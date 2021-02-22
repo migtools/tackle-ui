@@ -1,26 +1,26 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react/types-6-0";
 import {
-  BusinessServiceForm,
-  BusinessServiceFormProps,
-} from "../business-service-form";
+  StakeholderGroupForm,
+  StakeholderGroupFormProps,
+} from "../stakeholder-group-form";
 import { Modal } from "@patternfly/react-core";
 
 export default {
-  title: "BusinessServices / BusinessServiceForm",
-  component: BusinessServiceForm,
+  title: "Stakeholders / StakeholderGroupForm",
+  component: StakeholderGroupForm,
   argTypes: {
     onCancel: { action: "onCancel" },
   },
 } as Meta;
 
-const Template: Story<BusinessServiceFormProps> = (args) => (
-  <BusinessServiceForm {...args} />
+const Template: Story<StakeholderGroupFormProps> = (args) => (
+  <StakeholderGroupForm {...args} />
 );
 
-const TemplateModal: Story<BusinessServiceFormProps> = (args) => (
+const TemplateModal: Story<StakeholderGroupFormProps> = (args) => (
   <Modal isOpen={true} title="My modal title">
-    <BusinessServiceForm {...args} />
+    <StakeholderGroupForm {...args} />
   </Modal>
 );
 

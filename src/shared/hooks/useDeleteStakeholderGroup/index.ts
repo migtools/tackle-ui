@@ -1,0 +1,1 @@
+export { useDeleteStakeholderGroup } from "./useDeleteStakeholderGroup";

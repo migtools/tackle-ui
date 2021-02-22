@@ -20,8 +20,7 @@ describe("AppTableWithControls", () => {
     const wrapper = shallow(
       <AppTableWithControls
         count={120}
-        items={["first", "second", "third"]}
-        itemsToRow={itemsToRow}
+        rows={[{ cells: ["first", "second", "third"] }]}
         pagination={{ page: 1, perPage: 10 }}
         handlePaginationChange={jest.fn()}
         handleSortChange={jest.fn()}
@@ -37,8 +36,7 @@ describe("AppTableWithControls", () => {
     const wrapper = shallow(
       <AppTableWithControls
         count={120}
-        items={["first", "second", "third"]}
-        itemsToRow={itemsToRow}
+        rows={[{ cells: ["first", "second", "third"] }]}
         pagination={{ page: 1, perPage: 10 }}
         handlePaginationChange={jest.fn()}
         handleSortChange={jest.fn()}

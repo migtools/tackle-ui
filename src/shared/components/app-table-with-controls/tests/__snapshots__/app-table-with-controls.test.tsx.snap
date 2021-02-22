@@ -56,23 +56,9 @@ exports[`AppTableWithControls Renders adding toolbar 1`] = `
       Array [
         Object {
           "cells": Array [
-            Object {
-              "title": "first",
-            },
-          ],
-        },
-        Object {
-          "cells": Array [
-            Object {
-              "title": "second",
-            },
-          ],
-        },
-        Object {
-          "cells": Array [
-            Object {
-              "title": "third",
-            },
+            "first",
+            "second",
+            "third",
           ],
         },
       ]
@@ -144,23 +130,9 @@ exports[`AppTableWithControls Renders without crashing 1`] = `
       Array [
         Object {
           "cells": Array [
-            Object {
-              "title": "first",
-            },
-          ],
-        },
-        Object {
-          "cells": Array [
-            Object {
-              "title": "second",
-            },
-          ],
-        },
-        Object {
-          "cells": Array [
-            Object {
-              "title": "third",
-            },
+            "first",
+            "second",
+            "third",
           ],
         },
       ]

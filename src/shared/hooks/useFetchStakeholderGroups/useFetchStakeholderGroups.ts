@@ -3,32 +3,32 @@ import { AxiosError } from "axios";
 import { ActionType, createAsyncAction, getType } from "typesafe-actions";
 
 import {
-  getStakeholders,
-  getAllStakeholders,
-  StakeholderSortByQuery,
+  getStakeholderGroups,
+  getAllStakeholderGroups,
+  StakeholderGroupSortByQuery,
 } from "api/rest";
-import { PageRepresentation, Stakeholder, PageQuery } from "api/models";
+import { PageRepresentation, StakeholderGroup, PageQuery } from "api/models";
 
 export const {
   request: fetchRequest,
   success: fetchSuccess,
   failure: fetchFailure,
 } = createAsyncAction(
-  "useFetchStakeholders/fetch/request",
-  "useFetchStakeholders/fetch/success",
-  "useFetchStakeholders/fetch/failure"
-)<void, PageRepresentation<Stakeholder>, AxiosError>();
+  "useFetchStakeholderGroups/fetch/request",
+  "useFetchStakeholderGroups/fetch/success",
+  "useFetchStakeholderGroups/fetch/failure"
+)<void, PageRepresentation<StakeholderGroup>, AxiosError>();
 
 type State = Readonly<{
   isFetching: boolean;
-  stakeholders?: PageRepresentation<Stakeholder>;
+  stakeholderGroups?: PageRepresentation<StakeholderGroup>;
   fetchError?: AxiosError;
   fetchCount: number;
 }>;
 
 const defaultState: State = {
   isFetching: false,
-  stakeholders: undefined,
+  stakeholderGroups: undefined,
   fetchError: undefined,
   fetchCount: 0,
 };
@@ -56,7 +56,7 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         isFetching: false,
         fetchError: undefined,
-        stakeholders: action.payload,
+        stakeholderGroups: action.payload,
         fetchCount: state.fetchCount + 1,
       };
     case getType(fetchFailure):
@@ -72,44 +72,42 @@ const reducer = (state: State, action: Action): State => {
 };
 
 export interface IState {
-  stakeholders?: PageRepresentation<Stakeholder>;
+  stakeholderGroups?: PageRepresentation<StakeholderGroup>;
   isFetching: boolean;
   fetchError?: AxiosError;
   fetchCount: number;
-  fetchStakeholders: (
+  fetchStakeholderGroups: (
     filters: {
-      email?: string[];
-      displayName?: string[];
-      jobFuction?: string[];
-      group?: string[];
+      name?: string[];
+      description?: string[];
+      member?: string[];
     },
     page: PageQuery,
-    sortBy?: StakeholderSortByQuery
+    sortBy?: StakeholderGroupSortByQuery
   ) => void;
-  fetchAllStakeholders: () => void;
+  fetchAllStakeholderGroups: () => void;
 }
 
-export const useFetchStakeholders = (
+export const useFetchStakeholderGroups = (
   defaultIsFetching: boolean = false
 ): IState => {
   const [state, dispatch] = useReducer(reducer, defaultIsFetching, initReducer);
 
-  const fetchStakeholders = useCallback(
+  const fetchStakeholderGroups = useCallback(
     (
       filters: {
-        email?: string[];
-        displayName?: string[];
-        jobFuction?: string[];
-        group?: string[];
+        name?: string[];
+        description?: string[];
+        member?: string[];
       },
       page: PageQuery,
-      sortBy?: StakeholderSortByQuery
+      sortBy?: StakeholderGroupSortByQuery
     ) => {
       dispatch(fetchRequest());
 
-      getStakeholders(filters, page, sortBy)
+      getStakeholderGroups(filters, page, sortBy)
         .then(({ data }) => {
-          const list = data._embedded.stakeholder;
+          const list = data._embedded["stakeholder-group"];
           const total = data.total_count;
 
           dispatch(
@@ -128,12 +126,12 @@ export const useFetchStakeholders = (
     []
   );
 
-  const fetchAllStakeholders = useCallback(() => {
+  const fetchAllStakeholderGroups = useCallback(() => {
     dispatch(fetchRequest());
 
-    getAllStakeholders()
+    getAllStakeholderGroups()
       .then(({ data }) => {
-        const list = data._embedded.stakeholder;
+        const list = data._embedded["stakeholder-group"];
         const total = data.total_count;
 
         dispatch(
@@ -151,13 +149,13 @@ export const useFetchStakeholders = (
   }, []);
 
   return {
-    stakeholders: state.stakeholders,
+    stakeholderGroups: state.stakeholderGroups,
     isFetching: state.isFetching,
     fetchError: state.fetchError,
     fetchCount: state.fetchCount,
-    fetchStakeholders,
-    fetchAllStakeholders,
+    fetchStakeholderGroups,
+    fetchAllStakeholderGroups,
   };
 };
 
-export default useFetchStakeholders;
+export default useFetchStakeholderGroups;

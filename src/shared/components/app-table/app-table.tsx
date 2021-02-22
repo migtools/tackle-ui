@@ -11,6 +11,7 @@ import {
   IActionsResolver,
   IAreActionsDisabled,
   OnSort,
+  OnCollapse,
 } from "@patternfly/react-table";
 
 import { StateNoData } from "./state-no-data";
@@ -31,6 +32,8 @@ export interface AppTableProps {
   sortBy?: ISortBy;
   onSort?: OnSort;
 
+  onCollapse?: OnCollapse;
+
   filtersApplied: boolean;
   noDataState?: any;
   noSearchResultsState?: any;
@@ -50,6 +53,7 @@ export const AppTable: React.FC<AppTableProps> = ({
   loadingVariant = "skeleton",
   sortBy,
   onSort,
+  onCollapse,
   filtersApplied,
   noDataState,
   noSearchResultsState,
@@ -135,6 +139,7 @@ export const AppTable: React.FC<AppTableProps> = ({
       areActionsDisabled={areActionsDisabled}
       sortBy={sortBy}
       onSort={onSort}
+      onCollapse={onCollapse}
     >
       <TableHeader />
       <TableBody />

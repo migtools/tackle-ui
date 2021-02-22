@@ -1,25 +1,25 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { renderHook, act } from "@testing-library/react-hooks";
-import { useFetchStakeholders } from "./useFetchStakeholders";
-import { StakeholderPage } from "api/models";
-import { STAKEHOLDERS } from "api/rest";
+import { useFetchStakeholderGroups } from "./useFetchStakeholderGroups";
+import { StakeholderGroupPage } from "api/models";
+import { STAKEHOLDER_GROUPS } from "api/rest";
 
-describe("useFetchStakeholders", () => {
+describe("useFetchStakeholderGroups", () => {
   it("Fetch error due to no REST API found", async () => {
     // Mock REST API
-    new MockAdapter(axios).onGet(STAKEHOLDERS).networkError();
+    new MockAdapter(axios).onGet(STAKEHOLDER_GROUPS).networkError();
 
     // Use hook
     const { result, waitForNextUpdate } = renderHook(() =>
-      useFetchStakeholders()
+      useFetchStakeholderGroups()
     );
 
     const {
-      stakeholders,
+      stakeholderGroups: stakeholders,
       isFetching,
       fetchError,
-      fetchStakeholders,
+      fetchStakeholderGroups,
     } = result.current;
 
     expect(isFetching).toBe(false);
@@ -27,39 +27,39 @@ describe("useFetchStakeholders", () => {
     expect(fetchError).toBeUndefined();
 
     // Init fetch
-    act(() => fetchStakeholders({}, { page: 2, perPage: 50 }));
+    act(() => fetchStakeholderGroups({}, { page: 2, perPage: 50 }));
     expect(result.current.isFetching).toBe(true);
 
     // Fetch finished
     await waitForNextUpdate();
     expect(result.current.isFetching).toBe(false);
-    expect(result.current.stakeholders).toBeUndefined();
+    expect(result.current.stakeholderGroups).toBeUndefined();
     expect(result.current.fetchError).not.toBeUndefined();
   });
 
   it("Fetch success", async () => {
     // Mock REST API
-    const data: StakeholderPage = {
+    const data: StakeholderGroupPage = {
       _embedded: {
-        stakeholder: [],
+        "stakeholder-group": [],
       },
       total_count: 0,
     };
 
     new MockAdapter(axios)
-      .onGet(`${STAKEHOLDERS}?page=0&size=10`)
+      .onGet(`${STAKEHOLDER_GROUPS}?page=0&size=10`)
       .reply(200, data);
 
     // Use hook
     const { result, waitForNextUpdate } = renderHook(() =>
-      useFetchStakeholders()
+      useFetchStakeholderGroups()
     );
 
     const {
-      stakeholders,
+      stakeholderGroups: stakeholders,
       isFetching,
       fetchError,
-      fetchStakeholders,
+      fetchStakeholderGroups: fetchStakeholders,
     } = result.current;
 
     expect(isFetching).toBe(false);
@@ -73,7 +73,7 @@ describe("useFetchStakeholders", () => {
     // Fetch finished
     await waitForNextUpdate();
     expect(result.current.isFetching).toBe(false);
-    expect(result.current.stakeholders).toMatchObject({
+    expect(result.current.stakeholderGroups).toMatchObject({
       data: [],
       meta: { count: 0 },
     });
@@ -82,39 +82,41 @@ describe("useFetchStakeholders", () => {
 
   it("Fetch all", async () => {
     // Mock REST API
-    const data: StakeholderPage = {
+    const data: StakeholderGroupPage = {
       _embedded: {
-        stakeholder: [],
+        "stakeholder-group": [],
       },
       total_count: 0,
     };
 
-    new MockAdapter(axios).onGet(`${STAKEHOLDERS}?size=1000`).reply(200, data);
+    new MockAdapter(axios)
+      .onGet(`${STAKEHOLDER_GROUPS}?size=1000`)
+      .reply(200, data);
 
     // Use hook
     const { result, waitForNextUpdate } = renderHook(() =>
-      useFetchStakeholders()
+      useFetchStakeholderGroups()
     );
 
     const {
-      stakeholders,
+      stakeholderGroups,
       isFetching,
       fetchError,
-      fetchAllStakeholders,
+      fetchAllStakeholderGroups,
     } = result.current;
 
     expect(isFetching).toBe(false);
-    expect(stakeholders).toBeUndefined();
+    expect(stakeholderGroups).toBeUndefined();
     expect(fetchError).toBeUndefined();
 
     // Init fetch
-    act(() => fetchAllStakeholders());
+    act(() => fetchAllStakeholderGroups());
     expect(result.current.isFetching).toBe(true);
 
     // Fetch finished
     await waitForNextUpdate();
     expect(result.current.isFetching).toBe(false);
-    expect(result.current.stakeholders).toMatchObject({
+    expect(result.current.stakeholderGroups).toMatchObject({
       data: [],
       meta: { count: 0 },
     });
