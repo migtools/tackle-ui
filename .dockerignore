@@ -1,0 +1,4 @@
+*
+!build/*
+!nginx.conf.template
+!entrypoint.sh

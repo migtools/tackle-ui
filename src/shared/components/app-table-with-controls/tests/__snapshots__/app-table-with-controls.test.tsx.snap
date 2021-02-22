@@ -1,0 +1,180 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AppTableWithControls Renders adding toolbar 1`] = `
+<div
+  style={
+    Object {
+      "backgroundColor": "var(--pf-global--BackgroundColor--100)",
+    }
+  }
+>
+  <Toolbar
+    className="pf-m-toggle-group-container"
+    collapseListedFiltersBreakpoint="xl"
+  >
+    <ToolbarContent
+      isExpanded={false}
+      showClearFiltersButton={false}
+    >
+      <p>
+        This is an additional content to toolbar
+      </p>
+      <ToolbarItem
+        alignment={
+          Object {
+            "default": "alignRight",
+          }
+        }
+        variant="pagination"
+      >
+        <SimplePagination
+          count={120}
+          isTop={true}
+          onChange={[MockFunction]}
+          params={
+            Object {
+              "page": 1,
+              "perPage": 10,
+            }
+          }
+        />
+      </ToolbarItem>
+    </ToolbarContent>
+  </Toolbar>
+  <AppTable
+    columns={
+      Array [
+        Object {
+          "title": "Col1",
+        },
+      ]
+    }
+    filtersApplied={false}
+    isLoading={false}
+    onSort={[MockFunction]}
+    rows={
+      Array [
+        Object {
+          "cells": Array [
+            Object {
+              "title": "first",
+            },
+          ],
+        },
+        Object {
+          "cells": Array [
+            Object {
+              "title": "second",
+            },
+          ],
+        },
+        Object {
+          "cells": Array [
+            Object {
+              "title": "third",
+            },
+          ],
+        },
+      ]
+    }
+  />
+  <SimplePagination
+    count={120}
+    onChange={[MockFunction]}
+    params={
+      Object {
+        "page": 1,
+        "perPage": 10,
+      }
+    }
+  />
+</div>
+`;
+
+exports[`AppTableWithControls Renders without crashing 1`] = `
+<div
+  style={
+    Object {
+      "backgroundColor": "var(--pf-global--BackgroundColor--100)",
+    }
+  }
+>
+  <Toolbar
+    className="pf-m-toggle-group-container"
+    collapseListedFiltersBreakpoint="xl"
+  >
+    <ToolbarContent
+      isExpanded={false}
+      showClearFiltersButton={false}
+    >
+      <ToolbarItem
+        alignment={
+          Object {
+            "default": "alignRight",
+          }
+        }
+        variant="pagination"
+      >
+        <SimplePagination
+          count={120}
+          isTop={true}
+          onChange={[MockFunction]}
+          params={
+            Object {
+              "page": 1,
+              "perPage": 10,
+            }
+          }
+        />
+      </ToolbarItem>
+    </ToolbarContent>
+  </Toolbar>
+  <AppTable
+    columns={
+      Array [
+        Object {
+          "title": "Col1",
+        },
+      ]
+    }
+    filtersApplied={false}
+    isLoading={false}
+    onSort={[MockFunction]}
+    rows={
+      Array [
+        Object {
+          "cells": Array [
+            Object {
+              "title": "first",
+            },
+          ],
+        },
+        Object {
+          "cells": Array [
+            Object {
+              "title": "second",
+            },
+          ],
+        },
+        Object {
+          "cells": Array [
+            Object {
+              "title": "third",
+            },
+          ],
+        },
+      ]
+    }
+  />
+  <SimplePagination
+    count={120}
+    onChange={[MockFunction]}
+    params={
+      Object {
+        "page": 1,
+        "perPage": 10,
+      }
+    }
+  />
+</div>
+`;

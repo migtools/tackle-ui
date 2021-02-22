@@ -1,0 +1,46 @@
+{
+    "sidebar": {
+        "applicationInventory": "Inventario de aplicaciones",
+        "reports": "Reportes",
+        "controls": "Controles"
+    },
+    "terms": {
+        "name": "Nombre",
+        "description": "Descripción",
+        "owner": "Propietario",
+        "controls": "Controles",
+        "businessServices": "Servicios de negocio",
+        "stakeholders": "Interesados",
+        "stakeholderGroups": "Grupos de interesados",
+        "tags": "Etiquetas"
+    },
+    "actions": {
+        "edit": "Editar",
+        "delete": "Eliminar",
+        "cancel": "Cancelar",
+        "createNew": "Crear nuevo",
+        "create": "Crear",
+        "save": "Guardar"
+    },
+    "dialog": {
+        "title": {
+            "delete": "Eliminar '{{what}}'",
+            "newBusinessService": "Nuevo servicio de negocio",
+            "updateBusinessService": "Actualizar servicio de negocio"
+        },
+        "message": {
+            "delete": "¿Estás seguro de querer eliminar '{{what}}'?. Esta acción eliminará todos los recursos asociados al mismo y no puede ser revertida. ¡Asegúrate de que esto es lo que realmente quieres!"
+        }
+    },
+    "toastr": {
+        "success": {
+            "added": "Éxito! {{what}} fue creado como un {{type}}."
+        }
+    },
+    "validation": {
+        "required": "Este campo es requerido.",
+        "minLength": "Este campo debe de tener al menos {{length}} caracteres.",
+        "maxLength": "Este campo debe de tener menos de {{length}} caracteres.",
+        "onlyCharactersAndUnderscore": "Este campo debe de contener solo caracteres alfanuméricos incluyendo el subguión."
+    }
+}
