@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PageHeader Renders without crashing 1`] = `
+<Stack
+  hasGutter={true}
+>
+  <StackItem>
+    <BreadCrumbPath
+      breadcrumbs={
+        Array [
+          Object {
+            "path": "/companies",
+            "title": "Companies",
+          },
+          Object {
+            "path": "/companies/1",
+            "title": "Company details",
+          },
+        ]
+      }
+    />
+  </StackItem>
+  <StackItem>
+    <Split>
+      <SplitItem
+        isFilled={true}
+      >
+        <TextContent>
+          <Text
+            component="h1"
+          >
+            mycompany
+          </Text>
+        </TextContent>
+      </SplitItem>
+      <SplitItem>
+        <MenuActions
+          actions={
+            Array [
+              Object {
+                "callback": [MockFunction],
+                "label": "Edit",
+              },
+              Object {
+                "callback": [MockFunction],
+                "label": "Delete",
+              },
+            ]
+          }
+        />
+      </SplitItem>
+    </Split>
+  </StackItem>
+  <StackItem>
+    <HorizontalNav
+      navItems={
+        Array [
+          Object {
+            "path": "/companies/1/overview",
+            "title": "Overview",
+          },
+          Object {
+            "path": "/companies/1/yaml",
+            "title": "YAML",
+          },
+          Object {
+            "path": "/companies/1/sunat",
+            "title": "SUNAT",
+          },
+        ]
+      }
+    />
+  </StackItem>
+</Stack>
+`;

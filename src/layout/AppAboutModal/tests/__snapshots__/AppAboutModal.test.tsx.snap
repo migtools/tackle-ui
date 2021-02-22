@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AppAboutModal 1`] = `
+<AboutModal
+  appendTo={null}
+  backgroundImageSrc=""
+  brandImageAlt="Logo"
+  brandImageSrc="tackle.png"
+  className=""
+  isOpen={true}
+  noAboutModalBoxContentContainer={false}
+  onClose={[MockFunction]}
+  productName=""
+  trademark="COPYRIGHT © 2020."
+>
+  <TextContent>
+    <TextList
+      component="dl"
+    >
+      <TextListItem
+        component="dt"
+      >
+        Source code
+      </TextListItem>
+      <TextListItem
+        component="dd"
+      >
+        some content here
+      </TextListItem>
+    </TextList>
+  </TextContent>
+</AboutModal>
+`;

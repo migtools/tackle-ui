@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test snapshot 1`] = `
+<PageSidebar
+  nav={
+    <Nav
+      aria-label="Nav"
+      id="nav-primary"
+      onSelect={[Function]}
+      onToggle={[Function]}
+      ouiaSafe={true}
+      theme="dark"
+    >
+      <NavList
+        ariaLeftScroll="Scroll left"
+        ariaRightScroll="Scroll right"
+        title="Global"
+      >
+        <NavItem>
+          <NavLink
+            activeClassName="pf-m-current"
+            to="/application-inventory"
+          >
+            sidebar.applicationInventory
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            activeClassName="pf-m-current"
+            to="/reports"
+          >
+            sidebar.reports
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            activeClassName="pf-m-current"
+            to="/controls"
+          >
+            sidebar.controls
+          </NavLink>
+        </NavItem>
+      </NavList>
+    </Nav>
+  }
+  theme="dark"
+/>
+`;
