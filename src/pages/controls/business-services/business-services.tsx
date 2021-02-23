@@ -156,9 +156,7 @@ export const BusinessServices: React.FC = () => {
     { title: t("terms.description"), transforms: [cellWidth(40)] },
     {
       title: t("terms.owner"),
-      transforms: [
-        // sortable
-      ],
+      transforms: [sortable],
     },
     {
       title: "",
