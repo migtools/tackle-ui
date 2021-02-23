@@ -1,3 +1,5 @@
+[![CI](https://github.com/konveyor/tackle-ui/actions/workflows/ci-actions.yml/badge.svg)](https://github.com/konveyor/tackle-ui/actions/workflows/ci-actions.yml)
+
 # Tackle UI
 
 The UI web console for the tackle project.
