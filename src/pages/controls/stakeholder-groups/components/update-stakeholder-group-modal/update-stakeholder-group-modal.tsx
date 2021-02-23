@@ -23,7 +23,7 @@ export const UpdateStakeholderGroupModal: React.FC<UpdateStakeholderGroupModalPr
 
   return (
     <Modal
-      title={t("dialog.title.updateStakeholder")}
+      title={t("dialog.title.updateStakeholderGroup")}
       variant={ModalVariant.medium}
       isOpen={!!stakeholderGroup}
       onClose={onCancel}

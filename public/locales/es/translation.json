@@ -13,10 +13,11 @@
         "stakeholders": "Interesados",
         "stakeholderGroups": "Grupos de interesados",
         "tags": "Etiquetas",
+        "member(s)": "Miembro(s)",
+        "group(s)": "Grupo(s)",
         "email": "Email",
         "displayName": "Nombre a mostrar",
         "jobFunction": "Función laboral",
-        "group(s)": "Grupo(s)",
         "group": "Grupo"
     },
     "actions": {
@@ -32,6 +33,8 @@
             "delete": "Eliminar '{{what}}'",
             "newBusinessService": "Nuevo servicio de negocio",
             "updateBusinessService": "Actualizar servicio de negocio",
+            "newStakeholderGroup": "Nuevo grupo de interesados",
+            "updateStakeholderGroup": "Actualizar grupo de interesados",
             "newStakeholder": "Nuevo interesado",
             "updateStakeholder": "Actualizar interesado"
         },

@@ -23,7 +23,7 @@ export const NewStakeholderGroupModal: React.FC<NewStakeholderGroupModalProps> =
 
   return (
     <Modal
-      title={t("dialog.title.newStakeholder")}
+      title={t("dialog.title.newStakeholderGroup")}
       variant={ModalVariant.medium}
       isOpen={isOpen}
       onClose={onCancel}

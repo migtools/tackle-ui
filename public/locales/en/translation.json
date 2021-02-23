@@ -13,10 +13,11 @@
         "stakeholders": "Stakeholders",
         "stakeholderGroups": "Stakeholder groups",
         "tags": "Tags",
+        "member(s)": "Member(s)",
+        "group(s)": "Group(s)",
         "email": "Email",
         "displayName": "Display name",
         "jobFunction": "Job function",
-        "group(s)": "Group(s)",
         "group": "Group"
     },
     "actions": {
@@ -32,6 +33,8 @@
             "delete": "Delete '{{what}}'",
             "newBusinessService": "New business service",
             "updateBusinessService": "Update business service",
+            "newStakeholderGroup": "New stakeholder group",
+            "updateStakeholderGroup": "Update stakeholder group",
             "newStakeholder": "New stakeholder",
             "updateStakeholder": "Update stakeholder"
         },
