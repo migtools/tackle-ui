@@ -8,37 +8,80 @@ context("Test business service list", () => {
     cy.get("@tokens").then((tokens) => {
       const headers = {
         "Content-Type": "application/json",
-        "Accept": "application/hal+json",
+        Accept: "application/hal+json",
         Authorization: "Bearer " + tokens.access_token,
       };
 
-      // Delete all business services
+      const stakeholders = [];
+
+      // Delete business services
       cy.request({
         method: "GET",
         headers: headers,
         url: `${Cypress.env("controls_base_url")}/business-service?size=1000`,
-      }).then((result) => {
-        result.body._embedded["business-service"].forEach((e) => {
-          cy.request({
-            method: "DELETE",
-            headers: headers,
-            url: `${Cypress.env("controls_base_url")}/business-service/${e.id}`,
+      })
+        .then((response) => {
+          response.body._embedded["business-service"].forEach((elem) => {
+            cy.request({
+              method: "DELETE",
+              headers: headers,
+              url: `${Cypress.env("controls_base_url")}/business-service/${
+                elem.id
+              }`,
+            });
           });
-        });
-      });
+        })
 
-      // Create business services
-      for (let i = 1; i <= 12; i++) {
-        cy.request({
-          method: "POST",
-          headers: headers,
-          body: {
-            name: `service${i}`,
-            description: `description${i}`,
-          },
-          url: `${Cypress.env("controls_base_url")}/business-service`,
+        // Delete stakeholders
+        .then(() => {
+          cy.request({
+            method: "GET",
+            headers: headers,
+            url: `${Cypress.env("controls_base_url")}/stakeholder?size=1000`,
+          });
+        })
+        .then((response) => {
+          response.body._embedded["stakeholder"].forEach((elem) => {
+            cy.request({
+              method: "DELETE",
+              headers: headers,
+              url: `${Cypress.env("controls_base_url")}/stakeholder/${elem.id}`,
+            });
+          });
+        })
+
+        // Create stakeholders
+        .then(() => {
+          for (let i = 1; i <= 12; i++) {
+            cy.request({
+              method: "POST",
+              headers: headers,
+              body: {
+                name: `any`,
+                displayName: `stakeholder${i}`,
+              },
+              url: `${Cypress.env("controls_base_url")}/stakeholder`,
+            }).then((response) => {
+              stakeholders.push(response.body);
+            });
+          }
+        })
+
+        // Create business services
+        .then(() => {
+          for (let i = 1; i <= 12; i++) {
+            cy.request({
+              method: "POST",
+              headers: headers,
+              body: {
+                name: `service${i}`,
+                description: `description${i}`,
+                owner: stakeholders[12 - i],
+              },
+              url: `${Cypress.env("controls_base_url")}/business-service`,
+            });
+          }
         });
-      }
     });
   });
 
@@ -77,7 +120,7 @@ context("Test business service list", () => {
 
     cy.visit("/controls/business-services");
 
-    // Remember by default the table is sorted by name
+    // Remember that by default the table is sorted by name
 
     cy.wait("@apiCheck");
     cy.get("tbody > tr").should("have.length", 10);
@@ -95,6 +138,54 @@ context("Test business service list", () => {
     cy.get("tbody > tr").should("have.length", 10);
     cy.get("tbody > tr").contains("service1");
     cy.get("tbody > tr").contains("service7");
+  });
+
+  it("Sorting", () => {
+    cy.intercept({
+      method: "GET",
+      url: "/api/controls/business-service",
+    }).as("apiCheck");
+
+    cy.visit("/controls/business-services");
+
+    // Verify default sort
+    cy.wait("@apiCheck");
+    cy.get("th.pf-c-table__sort")
+      .first()
+      .should("have.attr", "aria-sort", "ascending")
+      .contains("Name");
+    cy.get("tbody > tr").eq(0).contains("service1");
+    cy.get("tbody > tr").eq(9).contains("service7");
+
+    // Reverse sort
+    cy.get("th.pf-c-table__sort > button").first().click();
+    cy.wait("@apiCheck");
+    cy.get("th.pf-c-table__sort")
+      .first()
+      .should("have.attr", "aria-sort", "descending")
+      .contains("Name");
+    cy.get("tbody > tr").eq(0).contains("service9");
+    cy.get("tbody > tr").eq(9).contains("service11");
+
+    // Sort by owner
+    cy.get("th.pf-c-table__sort > button").contains("Owner").click();
+    cy.wait("@apiCheck");
+    cy.get("th.pf-c-table__sort")
+      .eq(1)
+      .should("have.attr", "aria-sort", "ascending")
+      .contains("Owner");
+    cy.get("tbody > tr").eq(0).contains("stakeholder1");
+    cy.get("tbody > tr").eq(9).contains("stakeholder7");
+
+    // Reverse sort
+    cy.get("th.pf-c-table__sort > button").contains("Owner").click();
+    cy.wait("@apiCheck");
+    cy.get("th.pf-c-table__sort")
+      .eq(1)
+      .should("have.attr", "aria-sort", "descending")
+      .contains("Owner");
+    cy.get("tbody > tr").eq(0).contains("stakeholder9");
+    cy.get("tbody > tr").eq(9).contains("stakeholder11");
   });
 
   it("Edit", () => {

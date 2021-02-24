@@ -48,7 +48,7 @@ export const getBusinessServices = (
         field = "name";
         break;
       case BusinessServiceSortBy.OWNER:
-        field = "owner";
+        field = "owner.displayName";
         break;
       default:
         throw new Error("Could not define SortBy field name");
