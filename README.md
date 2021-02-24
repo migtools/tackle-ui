@@ -76,7 +76,7 @@ docker run -d \
 -e QUARKUS_OIDC_AUTH_SERVER_URL=http://keycloak:8080/auth/realms/konveyor \
 -e QUARKUS_OIDC_CLIENT_ID=controls-api \
 -e QUARKUS_OIDC_CREDENTIALS_SECRET=secret \
-quay.io/mrizzi/poc-controls:latest-native
+quay.io/konveyor/tackle-controls:latest-native
 ```
 
 # Start the UI
