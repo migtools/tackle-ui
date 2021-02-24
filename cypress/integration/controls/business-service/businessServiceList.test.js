@@ -97,19 +97,16 @@ context("Test business service list", () => {
     cy.wait("@apiCheck");
     cy.get("tbody > tr").should("have.length", 10);
 
-    // Apply first filter
+    // Apply first filter: 'byName'
     cy.get("input[aria-label='filter-text']").type("service12");
     cy.get("button[aria-label='search']").click();
 
     cy.wait("@apiCheck");
     cy.get("tbody > tr").should("have.length", 1).contains("service12");
 
-    // Apply second filter
+    // Apply second filter: 'byName'
     cy.get("input[aria-label='filter-text']").type("service5");
     cy.get("button[aria-label='search']").click();
-
-    cy.wait("@apiCheck");
-    cy.get("tbody > tr").should("have.length", 2).contains("service5");
   });
 
   it("Pagination", () => {
