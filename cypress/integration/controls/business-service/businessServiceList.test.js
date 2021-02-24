@@ -107,6 +107,46 @@ context("Test business service list", () => {
     // Apply second filter: 'byName'
     cy.get("input[aria-label='filter-text']").type("service5");
     cy.get("button[aria-label='search']").click();
+
+    cy.wait("@apiCheck");
+    cy.get("tbody > tr")
+      .should("have.length", 2)
+      .should("contain", "service12")
+      .should("contain", "service5");
+
+    // Apply second filter: 'byOwner'
+    cy.get(".pf-c-toolbar button.pf-c-dropdown__toggle").click();
+    cy.get(".pf-c-dropdown__menu button.pf-c-dropdown__menu-item")
+      .eq(2)
+      .click();
+
+    cy.get("input[aria-label='filter-text']").type("stakeholder1");
+    cy.get("button[aria-label='search']").click();
+
+    cy.wait("@apiCheck");
+    cy.get("tbody > tr")
+      .should("have.length", 1)
+      .should("contain", "service12");
+
+    // Remove filter 'byOwner' chip
+    cy.get(".pf-c-chip button.pf-c-button").eq(2).click();
+
+    cy.wait("@apiCheck");
+    cy.get("tbody > tr")
+      .should("have.length", 2)
+      .should("contain", "service12")
+      .should("contain", "service5");
+
+    // Clear all filters
+    cy.get(".pf-c-toolbar__item > button.pf-m-link")
+      .contains("Clear all filters")
+      .click({ force: true });
+
+    cy.wait("@apiCheck");
+    cy.get("tbody > tr")
+      .should("have.length", 10)
+      .should("contain", "service1")
+      .should("contain", "service7");
   });
 
   it("Pagination", () => {
