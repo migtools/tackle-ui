@@ -56,7 +56,7 @@ Start the controls' database:
 ```shell
 docker run -d \
 --network konveyor --network-alias controls-db \
--p 5432:5432 \
+-p 5433:5432 \
 -e POSTGRES_USER=user \
 -e POSTGRES_PASSWORD=password \
 -e POSTGRES_DB=controls_db \
