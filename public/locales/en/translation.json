@@ -14,11 +14,12 @@
         "stakeholderGroups": "Stakeholder groups",
         "tags": "Tags",
         "member(s)": "Member(s)",
-        "group(s)": "Group(s)",
+        "member": "Member",
         "email": "Email",
         "displayName": "Display name",
         "jobFunction": "Job function",
-        "group": "Group"
+        "group": "Group",
+        "group(s)": "Group(s)"
     },
     "actions": {
         "edit": "Edit",

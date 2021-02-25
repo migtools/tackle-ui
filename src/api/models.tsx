@@ -36,7 +36,7 @@ export interface StakeholderGroup {
   id?: number;
   name: string;
   description: string;
-  members?: string[];
+  members?: Stakeholder[];
 }
 
 export interface BusinessServicePage {

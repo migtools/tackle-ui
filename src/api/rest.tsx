@@ -224,7 +224,7 @@ export const getStakeholderGroups = (
         field = "name";
         break;
       case StakeholderGroupSortBy.MEMBERS:
-        field = "displayName";
+        field = "members";
         break;
       default:
         throw new Error("Could not define SortBy field name");

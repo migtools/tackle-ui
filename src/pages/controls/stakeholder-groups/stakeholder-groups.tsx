@@ -71,7 +71,7 @@ const toSortByQuery = (
     case 1:
       field = StakeholderGroupSortBy.NAME;
       break;
-    case 2:
+    case 3:
       field = StakeholderGroupSortBy.MEMBERS;
       break;
     default:
@@ -105,7 +105,7 @@ export const StakeholderGroups: React.FC = () => {
     },
     {
       key: FilterKey.MEMBERS,
-      name: t("terms.member(s)"),
+      name: t("terms.member"),
     },
   ];
   const [filtersValue, setFiltersValue] = useState<Map<FilterKey, string[]>>(
@@ -216,9 +216,11 @@ export const StakeholderGroups: React.FC = () => {
           <div className="pf-c-table__expandable-row-content">
             <DescriptionList>
               <DescriptionListGroup>
-                <DescriptionListTerm>{t("terms.group(s)")}</DescriptionListTerm>
+                <DescriptionListTerm>
+                  {t("terms.member(s)")}
+                </DescriptionListTerm>
                 <DescriptionListDescription>
-                  {item.members}
+                  {item.members?.map((f) => f.displayName).join(", ")}
                 </DescriptionListDescription>
               </DescriptionListGroup>
             </DescriptionList>

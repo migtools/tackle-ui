@@ -14,11 +14,12 @@
         "stakeholderGroups": "Grupos de interesados",
         "tags": "Etiquetas",
         "member(s)": "Miembro(s)",
-        "group(s)": "Grupo(s)",
+        "member": "Miembro",
         "email": "Email",
         "displayName": "Nombre a mostrar",
         "jobFunction": "Función laboral",
-        "group": "Grupo"
+        "group": "Grupo",
+        "group(s)": "Grupo(s)"
     },
     "actions": {
         "edit": "Editar",
