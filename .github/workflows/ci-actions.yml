@@ -75,7 +75,7 @@ jobs:
           kcadm: create realms -f konveyor-realm.json
       - name: Controls API
         run: |
-          docker run -d --name controls --network ${{ job.services.controls-db.network }} --network-alias controls -p 8080:8080 \
+          docker run -d --name controls --network ${{ job.services.controls-db.network }} --network-alias controls -p 8081:8080 \
           -e QUARKUS_HTTP_PORT=8080 \
           -e QUARKUS_DATASOURCE_USERNAME=user \
           -e QUARKUS_DATASOURCE_PASSWORD=password \
@@ -182,7 +182,7 @@ jobs:
           kcadm: create realms -f konveyor-realm.json
       - name: Controls API
         run: |
-          docker run -d --name controls --network ${{ job.services.controls-db.network }} --network-alias controls -p 8080:8080 \
+          docker run -d --name controls --network ${{ job.services.controls-db.network }} --network-alias controls -p 8081:8080 \
           -e QUARKUS_HTTP_PORT=8080 \
           -e QUARKUS_DATASOURCE_USERNAME=user \
           -e QUARKUS_DATASOURCE_PASSWORD=password \
@@ -212,7 +212,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_auth_base_url: http://localhost:3000/auth
-          CYPRESS_controls_base_url: http://localhost:8080/controls
+          CYPRESS_controls_base_url: http://localhost:8081/controls
       - uses: actions/upload-artifact@v1
         if: failure()
         with:

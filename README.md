@@ -19,7 +19,7 @@ This project depends on other resources:
 - Keycloak
 - Controls
 
-## Start dependencines with docker-compose
+## Start dependencies with docker-compose
 
 Start the dependencies using `docker-compose.yml`:
 
@@ -68,7 +68,7 @@ Start the controls:
 ```shell
 docker run -d \
 --network konveyor --network-alias controls \
--p 8080:8080 \
+-p 8081:8080 \
 -e QUARKUS_HTTP_PORT=8080 \
 -e QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://controls-db:5432/controls_db \
 -e QUARKUS_DATASOURCE_USERNAME=user \

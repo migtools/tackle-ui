@@ -4,7 +4,7 @@
     "auth_base_url": "http://localhost:8180/auth",
     "auth_realm": "konveyor",
     "auth_client_id": "tackle-ui",
-    "controls_base_url": "http://localhost:8080/controls"
+    "controls_base_url": "http://localhost:8081/controls"
   },
   "viewportWidth": 1225,
   "viewportHeight": 886,
