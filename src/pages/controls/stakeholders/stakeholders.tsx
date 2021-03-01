@@ -212,7 +212,7 @@ export const Stakeholders: React.FC = () => {
           title: item.jobFunction,
         },
         {
-          title: item.groups,
+          title: item.groups ? item.groups.length : 0,
         },
         {
           title: (
@@ -235,7 +235,7 @@ export const Stakeholders: React.FC = () => {
               <DescriptionListGroup>
                 <DescriptionListTerm>{t("terms.group(s)")}</DescriptionListTerm>
                 <DescriptionListDescription>
-                  {item.groups}
+                  {item.groups?.map((f) => f.name).join(", ")}
                 </DescriptionListDescription>
               </DescriptionListGroup>
             </DescriptionList>

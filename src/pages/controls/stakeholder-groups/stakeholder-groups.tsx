@@ -195,7 +195,7 @@ export const StakeholderGroups: React.FC = () => {
           title: item.description,
         },
         {
-          title: item.members,
+          title: item.members ? item.members.length : 0,
         },
         {
           title: (

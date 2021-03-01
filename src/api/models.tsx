@@ -29,7 +29,7 @@ export interface Stakeholder {
   displayName: string;
   email: string;
   jobFunction?: string;
-  groups?: number;
+  groups?: StakeholderGroup[];
 }
 
 export interface StakeholderGroup {

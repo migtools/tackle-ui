@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AxiosError, AxiosPromise, AxiosResponse } from "axios";
 import { useFormik, FormikProvider, FormikHelpers } from "formik";
@@ -15,17 +15,22 @@ import {
   TextInput,
 } from "@patternfly/react-core";
 
+import { useFetchStakeholderGroups } from "shared/hooks";
+
 import { createStakeholder, updateStakeholder } from "api/rest";
-import { Stakeholder } from "api/models";
+import { Stakeholder, StakeholderGroup } from "api/models";
 import {
   getAxiosErrorMessage,
   getValidatedFromError,
   getValidatedFromErrorTouched,
 } from "utils/utils";
 
+import { SelectGroupFormField } from "../select-group-form-field";
+
 export interface FormValues {
   email: string;
   displayName: string;
+  groups: StakeholderGroup[];
 }
 
 export interface StakeholderFormProps {
@@ -43,9 +48,21 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
 
   const [error, setError] = useState<AxiosError>();
 
+  const {
+    stakeholderGroups,
+    isFetching,
+    fetchError,
+    fetchAllStakeholderGroups,
+  } = useFetchStakeholderGroups();
+
+  useEffect(() => {
+    fetchAllStakeholderGroups();
+  }, [fetchAllStakeholderGroups]);
+
   const initialValues: FormValues = {
     email: stakeholder?.email || "",
     displayName: stakeholder?.displayName || "",
+    groups: stakeholder?.groups || [],
   };
 
   const validationSchema = object().shape({
@@ -69,6 +86,7 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
     const payload: Stakeholder = {
       email: formValues.email,
       displayName: formValues.displayName,
+      groups: [...formValues.groups],
     };
 
     let promise: AxiosPromise<Stakeholder>;
@@ -155,6 +173,20 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
               formik.errors.displayName,
               formik.touched.displayName
             )}
+          />
+        </FormGroup>
+        <FormGroup
+          label={t("terms.group(s)")}
+          fieldId="groups"
+          isRequired={false}
+          validated={getValidatedFromError(formik.errors.groups)}
+          helperTextInvalid={formik.errors.groups}
+        >
+          <SelectGroupFormField
+            name="members"
+            groups={stakeholderGroups?.data || []}
+            isFetching={isFetching}
+            fetchError={fetchError}
           />
         </FormGroup>
 
