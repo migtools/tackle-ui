@@ -183,7 +183,7 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
           helperTextInvalid={formik.errors.groups}
         >
           <SelectGroupFormField
-            name="members"
+            name="groups"
             groups={stakeholderGroups?.data || []}
             isFetching={isFetching}
             fetchError={fetchError}

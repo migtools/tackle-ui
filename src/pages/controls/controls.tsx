@@ -20,10 +20,6 @@ export const Controls: React.FC = () => {
         <Suspense fallback={<AppPlaceholder />}>
           <Switch>
             <Route
-              path={Paths.controls_businessServices}
-              component={businessServices}
-            />
-            <Route
               path={Paths.controls_stakeholders}
               component={Stakeholders}
             />
@@ -31,10 +27,14 @@ export const Controls: React.FC = () => {
               path={Paths.controls_stakeholderGroups}
               component={StakeholderGroups}
             />
+            <Route
+              path={Paths.controls_businessServices}
+              component={businessServices}
+            />
             <Route path={Paths.controls_tags} component={Tags} />
             <Redirect
               from={Paths.controls}
-              to={Paths.controls_businessServices}
+              to={Paths.controls_stakeholders}
               exact
             />
           </Switch>
