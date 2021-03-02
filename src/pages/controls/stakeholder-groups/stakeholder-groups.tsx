@@ -314,7 +314,7 @@ export const StakeholderGroups: React.FC = () => {
       alertActions.addSuccess(
         t("toastr.success.added", {
           what: response.data.name,
-          type: "business service",
+          type: "stakeholder group",
         })
       )
     );
@@ -391,10 +391,10 @@ export const StakeholderGroups: React.FC = () => {
             <EmptyState variant={EmptyStateVariant.small}>
               <EmptyStateIcon icon={AddCircleOIcon} />
               <Title headingLevel="h2" size="lg">
-                No stakeholders available
+                No stakeholder groups available
               </Title>
               <EmptyStateBody>
-                Create a new stakeholder to start seeing data here.
+                Create a new stakeholder group to start seeing data here.
               </EmptyStateBody>
             </EmptyState>
           }

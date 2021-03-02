@@ -11,7 +11,6 @@ import {
   ButtonVariant,
   Form,
   FormGroup,
-  TextArea,
   TextInput,
 } from "@patternfly/react-core";
 
@@ -160,7 +159,7 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
           validated={getValidatedFromError(formik.errors.displayName)}
           helperTextInvalid={formik.errors.displayName}
         >
-          <TextArea
+          <TextInput
             type="text"
             name="displayName"
             aria-label="displayName"

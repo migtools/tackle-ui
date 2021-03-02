@@ -329,7 +329,7 @@ export const Stakeholders: React.FC = () => {
       alertActions.addSuccess(
         t("toastr.success.added", {
           what: response.data.displayName,
-          type: "business service",
+          type: "stakeholder",
         })
       )
     );

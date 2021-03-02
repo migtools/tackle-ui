@@ -90,6 +90,7 @@ export const SelectMember: React.FC<SelectMemberProps> = ({
       menuAppendTo={() => document.body}
       maxHeight={350}
       customContent={customContent}
+      placeholderText="Select a member"
     >
       {stakeholders
         .map((f) => selectOptionMapper(f))
