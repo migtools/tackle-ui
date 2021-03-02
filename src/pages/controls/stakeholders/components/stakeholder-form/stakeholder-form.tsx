@@ -14,10 +14,10 @@ import {
   TextInput,
 } from "@patternfly/react-core";
 
-import { useFetchStakeholderGroups } from "shared/hooks";
+import { useFetchStakeholderGroups, useFetchJobFunctions } from "shared/hooks";
 
 import { createStakeholder, updateStakeholder } from "api/rest";
-import { Stakeholder, StakeholderGroup } from "api/models";
+import { JobFunction, Stakeholder, StakeholderGroup } from "api/models";
 import {
   getAxiosErrorMessage,
   getValidatedFromError,
@@ -25,10 +25,12 @@ import {
 } from "utils/utils";
 
 import { SelectGroupFormField } from "../select-group-form-field";
+import { SelectJobFunctionFormField } from "../select-job-function-form-field";
 
 export interface FormValues {
   email: string;
   displayName: string;
+  jobFunction?: JobFunction;
   groups: StakeholderGroup[];
 }
 
@@ -48,9 +50,20 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
   const [error, setError] = useState<AxiosError>();
 
   const {
+    JobFunctions,
+    isFetching: isFetchingJobFunctions,
+    fetchError: fetchErrorJobFunctions,
+    fetchAllJobFunctions,
+  } = useFetchJobFunctions();
+
+  useEffect(() => {
+    fetchAllJobFunctions();
+  }, [fetchAllJobFunctions]);
+
+  const {
     stakeholderGroups,
-    isFetching,
-    fetchError,
+    isFetching: isFetchingGroups,
+    fetchError: fetchErrorGroups,
     fetchAllStakeholderGroups,
   } = useFetchStakeholderGroups();
 
@@ -61,6 +74,7 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
   const initialValues: FormValues = {
     email: stakeholder?.email || "",
     displayName: stakeholder?.displayName || "",
+    jobFunction: stakeholder?.jobFunction,
     groups: stakeholder?.groups || [],
   };
 
@@ -85,6 +99,7 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
     const payload: Stakeholder = {
       email: formValues.email,
       displayName: formValues.displayName,
+      jobFunction: formValues.jobFunction,
       groups: [...formValues.groups],
     };
 
@@ -175,6 +190,20 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
           />
         </FormGroup>
         <FormGroup
+          label={t("terms.jobFunction")}
+          fieldId="jobFunction"
+          isRequired={false}
+          validated={getValidatedFromError(formik.errors.jobFunction)}
+          helperTextInvalid={formik.errors.jobFunction}
+        >
+          <SelectJobFunctionFormField
+            name="jobFunction"
+            jobFunctions={JobFunctions?.data || []}
+            isFetching={isFetchingJobFunctions}
+            fetchError={fetchErrorJobFunctions}
+          />
+        </FormGroup>
+        <FormGroup
           label={t("terms.group(s)")}
           fieldId="groups"
           isRequired={false}
@@ -184,8 +213,8 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
           <SelectGroupFormField
             name="groups"
             groups={stakeholderGroups?.data || []}
-            isFetching={isFetching}
-            fetchError={fetchError}
+            isFetching={isFetchingGroups}
+            fetchError={fetchErrorGroups}
           />
         </FormGroup>
 

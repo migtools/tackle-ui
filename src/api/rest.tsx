@@ -9,12 +9,14 @@ import {
   StakeholderPage,
   StakeholderGroup,
   StakeholderGroupPage,
+  JobFunctionPage,
 } from "./models";
 
 export const BASE_URL = "controls";
 export const BUSINESS_SERVICES = BASE_URL + "/business-service";
 export const STAKEHOLDERS = BASE_URL + "/stakeholder";
 export const STAKEHOLDER_GROUPS = BASE_URL + "/stakeholder-group";
+export const JOB_FUNCTIONS = BASE_URL + "/job-function";
 
 const headers = { Accept: "application/hal+json" };
 
@@ -279,4 +281,10 @@ export const updateStakeholderGroup = (
   obj: StakeholderGroup
 ): AxiosPromise<StakeholderGroup> => {
   return APIClient.put(`${STAKEHOLDER_GROUPS}/${obj.id}`, obj);
+};
+
+// Job functions
+
+export const getAllJobFunctions = (): AxiosPromise<JobFunctionPage> => {
+  return APIClient.get(`${JOB_FUNCTIONS}?size=1000`, { headers });
 };

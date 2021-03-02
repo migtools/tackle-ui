@@ -7,9 +7,9 @@ import { AppPlaceholder } from "shared/components";
 
 import { EditCompanyHeader } from "./controls-header";
 
-const businessServices = lazy(() => import("./business-services"));
 const Stakeholders = lazy(() => import("./stakeholders"));
 const StakeholderGroups = lazy(() => import("./stakeholder-groups"));
+const businessServices = lazy(() => import("./business-services"));
 const Tags = lazy(() => import("./tags"));
 
 export const Controls: React.FC = () => {
