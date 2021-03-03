@@ -2,9 +2,8 @@ import React from "react";
 import { AxiosError } from "axios";
 import { FieldHookConfig, useField } from "formik";
 
+import { SelectStakeholder } from "shared/components";
 import { Stakeholder } from "api/models";
-
-import { SelectMember } from "../select-member";
 
 export interface SelectMemberFormFieldProps {
   stakeholders: Stakeholder[];
@@ -17,16 +16,22 @@ export const SelectMemberFormField: React.FC<
 > = ({ stakeholders, isFetching, fetchError, ...props }) => {
   const [field, , helpers] = useField(props);
 
-  const handleOnSelect = (value: Stakeholder[]) => {
+  const handleOnSelect = (value: Stakeholder | Stakeholder[]) => {
+    if (!Array.isArray(value)) {
+      throw new Error("Component was expecting an array");
+    }
+
     helpers.setValue(value);
   };
 
   const handleOnClear = () => {
-    helpers.setValue(undefined);
+    helpers.setValue([]);
   };
 
   return (
-    <SelectMember
+    <SelectStakeholder
+      placeholderText="Select a member"
+      isMulti={true}
       value={field.value}
       stakeholders={stakeholders}
       isFetching={isFetching}

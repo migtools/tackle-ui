@@ -31,7 +31,7 @@ exports[`SelectStakeholder Renders without crashing 1`] = `
   onToggle={[Function]}
   onTypeaheadInputChanged={null}
   ouiaSafe={true}
-  placeholderText="Select owner from list of stakeholders"
+  placeholderText=""
   removeSelectionAriaLabel="Remove"
   selections={Array []}
   toggleAriaLabel="Options menu"
@@ -65,9 +65,7 @@ exports[`SelectStakeholder Renders without crashing 1`] = `
         "toString": [Function],
       }
     }
-  >
-    Aa
-  </SelectOption>
+  />
   <SelectOption
     className=""
     component="button"
@@ -92,8 +90,6 @@ exports[`SelectStakeholder Renders without crashing 1`] = `
         "toString": [Function],
       }
     }
-  >
-    Bb
-  </SelectOption>
+  />
 </Select>
 `;
