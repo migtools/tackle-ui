@@ -55,7 +55,7 @@ context("Test NewBusinessService", () => {
               method: "POST",
               headers: headers,
               body: {
-                name: `any`,
+                email: `email${i}@domain.com`,
                 displayName: `stakeholder${i}`,
               },
               url: `${Cypress.env("controls_base_url")}/stakeholder`,

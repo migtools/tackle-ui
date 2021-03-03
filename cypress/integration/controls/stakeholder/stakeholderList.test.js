@@ -14,32 +14,12 @@ context("Test business service list", () => {
 
       const stakeholders = [];
 
-      // Delete business services
+      // Delete stakeholders
       cy.request({
         method: "GET",
         headers: headers,
-        url: `${Cypress.env("controls_base_url")}/business-service?size=1000`,
+        url: `${Cypress.env("controls_base_url")}/stakeholder?size=1000`,
       })
-        .then((response) => {
-          response.body._embedded["business-service"].forEach((elem) => {
-            cy.request({
-              method: "DELETE",
-              headers: headers,
-              url: `${Cypress.env("controls_base_url")}/business-service/${
-                elem.id
-              }`,
-            });
-          });
-        })
-
-        // Delete stakeholders
-        .then(() => {
-          cy.request({
-            method: "GET",
-            headers: headers,
-            url: `${Cypress.env("controls_base_url")}/stakeholder?size=1000`,
-          });
-        })
         .then((response) => {
           response.body._embedded["stakeholder"].forEach((elem) => {
             cy.request({
@@ -57,28 +37,12 @@ context("Test business service list", () => {
               method: "POST",
               headers: headers,
               body: {
-                email: `email${i}@domain.com`,
+                email: `email-${(i + 9).toString(36)}@domain.com`,
                 displayName: `stakeholder${i}`,
               },
               url: `${Cypress.env("controls_base_url")}/stakeholder`,
             }).then((response) => {
               stakeholders.push(response.body);
-            });
-          }
-        })
-
-        // Create business services
-        .then(() => {
-          for (let i = 1; i <= 12; i++) {
-            cy.request({
-              method: "POST",
-              headers: headers,
-              body: {
-                name: `service${i}`,
-                description: `description${i}`,
-                owner: stakeholders[12 - i],
-              },
-              url: `${Cypress.env("controls_base_url")}/business-service`,
             });
           }
         });
@@ -88,36 +52,38 @@ context("Test business service list", () => {
   it("Filtering", () => {
     cy.intercept({
       method: "GET",
-      url: "/api/controls/business-service",
+      url: "/api/controls/stakeholder",
     }).as("apiCheck");
 
-    cy.visit("/controls/business-services");
+    cy.visit("/controls/stakeholders");
 
     //
     cy.wait("@apiCheck");
     cy.get("tbody > tr").should("have.length", 10);
 
-    // Apply first filter: 'byName'
-    cy.get("input[aria-label='filter-text']").type("service12");
+    // Apply first filter: 'byEmail'
+    cy.get("input[aria-label='filter-text']").type("email-l");
     cy.get("button[aria-label='search']").click();
 
     cy.wait("@apiCheck");
-    cy.get("tbody > tr").should("have.length", 1).contains("service12");
+    cy.get("tbody > tr")
+      .should("have.length", 1)
+      .contains("email-l@domain.com");
 
-    // Apply second filter: 'byName'
-    cy.get("input[aria-label='filter-text']").type("service5");
+    // Apply second filter: 'byEmail'
+    cy.get("input[aria-label='filter-text']").type("email-e");
     cy.get("button[aria-label='search']").click();
 
     cy.wait("@apiCheck");
     cy.get("tbody > tr")
       .should("have.length", 2)
-      .should("contain", "service12")
-      .should("contain", "service5");
+      .should("contain", "email-l@domain.com")
+      .should("contain", "email-e@domain.com");
 
-    // Apply second filter: 'byOwner'
+    // Apply second filter: 'byDisplayName'
     cy.get(".pf-c-toolbar button.pf-c-dropdown__toggle").click();
     cy.get(".pf-c-dropdown__menu button.pf-c-dropdown__menu-item")
-      .eq(2)
+      .eq(1)
       .click();
 
     cy.get("input[aria-label='filter-text']").type("stakeholder1");
@@ -126,16 +92,7 @@ context("Test business service list", () => {
     cy.wait("@apiCheck");
     cy.get("tbody > tr")
       .should("have.length", 1)
-      .should("contain", "service12");
-
-    // Remove filter 'byOwner' chip
-    cy.get(".pf-c-chip button.pf-c-button").eq(2).click();
-
-    cy.wait("@apiCheck");
-    cy.get("tbody > tr")
-      .should("have.length", 2)
-      .should("contain", "service12")
-      .should("contain", "service5");
+      .should("contain", "stakeholder12");
 
     // Clear all filters
     cy.get(".pf-c-toolbar__item > button.pf-m-link")
@@ -145,54 +102,54 @@ context("Test business service list", () => {
     cy.wait("@apiCheck");
     cy.get("tbody > tr")
       .should("have.length", 10)
-      .should("contain", "service1")
-      .should("contain", "service7");
+      .should("contain", "stakeholder1")
+      .should("contain", "stakeholder10");
   });
 
   it("Pagination", () => {
     cy.intercept({
       method: "GET",
-      url: "/api/controls/business-service",
+      url: "/api/controls/stakeholder",
     }).as("apiCheck");
 
-    cy.visit("/controls/business-services");
+    cy.visit("/controls/stakeholders");
 
     // Remember that by default the table is sorted by name
 
     cy.wait("@apiCheck");
     cy.get("tbody > tr").should("have.length", 10);
-    cy.get("tbody > tr").contains("service1");
-    cy.get("tbody > tr").contains("service7");
+    cy.get("tbody > tr").contains("stakeholder1");
+    cy.get("tbody > tr").contains("stakeholder10");
 
     cy.get("button[data-action='next']").first().click();
     cy.wait("@apiCheck");
     cy.get("tbody > tr").should("have.length", 2);
-    cy.get("tbody > tr").contains("service8");
-    cy.get("tbody > tr").contains("service9");
+    cy.get("tbody > tr").contains("stakeholder11");
+    cy.get("tbody > tr").contains("stakeholder12");
 
     cy.get("button[data-action='previous']").first().click();
     cy.wait("@apiCheck");
     cy.get("tbody > tr").should("have.length", 10);
-    cy.get("tbody > tr").contains("service1");
-    cy.get("tbody > tr").contains("service7");
+    cy.get("tbody > tr").contains("stakeholder1");
+    cy.get("tbody > tr").contains("stakeholder10");
   });
 
   it("Sorting", () => {
     cy.intercept({
       method: "GET",
-      url: "/api/controls/business-service",
+      url: "/api/controls/stakeholder",
     }).as("apiCheck");
 
-    cy.visit("/controls/business-services");
+    cy.visit("/controls/stakeholders");
 
     // Verify default sort
     cy.wait("@apiCheck");
     cy.get("th.pf-c-table__sort")
       .first()
       .should("have.attr", "aria-sort", "ascending")
-      .contains("Name");
-    cy.get("tbody > tr").eq(0).contains("service1");
-    cy.get("tbody > tr").eq(9).contains("service7");
+      .contains("Email");
+    cy.get("tbody > tr").eq(0).contains("stakeholder1");
+    cy.get("tbody > tr").eq(9).contains("stakeholder10");
 
     // Reverse sort
     cy.get("th.pf-c-table__sort > button").first().click();
@@ -200,38 +157,69 @@ context("Test business service list", () => {
     cy.get("th.pf-c-table__sort")
       .first()
       .should("have.attr", "aria-sort", "descending")
-      .contains("Name");
-    cy.get("tbody > tr").eq(0).contains("service9");
-    cy.get("tbody > tr").eq(9).contains("service11");
+      .contains("Email");
+    cy.get("tbody > tr").eq(0).contains("stakeholder12");
+    cy.get("tbody > tr").eq(9).contains("stakeholder3");
 
-    // Sort by owner
-    cy.get("th.pf-c-table__sort > button").contains("Owner").click();
+    // Sort by displayName
+    cy.get("th.pf-c-table__sort > button").contains("Display name").click();
     cy.wait("@apiCheck");
     cy.get("th.pf-c-table__sort")
       .eq(1)
       .should("have.attr", "aria-sort", "ascending")
-      .contains("Owner");
+      .contains("Display name");
     cy.get("tbody > tr").eq(0).contains("stakeholder1");
     cy.get("tbody > tr").eq(9).contains("stakeholder7");
 
     // Reverse sort
-    cy.get("th.pf-c-table__sort > button").contains("Owner").click();
+    cy.get("th.pf-c-table__sort > button").contains("Display name").click();
     cy.wait("@apiCheck");
     cy.get("th.pf-c-table__sort")
       .eq(1)
       .should("have.attr", "aria-sort", "descending")
-      .contains("Owner");
+      .contains("Display name");
     cy.get("tbody > tr").eq(0).contains("stakeholder9");
     cy.get("tbody > tr").eq(9).contains("stakeholder11");
+
+    // TODO test by job function and owner
+  });
+
+  it("Create new - mininum data", () => {
+    cy.intercept({
+      method: "GET",
+      url: "/api/controls/stakeholder",
+    }).as("apiCheck");
+
+    cy.visit("/controls/stakeholders");
+
+    // Open modal
+    cy.get("button[aria-label='create-stakeholder']").click();
+
+    // Verify primary button is disabled
+    cy.get("button[aria-label='submit']").should("be.disabled");
+
+    // Fill form
+    cy.get("input[name='email']").type("aaa@domain.com");
+    cy.get("input[name='displayName']").type("myDisplayName");
+
+    cy.get("button[aria-label='submit']").should("not.be.disabled");
+    cy.get("form").submit();
+
+    cy.wait("@apiCheck");
+
+    // Verify table
+    cy.get("tbody > tr")
+      .should("contain", "aaa@domain.com")
+      .should("contain", "myDisplayName");
   });
 
   it("Edit", () => {
     cy.intercept({
       method: "GET",
-      url: "/api/controls/business-service",
+      url: "/api/controls/stakeholder",
     }).as("apiCheck");
 
-    cy.visit("/controls/business-services");
+    cy.visit("/controls/stakeholders");
 
     cy.wait("@apiCheck");
 
@@ -242,8 +230,8 @@ context("Test business service list", () => {
     cy.get("button[aria-label='submit']").should("be.disabled");
 
     // Fill form
-    cy.get("input[name='name']").clear().type("my business service");
-    cy.get("textarea[name='description']").clear().type("my description");
+    cy.get("input[name='email']").clear().type("aaa@domain.com");
+    cy.get("input[name='displayName']").clear().type("myDisplayName");
 
     cy.get("button[aria-label='submit']").should("not.be.disabled");
     cy.get("form").submit();
@@ -251,22 +239,22 @@ context("Test business service list", () => {
     cy.wait("@apiCheck");
 
     // Verify table
-    cy.get("tbody > tr").contains("my business service");
-    cy.get("tbody > tr").contains("my description");
+    cy.get("tbody > tr").contains("aaa@domain.com");
+    cy.get("tbody > tr").contains("myDisplayName");
   });
 
-  it("Company list - delete", () => {
+  it("Delete", () => {
     cy.intercept({
       method: "GET",
-      path: "/api/controls/business-service*",
+      path: "/api/controls/stakeholder*",
     }).as("apiCheck");
 
     cy.intercept({
       method: "DELETE",
-      path: "/api/controls/business-service/*",
+      path: "/api/controls/stakeholder/*",
     }).as("apiDeleteCheck");
 
-    cy.visit("/controls/business-services");
+    cy.visit("/controls/stakeholders");
 
     cy.wait("@apiCheck");
 
