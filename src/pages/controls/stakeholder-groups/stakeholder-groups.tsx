@@ -172,7 +172,12 @@ export const StakeholderGroups: React.FC = () => {
       cellFormatters: [expandable],
     },
     { title: t("terms.description"), transforms: [] },
-    { title: t("terms.member(s)"), transforms: [sortable] },
+    {
+      title: t("terms.member(s)"),
+      transforms: [
+        // sortable
+      ],
+    },
     {
       title: "",
       props: {

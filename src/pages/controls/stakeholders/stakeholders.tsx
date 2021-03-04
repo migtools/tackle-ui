@@ -186,7 +186,12 @@ export const Stakeholders: React.FC = () => {
     },
     { title: t("terms.displayName"), transforms: [sortable] },
     { title: t("terms.jobFunction"), transforms: [sortable] },
-    { title: t("terms.group(s)"), transforms: [sortable] },
+    {
+      title: t("terms.group(s)"),
+      transforms: [
+        // sortable
+      ],
+    },
     {
       title: "",
       props: {
