@@ -152,8 +152,8 @@ export const BusinessServices: React.FC = () => {
   }, [filtersValue, paginationQuery, sortByQuery, fetchBusinessServices]);
 
   const columns: ICell[] = [
-    { title: t("terms.name"), transforms: [sortable, cellWidth(30)] },
-    { title: t("terms.description"), transforms: [cellWidth(30)] },
+    { title: t("terms.name"), transforms: [sortable, cellWidth(25)] },
+    { title: t("terms.description"), transforms: [cellWidth(35)] },
     { title: t("terms.owner"), transforms: [sortable] },
     {
       title: "",
