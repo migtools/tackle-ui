@@ -62,6 +62,11 @@ http {
             proxy_pass      ${CONTROLS_API_URL};
         }
 
+        location /api/application-inventory {
+            rewrite         ^/api/application-inventory/(.*)$ /application-inventory/$1 break;
+            proxy_pass      ${APPLICATION_INVENTORY_API_URL};
+        }
+
         error_page 404 /404.html;
             location = /40x.html {
         }
