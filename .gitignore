@@ -31,3 +31,6 @@ cypress/screenshots
 
 # VSCode
 .vscode/*
+
+# Intellij IDEA
+.idea/

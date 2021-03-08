@@ -63,6 +63,19 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+      application-inventory-db:
+        image: postgres:13.1
+        ports:
+          - 5434:5432
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: application_inventory_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -84,6 +97,17 @@ jobs:
           -e QUARKUS_OIDC_CLIENT_ID=controls-api \
           -e QUARKUS_OIDC_CREDENTIALS_SECRET=secret quay.io/konveyor/tackle-controls:latest-native
           sleep 5s && docker logs controls
+      - name: Application inventory API
+        run: |
+          docker run -d --name application-inventory --network ${{ job.services.application-inventory-db.network }} --network-alias application-inventory -p 8082:8080 \
+          -e QUARKUS_HTTP_PORT=8080 \
+          -e QUARKUS_DATASOURCE_USERNAME=user \
+          -e QUARKUS_DATASOURCE_PASSWORD=password \
+          -e QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://application-inventory-db:5432/application_inventory_db \
+          -e QUARKUS_OIDC_AUTH_SERVER_URL=http://keycloak:8080/auth/realms/konveyor \
+          -e QUARKUS_OIDC_CLIENT_ID=application-inventory-api \
+          -e QUARKUS_OIDC_CREDENTIALS_SECRET=secret quay.io/konveyor/tackle-application-inventory:latest-native
+          sleep 5s && docker logs application-inventory
       - name: Build
         run: |
           yarn install
@@ -171,6 +195,19 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+      application-inventory-db:
+        image: postgres:13.1
+        ports:
+          - 5434:5432
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: application_inventory_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v2
       - name: Keycloak Admin CLI
@@ -192,13 +229,26 @@ jobs:
           -e QUARKUS_OIDC_CREDENTIALS_SECRET=secret \
           quay.io/konveyor/tackle-controls:latest-native
           sleep 5s && docker logs controls
+      - name: Application inventory API
+        run: |
+          docker run -d --name application-inventory --network ${{ job.services.application-inventory-db.network }} --network-alias application-inventory -p 8082:8080 \
+          -e QUARKUS_HTTP_PORT=8080 \
+          -e QUARKUS_DATASOURCE_USERNAME=user \
+          -e QUARKUS_DATASOURCE_PASSWORD=password \
+          -e QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://application-inventory-db:5432/application_inventory_db \
+          -e QUARKUS_OIDC_AUTH_SERVER_URL=http://keycloak:8080/auth/realms/konveyor \
+          -e QUARKUS_OIDC_CLIENT_ID=application-inventory-api \
+          -e QUARKUS_OIDC_CREDENTIALS_SECRET=secret \
+          quay.io/konveyor/tackle-application-inventory:latest-native
+          sleep 5s && docker logs application-inventory
       - name: Tackle UI
         run: |
-          docker run -d --name tackle-ui --network ${{ job.services.controls-db.network }} --network-alias tackle-ui -p 3000:8080 \
+          docker run -d --name tackle-ui --network ${{ job.services.keycloak.network }} --network-alias tackle-ui -p 3000:8080 \
           -e SSO_REALM=konveyor \
           -e SSO_CLIENT_ID=tackle-ui \
           -e SSO_SERVER_URL=http://keycloak:8080/auth \
           -e CONTROLS_API_URL=http://controls:8080/controls \
+          -e APPLICATION_INVENTORY_API_URL=http://application-inventory:8080/application-inventory \
           quay.io/konveyor/tackle-ui:main
           sleep 5s && docker logs tackle-ui
       - name: Cypress run
@@ -213,6 +263,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_auth_base_url: http://localhost:3000/auth
           CYPRESS_controls_base_url: http://localhost:8081/controls
+          CYPRESS_application_inventory_base_url: http://localhost:8082/application-inventory
       - uses: actions/upload-artifact@v1
         if: failure()
         with:

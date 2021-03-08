@@ -16,7 +16,7 @@ exports[`SelectJobFunction Renders without crashing 1`] = `
   hasInlineFilter={false}
   inlineFilterPlaceholderText={null}
   inputIdPrefix=""
-  isCreatable={true}
+  isCreatable={false}
   isDisabled={false}
   isGrouped={false}
   isOpen={false}
@@ -60,7 +60,7 @@ exports[`SelectJobFunction Renders without crashing 1`] = `
       Object {
         "jobFunction": Object {
           "id": 1,
-          "name": "Aa",
+          "role": "Aa",
         },
         "toString": [Function],
       }
@@ -87,7 +87,7 @@ exports[`SelectJobFunction Renders without crashing 1`] = `
       Object {
         "jobFunction": Object {
           "id": 2,
-          "name": "Bb",
+          "role": "Bb",
         },
         "toString": [Function],
       }

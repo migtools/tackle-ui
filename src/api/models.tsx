@@ -41,7 +41,7 @@ export interface StakeholderGroup {
 
 export interface JobFunction {
   id?: number;
-  name: string;
+  role: string;
 }
 
 export interface BusinessServicePage {
