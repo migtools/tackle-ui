@@ -20,7 +20,7 @@ const selectOptionMapper = (
   jobFunction: JobFunction
 ): SelectOptionJobFunction => ({
   jobFunction: { ...jobFunction },
-  toString: () => jobFunction.name,
+  toString: () => jobFunction.role,
 });
 
 export interface SelectJobFunctionProps {
@@ -78,7 +78,7 @@ export const SelectJobFunction: React.FC<SelectJobFunctionProps> = ({
       onToggle={handleOnToggle}
       onSelect={handleOnSelect}
       onClear={handleOnClearSelection}
-      selections={value ? value.name : undefined}
+      selections={value ? value.role : undefined}
       isOpen={isOpen}
       menuAppendTo={() => document.body}
       maxHeight={350}
@@ -90,7 +90,7 @@ export const SelectJobFunction: React.FC<SelectJobFunctionProps> = ({
         .map((f) => selectOptionMapper(f))
         .map((elem, index) => (
           <SelectOption key={index} value={elem}>
-            {elem.jobFunction.name}
+            {elem.jobFunction.role}
           </SelectOption>
         ))}
     </Select>

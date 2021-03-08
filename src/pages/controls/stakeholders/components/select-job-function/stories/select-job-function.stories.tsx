@@ -24,11 +24,11 @@ Basic.args = {
   jobFunctions: [
     {
       id: 1,
-      name: "aa",
+      role: "aa",
     },
     {
       id: 2,
-      name: "bb",
+      role: "bb",
     },
   ],
 };
@@ -38,7 +38,7 @@ WithValue.args = {
   ...Basic.args,
   value: {
     id: 3,
-    name: "any",
+    role: "any",
   },
 };
 
@@ -46,7 +46,7 @@ const bigJobFunctions: JobFunction[] = [];
 for (let index = 0; index < 100; index++) {
   bigJobFunctions.push({
     id: index,
-    name: `function${index}`,
+    role: `function${index}`,
   });
 }
 
