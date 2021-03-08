@@ -78,7 +78,10 @@ export interface IState {
   fetchCount: number;
   fetchStakeholders: (
     filters: {
-      filterText?: string;
+      email?: string[];
+      displayName?: string[];
+      jobFuction?: string[];
+      group?: string[];
     },
     page: PageQuery,
     sortBy?: StakeholderSortByQuery
@@ -93,7 +96,12 @@ export const useFetchStakeholders = (
 
   const fetchStakeholders = useCallback(
     (
-      filters: { filterText?: string },
+      filters: {
+        email?: string[];
+        displayName?: string[];
+        jobFuction?: string[];
+        group?: string[];
+      },
       page: PageQuery,
       sortBy?: StakeholderSortByQuery
     ) => {

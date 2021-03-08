@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AppTableToolbarToggleGroup Renders without crashing 1`] = `
+<ForwardRef
+  variant="filter-group"
+>
+  <ToolbarFilter
+    categoryName={
+      Object {
+        "key": "name",
+        "name": "Name",
+      }
+    }
+    chips={
+      Array [
+        "carlos",
+        "maria",
+      ]
+    }
+    deleteChip={[Function]}
+    deleteChipGroup={[Function]}
+    key="0"
+    showToolbarItem={false}
+  />
+  <ToolbarFilter
+    categoryName={
+      Object {
+        "key": "description",
+        "name": "Description",
+      }
+    }
+    chips={
+      Array [
+        "engineer",
+        "teacher",
+      ]
+    }
+    deleteChip={[Function]}
+    deleteChipGroup={[Function]}
+    key="1"
+    showToolbarItem={true}
+  >
+    <span>
+      children
+    </span>
+  </ToolbarFilter>
+</ForwardRef>
+`;

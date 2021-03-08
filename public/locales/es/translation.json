@@ -12,7 +12,14 @@
         "businessServices": "Servicios de negocio",
         "stakeholders": "Interesados",
         "stakeholderGroups": "Grupos de interesados",
-        "tags": "Etiquetas"
+        "tags": "Etiquetas",
+        "member(s)": "Miembro(s)",
+        "member": "Miembro",
+        "email": "Email",
+        "displayName": "Nombre a mostrar",
+        "jobFunction": "Función laboral",
+        "group": "Grupo",
+        "group(s)": "Grupo(s)"
     },
     "actions": {
         "edit": "Editar",
@@ -26,7 +33,11 @@
         "title": {
             "delete": "Eliminar '{{what}}'",
             "newBusinessService": "Nuevo servicio de negocio",
-            "updateBusinessService": "Actualizar servicio de negocio"
+            "updateBusinessService": "Actualizar servicio de negocio",
+            "newStakeholderGroup": "Nuevo grupo de interesados",
+            "updateStakeholderGroup": "Actualizar grupo de interesados",
+            "newStakeholder": "Nuevo interesado",
+            "updateStakeholder": "Actualizar interesado"
         },
         "message": {
             "delete": "¿Estás seguro de querer eliminar '{{what}}'?. Esta acción eliminará todos los recursos asociados al mismo y no puede ser revertida. ¡Asegúrate de que esto es lo que realmente quieres!"
@@ -41,6 +52,7 @@
         "required": "Este campo es requerido.",
         "minLength": "Este campo debe de tener al menos {{length}} caracteres.",
         "maxLength": "Este campo debe de tener menos de {{length}} caracteres.",
-        "onlyCharactersAndUnderscore": "Este campo debe de contener solo caracteres alfanuméricos incluyendo el subguión."
+        "onlyCharactersAndUnderscore": "Este campo debe de contener solo caracteres alfanuméricos incluyendo el subguión.",
+        "email": "Este campo requiere un email válido."
     }
 }

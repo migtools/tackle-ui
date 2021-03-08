@@ -19,7 +19,7 @@ This project depends on other resources:
 - Keycloak
 - Controls
 
-## Start dependencines with docker-compose
+## Start dependencies with docker-compose
 
 Start the dependencies using `docker-compose.yml`:
 
@@ -56,7 +56,7 @@ Start the controls' database:
 ```shell
 docker run -d \
 --network konveyor --network-alias controls-db \
--p 5432:5432 \
+-p 5433:5432 \
 -e POSTGRES_USER=user \
 -e POSTGRES_PASSWORD=password \
 -e POSTGRES_DB=controls_db \
@@ -68,7 +68,7 @@ Start the controls:
 ```shell
 docker run -d \
 --network konveyor --network-alias controls \
--p 8080:8080 \
+-p 8081:8080 \
 -e QUARKUS_HTTP_PORT=8080 \
 -e QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://controls-db:5432/controls_db \
 -e QUARKUS_DATASOURCE_USERNAME=user \
@@ -94,3 +94,57 @@ yarn start
 ```
 
 You should be able to open http://localhost:3000 and start working on the UI.
+
+# Use tackle-controls in dev mode
+
+Fork/clone the `tackle-controls` repository:
+
+```shell
+git clone https://github.com/konveyor/tackle-controls
+```
+
+Start a database which will be used by the `tackle-controls` project:
+
+```shell
+docker run -d -p 5432:5432 \
+-e POSTGRES_USER=username \
+-e POSTGRES_PASSWORD=password \
+-e POSTGRES_DB=controls_db \
+postgres:13.1
+```
+
+Move your terminal to the `tackle-controls` repository you cloned and then:
+
+```shell
+./mvnw quarkus:dev \
+-Dquarkus.http.port=8080 \
+-Dquarkus.datasource.username=username \
+-Dquarkus.datasource.password=password \
+-Dquarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/controls_db \
+-Dquarkus.oidc.client-id=controls-api \
+-Dquarkus.oidc.credentials.secret=secret \
+-Dquarkus.oidc.auth-server-url=http://localhost:8180/auth/realms/konveyor
+```
+
+Finally, open `src/setupProxy.js` and change the port (from 8081 to 8080) of the `/api/controls` endpoint. It should look like:
+
+```javascript
+module.exports = function (app) {
+  app.use(
+    "/api/controls",
+    createProxyMiddleware({
+      target: "http://localhost:8080",
+      changeOrigin: true,
+      pathRewrite: {
+        "^/api/controls": "/controls",
+      },
+    })
+  );
+};
+```
+
+You need to restart the local ui server. Stop the ui server and then execute:
+
+```shell
+yarn start
+```

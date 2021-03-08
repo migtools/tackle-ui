@@ -27,7 +27,7 @@ describe("useFetchStakeholders", () => {
     expect(fetchError).toBeUndefined();
 
     // Init fetch
-    act(() => fetchStakeholders({ filterText: "" }, { page: 2, perPage: 50 }));
+    act(() => fetchStakeholders({}, { page: 2, perPage: 50 }));
     expect(result.current.isFetching).toBe(true);
 
     // Fetch finished
@@ -47,7 +47,7 @@ describe("useFetchStakeholders", () => {
     };
 
     new MockAdapter(axios)
-      .onGet(`${STAKEHOLDERS}?page=0&size=10&filter=something`)
+      .onGet(`${STAKEHOLDERS}?page=0&size=10`)
       .reply(200, data);
 
     // Use hook
@@ -67,9 +67,7 @@ describe("useFetchStakeholders", () => {
     expect(fetchError).toBeUndefined();
 
     // Init fetch
-    act(() =>
-      fetchStakeholders({ filterText: "something" }, { page: 1, perPage: 10 })
-    );
+    act(() => fetchStakeholders({}, { page: 1, perPage: 10 }));
     expect(result.current.isFetching).toBe(true);
 
     // Fetch finished

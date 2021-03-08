@@ -12,7 +12,14 @@
         "businessServices": "Business services",
         "stakeholders": "Stakeholders",
         "stakeholderGroups": "Stakeholder groups",
-        "tags": "Tags"
+        "tags": "Tags",
+        "member(s)": "Member(s)",
+        "member": "Member",
+        "email": "Email",
+        "displayName": "Display name",
+        "jobFunction": "Job function",
+        "group": "Group",
+        "group(s)": "Group(s)"
     },
     "actions": {
         "edit": "Edit",
@@ -26,7 +33,11 @@
         "title": {
             "delete": "Delete '{{what}}'",
             "newBusinessService": "New business service",
-            "updateBusinessService": "Update business service"
+            "updateBusinessService": "Update business service",
+            "newStakeholderGroup": "New stakeholder group",
+            "updateStakeholderGroup": "Update stakeholder group",
+            "newStakeholder": "New stakeholder",
+            "updateStakeholder": "Update stakeholder"
         },
         "message": {
             "delete": "Are you sure you want to delete '{{what}}'? This will delete all resources associated with it and cannot be undone. Make sure this is something you really want to do!"
@@ -41,6 +52,7 @@
         "required": "This field is required.",
         "minLength": "This field must contain at least {{length}} characters.",
         "maxLength": "This field must contain fewer than {{length}} characters.",
-        "onlyCharactersAndUnderscore": "This field must contain only alphanumeric characters including underscore."
+        "onlyCharactersAndUnderscore": "This field must contain only alphanumeric characters including underscore.",
+        "email": "This field requires a valid email."
     }
 }

@@ -25,8 +25,23 @@ export interface BusinessService {
 }
 
 export interface Stakeholder {
+  id?: number;
   displayName: string;
   email: string;
+  jobFunction?: JobFunction;
+  groups?: StakeholderGroup[];
+}
+
+export interface StakeholderGroup {
+  id?: number;
+  name: string;
+  description: string;
+  members?: Stakeholder[];
+}
+
+export interface JobFunction {
+  id?: number;
+  role: string;
 }
 
 export interface BusinessServicePage {
@@ -39,6 +54,20 @@ export interface BusinessServicePage {
 export interface StakeholderPage {
   _embedded: {
     stakeholder: Stakeholder[];
+  };
+  total_count: number;
+}
+
+export interface StakeholderGroupPage {
+  _embedded: {
+    "stakeholder-group": StakeholderGroup[];
+  };
+  total_count: number;
+}
+
+export interface JobFunctionPage {
+  _embedded: {
+    "job-function": JobFunction[];
   };
   total_count: number;
 }

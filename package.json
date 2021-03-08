@@ -3,9 +3,10 @@
   "version": "0.1",
   "private": true,
   "dependencies": {
-    "@patternfly/patternfly": "4.82.0",
-    "@patternfly/react-core": "4.92.1",
-    "@patternfly/react-table": "4.20.21",
+    "@konveyor/lib-ui": "^2.0.0",
+    "@patternfly/patternfly": "4.87.3",
+    "@patternfly/react-core": "4.97.3",
+    "@patternfly/react-table": "4.23.3",
     "@react-keycloak/web": "^3.4.0",
     "@redhat-cloud-services/frontend-components-notifications": "3.0.3",
     "@testing-library/jest-dom": "^5.11.4",
