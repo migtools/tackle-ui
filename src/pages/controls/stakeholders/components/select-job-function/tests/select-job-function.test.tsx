@@ -8,11 +8,11 @@ describe("SelectJobFunction", () => {
   const JOBFUNCTIONS: JobFunction[] = [
     {
       id: 1,
-      name: "Aa",
+      role: "Aa",
     },
     {
       id: 2,
-      name: "Bb",
+      role: "Bb",
     },
   ];
 

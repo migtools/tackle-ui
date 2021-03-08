@@ -84,7 +84,7 @@ export const SelectJobFunction: React.FC<SelectJobFunctionProps> = ({
       maxHeight={350}
       customContent={customContent}
       placeholderText="Select a job function"
-      isCreatable={true}
+      isCreatable={false}
     >
       {jobFunctions
         .map((f) => selectOptionMapper(f))
