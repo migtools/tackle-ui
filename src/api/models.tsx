@@ -44,6 +44,13 @@ export interface JobFunction {
   role: string;
 }
 
+export interface Application {
+  id?: number;
+  name: string;
+  description?: string;
+  comments?: string;
+}
+
 export interface BusinessServicePage {
   _embedded: {
     "business-service": BusinessService[];
@@ -68,6 +75,13 @@ export interface StakeholderGroupPage {
 export interface JobFunctionPage {
   _embedded: {
     "job-function": JobFunction[];
+  };
+  total_count: number;
+}
+
+export interface ApplicationPage {
+  _embedded: {
+    application: Application[];
   };
   total_count: number;
 }

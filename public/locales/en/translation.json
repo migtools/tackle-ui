@@ -7,19 +7,20 @@
     "terms": {
         "name": "Name",
         "description": "Description",
+        "comments": "Comments",
         "owner": "Owner",
         "controls": "Controls",
-        "businessServices": "Business services",
         "stakeholders": "Stakeholders",
         "stakeholderGroups": "Stakeholder groups",
+        "businessServices": "Business services",
         "tags": "Tags",
         "member(s)": "Member(s)",
         "member": "Member",
         "email": "Email",
         "displayName": "Display name",
         "jobFunction": "Job function",
-        "group": "Group",
-        "group(s)": "Group(s)"
+        "group(s)": "Group(s)",
+        "group": "Group"
     },
     "actions": {
         "edit": "Edit",
@@ -32,6 +33,8 @@
     "dialog": {
         "title": {
             "delete": "Delete '{{what}}'",
+            "newApplication": "New application",
+            "updateApplication": "Update application",
             "newBusinessService": "New business service",
             "updateBusinessService": "Update business service",
             "newStakeholderGroup": "New stakeholder group",
