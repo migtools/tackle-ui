@@ -52,6 +52,7 @@ import { getAxiosErrorMessage } from "utils/utils";
 
 import { NewApplicationModal } from "./components/new-application-modal";
 import { UpdateApplicationModal } from "./components/update-application-modal";
+import { RemoteBusinessService } from "./components/remote-business-service";
 
 enum FilterKey {
   NAME = "name",
@@ -155,6 +156,7 @@ export const ApplicationInventory: React.FC = () => {
       cellFormatters: [expandable],
     },
     { title: t("terms.description"), transforms: [] },
+    { title: t("terms.businessService"), transforms: [] },
   ];
 
   const rows: IRow[] = [];
@@ -169,6 +171,17 @@ export const ApplicationInventory: React.FC = () => {
         },
         {
           title: item.description,
+        },
+        {
+          title: (
+            <RemoteBusinessService
+              businessServiceId={Number(item.businessService)}
+            >
+              {({ businessService, fetchError }) =>
+                fetchError ? t("terms.unknown") : businessService?.name || ""
+              }
+            </RemoteBusinessService>
+          ),
         },
       ],
     });
