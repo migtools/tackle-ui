@@ -8,6 +8,7 @@
         "name": "Name",
         "description": "Description",
         "comments": "Comments",
+        "businessService": "Business service",
         "owner": "Owner",
         "controls": "Controls",
         "stakeholders": "Stakeholders",

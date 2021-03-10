@@ -19,6 +19,8 @@ describe("SelectStakeholder", () => {
   it("Renders without crashing", () => {
     const wrapper = shallow(
       <SelectStakeholder
+        isMulti={true}
+        placeholderText="Select an option"
         stakeholders={STAKEHOLDERS}
         onSelect={jest.fn()}
         onClear={jest.fn()}

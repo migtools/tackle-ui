@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AxiosError, AxiosPromise, AxiosResponse } from "axios";
 import { useFormik, FormikProvider, FormikHelpers } from "formik";
@@ -11,22 +11,39 @@ import {
   ButtonVariant,
   Form,
   FormGroup,
+  SelectOptionObject,
   TextArea,
   TextInput,
 } from "@patternfly/react-core";
 
+import { useFetchBusinessServices } from "shared/hooks";
+
 import { createApplication, updateApplication } from "api/rest";
-import { Application } from "api/models";
+import { Application, BusinessService } from "api/models";
 import {
   getAxiosErrorMessage,
   getValidatedFromError,
   getValidatedFromErrorTouched,
 } from "utils/utils";
+import { SelectEntityFormikField } from "shared/components";
+import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
+
+interface SelectOptionEntity extends SelectOptionObject {
+  entity: BusinessService;
+}
+
+const selectOptionMapper = (entity: BusinessService): SelectOptionEntity => ({
+  entity: { ...entity },
+  toString: () => {
+    return entity.name;
+  },
+});
 
 export interface FormValues {
   name: string;
   description?: string;
   comments?: string;
+  businessService?: SelectOptionEntity;
 }
 
 export interface ApplicationFormProps {
@@ -44,10 +61,44 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
   const [error, setError] = useState<AxiosError>();
 
+  const {
+    businessServices,
+    isFetching: isFetchingBusinessServices,
+    fetchError: fetchErrorBusinessServices,
+    fetchAllBusinessServices,
+  } = useFetchBusinessServices();
+
+  useEffect(() => {
+    fetchAllBusinessServices();
+  }, [fetchAllBusinessServices]);
+
+  const businessServiceInitialValue = useMemo(() => {
+    let result: SelectOptionEntity | undefined = undefined;
+    if (
+      application &&
+      application.businessService &&
+      businessServices &&
+      businessServices.data
+    ) {
+      const businessServiceId = Number(application.businessService);
+      const businessService = businessServices.data.find(
+        (f) => f.id === businessServiceId
+      );
+
+      result = selectOptionMapper({
+        id: businessServiceId,
+        name: businessService ? businessService.name : "Unknown",
+      });
+    }
+
+    return result;
+  }, [application, businessServices]);
+
   const initialValues: FormValues = {
     name: application?.name || "",
     description: application?.description || "",
     comments: application?.comments || "",
+    businessService: businessServiceInitialValue,
   };
 
   const validationSchema = object().shape({
@@ -72,6 +123,9 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
       name: formValues.name,
       description: formValues.description,
       comments: formValues.comments,
+      businessService: formValues.businessService
+        ? `${formValues.businessService.entity.id}`
+        : undefined,
     };
 
     let promise: AxiosPromise<Application>;
@@ -158,6 +212,38 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
               formik.errors.description,
               formik.touched.description
             )}
+          />
+        </FormGroup>
+        <FormGroup
+          label={t("terms.businessService")}
+          fieldId="businessService"
+          isRequired={false}
+          validated={getValidatedFromError(formik.errors.businessService)}
+          helperTextInvalid={formik.errors.businessService}
+        >
+          <SelectEntityFormikField
+            fieldConfig={{
+              name: "businessService",
+            }}
+            selectConfig={{
+              isMulti: false,
+              options: (businessServices?.data || []).map((f) =>
+                selectOptionMapper(f)
+              ),
+              isEqual: (a: SelectOptionObject, b: SelectOptionObject) => {
+                return (
+                  (a as SelectOptionEntity).entity.id ===
+                  (b as SelectOptionEntity).entity.id
+                );
+              },
+
+              isFetching: isFetchingBusinessServices,
+              fetchError: fetchErrorBusinessServices,
+
+              menuAppendTo: () => document.body,
+              maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
+              placeholderText: "Select a business service",
+            }}
           />
         </FormGroup>
         <FormGroup

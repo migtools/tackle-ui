@@ -49,6 +49,7 @@ export interface Application {
   name: string;
   description?: string;
   comments?: string;
+  businessService?: string;
 }
 
 export interface BusinessServicePage {

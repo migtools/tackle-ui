@@ -85,4 +85,47 @@ describe("useFetchBusinessServices", () => {
     });
     expect(result.current.fetchError).toBeUndefined();
   });
+
+  it("Fetch all", async () => {
+    // Mock REST API
+    const data: BusinessServicePage = {
+      _embedded: {
+        "business-service": [],
+      },
+      total_count: 0,
+    };
+
+    new MockAdapter(axios)
+      .onGet(`${BUSINESS_SERVICES}?size=1000`)
+      .reply(200, data);
+
+    // Use hook
+    const { result, waitForNextUpdate } = renderHook(() =>
+      useFetchBusinessServices()
+    );
+
+    const {
+      businessServices: items,
+      isFetching,
+      fetchError,
+      fetchAllBusinessServices: fetchAll,
+    } = result.current;
+
+    expect(isFetching).toBe(false);
+    expect(items).toBeUndefined();
+    expect(fetchError).toBeUndefined();
+
+    // Init fetch
+    act(() => fetchAll());
+    expect(result.current.isFetching).toBe(true);
+
+    // Fetch finished
+    await waitForNextUpdate();
+    expect(result.current.isFetching).toBe(false);
+    expect(result.current.businessServices).toMatchObject({
+      data: [],
+      meta: { count: 0 },
+    });
+    expect(result.current.fetchError).toBeUndefined();
+  });
 });

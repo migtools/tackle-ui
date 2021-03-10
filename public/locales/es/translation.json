@@ -8,6 +8,7 @@
         "name": "Nombre",
         "description": "Descripción",
         "comments": "Comentarios",
+        "businessService": "Servicio de negocio",
         "owner": "Propietario",
         "controls": "Controles",
         "stakeholders": "Interesados",

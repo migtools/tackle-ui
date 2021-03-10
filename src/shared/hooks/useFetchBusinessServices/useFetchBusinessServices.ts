@@ -2,7 +2,11 @@ import { useCallback, useReducer } from "react";
 import { AxiosError } from "axios";
 import { ActionType, createAsyncAction, getType } from "typesafe-actions";
 
-import { getBusinessServices, BusinessServiceSortByQuery } from "api/rest";
+import {
+  getBusinessServices,
+  getAllBusinessServices,
+  BusinessServiceSortByQuery,
+} from "api/rest";
 import { PageRepresentation, BusinessService, PageQuery } from "api/models";
 
 export const {
@@ -81,6 +85,7 @@ export interface IState {
     page: PageQuery,
     sortBy?: BusinessServiceSortByQuery
   ) => void;
+  fetchAllBusinessServices: () => void;
 }
 
 export const useFetchBusinessServices = (
@@ -117,12 +122,35 @@ export const useFetchBusinessServices = (
     []
   );
 
+  const fetchAllBusinessServices = useCallback(() => {
+    dispatch(fetchRequest());
+
+    getAllBusinessServices()
+      .then(({ data }) => {
+        const list = data._embedded["business-service"];
+        const total = data.total_count;
+
+        dispatch(
+          fetchSuccess({
+            data: list,
+            meta: {
+              count: total,
+            },
+          })
+        );
+      })
+      .catch((error: AxiosError) => {
+        dispatch(fetchFailure(error));
+      });
+  }, []);
+
   return {
     businessServices: state.businessServices,
     isFetching: state.isFetching,
     fetchError: state.fetchError,
     fetchCount: state.fetchCount,
     fetchBusinessServices,
+    fetchAllBusinessServices,
   };
 };
 

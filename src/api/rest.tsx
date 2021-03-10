@@ -98,7 +98,11 @@ export const getBusinessServices = (
   return APIClient.get(`${BUSINESS_SERVICES}?${query.join("&")}`, { headers });
 };
 
-export const deleteBusinessService = (id: number): AxiosPromise => {
+export const getAllBusinessServices = (): AxiosPromise<BusinessServicePage> => {
+  return APIClient.get(`${BUSINESS_SERVICES}?size=1000`, { headers });
+};
+
+export const deleteBusinessService = (id: number | string): AxiosPromise => {
   return APIClient.delete(`${BUSINESS_SERVICES}/${id}`);
 };
 
