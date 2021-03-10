@@ -87,12 +87,12 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
       result = selectOptionMapper({
         id: businessServiceId,
-        name: businessService ? businessService.name : "Unknown",
+        name: businessService ? businessService.name : t("terms.unknown"),
       });
     }
 
     return result;
-  }, [application, businessServices]);
+  }, [application, businessServices, t]);
 
   const initialValues: FormValues = {
     name: application?.name || "",
@@ -242,7 +242,11 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
               menuAppendTo: () => document.body,
               maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
-              placeholderText: "Select a business service",
+              placeholderText: t("composed.selectOne", {
+                what: t("terms.businessService"),
+              }),
+              "aria-label": "business-service",
+              "aria-describedby": "business-service",
             }}
           />
         </FormGroup>

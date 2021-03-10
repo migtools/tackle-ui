@@ -10,28 +10,23 @@ import {
   DescriptionListDescription,
   DescriptionListGroup,
   DescriptionListTerm,
-  EmptyState,
-  EmptyStateBody,
-  EmptyStateIcon,
-  EmptyStateVariant,
   PageSection,
   PageSectionVariants,
   Text,
   TextContent,
-  Title,
   ToolbarGroup,
   ToolbarItem,
 } from "@patternfly/react-core";
 import {
   expandable,
-  IActions,
+  IAction,
   ICell,
   IExtraData,
   IRow,
   IRowData,
+  ISeparator,
   sortable,
 } from "@patternfly/react-table";
-import { AddCircleOIcon } from "@patternfly/react-icons";
 
 import { useDispatch } from "react-redux";
 import { alertActions } from "store/alert";
@@ -42,6 +37,7 @@ import {
   AppTableToolbarToggleGroup,
   AppTableWithControls,
   ConditionalRender,
+  NoDataEmptyState,
   SearchFilter,
 } from "shared/components";
 import {
@@ -197,30 +193,43 @@ export const ApplicationInventory: React.FC = () => {
     }
   });
 
-  const actions: IActions = [
-    {
-      title: t("actions.edit"),
-      onClick: (
-        event: React.MouseEvent,
-        rowIndex: number,
-        rowData: IRowData
-      ) => {
-        const row: Application = getRow(rowData);
-        editRow(row);
+  const actionResolver = (rowData: IRowData): (IAction | ISeparator)[] => {
+    const row: Application = getRow(rowData);
+    if (!row) {
+      return [];
+    }
+
+    const actions: (IAction | ISeparator)[] = [
+      {
+        title: t("actions.edit"),
+        onClick: (
+          event: React.MouseEvent,
+          rowIndex: number,
+          rowData: IRowData
+        ) => {
+          const row: Application = getRow(rowData);
+          editRow(row);
+        },
       },
-    },
-    {
-      title: t("actions.delete"),
-      onClick: (
-        event: React.MouseEvent,
-        rowIndex: number,
-        rowData: IRowData
-      ) => {
-        const row: Application = getRow(rowData);
-        deleteRow(row);
+      {
+        title: t("actions.delete"),
+        onClick: (
+          event: React.MouseEvent,
+          rowIndex: number,
+          rowData: IRowData
+        ) => {
+          const row: Application = getRow(rowData);
+          deleteRow(row);
+        },
       },
-    },
-  ];
+    ];
+
+    return actions;
+  };
+
+  const areActionsDisabled = (): boolean => {
+    return false;
+  };
 
   // Rows
 
@@ -331,7 +340,7 @@ export const ApplicationInventory: React.FC = () => {
     <>
       <PageSection variant={PageSectionVariants.light}>
         <TextContent>
-          <Text component="h1">Application inventory</Text>
+          <Text component="h1">{t("composed.applicationInventory")}</Text>
         </TextContent>
       </PageSection>
       <PageSection>
@@ -348,7 +357,8 @@ export const ApplicationInventory: React.FC = () => {
             onCollapse={collapseRow}
             columns={columns}
             rows={rows}
-            actions={actions}
+            actionResolver={actionResolver}
+            areActionsDisabled={areActionsDisabled}
             isLoading={isFetching}
             loadingVariant="skeleton"
             fetchError={fetchError}
@@ -386,15 +396,14 @@ export const ApplicationInventory: React.FC = () => {
               </ToolbarGroup>
             }
             noDataState={
-              <EmptyState variant={EmptyStateVariant.small}>
-                <EmptyStateIcon icon={AddCircleOIcon} />
-                <Title headingLevel="h2" size="lg">
-                  No applications available
-                </Title>
-                <EmptyStateBody>
-                  Create a new application to start seeing data here.
-                </EmptyStateBody>
-              </EmptyState>
+              <NoDataEmptyState
+                title={t("composed.noDataStateTitle", {
+                  what: t("terms.applications"),
+                })}
+                description={t("composed.noDataStateBody", {
+                  what: t("terms.application"),
+                })}
+              />
             }
           />
         </ConditionalRender>

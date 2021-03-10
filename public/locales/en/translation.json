@@ -8,6 +8,7 @@
         "name": "Name",
         "description": "Description",
         "comments": "Comments",
+        "unknown": "Unknown",
         "businessService": "Business service",
         "owner": "Owner",
         "controls": "Controls",
@@ -51,6 +52,12 @@
         "success": {
             "added": "Success! {{what}} was added as a {{type}}."
         }
+    },
+    "composed": {
+        "applicationInventory": "Application inventory",
+        "noDataStateTitle": "No {{what}} available",
+        "noDataStateBody": "Create a new {{what}} to start seeing data here",
+        "selectOne": "Select a {{what}}"
     },
     "validation": {
         "required": "This field is required.",
