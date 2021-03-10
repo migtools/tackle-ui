@@ -155,6 +155,7 @@ export const ApplicationInventory: React.FC = () => {
       cellFormatters: [expandable],
     },
     { title: t("terms.description"), transforms: [] },
+    { title: t("terms.businessService"), transforms: [] },
   ];
 
   const rows: IRow[] = [];
@@ -169,6 +170,9 @@ export const ApplicationInventory: React.FC = () => {
         },
         {
           title: item.description,
+        },
+        {
+          title: item.businessService,
         },
       ],
     });
