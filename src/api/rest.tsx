@@ -10,17 +10,43 @@ import {
   StakeholderGroup,
   StakeholderGroupPage,
   JobFunctionPage,
+  ApplicationPage,
+  Application,
 } from "./models";
 
-export const BASE_URL = "controls";
-export const BUSINESS_SERVICES = BASE_URL + "/business-service";
-export const STAKEHOLDERS = BASE_URL + "/stakeholder";
-export const STAKEHOLDER_GROUPS = BASE_URL + "/stakeholder-group";
-export const JOB_FUNCTIONS = BASE_URL + "/job-function";
+export const CONTROLS_BASE_URL = "controls";
+export const APP_INVENTORY_BASE_URL = "application-inventory";
+
+export const BUSINESS_SERVICES = CONTROLS_BASE_URL + "/business-service";
+export const STAKEHOLDERS = CONTROLS_BASE_URL + "/stakeholder";
+export const STAKEHOLDER_GROUPS = CONTROLS_BASE_URL + "/stakeholder-group";
+export const JOB_FUNCTIONS = CONTROLS_BASE_URL + "/job-function";
+
+export const APPLICATIONS = APP_INVENTORY_BASE_URL + "/application";
 
 const headers = { Accept: "application/hal+json" };
 
 type Direction = "asc" | "desc";
+
+const buildQuery = (params: any) => {
+  const query: string[] = [];
+
+  Object.keys(params).forEach((key) => {
+    const value = (params as any)[key];
+
+    if (value !== undefined && value !== null) {
+      let queryParamValues: string[] = [];
+      if (Array.isArray(value)) {
+        queryParamValues = value;
+      } else {
+        queryParamValues = [value];
+      }
+      queryParamValues.forEach((v) => query.push(`${key}=${v}`));
+    }
+  });
+
+  return query;
+};
 
 // Business services
 
@@ -58,8 +84,6 @@ export const getBusinessServices = (
     sortByQuery = `${sortBy.direction === "desc" ? "-" : ""}${field}`;
   }
 
-  const query: string[] = [];
-
   const params = {
     page: pagination.page - 1,
     size: pagination.perPage,
@@ -70,24 +94,15 @@ export const getBusinessServices = (
     "owner.displayName": filters.owner,
   };
 
-  Object.keys(params).forEach((key) => {
-    const value = (params as any)[key];
-
-    if (value !== undefined && value !== null) {
-      let queryParamValues: string[] = [];
-      if (Array.isArray(value)) {
-        queryParamValues = value;
-      } else {
-        queryParamValues = [value];
-      }
-      queryParamValues.forEach((v) => query.push(`${key}=${v}`));
-    }
-  });
-
+  const query: string[] = buildQuery(params);
   return APIClient.get(`${BUSINESS_SERVICES}?${query.join("&")}`, { headers });
 };
 
-export const deleteBusinessService = (id: number): AxiosPromise => {
+export const getAllBusinessServices = (): AxiosPromise<BusinessServicePage> => {
+  return APIClient.get(`${BUSINESS_SERVICES}?size=1000`, { headers });
+};
+
+export const deleteBusinessService = (id: number | string): AxiosPromise => {
   return APIClient.delete(`${BUSINESS_SERVICES}/${id}`);
 };
 
@@ -148,8 +163,6 @@ export const getStakeholders = (
     sortByQuery = `${sortBy.direction === "desc" ? "-" : ""}${field}`;
   }
 
-  const query: string[] = [];
-
   const params = {
     page: pagination.page - 1,
     size: pagination.perPage,
@@ -161,20 +174,7 @@ export const getStakeholders = (
     group: filters.group,
   };
 
-  Object.keys(params).forEach((key) => {
-    const value = (params as any)[key];
-
-    if (value !== undefined && value !== null) {
-      let queryParamValues: string[] = [];
-      if (Array.isArray(value)) {
-        queryParamValues = value;
-      } else {
-        queryParamValues = [value];
-      }
-      queryParamValues.forEach((v) => query.push(`${key}=${v}`));
-    }
-  });
-
+  const query: string[] = buildQuery(params);
   return APIClient.get(`${STAKEHOLDERS}?${query.join("&")}`, { headers });
 };
 
@@ -234,8 +234,6 @@ export const getStakeholderGroups = (
     sortByQuery = `${sortBy.direction === "desc" ? "-" : ""}${field}`;
   }
 
-  const query: string[] = [];
-
   const params = {
     page: pagination.page - 1,
     size: pagination.perPage,
@@ -246,20 +244,7 @@ export const getStakeholderGroups = (
     member: filters.member,
   };
 
-  Object.keys(params).forEach((key) => {
-    const value = (params as any)[key];
-
-    if (value !== undefined && value !== null) {
-      let queryParamValues: string[] = [];
-      if (Array.isArray(value)) {
-        queryParamValues = value;
-      } else {
-        queryParamValues = [value];
-      }
-      queryParamValues.forEach((v) => query.push(`${key}=${v}`));
-    }
-  });
-
+  const query: string[] = buildQuery(params);
   return APIClient.get(`${STAKEHOLDER_GROUPS}?${query.join("&")}`, { headers });
 };
 
@@ -287,4 +272,64 @@ export const updateStakeholderGroup = (
 
 export const getAllJobFunctions = (): AxiosPromise<JobFunctionPage> => {
   return APIClient.get(`${JOB_FUNCTIONS}?size=1000`, { headers });
+};
+
+// App inventory
+
+export enum ApplicationSortBy {
+  NAME,
+}
+export interface ApplicationSortByQuery {
+  field: ApplicationSortBy;
+  direction?: Direction;
+}
+
+export const getApplications = (
+  filters: {
+    name?: string[];
+  },
+  pagination: PageQuery,
+  sortBy?: ApplicationSortByQuery
+): AxiosPromise<ApplicationPage> => {
+  let sortByQuery: string | undefined = undefined;
+  if (sortBy) {
+    let field;
+    switch (sortBy.field) {
+      case ApplicationSortBy.NAME:
+        field = "name";
+        break;
+      default:
+        throw new Error("Could not define SortBy field name");
+    }
+    sortByQuery = `${sortBy.direction === "desc" ? "-" : ""}${field}`;
+  }
+
+  const params = {
+    page: pagination.page - 1,
+    size: pagination.perPage,
+    sort: sortByQuery,
+
+    name: filters.name,
+  };
+
+  const query: string[] = buildQuery(params);
+  return APIClient.get(`${APPLICATIONS}?${query.join("&")}`, {
+    headers,
+  });
+};
+
+export const deleteApplication = (id: number): AxiosPromise => {
+  return APIClient.delete(`${APPLICATIONS}/${id}`);
+};
+
+export const createApplication = (
+  obj: Application
+): AxiosPromise<Application> => {
+  return APIClient.post(`${APPLICATIONS}`, obj);
+};
+
+export const updateApplication = (
+  obj: Application
+): AxiosPromise<Application> => {
+  return APIClient.put(`${APPLICATIONS}/${obj.id}`, obj);
 };

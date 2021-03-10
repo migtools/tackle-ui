@@ -7,19 +7,22 @@
     "terms": {
         "name": "Name",
         "description": "Description",
+        "comments": "Comments",
+        "unknown": "Unknown",
+        "businessService": "Business service",
         "owner": "Owner",
         "controls": "Controls",
-        "businessServices": "Business services",
         "stakeholders": "Stakeholders",
         "stakeholderGroups": "Stakeholder groups",
+        "businessServices": "Business services",
         "tags": "Tags",
         "member(s)": "Member(s)",
         "member": "Member",
         "email": "Email",
         "displayName": "Display name",
         "jobFunction": "Job function",
-        "group": "Group",
-        "group(s)": "Group(s)"
+        "group(s)": "Group(s)",
+        "group": "Group"
     },
     "actions": {
         "edit": "Edit",
@@ -32,6 +35,8 @@
     "dialog": {
         "title": {
             "delete": "Delete '{{what}}'",
+            "newApplication": "New application",
+            "updateApplication": "Update application",
             "newBusinessService": "New business service",
             "updateBusinessService": "Update business service",
             "newStakeholderGroup": "New stakeholder group",
@@ -47,6 +52,12 @@
         "success": {
             "added": "Success! {{what}} was added as a {{type}}."
         }
+    },
+    "composed": {
+        "applicationInventory": "Application inventory",
+        "noDataStateTitle": "No {{what}} available",
+        "noDataStateBody": "Create a new {{what}} to start seeing data here",
+        "selectOne": "Select a {{what}}"
     },
     "validation": {
         "required": "This field is required.",

@@ -1,0 +1,1 @@
+export { useDeleteApplication } from "./useDeleteApplication";

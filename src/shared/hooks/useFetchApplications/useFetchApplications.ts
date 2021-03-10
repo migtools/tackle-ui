@@ -2,33 +2,29 @@ import { useCallback, useReducer } from "react";
 import { AxiosError } from "axios";
 import { ActionType, createAsyncAction, getType } from "typesafe-actions";
 
-import {
-  getBusinessServices,
-  getAllBusinessServices,
-  BusinessServiceSortByQuery,
-} from "api/rest";
-import { PageRepresentation, BusinessService, PageQuery } from "api/models";
+import { getApplications, ApplicationSortByQuery } from "api/rest";
+import { PageRepresentation, Application, PageQuery } from "api/models";
 
 export const {
   request: fetchRequest,
   success: fetchSuccess,
   failure: fetchFailure,
 } = createAsyncAction(
-  "useFetchBusinessServices/fetch/request",
-  "useFetchBusinessServices/fetch/success",
-  "useFetchBusinessServices/fetch/failure"
-)<void, PageRepresentation<BusinessService>, AxiosError>();
+  "useFetchApplications/fetch/request",
+  "useFetchApplications/fetch/success",
+  "useFetchApplications/fetch/failure"
+)<void, PageRepresentation<Application>, AxiosError>();
 
 type State = Readonly<{
   isFetching: boolean;
-  businessServices?: PageRepresentation<BusinessService>;
+  applications?: PageRepresentation<Application>;
   fetchError?: AxiosError;
   fetchCount: number;
 }>;
 
 const defaultState: State = {
   isFetching: false,
-  businessServices: undefined,
+  applications: undefined,
   fetchError: undefined,
   fetchCount: 0,
 };
@@ -56,7 +52,7 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         isFetching: false,
         fetchError: undefined,
-        businessServices: action.payload,
+        applications: action.payload,
         fetchCount: state.fetchCount + 1,
       };
     case getType(fetchFailure):
@@ -72,38 +68,37 @@ const reducer = (state: State, action: Action): State => {
 };
 
 export interface IState {
-  businessServices?: PageRepresentation<BusinessService>;
+  applications?: PageRepresentation<Application>;
   isFetching: boolean;
   fetchError?: AxiosError;
   fetchCount: number;
-  fetchBusinessServices: (
+  fetchApplications: (
     filters: {
       name?: string[];
-      description?: string[];
-      owner?: string[];
     },
     page: PageQuery,
-    sortBy?: BusinessServiceSortByQuery
+    sortBy?: ApplicationSortByQuery
   ) => void;
-  fetchAllBusinessServices: () => void;
 }
 
-export const useFetchBusinessServices = (
+export const useFetchApplications = (
   defaultIsFetching: boolean = false
 ): IState => {
   const [state, dispatch] = useReducer(reducer, defaultIsFetching, initReducer);
 
-  const fetchBusinessServices = useCallback(
+  const fetchApplications = useCallback(
     (
-      filters: { name?: string[]; description?: string[]; owner?: string[] },
+      filters: {
+        name?: string[];
+      },
       page: PageQuery,
-      sortBy?: BusinessServiceSortByQuery
+      sortBy?: ApplicationSortByQuery
     ) => {
       dispatch(fetchRequest());
 
-      getBusinessServices(filters, page, sortBy)
+      getApplications(filters, page, sortBy)
         .then(({ data }) => {
-          const list = data._embedded["business-service"];
+          const list = data._embedded.application;
           const total = data.total_count;
 
           dispatch(
@@ -122,36 +117,13 @@ export const useFetchBusinessServices = (
     []
   );
 
-  const fetchAllBusinessServices = useCallback(() => {
-    dispatch(fetchRequest());
-
-    getAllBusinessServices()
-      .then(({ data }) => {
-        const list = data._embedded["business-service"];
-        const total = data.total_count;
-
-        dispatch(
-          fetchSuccess({
-            data: list,
-            meta: {
-              count: total,
-            },
-          })
-        );
-      })
-      .catch((error: AxiosError) => {
-        dispatch(fetchFailure(error));
-      });
-  }, []);
-
   return {
-    businessServices: state.businessServices,
+    applications: state.applications,
     isFetching: state.isFetching,
     fetchError: state.fetchError,
     fetchCount: state.fetchCount,
-    fetchBusinessServices,
-    fetchAllBusinessServices,
+    fetchApplications,
   };
 };
 
-export default useFetchBusinessServices;
+export default useFetchApplications;

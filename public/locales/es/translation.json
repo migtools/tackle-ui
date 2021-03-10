@@ -7,19 +7,22 @@
     "terms": {
         "name": "Nombre",
         "description": "Descripción",
+        "comments": "Comentarios",
+        "unknown": "Desconocido",
+        "businessService": "Servicio de negocio",
         "owner": "Propietario",
         "controls": "Controles",
-        "businessServices": "Servicios de negocio",
         "stakeholders": "Interesados",
         "stakeholderGroups": "Grupos de interesados",
+        "businessServices": "Servicios de negocio",
         "tags": "Etiquetas",
         "member(s)": "Miembro(s)",
         "member": "Miembro",
         "email": "Email",
         "displayName": "Nombre a mostrar",
         "jobFunction": "Función laboral",
-        "group": "Grupo",
-        "group(s)": "Grupo(s)"
+        "group(s)": "Grupo(s)",
+        "group": "Grupo"
     },
     "actions": {
         "edit": "Editar",
@@ -32,6 +35,8 @@
     "dialog": {
         "title": {
             "delete": "Eliminar '{{what}}'",
+            "newApplication": "Nueva aplicación",
+            "updateApplication": "Actualizar aplicación",
             "newBusinessService": "Nuevo servicio de negocio",
             "updateBusinessService": "Actualizar servicio de negocio",
             "newStakeholderGroup": "Nuevo grupo de interesados",
@@ -47,6 +52,12 @@
         "success": {
             "added": "Éxito! {{what}} fue creado como un {{type}}."
         }
+    },
+    "composed": {
+        "applicationInventory": "Inventario de aplicaciones",
+        "noDataStateTitle": "No existen {{what}} disponibles",
+        "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
+        "selectOne": "Seleccione un(a) {{what}}"
     },
     "validation": {
         "required": "Este campo es requerido.",
