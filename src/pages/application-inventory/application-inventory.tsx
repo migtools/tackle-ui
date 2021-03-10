@@ -52,6 +52,7 @@ import { getAxiosErrorMessage } from "utils/utils";
 
 import { NewApplicationModal } from "./components/new-application-modal";
 import { UpdateApplicationModal } from "./components/update-application-modal";
+import { RemoteBusinessService } from "./components/remote-business-service";
 
 enum FilterKey {
   NAME = "name",
@@ -172,7 +173,15 @@ export const ApplicationInventory: React.FC = () => {
           title: item.description,
         },
         {
-          title: item.businessService,
+          title: (
+            <RemoteBusinessService
+              businessServiceId={Number(item.businessService)}
+            >
+              {({ businessService, fetchError }) =>
+                fetchError ? t("terms.unknown") : businessService?.name || ""
+              }
+            </RemoteBusinessService>
+          ),
         },
       ],
     });

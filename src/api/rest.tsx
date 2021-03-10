@@ -118,6 +118,12 @@ export const updateBusinessService = (
   return APIClient.put(`${BUSINESS_SERVICES}/${obj.id}`, obj);
 };
 
+export const getBusinessServiceById = (
+  id: number
+): AxiosPromise<BusinessService> => {
+  return APIClient.get(`${BUSINESS_SERVICES}/${id}`);
+};
+
 // Stakeholders
 
 export enum StakeholderSortBy {
