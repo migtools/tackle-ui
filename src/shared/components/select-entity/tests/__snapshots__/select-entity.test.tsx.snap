@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`SelectStakeholder Renders without crashing 1`] = `
+exports[`SelectEntity Renders without crashing 1`] = `
 <Select
   aria-label=""
   aria-labelledby=""
@@ -21,8 +21,7 @@ exports[`SelectStakeholder Renders without crashing 1`] = `
   isGrouped={false}
   isOpen={false}
   isPlain={false}
-  maxHeight={350}
-  menuAppendTo={[Function]}
+  menuAppendTo="inline"
   noResultsFoundText="No results found"
   onClear={[Function]}
   onCreateOption={[Function]}
@@ -31,7 +30,7 @@ exports[`SelectStakeholder Renders without crashing 1`] = `
   onToggle={[Function]}
   onTypeaheadInputChanged={null}
   ouiaSafe={true}
-  placeholderText="Select an option"
+  placeholderText=""
   removeSelectionAriaLabel="Remove"
   selections={Array []}
   toggleAriaLabel="Options menu"
@@ -58,10 +57,6 @@ exports[`SelectStakeholder Renders without crashing 1`] = `
     sendRef={[Function]}
     value={
       Object {
-        "stakeholder": Object {
-          "displayName": "Aa",
-          "email": "aa@domain.com",
-        },
         "toString": [Function],
       }
     }
@@ -83,10 +78,6 @@ exports[`SelectStakeholder Renders without crashing 1`] = `
     sendRef={[Function]}
     value={
       Object {
-        "stakeholder": Object {
-          "displayName": "Bb",
-          "email": "bb@domain.com",
-        },
         "toString": [Function],
       }
     }
