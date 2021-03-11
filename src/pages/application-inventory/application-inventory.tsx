@@ -157,6 +157,7 @@ export const ApplicationInventory: React.FC = () => {
     },
     { title: t("terms.description"), transforms: [] },
     { title: t("terms.businessService"), transforms: [] },
+    { title: t("terms.assessment"), transforms: [] },
   ];
 
   const rows: IRow[] = [];
@@ -174,14 +175,23 @@ export const ApplicationInventory: React.FC = () => {
         },
         {
           title: (
-            <RemoteBusinessService
-              businessServiceId={Number(item.businessService)}
-            >
-              {({ businessService, fetchError }) =>
-                fetchError ? t("terms.unknown") : businessService?.name || ""
-              }
-            </RemoteBusinessService>
+            <>
+              {item.businessService && (
+                <RemoteBusinessService
+                  businessServiceId={Number(item.businessService)}
+                >
+                  {({ businessService, fetchError }) =>
+                    fetchError
+                      ? t("terms.unknown")
+                      : businessService?.name || ""
+                  }
+                </RemoteBusinessService>
+              )}
+            </>
           ),
+        },
+        {
+          title: "asses",
         },
       ],
     });

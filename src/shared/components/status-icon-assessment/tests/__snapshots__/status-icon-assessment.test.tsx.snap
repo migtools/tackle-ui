@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StatusIconAssessment Renders without crashing 1`] = `
+<Flex
+  alignItems={
+    Object {
+      "default": "alignItemsCenter",
+    }
+  }
+  className=""
+  flexWrap={
+    Object {
+      "default": "nowrap",
+    }
+  }
+  spaceItems={
+    Object {
+      "default": "spaceItemsSm",
+    }
+  }
+  style={
+    Object {
+      "whiteSpace": "nowrap",
+    }
+  }
+>
+  <FlexItem>
+    <ErrorCircleOIcon
+      className=""
+      color="#6a6e73"
+      noVerticalAlign={false}
+      size="sm"
+    />
+  </FlexItem>
+  <FlexItem>
+    Not started yet
+  </FlexItem>
+</Flex>
+`;

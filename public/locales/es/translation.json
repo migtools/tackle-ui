@@ -7,9 +7,10 @@
     "terms": {
         "name": "Nombre",
         "description": "Descripción",
-        "comments": "Comentarios",
-        "unknown": "Desconocido",
         "businessService": "Servicio de negocio",
+        "assessment": "Evaluación",
+        "unknown": "Desconocido",
+        "comments": "Comentarios",
         "owner": "Propietario",
         "controls": "Controles",
         "stakeholders": "Interesados",

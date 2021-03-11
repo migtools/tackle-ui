@@ -12,3 +12,4 @@ export { SearchInput } from "./search-input";
 export { SelectEntity, SelectEntityFormikField } from "./select-entity";
 export { SelectStakeholder } from "./select-stakeholder";
 export { SimpleFilterDropdown } from "./simple-filter-dropdown";
+export { StatusIconAssessment } from "./status-icon-assessment";
