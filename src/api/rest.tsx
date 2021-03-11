@@ -12,10 +12,12 @@ import {
   JobFunctionPage,
   ApplicationPage,
   Application,
+  Assessment,
 } from "./models";
 
 export const CONTROLS_BASE_URL = "controls";
 export const APP_INVENTORY_BASE_URL = "application-inventory";
+export const PATHFINDER_BASE_URL = "pathfinder";
 
 export const BUSINESS_SERVICES = CONTROLS_BASE_URL + "/business-service";
 export const STAKEHOLDERS = CONTROLS_BASE_URL + "/stakeholder";
@@ -23,6 +25,8 @@ export const STAKEHOLDER_GROUPS = CONTROLS_BASE_URL + "/stakeholder-group";
 export const JOB_FUNCTIONS = CONTROLS_BASE_URL + "/job-function";
 
 export const APPLICATIONS = APP_INVENTORY_BASE_URL + "/application";
+
+export const ASSESSMENTS = PATHFINDER_BASE_URL + "/assessments";
 
 const headers = { Accept: "application/hal+json" };
 
@@ -338,4 +342,17 @@ export const updateApplication = (
   obj: Application
 ): AxiosPromise<Application> => {
   return APIClient.put(`${APPLICATIONS}/${obj.id}`, obj);
+};
+
+//
+
+export const getAssessments = (filters: {
+  applicationId?: number[];
+}): AxiosPromise<Assessment[]> => {
+  const params = {
+    applicationId: filters.applicationId,
+  };
+
+  const query: string[] = buildQuery(params);
+  return APIClient.get(`${ASSESSMENTS}?${query.join("&")}`, { headers });
 };

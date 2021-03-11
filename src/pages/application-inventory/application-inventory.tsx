@@ -39,6 +39,7 @@ import {
   ConditionalRender,
   NoDataEmptyState,
   SearchFilter,
+  StatusIconAssessment,
 } from "shared/components";
 import {
   useDeleteApplication,
@@ -53,6 +54,7 @@ import { getAxiosErrorMessage } from "utils/utils";
 import { NewApplicationModal } from "./components/new-application-modal";
 import { UpdateApplicationModal } from "./components/update-application-modal";
 import { RemoteBusinessService } from "./components/remote-business-service";
+import { RemoteAssessment } from "./components/remote-assessment";
 
 enum FilterKey {
   NAME = "name",
@@ -191,7 +193,27 @@ export const ApplicationInventory: React.FC = () => {
           ),
         },
         {
-          title: "asses",
+          title: (
+            <>
+              {item.id && (
+                <RemoteAssessment applicationId={item.id}>
+                  {({ assessment, fetchError }) => (
+                    <ConditionalRender
+                      when={!!fetchError}
+                      then={t("terms.unknown")}
+                    >
+                      {assessment && (
+                        <StatusIconAssessment
+                          status={assessment.status}
+                          label={t("composed.inProgress")}
+                        />
+                      )}
+                    </ConditionalRender>
+                  )}
+                </RemoteAssessment>
+              )}
+            </>
+          ),
         },
       ],
     });

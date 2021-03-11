@@ -52,6 +52,13 @@ export interface Application {
   businessService?: string;
 }
 
+//
+
+export interface Assessment {
+  id?: number;
+  status: "NotStarted" | "InProgress" | "Completed";
+}
+
 export interface BusinessServicePage {
   _embedded: {
     "business-service": BusinessService[];
