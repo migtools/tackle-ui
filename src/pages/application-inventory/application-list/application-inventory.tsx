@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { AxiosResponse } from "axios";
 import { useTranslation } from "react-i18next";
 import { useSelectionState } from "@konveyor/lib-ui";
@@ -48,6 +49,7 @@ import {
   useFetchApplications,
 } from "shared/hooks";
 
+import { formatPath, Paths } from "Paths";
 import { Application, SortByQuery } from "api/models";
 import { ApplicationSortBy, ApplicationSortByQuery } from "api/rest";
 import { getAxiosErrorMessage } from "utils/utils";
@@ -92,6 +94,8 @@ const getRow = (rowData: IRowData): Application => {
 export const ApplicationList: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+
+  const history = useHistory();
 
   const filters = [
     {
@@ -281,7 +285,11 @@ export const ApplicationList: React.FC = () => {
           rowData: IRowData
         ) => {
           const row: Application = getRow(rowData);
-          alert("Work in progress id=" + row.id);
+          history.push(
+            formatPath(Paths.applicationInventory_assessment, {
+              assessmentId: row.id,
+            })
+          );
         },
       },
       {

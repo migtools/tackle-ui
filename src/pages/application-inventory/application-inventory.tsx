@@ -5,6 +5,7 @@ import { Paths } from "Paths";
 import { AppPlaceholder } from "shared/components";
 
 const ApplicationList = lazy(() => import("./application-list"));
+const Assessment = lazy(() => import("./assessment"));
 
 export const ApplicationInventory: React.FC = () => {
   return (
@@ -13,6 +14,10 @@ export const ApplicationInventory: React.FC = () => {
         <Route
           path={Paths.applicationInventory_applicationList}
           component={ApplicationList}
+        />
+        <Route
+          path={Paths.applicationInventory_assessment}
+          component={Assessment}
         />
         <Redirect
           from={Paths.applicationInventory}
