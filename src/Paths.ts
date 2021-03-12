@@ -12,7 +12,9 @@ export enum Paths {
   base = "/",
   notFound = "/not-found",
 
-  applicationInventory = "/application-inventory",
+  applicationInventory = "/application-inventory/",
+  applicationInventory_applicationList = "/application-inventory/application-list",
+
   reports = "/reports",
 
   controls = "/controls",
