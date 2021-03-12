@@ -27,6 +27,7 @@ import {
   ISeparator,
   sortable,
 } from "@patternfly/react-table";
+import { PencilAltIcon } from "@patternfly/react-icons";
 
 import { useDispatch } from "react-redux";
 import { alertActions } from "store/alert";
@@ -131,6 +132,13 @@ export const ApplicationInventory: React.FC = () => {
     isEqual: (a, b) => a.id === b.id,
   });
 
+  const { isItemSelected, toggleItemSelected } = useSelectionState<Application>(
+    {
+      items: applications?.data || [],
+      isEqual: (a, b) => a.id === b.id,
+    }
+  );
+
   const refreshTable = useCallback(() => {
     fetchApplications(
       {
@@ -160,14 +168,23 @@ export const ApplicationInventory: React.FC = () => {
     { title: t("terms.description"), transforms: [] },
     { title: t("terms.businessService"), transforms: [] },
     { title: t("terms.assessment"), transforms: [] },
+    {
+      title: "",
+      props: {
+        className: "pf-c-table__inline-edit-action",
+      },
+    },
   ];
 
   const rows: IRow[] = [];
   applications?.data.forEach((item) => {
     const isExpanded = isItemExpanded(item);
+    const isSelected = isItemSelected(item);
+
     rows.push({
       [ENTITY_FIELD]: item,
       isOpen: isExpanded,
+      selected: isSelected,
       cells: [
         {
           title: item.name,
@@ -205,7 +222,7 @@ export const ApplicationInventory: React.FC = () => {
                       {assessment && (
                         <StatusIconAssessment
                           status={assessment.status}
-                          label={t("composed.inProgress")}
+                          label={assessment.status}
                         />
                       )}
                     </ConditionalRender>
@@ -215,27 +232,38 @@ export const ApplicationInventory: React.FC = () => {
             </>
           ),
         },
+        {
+          title: (
+            <div className="pf-c-inline-edit__action pf-m-enable-editable">
+              <Button
+                type="button"
+                variant="plain"
+                onClick={() => editRow(item)}
+              >
+                <PencilAltIcon />
+              </Button>
+            </div>
+          ),
+        },
       ],
     });
 
-    if (isExpanded) {
-      rows.push({
-        parent: rows.length - 1,
-        fullWidth: false,
-        cells: [
-          <div className="pf-c-table__expandable-row-content">
-            <DescriptionList isHorizontal>
-              <DescriptionListGroup>
-                <DescriptionListTerm>{t("terms.comments")}</DescriptionListTerm>
-                <DescriptionListDescription>
-                  {item.comments}
-                </DescriptionListDescription>
-              </DescriptionListGroup>
-            </DescriptionList>
-          </div>,
-        ],
-      });
-    }
+    rows.push({
+      parent: rows.length - 1,
+      fullWidth: false,
+      cells: [
+        <div className="pf-c-table__expandable-row-content">
+          <DescriptionList isHorizontal>
+            <DescriptionListGroup>
+              <DescriptionListTerm>{t("terms.comments")}</DescriptionListTerm>
+              <DescriptionListDescription>
+                {item.comments}
+              </DescriptionListDescription>
+            </DescriptionListGroup>
+          </DescriptionList>
+        </div>,
+      ],
+    });
   });
 
   const actionResolver = (rowData: IRowData): (IAction | ISeparator)[] => {
@@ -246,14 +274,14 @@ export const ApplicationInventory: React.FC = () => {
 
     const actions: (IAction | ISeparator)[] = [
       {
-        title: t("actions.edit"),
+        title: t("actions.assess"),
         onClick: (
           event: React.MouseEvent,
           rowIndex: number,
           rowData: IRowData
         ) => {
           const row: Application = getRow(rowData);
-          editRow(row);
+          alert("Work in progress id=" + row.id);
         },
       },
       {
@@ -287,6 +315,17 @@ export const ApplicationInventory: React.FC = () => {
   ) => {
     const row = getRow(rowData);
     toggleItemExpanded(row);
+  };
+
+  const selectRow = (
+    event: React.FormEvent<HTMLInputElement>,
+    isSelected: boolean,
+    rowIndex: number,
+    rowData: IRowData,
+    extraData: IExtraData
+  ) => {
+    const row = getRow(rowData);
+    toggleItemSelected(row);
   };
 
   const editRow = (row: Application) => {
@@ -400,6 +439,8 @@ export const ApplicationInventory: React.FC = () => {
             handlePaginationChange={handlePaginationChange}
             handleSortChange={handleSortChange}
             onCollapse={collapseRow}
+            onSelect={selectRow}
+            canSelectAll={false}
             columns={columns}
             rows={rows}
             actionResolver={actionResolver}

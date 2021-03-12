@@ -16,6 +16,8 @@ import {
   IRow,
   ISortBy,
   OnCollapse,
+  OnRowEdit,
+  OnSelect,
   SortByDirection,
 } from "@patternfly/react-table";
 import { FilterIcon } from "@patternfly/react-icons";
@@ -47,6 +49,11 @@ export interface AppTableWithControlsProps {
 
   onCollapse?: OnCollapse;
 
+  onSelect?: OnSelect;
+  canSelectAll?: boolean;
+
+  onRowEdit?: OnRowEdit;
+
   rows: IRow[];
   columns: ICell[];
   actions?: IActions;
@@ -76,6 +83,11 @@ export const AppTableWithControls: React.FC<AppTableWithControlsProps> = ({
   handleSortChange,
 
   onCollapse,
+
+  onSelect,
+  canSelectAll,
+
+  onRowEdit,
 
   rows,
   columns,
@@ -135,6 +147,9 @@ export const AppTableWithControls: React.FC<AppTableWithControlsProps> = ({
         sortBy={sortBy}
         onSort={handleSortChange}
         onCollapse={onCollapse}
+        onSelect={onSelect}
+        onRowEdit={onRowEdit}
+        canSelectAll={canSelectAll}
         filtersApplied={filtersApplied}
         noDataState={noDataState}
         noSearchResultsState={noSearchResultsState}

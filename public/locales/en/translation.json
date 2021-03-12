@@ -25,13 +25,20 @@
         "group(s)": "Group(s)",
         "group": "Group"
     },
+    "composed": {
+        "applicationInventory": "Application inventory",
+        "noDataStateTitle": "No {{what}} available",
+        "noDataStateBody": "Create a new {{what}} to start seeing data here",
+        "selectOne": "Select a {{what}}"
+    },
     "actions": {
-        "edit": "Edit",
+        "assess": "Assess",
         "delete": "Delete",
         "cancel": "Cancel",
         "createNew": "Create new",
         "create": "Create",
-        "save": "Save"
+        "save": "Save",
+        "edit": "Edit"
     },
     "dialog": {
         "title": {
@@ -53,12 +60,6 @@
         "success": {
             "added": "Success! {{what}} was added as a {{type}}."
         }
-    },
-    "composed": {
-        "applicationInventory": "Application inventory",
-        "noDataStateTitle": "No {{what}} available",
-        "noDataStateBody": "Create a new {{what}} to start seeing data here",
-        "selectOne": "Select a {{what}}"
     },
     "validation": {
         "required": "This field is required.",

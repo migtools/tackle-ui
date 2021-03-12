@@ -12,6 +12,8 @@ import {
   IAreActionsDisabled,
   OnSort,
   OnCollapse,
+  OnSelect,
+  OnRowEdit,
 } from "@patternfly/react-table";
 
 import { StateNoData } from "./state-no-data";
@@ -34,6 +36,11 @@ export interface AppTableProps {
 
   onCollapse?: OnCollapse;
 
+  onSelect?: OnSelect;
+  canSelectAll?: boolean;
+
+  onRowEdit?: OnRowEdit;
+
   filtersApplied: boolean;
   noDataState?: any;
   noSearchResultsState?: any;
@@ -54,6 +61,9 @@ export const AppTable: React.FC<AppTableProps> = ({
   sortBy,
   onSort,
   onCollapse,
+  onSelect,
+  canSelectAll,
+  onRowEdit,
   filtersApplied,
   noDataState,
   noSearchResultsState,
@@ -140,6 +150,9 @@ export const AppTable: React.FC<AppTableProps> = ({
       sortBy={sortBy}
       onSort={onSort}
       onCollapse={onCollapse}
+      onSelect={onSelect}
+      canSelectAll={canSelectAll}
+      onRowEdit={onRowEdit}
     >
       <TableHeader />
       <TableBody />
