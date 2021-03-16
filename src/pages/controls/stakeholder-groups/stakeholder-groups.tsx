@@ -56,7 +56,7 @@ import { UpdateStakeholderGroupModal } from "./components/update-stakeholder-gro
 enum FilterKey {
   NAME = "name",
   DESCRIPTION = "description",
-  MEMBERS = "member",
+  STAKEHOLDERS = "stakeholders",
 }
 
 const toSortByQuery = (
@@ -72,7 +72,7 @@ const toSortByQuery = (
       field = StakeholderGroupSortBy.NAME;
       break;
     case 3:
-      field = StakeholderGroupSortBy.MEMBERS;
+      field = StakeholderGroupSortBy.STAKEHOLDERS;
       break;
     default:
       throw new Error("Invalid column index=" + sortBy.index);
@@ -104,7 +104,7 @@ export const StakeholderGroups: React.FC = () => {
       name: t("terms.description"),
     },
     {
-      key: FilterKey.MEMBERS,
+      key: FilterKey.STAKEHOLDERS,
       name: t("terms.member"),
     },
   ];
@@ -146,7 +146,7 @@ export const StakeholderGroups: React.FC = () => {
       {
         name: filtersValue.get(FilterKey.NAME),
         description: filtersValue.get(FilterKey.DESCRIPTION),
-        member: filtersValue.get(FilterKey.MEMBERS),
+        stakeholders: filtersValue.get(FilterKey.STAKEHOLDERS),
       },
       paginationQuery,
       toSortByQuery(sortByQuery)
@@ -158,7 +158,7 @@ export const StakeholderGroups: React.FC = () => {
       {
         name: filtersValue.get(FilterKey.NAME),
         description: filtersValue.get(FilterKey.DESCRIPTION),
-        member: filtersValue.get(FilterKey.MEMBERS),
+        stakeholders: filtersValue.get(FilterKey.STAKEHOLDERS),
       },
       paginationQuery,
       toSortByQuery(sortByQuery)
@@ -200,7 +200,7 @@ export const StakeholderGroups: React.FC = () => {
           title: item.description,
         },
         {
-          title: item.members ? item.members.length : 0,
+          title: item.stakeholders ? item.stakeholders.length : 0,
         },
         {
           title: (
@@ -225,7 +225,7 @@ export const StakeholderGroups: React.FC = () => {
                   {t("terms.member(s)")}
                 </DescriptionListTerm>
                 <DescriptionListDescription>
-                  {item.members?.map((f) => f.displayName).join(", ")}
+                  {item.stakeholders?.map((f) => f.displayName).join(", ")}
                 </DescriptionListDescription>
               </DescriptionListGroup>
             </DescriptionList>
