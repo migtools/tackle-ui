@@ -58,6 +58,8 @@ export interface Assessment {
   id?: number;
   applicationId: number;
   status: "NotStarted" | "InProgress" | "Completed";
+  stakeholders?: number[];
+  stakeholderGroups?: number[];
 }
 
 export interface BusinessServicePage {

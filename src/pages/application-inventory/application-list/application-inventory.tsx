@@ -63,7 +63,6 @@ import { NewApplicationModal } from "./components/new-application-modal";
 import { UpdateApplicationModal } from "./components/update-application-modal";
 import { RemoteBusinessService } from "./components/remote-business-service";
 import { RemoteAssessment } from "./components/remote-assessment";
-import { AssessmentModal } from "./components/assessment-modal";
 
 enum FilterKey {
   NAME = "name",
@@ -115,7 +114,6 @@ export const ApplicationList: React.FC = () => {
 
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
   const [rowToUpdate, setRowToUpdate] = useState<Application>();
-  const [rowToAssess, setRowToAssess] = useState<Assessment>();
 
   const { deleteApplication } = useDeleteApplication();
 
@@ -307,12 +305,20 @@ export const ApplicationList: React.FC = () => {
               ]);
             })
             .then(([currentAssessment, newAssessment]) => {
-              setRowToAssess(currentAssessment || newAssessment);
+              history.push(
+                formatPath(Paths.applicationInventory_assessment, {
+                  assessmentId: (currentAssessment || newAssessment).id,
+                })
+              );
             })
             .catch((error) => {
               // TODO temporary local dev
               // dispatch(alertActions.addDanger(getAxiosErrorMessage(error)));
-              setRowToAssess({ id: 1, status: "InProgress", applicationId: 1 });
+              history.push(
+                formatPath(Paths.applicationInventory_assessment, {
+                  assessmentId: 1,
+                })
+              );
             });
         },
       },
@@ -452,13 +458,6 @@ export const ApplicationList: React.FC = () => {
     setRowToUpdate(undefined);
   };
 
-  // Assessment Modal
-
-  const handleOnAssessmentCancel = () => {
-    setRowToAssess(undefined);
-    refreshTable();
-  };
-
   return (
     <>
       <PageSection variant={PageSectionVariants.light}>
@@ -543,12 +542,6 @@ export const ApplicationList: React.FC = () => {
         application={rowToUpdate}
         onSaved={handleOnUpdated}
         onCancel={handleOnUpdatedCancel}
-      />
-
-      <AssessmentModal
-        assessment={rowToAssess}
-        onSaved={() => {}}
-        onCancel={handleOnAssessmentCancel}
       />
     </>
   );

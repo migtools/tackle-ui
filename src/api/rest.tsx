@@ -344,7 +344,9 @@ export const updateApplication = (
   return APIClient.put(`${APPLICATIONS}/${obj.id}`, obj);
 };
 
-export const getApplicationById = (id: number): AxiosPromise<Application> => {
+export const getApplicationById = (
+  id: number | string
+): AxiosPromise<Application> => {
   return APIClient.get(`${APPLICATIONS}/${id}`);
 };
 

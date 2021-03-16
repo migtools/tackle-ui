@@ -29,6 +29,10 @@ export interface OptionalCompanyRoute {
   company?: string;
 }
 
-export interface CompanytRoute {
+export interface CompanyRoute {
   company: string;
+}
+
+export interface AssessmentRoute {
+  assessmentId: string;
 }
