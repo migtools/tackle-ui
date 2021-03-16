@@ -15,7 +15,7 @@ export const SidebarApp: React.FC = () => {
         <NavList title="Global">
           <NavItem>
             <NavLink
-              to={Paths.applicationInventory_applicationList}
+              to={Paths.applicationInventory}
               activeClassName="pf-m-current"
             >
               {t("sidebar.applicationInventory")}

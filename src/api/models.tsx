@@ -56,6 +56,7 @@ export interface Application {
 
 export interface Assessment {
   id?: number;
+  applicationId: number;
   status: "NotStarted" | "InProgress" | "Completed";
 }
 

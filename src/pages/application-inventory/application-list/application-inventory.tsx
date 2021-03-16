@@ -50,14 +50,20 @@ import {
 } from "shared/hooks";
 
 import { formatPath, Paths } from "Paths";
-import { Application, SortByQuery } from "api/models";
-import { ApplicationSortBy, ApplicationSortByQuery } from "api/rest";
+import { Application, Assessment, SortByQuery } from "api/models";
+import {
+  ApplicationSortBy,
+  ApplicationSortByQuery,
+  createAssessment,
+  getAssessments,
+} from "api/rest";
 import { getAxiosErrorMessage } from "utils/utils";
 
 import { NewApplicationModal } from "./components/new-application-modal";
 import { UpdateApplicationModal } from "./components/update-application-modal";
 import { RemoteBusinessService } from "./components/remote-business-service";
 import { RemoteAssessment } from "./components/remote-assessment";
+import { AssessmentModal } from "./components/assessment-modal";
 
 enum FilterKey {
   NAME = "name",
@@ -109,6 +115,7 @@ export const ApplicationList: React.FC = () => {
 
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
   const [rowToUpdate, setRowToUpdate] = useState<Application>();
+  const [rowToAssess, setRowToAssess] = useState<Assessment>();
 
   const { deleteApplication } = useDeleteApplication();
 
@@ -285,11 +292,28 @@ export const ApplicationList: React.FC = () => {
           rowData: IRowData
         ) => {
           const row: Application = getRow(rowData);
-          history.push(
-            formatPath(Paths.applicationInventory_assessment, {
-              assessmentId: row.id,
+
+          getAssessments({ applicationId: row.id })
+            .then(({ data }) => {
+              const currentAssessment: Assessment | undefined = data[0];
+
+              const newAssessment = {
+                applicationId: row.id,
+              } as Assessment;
+
+              return Promise.all([
+                currentAssessment,
+                currentAssessment || createAssessment(newAssessment),
+              ]);
             })
-          );
+            .then(([currentAssessment, newAssessment]) => {
+              setRowToAssess(currentAssessment || newAssessment);
+            })
+            .catch((error) => {
+              // TODO temporary local dev
+              // dispatch(alertActions.addDanger(getAxiosErrorMessage(error)));
+              setRowToAssess({ id: 1, status: "InProgress", applicationId: 1 });
+            });
         },
       },
       {
@@ -428,6 +452,13 @@ export const ApplicationList: React.FC = () => {
     setRowToUpdate(undefined);
   };
 
+  // Assessment Modal
+
+  const handleOnAssessmentCancel = () => {
+    setRowToAssess(undefined);
+    refreshTable();
+  };
+
   return (
     <>
       <PageSection variant={PageSectionVariants.light}>
@@ -512,6 +543,12 @@ export const ApplicationList: React.FC = () => {
         application={rowToUpdate}
         onSaved={handleOnUpdated}
         onCancel={handleOnUpdatedCancel}
+      />
+
+      <AssessmentModal
+        assessment={rowToAssess}
+        onSaved={() => {}}
+        onCancel={handleOnAssessmentCancel}
       />
     </>
   );

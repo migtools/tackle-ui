@@ -11,6 +11,7 @@
         "assessment": "Assessment",
         "unknown": "Unknown",
         "comments": "Comments",
+        "applications": "Applications",
         "owner": "Owner",
         "controls": "Controls",
         "stakeholders": "Stakeholders",
@@ -25,12 +26,6 @@
         "group(s)": "Group(s)",
         "group": "Group"
     },
-    "composed": {
-        "applicationInventory": "Application inventory",
-        "noDataStateTitle": "No {{what}} available",
-        "noDataStateBody": "Create a new {{what}} to start seeing data here",
-        "selectOne": "Select a {{what}}"
-    },
     "actions": {
         "assess": "Assess",
         "delete": "Delete",
@@ -38,6 +33,8 @@
         "createNew": "Create new",
         "create": "Create",
         "save": "Save",
+        "next": "Next",
+        "back": "Back",
         "edit": "Edit"
     },
     "dialog": {
@@ -60,6 +57,14 @@
         "success": {
             "added": "Success! {{what}} was added as a {{type}}."
         }
+    },
+    "composed": {
+        "applicationInventory": "Application inventory",
+        "noDataStateTitle": "No {{what}} available",
+        "noDataStateBody": "Create a new {{what}} to start seeing data here",
+        "selectOne": "Select a {{what}}",
+        "selectStakeholders": "Select stakeholders",
+        "applicationAssessment": "Application assessment"
     },
     "validation": {
         "required": "This field is required.",

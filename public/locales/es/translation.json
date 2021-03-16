@@ -11,6 +11,7 @@
         "assessment": "Evaluación",
         "unknown": "Desconocido",
         "comments": "Comentarios",
+        "applications": "Aplicaciones",
         "owner": "Propietario",
         "controls": "Controles",
         "stakeholders": "Interesados",
@@ -25,12 +26,6 @@
         "group(s)": "Grupo(s)",
         "group": "Grupo"
     },
-    "composed": {
-        "applicationInventory": "Inventario de aplicaciones",
-        "noDataStateTitle": "No existen {{what}} disponibles",
-        "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
-        "selectOne": "Seleccione un(a) {{what}}"
-    },
     "actions": {
         "assess": "Evaluar",
         "delete": "Eliminar",
@@ -38,6 +33,8 @@
         "createNew": "Crear nuevo",
         "create": "Crear",
         "save": "Guardar",
+        "next": "Siguiente",
+        "back": "Atras",
         "edit": "Editar"
     },
     "dialog": {
@@ -60,6 +57,14 @@
         "success": {
             "added": "Éxito! {{what}} fue creado como un {{type}}."
         }
+    },
+    "composed": {
+        "applicationInventory": "Inventario de aplicaciones",
+        "noDataStateTitle": "No existen {{what}} disponibles",
+        "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
+        "selectOne": "Seleccione un(a) {{what}}",
+        "selectStakeholders": "Seleccione interesados",
+        "applicationAssessment": "Evaluar aplicación"
     },
     "validation": {
         "required": "Este campo es requerido.",

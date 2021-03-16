@@ -344,10 +344,14 @@ export const updateApplication = (
   return APIClient.put(`${APPLICATIONS}/${obj.id}`, obj);
 };
 
+export const getApplicationById = (id: number): AxiosPromise<Application> => {
+  return APIClient.get(`${APPLICATIONS}/${id}`);
+};
+
 //
 
 export const getAssessments = (filters: {
-  applicationId?: number[];
+  applicationId?: number;
 }): AxiosPromise<Assessment[]> => {
   const params = {
     applicationId: filters.applicationId,
@@ -355,4 +359,8 @@ export const getAssessments = (filters: {
 
   const query: string[] = buildQuery(params);
   return APIClient.get(`${ASSESSMENTS}?${query.join("&")}`, { headers });
+};
+
+export const createAssessment = (obj: Assessment): AxiosPromise<Assessment> => {
+  return APIClient.post(`${ASSESSMENTS}`, obj);
 };

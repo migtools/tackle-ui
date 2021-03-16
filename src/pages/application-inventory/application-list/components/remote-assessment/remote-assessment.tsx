@@ -26,7 +26,7 @@ export const RemoteAssessment: React.FC<RemoteAssessmentProps> = ({
   useEffect(() => {
     setIsFetching(true);
 
-    getAssessments({ applicationId: [applicationId] })
+    getAssessments({ applicationId })
       .then(({ data }) => {
         setIsFetching(false);
         setFetchError(undefined);
