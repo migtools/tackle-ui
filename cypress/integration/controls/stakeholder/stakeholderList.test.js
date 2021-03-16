@@ -213,7 +213,7 @@ context("Test business service list", () => {
       .should("contain", "myDisplayName");
   });
 
-  it.only("Create new", () => {
+  it("Create new", () => {
     cy.intercept({
       method: "GET",
       url: "/api/controls/stakeholder",
