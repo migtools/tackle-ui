@@ -8,7 +8,7 @@
     "application_inventory_base_url": "http://localhost:8082/application-inventory",
     "pathfinder_base_url": "http://localhost:8083/pathfinder"
   },
-  "viewportWidth": 1225,
-  "viewportHeight": 886,
+  "viewportWidth": 1280,
+  "viewportHeight": 1024,
   "chromeWebSecurity": false
 }
