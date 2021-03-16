@@ -82,7 +82,13 @@ services:
       QUARKUS_OIDC_CLIENT_ID: application-inventory-api
       QUARKUS_OIDC_CREDENTIALS_SECRET: secret
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/application-inventory/q/health"]
+      test:
+        [
+          "CMD",
+          "curl",
+          "-f",
+          "http://localhost:8080/application-inventory/q/health",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -92,4 +98,25 @@ services:
       application-inventory-db:
         condition: service_healthy
 
-  
+  ui:
+    image: quay.io/konveyor/tackle-ui:main
+    ports:
+      - 3001:8080
+    environment:
+      SSO_REALM: konveyor
+      SSO_CLIENT_ID: tackle-ui
+      SSO_SERVER_URL: http://keycloak:8080/auth
+      CONTROLS_API_URL: http://controls:8080/controls
+      APPLICATION_INVENTORY_API_URL: http://application-inventory:8080/application-inventory
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      keycloak:
+        condition: service_healthy
+      controls:
+        condition: service_healthy
+      application-inventory:
+        condition: service_healthy
