@@ -6,8 +6,5 @@
     "auth_client_id": "tackle-ui",
     "controls_base_url": "http://localhost:8081/controls",
     "application_inventory_base_url": "http://localhost:8082/application-inventory"
-  },
-  "viewportWidth": 1280,
-  "viewportHeight": 1024,
-  "chromeWebSecurity": false
+  }
 }
