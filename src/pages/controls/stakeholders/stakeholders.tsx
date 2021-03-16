@@ -214,7 +214,7 @@ export const Stakeholders: React.FC = () => {
           title: item.displayName,
         },
         {
-          title: item.jobFunction,
+          title: item.jobFunction?.role,
         },
         {
           title: item.groups ? item.groups.length : 0,
