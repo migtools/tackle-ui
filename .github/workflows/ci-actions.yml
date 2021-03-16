@@ -31,7 +31,7 @@ jobs:
           flags: unitests
 
   e2e:
-    # needs: [unit-test]
+    needs: [unit-test]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
