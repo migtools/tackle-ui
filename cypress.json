@@ -1,4 +1,5 @@
 {
+  "video": false,
   "baseUrl": "http://localhost:3000/",
   "env": {
     "auth_base_url": "http://localhost:8180/auth",
