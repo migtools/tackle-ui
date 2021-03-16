@@ -213,6 +213,55 @@ context("Test business service list", () => {
       .should("contain", "myDisplayName");
   });
 
+  it.only("Create new", () => {
+    cy.intercept({
+      method: "GET",
+      url: "/api/controls/stakeholder",
+    }).as("apiCheckGetStakeholders");
+
+    cy.intercept({
+      method: "GET",
+      url: "/api/controls/job-function",
+    }).as("apiCheckGetJobFunction");
+
+    cy.visit("/controls/stakeholders");
+
+    // Open modal
+    cy.get("button[aria-label='create-stakeholder']").click();
+
+    // Verify primary button is disabled
+    cy.get("button[aria-label='submit']").should("be.disabled");
+
+    // Fill form
+    cy.wait("@apiCheckGetJobFunction");
+
+    cy.get("input[name='email']").type("aaa@domain.com");
+    cy.get("input[name='displayName']").type("myDisplayName");
+
+    cy.get(".pf-c-form__group-control button.pf-c-select__toggle-button")
+      .eq(0)
+      .click();
+    cy.get(
+      ".pf-c-form__group-control .pf-c-form-control.pf-c-select__toggle-typeahead"
+    )
+      .eq(0)
+      .type("Business Analyst");
+    cy.get("button.pf-c-select__menu-item")
+      .eq(0)
+      .click({ waitForAnimations: false });
+
+    cy.get("button[aria-label='submit']").should("not.be.disabled");
+    cy.get("form").submit();
+
+    cy.wait("@apiCheckGetStakeholders");
+
+    // Verify table
+    cy.get("tbody > tr")
+      .should("contain", "aaa@domain.com")
+      .should("contain", "myDisplayName")
+      .should("contain", "Business Analyst");
+  });
+
   it("Edit", () => {
     cy.intercept({
       method: "GET",
