@@ -57,7 +57,7 @@ enum FilterKey {
   EMAIL = "email",
   DISPLAY_NAME = "displayName",
   JOB_FUNCTION = "jobFunction",
-  GROUPS = "groups",
+  STAKEHOLDER_GROUPS = "stakeholderGroups",
 }
 
 const toSortByQuery = (
@@ -79,7 +79,7 @@ const toSortByQuery = (
       field = StakeholderSortBy.JOB_FUNCTION;
       break;
     case 4:
-      field = StakeholderSortBy.GROUP;
+      field = StakeholderSortBy.STAKEHOLDER_GROUPS;
       break;
     default:
       throw new Error("Invalid column index=" + sortBy.index);
@@ -115,7 +115,7 @@ export const Stakeholders: React.FC = () => {
       name: t("terms.jobFunction"),
     },
     {
-      key: FilterKey.GROUPS,
+      key: FilterKey.STAKEHOLDER_GROUPS,
       name: t("terms.group"),
     },
   ];
@@ -157,8 +157,8 @@ export const Stakeholders: React.FC = () => {
       {
         email: filtersValue.get(FilterKey.EMAIL),
         displayName: filtersValue.get(FilterKey.DISPLAY_NAME),
-        jobFuction: filtersValue.get(FilterKey.JOB_FUNCTION),
-        group: filtersValue.get(FilterKey.GROUPS),
+        jobFunction: filtersValue.get(FilterKey.JOB_FUNCTION),
+        stakeholderGroups: filtersValue.get(FilterKey.STAKEHOLDER_GROUPS),
       },
       paginationQuery,
       toSortByQuery(sortByQuery)
@@ -170,8 +170,8 @@ export const Stakeholders: React.FC = () => {
       {
         email: filtersValue.get(FilterKey.EMAIL),
         displayName: filtersValue.get(FilterKey.DISPLAY_NAME),
-        jobFuction: filtersValue.get(FilterKey.JOB_FUNCTION),
-        group: filtersValue.get(FilterKey.GROUPS),
+        jobFunction: filtersValue.get(FilterKey.JOB_FUNCTION),
+        stakeholderGroups: filtersValue.get(FilterKey.STAKEHOLDER_GROUPS),
       },
       paginationQuery,
       toSortByQuery(sortByQuery)
@@ -217,7 +217,7 @@ export const Stakeholders: React.FC = () => {
           title: item.jobFunction?.role,
         },
         {
-          title: item.groups ? item.groups.length : 0,
+          title: item.stakeholderGroups ? item.stakeholderGroups.length : 0,
         },
         {
           title: (
@@ -240,7 +240,7 @@ export const Stakeholders: React.FC = () => {
               <DescriptionListGroup>
                 <DescriptionListTerm>{t("terms.group(s)")}</DescriptionListTerm>
                 <DescriptionListDescription>
-                  {item.groups?.map((f) => f.name).join(", ")}
+                  {item.stakeholderGroups?.map((f) => f.name).join(", ")}
                 </DescriptionListDescription>
               </DescriptionListGroup>
             </DescriptionList>

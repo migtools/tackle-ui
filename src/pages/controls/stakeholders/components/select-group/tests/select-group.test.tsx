@@ -5,7 +5,7 @@ import { StakeholderGroup } from "api/models";
 import { SelectGroup } from "../select-group";
 
 describe("SelectGroup", () => {
-  const GROUPS: StakeholderGroup[] = [
+  const STAKEHOLDER_GROUPS: StakeholderGroup[] = [
     {
       name: "aa",
       description: "somethingA",
@@ -18,7 +18,11 @@ describe("SelectGroup", () => {
 
   it("Renders without crashing", () => {
     const wrapper = shallow(
-      <SelectGroup groups={GROUPS} onSelect={jest.fn()} onClear={jest.fn()} />
+      <SelectGroup
+        stakeholderGroups={STAKEHOLDER_GROUPS}
+        onSelect={jest.fn()}
+        onClear={jest.fn()}
+      />
     );
     expect(wrapper).toMatchSnapshot();
   });

@@ -31,7 +31,7 @@ export interface FormValues {
   email: string;
   displayName: string;
   jobFunction?: JobFunction;
-  groups: StakeholderGroup[];
+  stakeholderGroups: StakeholderGroup[];
 }
 
 export interface StakeholderFormProps {
@@ -75,7 +75,7 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
     email: stakeholder?.email || "",
     displayName: stakeholder?.displayName || "",
     jobFunction: stakeholder?.jobFunction,
-    groups: stakeholder?.groups || [],
+    stakeholderGroups: stakeholder?.stakeholderGroups || [],
   };
 
   const validationSchema = object().shape({
@@ -100,7 +100,7 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
       email: formValues.email,
       displayName: formValues.displayName,
       jobFunction: formValues.jobFunction,
-      groups: [...formValues.groups],
+      stakeholderGroups: [...formValues.stakeholderGroups],
     };
 
     let promise: AxiosPromise<Stakeholder>;
@@ -207,12 +207,12 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
           label={t("terms.group(s)")}
           fieldId="groups"
           isRequired={false}
-          validated={getValidatedFromError(formik.errors.groups)}
-          helperTextInvalid={formik.errors.groups}
+          validated={getValidatedFromError(formik.errors.stakeholderGroups)}
+          helperTextInvalid={formik.errors.stakeholderGroups}
         >
           <SelectGroupFormField
             name="groups"
-            groups={stakeholderGroups?.data || []}
+            stakeholderGroups={stakeholderGroups?.data || []}
             isFetching={isFetchingGroups}
             fetchError={fetchErrorGroups}
           />

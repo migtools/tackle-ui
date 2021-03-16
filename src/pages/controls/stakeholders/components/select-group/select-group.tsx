@@ -13,21 +13,21 @@ import { StakeholderGroup } from "api/models";
 import { getAxiosErrorMessage } from "utils/utils";
 
 interface SelectOptionStakeholder extends SelectOptionObject {
-  group: StakeholderGroup;
+  stakeholderGroup: StakeholderGroup;
 }
 
 const selectOptionMapper = (
-  group: StakeholderGroup
+  stakeholderGroup: StakeholderGroup
 ): SelectOptionStakeholder => ({
-  group: { ...group },
+  stakeholderGroup: { ...stakeholderGroup },
   toString: function () {
-    return group.name;
+    return stakeholderGroup.name;
   },
 });
 
 export interface SelectGroupProps {
   value?: StakeholderGroup[];
-  groups: StakeholderGroup[];
+  stakeholderGroups: StakeholderGroup[];
   isFetching?: boolean;
   fetchError?: AxiosError;
   onSelect: (value: StakeholderGroup[]) => void;
@@ -36,7 +36,7 @@ export interface SelectGroupProps {
 
 export const SelectGroup: React.FC<SelectGroupProps> = ({
   value,
-  groups,
+  stakeholderGroups,
   isFetching,
   fetchError,
   onSelect,
@@ -60,10 +60,12 @@ export const SelectGroup: React.FC<SelectGroupProps> = ({
 
     const selectedOption = selection as SelectOptionStakeholder;
 
-    if (value?.find((f) => f.id === selectedOption.group.id)) {
-      onSelect(value.filter((f) => f.id !== selectedOption.group.id));
+    if (value?.find((f) => f.id === selectedOption.stakeholderGroup.id)) {
+      onSelect(
+        value.filter((f) => f.id !== selectedOption.stakeholderGroup.id)
+      );
     } else {
-      onSelect([...(value || []), selectedOption.group]);
+      onSelect([...(value || []), selectedOption.stakeholderGroup]);
     }
   };
 
@@ -90,9 +92,9 @@ export const SelectGroup: React.FC<SelectGroupProps> = ({
       menuAppendTo={() => document.body}
       maxHeight={350}
       customContent={customContent}
-      placeholderText="Select a group"
+      placeholderText="Select a stakeholder group"
     >
-      {groups
+      {stakeholderGroups
         .map((f) => selectOptionMapper(f))
         .map((elem, index) => (
           <SelectOption key={index} value={elem} />
