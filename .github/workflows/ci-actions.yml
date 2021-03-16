@@ -113,7 +113,7 @@ jobs:
           yarn install
           yarn build:instrumentation
       - name: Cypress run
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v2.8.2
         with:
           record: false
           start: yarn run ui:start
@@ -252,7 +252,7 @@ jobs:
           quay.io/konveyor/tackle-ui:main
           sleep 5s && docker logs tackle-ui
       - name: Cypress run
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v2.8.2
         with:
           record: false
           wait-on: "http://localhost:3000"
