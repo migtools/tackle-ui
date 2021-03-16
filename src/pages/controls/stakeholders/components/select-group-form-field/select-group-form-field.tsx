@@ -14,12 +14,7 @@ export interface SelectMemberFormFieldProps {
 
 export const SelectGroupFormField: React.FC<
   FieldHookConfig<StakeholderGroup[] | undefined> & SelectMemberFormFieldProps
-> = ({
-  stakeholderGroups: stakeholderGroups,
-  isFetching,
-  fetchError,
-  ...props
-}) => {
+> = ({ stakeholderGroups, isFetching, fetchError, ...props }) => {
   const [field, , helpers] = useField(props);
 
   const handleOnSelect = (value: StakeholderGroup[]) => {
