@@ -92,7 +92,7 @@ export const SelectGroup: React.FC<SelectGroupProps> = ({
       menuAppendTo={() => document.body}
       maxHeight={350}
       customContent={customContent}
-      placeholderText="Select a stakeholder group"
+      placeholderText="Select stakeholder groups"
     >
       {stakeholderGroups
         .map((f) => selectOptionMapper(f))
