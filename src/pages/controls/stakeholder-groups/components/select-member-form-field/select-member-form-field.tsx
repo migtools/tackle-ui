@@ -30,7 +30,7 @@ export const SelectMemberFormField: React.FC<
 
   return (
     <SelectStakeholder
-      placeholderText="Select a member"
+      placeholderText="Select a stakeholder"
       isMulti={true}
       value={field.value}
       stakeholders={stakeholders}

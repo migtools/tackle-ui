@@ -172,13 +172,13 @@ export const StakeholderGroupForm: React.FC<StakeholderGroupFormProps> = ({
         </FormGroup>
         <FormGroup
           label={t("terms.member(s)")}
-          fieldId="members"
+          fieldId="stakeholders"
           isRequired={false}
           validated={getValidatedFromError(formik.errors.stakeholders)}
           helperTextInvalid={formik.errors.stakeholders}
         >
           <SelectMemberFormField
-            name="members"
+            name="stakeholders"
             stakeholders={stakeholders?.data || []}
             isFetching={isFetching}
             fetchError={fetchError}
