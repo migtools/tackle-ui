@@ -360,9 +360,15 @@ export const getAssessments = (filters: {
   };
 
   const query: string[] = buildQuery(params);
-  return APIClient.get(`${ASSESSMENTS}?${query.join("&")}`, { headers });
+  return APIClient.get(`${ASSESSMENTS}?${query.join("&")}`);
 };
 
 export const createAssessment = (obj: Assessment): AxiosPromise<Assessment> => {
   return APIClient.post(`${ASSESSMENTS}`, obj);
+};
+
+export const getAssessmentById = (
+  id: number | string
+): AxiosPromise<Assessment> => {
+  return APIClient.get(`${ASSESSMENTS}/${id}`);
 };
