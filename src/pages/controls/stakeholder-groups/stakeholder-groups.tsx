@@ -56,7 +56,7 @@ import { UpdateStakeholderGroupModal } from "./components/update-stakeholder-gro
 enum FilterKey {
   NAME = "name",
   DESCRIPTION = "description",
-  STAKEHOLDERS = "stakeholders",
+  STAKEHOLDER = "stakeholder",
 }
 
 const toSortByQuery = (
@@ -104,7 +104,7 @@ export const StakeholderGroups: React.FC = () => {
       name: t("terms.description"),
     },
     {
-      key: FilterKey.STAKEHOLDERS,
+      key: FilterKey.STAKEHOLDER,
       name: t("terms.member"),
     },
   ];
@@ -146,7 +146,7 @@ export const StakeholderGroups: React.FC = () => {
       {
         name: filtersValue.get(FilterKey.NAME),
         description: filtersValue.get(FilterKey.DESCRIPTION),
-        stakeholders: filtersValue.get(FilterKey.STAKEHOLDERS),
+        stakeholder: filtersValue.get(FilterKey.STAKEHOLDER),
       },
       paginationQuery,
       toSortByQuery(sortByQuery)
@@ -158,7 +158,7 @@ export const StakeholderGroups: React.FC = () => {
       {
         name: filtersValue.get(FilterKey.NAME),
         description: filtersValue.get(FilterKey.DESCRIPTION),
-        stakeholders: filtersValue.get(FilterKey.STAKEHOLDERS),
+        stakeholder: filtersValue.get(FilterKey.STAKEHOLDER),
       },
       paginationQuery,
       toSortByQuery(sortByQuery)
@@ -174,9 +174,7 @@ export const StakeholderGroups: React.FC = () => {
     { title: t("terms.description"), transforms: [] },
     {
       title: t("terms.member(s)"),
-      transforms: [
-        // sortable
-      ],
+      transforms: [sortable],
     },
     {
       title: "",

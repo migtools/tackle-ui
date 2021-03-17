@@ -57,7 +57,7 @@ enum FilterKey {
   EMAIL = "email",
   DISPLAY_NAME = "displayName",
   JOB_FUNCTION = "jobFunction",
-  STAKEHOLDER_GROUPS = "stakeholderGroups",
+  STAKEHOLDER_GROUP = "stakeholderGroup",
 }
 
 const toSortByQuery = (
@@ -115,7 +115,7 @@ export const Stakeholders: React.FC = () => {
       name: t("terms.jobFunction"),
     },
     {
-      key: FilterKey.STAKEHOLDER_GROUPS,
+      key: FilterKey.STAKEHOLDER_GROUP,
       name: t("terms.group"),
     },
   ];
@@ -158,7 +158,7 @@ export const Stakeholders: React.FC = () => {
         email: filtersValue.get(FilterKey.EMAIL),
         displayName: filtersValue.get(FilterKey.DISPLAY_NAME),
         jobFunction: filtersValue.get(FilterKey.JOB_FUNCTION),
-        stakeholderGroups: filtersValue.get(FilterKey.STAKEHOLDER_GROUPS),
+        stakeholderGroup: filtersValue.get(FilterKey.STAKEHOLDER_GROUP),
       },
       paginationQuery,
       toSortByQuery(sortByQuery)
@@ -171,7 +171,7 @@ export const Stakeholders: React.FC = () => {
         email: filtersValue.get(FilterKey.EMAIL),
         displayName: filtersValue.get(FilterKey.DISPLAY_NAME),
         jobFunction: filtersValue.get(FilterKey.JOB_FUNCTION),
-        stakeholderGroups: filtersValue.get(FilterKey.STAKEHOLDER_GROUPS),
+        stakeholderGroup: filtersValue.get(FilterKey.STAKEHOLDER_GROUP),
       },
       paginationQuery,
       toSortByQuery(sortByQuery)
@@ -188,9 +188,7 @@ export const Stakeholders: React.FC = () => {
     { title: t("terms.jobFunction"), transforms: [sortable] },
     {
       title: t("terms.group(s)"),
-      transforms: [
-        // sortable
-      ],
+      transforms: [sortable],
     },
     {
       title: "",

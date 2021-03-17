@@ -81,7 +81,7 @@ export interface IState {
       email?: string[];
       displayName?: string[];
       jobFunction?: string[];
-      stakeholderGroups?: string[];
+      stakeholderGroup?: string[];
     },
     page: PageQuery,
     sortBy?: StakeholderSortByQuery

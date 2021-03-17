@@ -177,7 +177,7 @@ export const getStakeholders = (
     email: filters.email,
     displayName: filters.displayName,
     jobFunction: filters.jobFunction,
-    stakeholderGroup: filters.stakeholderGroup,
+    "stakeholderGroups.name": filters.stakeholderGroup,
   };
 
   const query: string[] = buildQuery(params);
@@ -219,7 +219,7 @@ export const getStakeholderGroups = (
   filters: {
     name?: string[];
     description?: string[];
-    member?: string[];
+    stakeholder?: string[];
   },
   pagination: PageQuery,
   sortBy?: StakeholderGroupSortByQuery
@@ -247,7 +247,7 @@ export const getStakeholderGroups = (
 
     name: filters.name,
     description: filters.description,
-    member: filters.member,
+    "stakeholders.displayName": filters.stakeholder,
   };
 
   const query: string[] = buildQuery(params);
