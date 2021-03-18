@@ -33,7 +33,7 @@ exports[`StatusIconAssessment Renders without crashing 1`] = `
     />
   </FlexItem>
   <FlexItem>
-    Not started yet
+    terms.notStarted
   </FlexItem>
 </Flex>
 `;

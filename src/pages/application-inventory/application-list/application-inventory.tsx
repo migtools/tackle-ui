@@ -42,6 +42,7 @@ import {
   NoDataEmptyState,
   SearchFilter,
   StatusIconAssessment,
+  StatusIconAssessmentType,
 } from "shared/components";
 import {
   useDeleteApplication,
@@ -96,11 +97,35 @@ const getRow = (rowData: IRowData): Application => {
   return rowData[ENTITY_FIELD];
 };
 
+const getStatusIconFrom = (
+  assessment: Assessment
+): StatusIconAssessmentType => {
+  switch (assessment.status) {
+    case "EMPTY":
+      return "NotStarted";
+    case "STARTED":
+      return "InProgress";
+    case "COMPLETE":
+      return "Completed";
+    default:
+      return "NotStarted";
+  }
+};
+
 export const ApplicationList: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-
   const history = useHistory();
+
+  const { deleteApplication } = useDeleteApplication();
+  const {
+    applications,
+    isFetching,
+    fetchError,
+    fetchApplications,
+  } = useFetchApplications(true);
+
+  // Filters
 
   const filters = [
     {
@@ -112,17 +137,12 @@ export const ApplicationList: React.FC = () => {
     new Map([])
   );
 
+  // Create and edit app modal states
+
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
   const [rowToUpdate, setRowToUpdate] = useState<Application>();
 
-  const { deleteApplication } = useDeleteApplication();
-
-  const {
-    applications,
-    isFetching,
-    fetchError,
-    fetchApplications,
-  } = useFetchApplications(true);
+  // Fetch data
 
   const {
     paginationQuery,
@@ -133,20 +153,15 @@ export const ApplicationList: React.FC = () => {
     sortByQuery: { direction: "asc", index: 1 },
   });
 
-  const {
-    isItemSelected: isItemExpanded,
-    toggleItemSelected: toggleItemExpanded,
-  } = useSelectionState<Application>({
-    items: applications?.data || [],
-    isEqual: (a, b) => a.id === b.id,
-  });
-
-  const { isItemSelected, toggleItemSelected } = useSelectionState<Application>(
-    {
-      items: applications?.data || [],
-      isEqual: (a, b) => a.id === b.id,
-    }
-  );
+  useEffect(() => {
+    fetchApplications(
+      {
+        name: filtersValue.get(FilterKey.NAME),
+      },
+      paginationQuery,
+      toSortByQuery(sortByQuery)
+    );
+  }, [filtersValue, paginationQuery, sortByQuery, fetchApplications]);
 
   const refreshTable = useCallback(() => {
     fetchApplications(
@@ -158,15 +173,26 @@ export const ApplicationList: React.FC = () => {
     );
   }, [filtersValue, paginationQuery, sortByQuery, fetchApplications]);
 
-  useEffect(() => {
-    fetchApplications(
-      {
-        name: filtersValue.get(FilterKey.NAME),
-      },
-      paginationQuery,
-      toSortByQuery(sortByQuery)
-    );
-  }, [filtersValue, paginationQuery, sortByQuery, fetchApplications]);
+  // Expansion and selection of rows
+
+  const {
+    isItemSelected: isRowExpanded,
+    toggleItemSelected: toggleRowExpanded,
+  } = useSelectionState<Application>({
+    items: applications?.data || [],
+    isEqual: (a, b) => a.id === b.id,
+  });
+
+  const {
+    isItemSelected: isRowSelected,
+    toggleItemSelected: toggleRowSelected,
+    selectedItems: selectedRows,
+  } = useSelectionState<Application>({
+    items: applications?.data || [],
+    isEqual: (a, b) => a.id === b.id,
+  });
+
+  // Table content definition
 
   const columns: ICell[] = [
     {
@@ -187,8 +213,8 @@ export const ApplicationList: React.FC = () => {
 
   const rows: IRow[] = [];
   applications?.data.forEach((item) => {
-    const isExpanded = isItemExpanded(item);
-    const isSelected = isItemSelected(item);
+    const isExpanded = isRowExpanded(item);
+    const isSelected = isRowSelected(item);
 
     rows.push({
       [ENTITY_FIELD]: item,
@@ -228,11 +254,12 @@ export const ApplicationList: React.FC = () => {
                       when={!!fetchError}
                       then={t("terms.unknown")}
                     >
-                      {assessment && (
+                      {assessment ? (
                         <StatusIconAssessment
-                          status={assessment.status}
-                          label={assessment.status}
+                          status={getStatusIconFrom(assessment)}
                         />
+                      ) : (
+                        <StatusIconAssessment status="NotStarted" />
                       )}
                     </ConditionalRender>
                   )}
@@ -290,36 +317,7 @@ export const ApplicationList: React.FC = () => {
           rowData: IRowData
         ) => {
           const row: Application = getRow(rowData);
-
-          getAssessments({ applicationId: row.id })
-            .then(({ data }) => {
-              const currentAssessment: Assessment | undefined = data[0];
-
-              const newAssessment = {
-                applicationId: row.id,
-              } as Assessment;
-
-              return Promise.all([
-                currentAssessment,
-                currentAssessment || createAssessment(newAssessment),
-              ]);
-            })
-            .then(([currentAssessment, newAssessment]) => {
-              history.push(
-                formatPath(Paths.applicationInventory_assessment, {
-                  assessmentId: (currentAssessment || newAssessment).id,
-                })
-              );
-            })
-            .catch((error) => {
-              // TODO temporary local dev
-              // dispatch(alertActions.addDanger(getAxiosErrorMessage(error)));
-              history.push(
-                formatPath(Paths.applicationInventory_assessment, {
-                  assessmentId: 1,
-                })
-              );
-            });
+          startApplicationAssessment(row);
         },
       },
       {
@@ -342,7 +340,7 @@ export const ApplicationList: React.FC = () => {
     return false;
   };
 
-  // Rows
+  // Row event handlers
 
   const collapseRow = (
     event: React.MouseEvent,
@@ -352,7 +350,7 @@ export const ApplicationList: React.FC = () => {
     extraData: IExtraData
   ) => {
     const row = getRow(rowData);
-    toggleItemExpanded(row);
+    toggleRowExpanded(row);
   };
 
   const selectRow = (
@@ -363,7 +361,7 @@ export const ApplicationList: React.FC = () => {
     extraData: IExtraData
   ) => {
     const row = getRow(rowData);
-    toggleItemSelected(row);
+    toggleRowSelected(row);
   };
 
   const editRow = (row: Application) => {
@@ -396,7 +394,7 @@ export const ApplicationList: React.FC = () => {
     );
   };
 
-  // Advanced filters
+  // Advanced filters event handlers
 
   const handleOnClearAllFilters = () => {
     setFiltersValue((current) => {
@@ -423,7 +421,7 @@ export const ApplicationList: React.FC = () => {
     setFiltersValue((current) => new Map(current).set(filterKey, value));
   };
 
-  // Create Modal
+  // Create App modal
 
   const handleOnOpenCreateNewModal = () => {
     setIsNewModalOpen(true);
@@ -447,7 +445,7 @@ export const ApplicationList: React.FC = () => {
     setIsNewModalOpen(false);
   };
 
-  // Update Modal
+  // Update app Modal
 
   const handleOnUpdated = () => {
     setRowToUpdate(undefined);
@@ -456,6 +454,50 @@ export const ApplicationList: React.FC = () => {
 
   const handleOnUpdatedCancel = () => {
     setRowToUpdate(undefined);
+  };
+
+  // General actions
+
+  const startApplicationAssessment = (row: Application) => {
+    getAssessments({ applicationId: row.id })
+      .then(({ data }) => {
+        const currentAssessment: Assessment | undefined = data[0];
+
+        const newAssessment = {
+          applicationId: row.id,
+        } as Assessment;
+
+        return Promise.all([
+          currentAssessment,
+          !currentAssessment ? createAssessment(newAssessment) : undefined,
+        ]);
+      })
+      .then(([currentAssessment, newAssessment]) => {
+        history.push(
+          formatPath(Paths.applicationInventory_assessment, {
+            assessmentId: currentAssessment
+              ? currentAssessment.id
+              : newAssessment?.data.id,
+          })
+        );
+      })
+      .catch((error) => {
+        dispatch(alertActions.addDanger(getAxiosErrorMessage(error)));
+      });
+  };
+
+  const handleOnAssessSelectedRow = () => {
+    if (selectedRows.length !== 1) {
+      dispatch(
+        alertActions.addDanger(
+          "The number of applications to be assess must be 1"
+        )
+      );
+      return;
+    }
+
+    const row = selectedRows[0];
+    startApplicationAssessment(row);
   };
 
   return (
@@ -506,26 +548,39 @@ export const ApplicationList: React.FC = () => {
               </AppTableToolbarToggleGroup>
             }
             toolbar={
-              <ToolbarGroup variant="button-group">
-                <ToolbarItem>
-                  <Button
-                    type="button"
-                    aria-label="create-application"
-                    variant={ButtonVariant.primary}
-                    onClick={handleOnOpenCreateNewModal}
-                  >
-                    {t("actions.createNew")}
-                  </Button>
-                </ToolbarItem>
-              </ToolbarGroup>
+              <>
+                <ToolbarGroup variant="button-group">
+                  <ToolbarItem>
+                    <Button
+                      type="button"
+                      aria-label="create-application"
+                      variant={ButtonVariant.primary}
+                      onClick={handleOnOpenCreateNewModal}
+                    >
+                      {t("actions.createNew")}
+                    </Button>
+                  </ToolbarItem>
+                  <ToolbarItem>
+                    <Button
+                      type="button"
+                      aria-label="assess-application"
+                      variant={ButtonVariant.primary}
+                      onClick={handleOnAssessSelectedRow}
+                      isDisabled={selectedRows.length !== 1}
+                    >
+                      {t("actions.assess")}
+                    </Button>
+                  </ToolbarItem>
+                </ToolbarGroup>
+              </>
             }
             noDataState={
               <NoDataEmptyState
                 title={t("composed.noDataStateTitle", {
-                  what: t("terms.applications"),
+                  what: t("terms.applications").toLocaleLowerCase(),
                 })}
                 description={t("composed.noDataStateBody", {
-                  what: t("terms.application"),
+                  what: t("terms.application").toLocaleLowerCase(),
                 })}
               />
             }

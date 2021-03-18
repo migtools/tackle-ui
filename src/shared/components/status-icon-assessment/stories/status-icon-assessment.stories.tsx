@@ -17,17 +17,14 @@ const Template: Story<IStatusIconAssessmentProps> = (args) => (
 export const NotStarted = Template.bind({});
 NotStarted.args = {
   status: "NotStarted",
-  label: "Not started yet",
 };
 
 export const InProgress = Template.bind({});
 InProgress.args = {
   status: "InProgress",
-  label: "In progress",
 };
 
 export const Completed = Template.bind({});
 Completed.args = {
   status: "Completed",
-  label: "Completed",
 };

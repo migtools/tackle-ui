@@ -19,7 +19,7 @@ exports[`Test snapshot 1`] = `
         <NavItem>
           <NavLink
             activeClassName="pf-m-current"
-            to="/application-inventory/application-list"
+            to="/application-inventory/"
           >
             sidebar.applicationInventory
           </NavLink>

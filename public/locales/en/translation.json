@@ -5,17 +5,18 @@
         "controls": "Controls"
     },
     "terms": {
+        "unknown": "Unknown",
+        "application": "Application",
+        "applications": "Applications",
+        "assessment": "Assessment",
+        "stakeholders": "Stakeholders",
+        "stakeholderGroups": "Stakeholder groups",
         "name": "Name",
         "description": "Description",
         "businessService": "Business service",
-        "assessment": "Assessment",
-        "unknown": "Unknown",
         "comments": "Comments",
-        "applications": "Applications",
         "owner": "Owner",
         "controls": "Controls",
-        "stakeholders": "Stakeholders",
-        "stakeholderGroups": "Stakeholder groups",
         "businessServices": "Business services",
         "tags": "Tags",
         "member(s)": "Member(s)",
@@ -24,17 +25,28 @@
         "displayName": "Display name",
         "jobFunction": "Job function",
         "group(s)": "Group(s)",
-        "group": "Group"
+        "group": "Group",
+        "notStarted": "Not started",
+        "inProgress": "In progress",
+        "completed": "Completed"
+    },
+    "composed": {
+        "selectStakeholders": "Select stakeholders",
+        "applicationAssessment": "Application assessment",
+        "applicationInventory": "Application inventory",
+        "noDataStateTitle": "No {{what}} available",
+        "noDataStateBody": "Create a new {{what}} to start seeing data here",
+        "selectOne": "Select a {{what}}"
     },
     "actions": {
+        "next": "Next",
+        "back": "Back",
+        "cancel": "Cancel",
         "assess": "Assess",
         "delete": "Delete",
-        "cancel": "Cancel",
         "createNew": "Create new",
         "create": "Create",
         "save": "Save",
-        "next": "Next",
-        "back": "Back",
         "edit": "Edit"
     },
     "dialog": {
@@ -57,14 +69,6 @@
         "success": {
             "added": "Success! {{what}} was added as a {{type}}."
         }
-    },
-    "composed": {
-        "applicationInventory": "Application inventory",
-        "noDataStateTitle": "No {{what}} available",
-        "noDataStateBody": "Create a new {{what}} to start seeing data here",
-        "selectOne": "Select a {{what}}",
-        "selectStakeholders": "Select stakeholders",
-        "applicationAssessment": "Application assessment"
     },
     "validation": {
         "required": "This field is required.",

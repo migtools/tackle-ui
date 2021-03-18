@@ -1,1 +1,1 @@
-export { StatusIconAssessment } from "./status-icon-assessment";
+export * from "./status-icon-assessment";

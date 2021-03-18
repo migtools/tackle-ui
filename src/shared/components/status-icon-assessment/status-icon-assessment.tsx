@@ -1,4 +1,6 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
+
 import { Flex, FlexItem, SpinnerProps } from "@patternfly/react-core";
 import {
   CheckCircleIcon,
@@ -13,10 +15,13 @@ import {
   global_info_color_200 as loadingColor,
 } from "@patternfly/react-tokens";
 
-export type StatusType = "NotStarted" | "InProgress" | "Completed";
+export type StatusIconAssessmentType =
+  | "NotStarted"
+  | "InProgress"
+  | "Completed";
 
 type IconListType = {
-  [key in StatusType]: {
+  [key in StatusIconAssessmentType]: {
     Icon:
       | React.ComponentClass<SVGIconProps>
       | React.FunctionComponent<SpinnerProps>;
@@ -39,18 +44,18 @@ const iconList: IconListType = {
 };
 
 export interface IStatusIconAssessmentProps {
-  status: StatusType;
-  label?: React.ReactNode;
+  status: StatusIconAssessmentType;
   isDisabled?: boolean;
   className?: string;
 }
 
 export const StatusIconAssessment: React.FunctionComponent<IStatusIconAssessmentProps> = ({
   status,
-  label,
   isDisabled = false,
   className = "",
 }: IStatusIconAssessmentProps) => {
+  const { t } = useTranslation();
+
   const Icon = iconList[status].Icon;
   const icon = (
     <Icon
@@ -59,19 +64,32 @@ export const StatusIconAssessment: React.FunctionComponent<IStatusIconAssessment
     />
   );
 
-  if (label) {
-    return (
-      <Flex
-        spaceItems={{ default: "spaceItemsSm" }}
-        alignItems={{ default: "alignItemsCenter" }}
-        flexWrap={{ default: "nowrap" }}
-        style={{ whiteSpace: "nowrap" }}
-        className={className}
-      >
-        <FlexItem>{icon}</FlexItem>
-        <FlexItem>{label}</FlexItem>
-      </Flex>
-    );
+  let label: string;
+  switch (status) {
+    case "NotStarted":
+      label = t("terms.notStarted");
+      break;
+    case "InProgress":
+      label = t("terms.inProgress");
+      break;
+    case "Completed":
+      label = t("terms.completed");
+      break;
+    default:
+      label = t("terms.unknown");
+      break;
   }
-  return icon;
+
+  return (
+    <Flex
+      spaceItems={{ default: "spaceItemsSm" }}
+      alignItems={{ default: "alignItemsCenter" }}
+      flexWrap={{ default: "nowrap" }}
+      style={{ whiteSpace: "nowrap" }}
+      className={className}
+    >
+      <FlexItem>{icon}</FlexItem>
+      <FlexItem>{label}</FlexItem>
+    </Flex>
+  );
 };
