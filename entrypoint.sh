@@ -12,10 +12,10 @@ if [[ -z "$APPLICATION_INVENTORY_API_URL" ]]; then
   exit 1
 fi
 
-if [[ -z "$PATHFINDER_API_URL" ]]; then
-  echo "You must provide PATHFINDER_API_URL environment variable" 1>&2
-  exit 1
-fi
+# if [[ -z "$PATHFINDER_API_URL" ]]; then
+#   echo "You must provide PATHFINDER_API_URL environment variable" 1>&2
+#   exit 1
+# fi
 
 if [[ -z "$SSO_REALM" ]]; then
   echo "You must provide SSO_REALM environment variable" 1>&2
@@ -32,7 +32,8 @@ fi
 
 if [ -f ./nginx.conf.template ]; then
   echo "---> Processing nginx.conf.template configuration file..."
-  envsubst '${CONTROLS_API_URL} ${SSO_SERVER_URL} ${APPLICATION_INVENTORY_API_URL} ${PATHFINDER_API_URL}' < ./nginx.conf.template > ./nginx.conf
+  envsubst '${CONTROLS_API_URL} ${SSO_SERVER_URL} ${APPLICATION_INVENTORY_API_URL}' < ./nginx.conf.template > ./nginx.conf
+  # envsubst '${CONTROLS_API_URL} ${SSO_SERVER_URL} ${APPLICATION_INVENTORY_API_URL} ${PATHFINDER_API_URL}' < ./nginx.conf.template > ./nginx.conf
   cp -v ./nginx.conf "${NGINX_CONF_PATH}"
   rm -f ./nginx.conf
 fi
