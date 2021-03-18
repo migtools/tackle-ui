@@ -12,7 +12,7 @@ export enum Paths {
   base = "/",
   notFound = "/not-found",
 
-  applicationInventory = "/application-inventory/",
+  applicationInventory = "/application-inventory",
   applicationInventory_applicationList = "/application-inventory/application-list",
   applicationInventory_assessment = "/application-inventory/assessment/:assessmentId",
 
@@ -23,14 +23,6 @@ export enum Paths {
   controls_stakeholders = "/controls/stakeholders",
   controls_stakeholderGroups = "/controls/stakeholder-groups",
   controls_tags = "/controls/tags",
-}
-
-export interface OptionalCompanyRoute {
-  company?: string;
-}
-
-export interface CompanyRoute {
-  company: string;
 }
 
 export interface AssessmentRoute {

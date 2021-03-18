@@ -78,7 +78,7 @@ const toSortByQuery = (
 
   let field: ApplicationSortBy;
   switch (sortBy.index) {
-    case 1:
+    case 2:
       field = ApplicationSortBy.NAME;
       break;
     default:
@@ -150,7 +150,7 @@ export const ApplicationList: React.FC = () => {
     handlePaginationChange,
     handleSortChange,
   } = useTableControls({
-    sortByQuery: { direction: "asc", index: 1 },
+    sortByQuery: { direction: "asc", index: 2 },
   });
 
   useEffect(() => {
@@ -309,17 +309,17 @@ export const ApplicationList: React.FC = () => {
     }
 
     const actions: (IAction | ISeparator)[] = [
-      {
-        title: t("actions.assess"),
-        onClick: (
-          event: React.MouseEvent,
-          rowIndex: number,
-          rowData: IRowData
-        ) => {
-          const row: Application = getRow(rowData);
-          startApplicationAssessment(row);
-        },
-      },
+      // {
+      //   title: t("actions.assess"),
+      //   onClick: (
+      //     event: React.MouseEvent,
+      //     rowIndex: number,
+      //     rowData: IRowData
+      //   ) => {
+      //     const row: Application = getRow(rowData);
+      //     startApplicationAssessment(row);
+      //   },
+      // },
       {
         title: t("actions.delete"),
         onClick: (

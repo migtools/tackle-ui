@@ -1,6 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useFormikContext } from "formik";
+import { AxiosError } from "axios";
 
 import {
   FormGroup,
@@ -17,7 +18,6 @@ import { getValidatedFromError } from "utils/utils";
 
 import { IFormValues } from "../../application-assessment";
 import { Stakeholder, StakeholderGroup } from "api/models";
-import { AxiosError } from "axios";
 
 export interface StakeholdersFormProps {
   stakeholders?: Stakeholder[];
