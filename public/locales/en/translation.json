@@ -70,6 +70,13 @@
             "added": "Success! {{what}} was added as a {{type}}."
         }
     },
+    "composed": {
+        "applicationInventory": "Application inventory",
+        "noDataStateTitle": "No {{what}} available",
+        "noDataStateBody": "Create a new {{what}} to start seeing data here",
+        "selectOne": "Select a {{what}}",
+        "selectMany": "Select {{what}}"
+    },
     "validation": {
         "required": "This field is required.",
         "minLength": "This field must contain at least {{length}} characters.",

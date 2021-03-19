@@ -7,14 +7,14 @@ import { StakeholderGroup } from "api/models";
 import { SelectGroup } from "../select-group";
 
 export interface SelectMemberFormFieldProps {
-  groups: StakeholderGroup[];
+  stakeholderGroups: StakeholderGroup[];
   isFetching: boolean;
   fetchError?: AxiosError;
 }
 
 export const SelectGroupFormField: React.FC<
   FieldHookConfig<StakeholderGroup[] | undefined> & SelectMemberFormFieldProps
-> = ({ groups: stakeholders, isFetching, fetchError, ...props }) => {
+> = ({ stakeholderGroups, isFetching, fetchError, ...props }) => {
   const [field, , helpers] = useField(props);
 
   const handleOnSelect = (value: StakeholderGroup[]) => {
@@ -28,7 +28,7 @@ export const SelectGroupFormField: React.FC<
   return (
     <SelectGroup
       value={field.value}
-      groups={stakeholders}
+      stakeholderGroups={stakeholderGroups}
       isFetching={isFetching}
       fetchError={fetchError}
       onSelect={handleOnSelect}

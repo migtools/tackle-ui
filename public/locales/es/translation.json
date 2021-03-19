@@ -70,6 +70,13 @@
             "added": "Éxito! {{what}} fue creado como un {{type}}."
         }
     },
+    "composed": {
+        "applicationInventory": "Inventario de aplicaciones",
+        "noDataStateTitle": "No existen {{what}} disponibles",
+        "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
+        "selectOne": "Seleccione un(a) {{what}}",
+        "selectMany": "Seleccione {{what}}"
+    },
     "validation": {
         "required": "Este campo es requerido.",
         "minLength": "Este campo debe de tener al menos {{length}} caracteres.",

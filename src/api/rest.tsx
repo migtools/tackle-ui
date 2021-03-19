@@ -134,7 +134,7 @@ export enum StakeholderSortBy {
   EMAIL,
   DISPLAY_NAME,
   JOB_FUNCTION,
-  GROUP,
+  STAKEHOLDER_GROUPS,
 }
 export interface StakeholderSortByQuery {
   field: StakeholderSortBy;
@@ -145,8 +145,8 @@ export const getStakeholders = (
   filters: {
     email?: string[];
     displayName?: string[];
-    jobFuction?: string[];
-    group?: string[];
+    jobFunction?: string[];
+    stakeholderGroup?: string[];
   },
   pagination: PageQuery,
   sortBy?: StakeholderSortByQuery
@@ -164,8 +164,8 @@ export const getStakeholders = (
       case StakeholderSortBy.JOB_FUNCTION:
         field = "jobFunction";
         break;
-      case StakeholderSortBy.GROUP:
-        field = "group";
+      case StakeholderSortBy.STAKEHOLDER_GROUPS:
+        field = "stakeholderGroups.size";
         break;
       default:
         throw new Error("Could not define SortBy field name");
@@ -180,8 +180,8 @@ export const getStakeholders = (
 
     email: filters.email,
     displayName: filters.displayName,
-    jobFunction: filters.jobFuction,
-    group: filters.group,
+    jobFunction: filters.jobFunction,
+    "stakeholderGroups.name": filters.stakeholderGroup,
   };
 
   const query: string[] = buildQuery(params);
@@ -212,7 +212,7 @@ export const updateStakeholder = (
 
 export enum StakeholderGroupSortBy {
   NAME,
-  MEMBERS,
+  STAKEHOLDERS,
 }
 export interface StakeholderGroupSortByQuery {
   field: StakeholderGroupSortBy;
@@ -223,7 +223,7 @@ export const getStakeholderGroups = (
   filters: {
     name?: string[];
     description?: string[];
-    member?: string[];
+    stakeholder?: string[];
   },
   pagination: PageQuery,
   sortBy?: StakeholderGroupSortByQuery
@@ -235,8 +235,8 @@ export const getStakeholderGroups = (
       case StakeholderGroupSortBy.NAME:
         field = "name";
         break;
-      case StakeholderGroupSortBy.MEMBERS:
-        field = "members";
+      case StakeholderGroupSortBy.STAKEHOLDERS:
+        field = "stakeholders.size";
         break;
       default:
         throw new Error("Could not define SortBy field name");
@@ -251,7 +251,7 @@ export const getStakeholderGroups = (
 
     name: filters.name,
     description: filters.description,
-    member: filters.member,
+    "stakeholders.displayName": filters.stakeholder,
   };
 
   const query: string[] = buildQuery(params);
