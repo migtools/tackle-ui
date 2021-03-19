@@ -164,13 +164,13 @@ jobs:
           kubectl create -f kubernetes/ing.yml -n tackle
 
           kubectl create -f kubernetes/keycloak -n tackle
-          kubectl wait deployment/keycloak --for condition=available --timeout=-1 -n tackle
+          kubectl wait deployment/keycloak --for condition=available --timeout=-1s -n tackle
 
           kubectl create -f kubernetes/controls -n tackle
-          kubectl wait deployment/tackle-controls --for condition=available --timeout=-1 -n tackle
+          kubectl wait deployment/tackle-controls --for condition=available --timeout=-1s -n tackle
 
           kubectl create -f kubernetes/application-inventory -n tackle
-          kubectl wait deployment/tackle-application-inventory --for condition=available --timeout=-1 -n tackle
+          kubectl wait deployment/tackle-application-inventory --for condition=available --timeout=-1s -n tackle
 
           export TACKLE_INGRESS_IP=$(kubectl get ingress tackle -o json -n tackle | jq -r ".status.loadBalancer.ingress[].ip")
           export TACKLE_CONTROLS_HOST=https://$TACKLE_INGRESS_IP
