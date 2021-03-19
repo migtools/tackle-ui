@@ -158,7 +158,7 @@ export const getStakeholders = (
         field = "displayName";
         break;
       case StakeholderSortBy.JOB_FUNCTION:
-        field = "jobFunction";
+        field = "jobFunction.role";
         break;
       case StakeholderSortBy.STAKEHOLDER_GROUPS:
         field = "stakeholderGroups.size";
@@ -176,7 +176,7 @@ export const getStakeholders = (
 
     email: filters.email,
     displayName: filters.displayName,
-    jobFunction: filters.jobFunction,
+    "jobFunction.role": filters.jobFunction,
     "stakeholderGroups.name": filters.stakeholderGroup,
   };
 
