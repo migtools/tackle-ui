@@ -149,49 +149,54 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: a
+        run: echo "TACKLE_CONTROLS_HOST=yellow" >> $GITHUB_ENV
+      - name: b
+        run: echo $TACKLE_CONTROLS_HOST
+
       # - name: Build
       #   run: |
       #     yarn install
       #     yarn build:instrumentation
-      - name: Setup Minikube
-        uses: manusa/actions-setup-minikube@v2.3.1
-        with:
-          minikube version: v1.17.1
-          kubernetes version: v1.20.2
-          driver: docker
-          start args: '--addons=registry --addons=ingress'
-      - name: Validate Minikube
-        run: minikube status | grep Running
-      - name: Validate Cluster
-        run: kubectl get nodes
-      - name: Validate enabled addon in arg
-        run: minikube addons list -o json | jq '.registry.Status' | grep enabled
-      - name: Deploy Tackle        
-        run: |          
-          kubectl create ns tackle
+      # - name: Setup Minikube
+      #   uses: manusa/actions-setup-minikube@v2.3.1
+      #   with:
+      #     minikube version: v1.17.1
+      #     kubernetes version: v1.20.2
+      #     driver: docker
+      #     start args: '--addons=registry --addons=ingress'
+      # - name: Validate Minikube
+      #   run: minikube status | grep Running
+      # - name: Validate Cluster
+      #   run: kubectl get nodes
+      # - name: Validate enabled addon in arg
+      #   run: minikube addons list -o json | jq '.registry.Status' | grep enabled
+      # - name: Deploy Tackle        
+      #   run: |          
+      #     kubectl create ns tackle
 
-          kubectl create -f kubernetes/keycloak -n tackle
-          kubectl wait deployment/keycloak --for condition=available --timeout=-1s -n tackle
+      #     kubectl create -f kubernetes/keycloak -n tackle
+      #     kubectl wait deployment/keycloak --for condition=available --timeout=-1s -n tackle
           
-          kubectl create -f kubernetes/controls -n tackle
-          kubectl wait deployment/tackle-controls --for condition=available --timeout=-1s -n tackle
+      #     kubectl create -f kubernetes/controls -n tackle
+      #     kubectl wait deployment/tackle-controls --for condition=available --timeout=-1s -n tackle
 
-          kubectl create -f kubernetes/application-inventory -n tackle
-          kubectl wait deployment/tackle-application-inventory --for condition=available --timeout=-1s -n tackle          
+      #     kubectl create -f kubernetes/application-inventory -n tackle
+      #     kubectl wait deployment/tackle-application-inventory --for condition=available --timeout=-1s -n tackle          
 
-          kubectl create -f kubernetes/ing.yml -n tackle
+      #     kubectl create -f kubernetes/ing.yml -n tackle
 
-          kubectl get ingress tackle -o json -n tackle
+      #     kubectl get ingress tackle -o json -n tackle
 
-          # export TACKLE_INGRESS_IP=$(kubectl get ingress tackle -o json -n tackle | jq -r ".status.loadBalancer.ingress[].ip")
-          # export TACKLE_CONTROLS_HOST=https://$TACKLE_INGRESS_IP
-          # export TACKLE_APPLICATION_INVENTORY_HOST=https://$TACKLE_INGRESS_IP
+      #     # export TACKLE_INGRESS_IP=$(kubectl get ingress tackle -o json -n tackle | jq -r ".status.loadBalancer.ingress[].ip")
+      #     # export TACKLE_CONTROLS_HOST=https://$TACKLE_INGRESS_IP
+      #     # export TACKLE_APPLICATION_INVENTORY_HOST=https://$TACKLE_INGRESS_IP
           
-          # echo TACKLE_INGRESS_IP=$(TACKLE_INGRESS_IP)
-          # echo TACKLE_APPLICATION_INVENTORY_HOST=$(TACKLE_APPLICATION_INVENTORY_HOST)
+      #     # echo TACKLE_INGRESS_IP=$(TACKLE_INGRESS_IP)
+      #     # echo TACKLE_APPLICATION_INVENTORY_HOST=$(TACKLE_APPLICATION_INVENTORY_HOST)
 
-      - name: Ingress
-        run: bash -c 'external_ip=""; while [ -z $external_ip ]; do echo "Waiting for end point..."; external_ip=$(kubectl get ingress tackle --template="{{range .status.loadBalancer.ingress}}{{.ip}}{{end}}" -n tackle); [ -z "$external_ip" ] && sleep 10; done; echo "End point ready-" && echo $external_ip; export endpoint=$external_ip'
+      # - name: Ingress
+      #   run: bash -c 'external_ip=""; while [ -z $external_ip ]; do echo "Waiting for end point..."; external_ip=$(kubectl get ingress tackle --template="{{range .status.loadBalancer.ingress}}{{.ip}}{{end}}" -n tackle); [ -z "$external_ip" ] && sleep 10; done; echo "End point ready-" && echo $external_ip; export endpoint=$external_ip'
       # - name: Cypress run
       #   uses: cypress-io/github-action@v2
       #   with:
