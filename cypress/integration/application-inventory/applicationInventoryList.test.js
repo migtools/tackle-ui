@@ -255,7 +255,7 @@ context("Test business service list", () => {
     ).contains("my comments");
   });
 
-  it.only("Edit", () => {
+  it("Edit", () => {
     cy.intercept({
       method: "GET",
       url: "/api/application-inventory/application",
@@ -269,15 +269,20 @@ context("Test business service list", () => {
 
     cy.wait("@apiCheck");
 
-    // Open modal
-    cy.get(".pf-c-table .pf-c-table__action .pf-c-dropdown__toggle")
+    // Open modal from row pencil
+    cy.get(".pf-c-table .pf-c-inline-edit__action .pf-c-button")
       .first()
       .click();
-    cy.get(
-      ".pf-c-table .pf-c-table__action .pf-c-dropdown__menu .pf-c-dropdown__menu-item"
-    )
-      .contains("Edit")
-      .click();
+
+    // Open modal from kebab
+    // cy.get(".pf-c-table .pf-c-table__action .pf-c-dropdown__toggle")
+    //   .first()
+    //   .click();
+    // cy.get(
+    //   ".pf-c-table .pf-c-table__action .pf-c-dropdown__menu .pf-c-dropdown__menu-item"
+    // )
+    //   .contains("Edit")
+    //   .click();
 
     // Verify primary button is disabled
     cy.get("button[aria-label='submit']").should("be.disabled");
