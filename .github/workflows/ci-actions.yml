@@ -156,25 +156,20 @@ jobs:
       - name: Setup Minikube
         uses: manusa/actions-setup-minikube@v2.3.1
         with:
-          minikube version: "v1.18.1"
-          kubernetes version: "v1.20.5"
-          start args: "--addons=registry --addons=ingress"
+          minikube version: v1.9.2
+          kubernetes version: v1.18.2
+          start args: '--addons=registry --addons=ingress'
       - name: Deploy Tackle        
         run: |          
           kubectl create ns tackle
-          
-          echo "Creating ingress"
           kubectl create -f kubernetes/ing.yml -n tackle
-          
-          echo "Deploying Keycloak..."
+
           kubectl create -f kubernetes/keycloak -n tackle
           kubectl wait deployment/keycloak --for condition=available --timeout=-1s -n tackle
           
-          echo "Deploying Tackle controls..."
           kubectl create -f kubernetes/controls -n tackle
           kubectl wait deployment/tackle-controls --for condition=available --timeout=-1s -n tackle
 
-          echo "Deploying Tackle application inventory..."
           kubectl create -f kubernetes/application-inventory -n tackle
           kubectl wait deployment/tackle-application-inventory --for condition=available --timeout=-1s -n tackle          
 
