@@ -1,0 +1,6 @@
+{
+    "realm": "konveyor",
+    "auth-server-url": "${SSO_URL}",
+    "resource": "tackle-ui",
+    "public-client": true
+}
