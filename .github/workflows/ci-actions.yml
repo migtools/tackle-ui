@@ -169,7 +169,6 @@ jobs:
       - name: Deploy Tackle        
         run: |          
           kubectl create ns tackle
-          kubectl create -f kubernetes/ing.yml -n tackle
 
           kubectl create -f kubernetes/keycloak -n tackle
           kubectl wait deployment/keycloak --for condition=available --timeout=-1s -n tackle
@@ -180,6 +179,8 @@ jobs:
           kubectl create -f kubernetes/application-inventory -n tackle
           kubectl wait deployment/tackle-application-inventory --for condition=available --timeout=-1s -n tackle          
 
+          kubectl create -f kubernetes/ing.yml -n tackle
+          
           kubectl get ingress tackle -o json -n tackle
 
           export TACKLE_INGRESS_IP=$(kubectl get ingress tackle -o json -n tackle | jq -r ".status.loadBalancer.ingress[].ip")
