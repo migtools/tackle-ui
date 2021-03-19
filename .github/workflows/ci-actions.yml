@@ -149,10 +149,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Build
-        run: |
-          yarn install
-          yarn build:instrumentation
+      # - name: Build
+      #   run: |
+      #     yarn install
+      #     yarn build:instrumentation
       - name: Setup Minikube
         uses: manusa/actions-setup-minikube@v2.3.1
         with:
@@ -161,32 +161,42 @@ jobs:
       - name: Deploy Tackle        
         run: |          
           kubectl create ns tackle
+
+          echo "Creating ingress..."
           kubectl create -f kubernetes/ing.yml -n tackle
 
+          echo "Deploying Keycloak..."
           kubectl create -f kubernetes/keycloak -n tackle
           kubectl wait deployment/keycloak --for condition=available --timeout=-1s -n tackle
-
+          
+          echo "Deploying Tackle controls..."
           kubectl create -f kubernetes/controls -n tackle
           kubectl wait deployment/tackle-controls --for condition=available --timeout=-1s -n tackle
 
+          echo "Deploying Tackle application inventory..."
           kubectl create -f kubernetes/application-inventory -n tackle
           kubectl wait deployment/tackle-application-inventory --for condition=available --timeout=-1s -n tackle
+
+          kubectl get ingress tackle -o json -n tackle
 
           export TACKLE_INGRESS_IP=$(kubectl get ingress tackle -o json -n tackle | jq -r ".status.loadBalancer.ingress[].ip")
           export TACKLE_CONTROLS_HOST=https://$TACKLE_INGRESS_IP
           export TACKLE_APPLICATION_INVENTORY_HOST=https://$TACKLE_INGRESS_IP
+          
+          echo TACKLE_INGRESS_IP=$(TACKLE_INGRESS_IP)
+          echo TACKLE_APPLICATION_INVENTORY_HOST=$(TACKLE_APPLICATION_INVENTORY_HOST)
 
-      - name: Cypress run
-        uses: cypress-io/github-action@v2
-        with:
-          record: false
-          start: yarn run ui:start
-          wait-on: "http://localhost:3000"
-          wait-on-timeout: 120
-          config: pageLoadTimeout=100000
-          browser: ${{ matrix.browser }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Cypress run
+      #   uses: cypress-io/github-action@v2
+      #   with:
+      #     record: false
+      #     start: yarn run ui:start
+      #     wait-on: "http://localhost:3000"
+      #     wait-on-timeout: 120
+      #     config: pageLoadTimeout=100000
+      #     browser: ${{ matrix.browser }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # - uses: actions/upload-artifact@v1
       #   if: failure()
       #   with:
