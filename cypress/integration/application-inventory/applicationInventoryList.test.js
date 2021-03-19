@@ -169,18 +169,32 @@ context("Test business service list", () => {
       .first()
       .should("have.attr", "aria-sort", "ascending")
       .contains("Name");
-    cy.get("tbody > tr").eq(0).contains("app-a");
-    cy.get("tbody > tr").eq(9).contains("app-j");
+
+    cy.get("tbody > tr")
+      .not(".pf-c-table__expandable-row")
+      .eq(0)
+      .contains("td", "app-a");
+    cy.get("tbody > tr")
+      .not(".pf-c-table__expandable-row")
+      .eq(9)
+      .contains("td", "app-j");
 
     // Reverse sort
     cy.get("th.pf-c-table__sort > button").first().click();
+
     cy.wait("@apiCheck");
-    cy.get("th.pf-c-table__sort")
+    cy.get(".pf-c-table__sort")
       .first()
-      .should("have.attr", "aria-sort", "descending")
-      .contains("Name");
-    cy.get("tbody > tr").eq(0).contains("app-l");
-    cy.get("tbody > tr").eq(9).contains("app-c");
+      .should("have.attr", "aria-sort", "descending");
+
+    cy.get("tbody > tr")
+      .not(".pf-c-table__expandable-row")
+      .eq(0)
+      .contains("td", "app-l");
+    cy.get("tbody > tr")
+      .not(".pf-c-table__expandable-row")
+      .eq(9)
+      .contains("td", "app-c");
   });
 
   it("Create new - mininum data", () => {
