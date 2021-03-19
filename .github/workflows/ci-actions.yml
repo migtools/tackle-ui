@@ -129,9 +129,7 @@ jobs:
   #       with:
   #         name: e2e-screenshots-${{ matrix.os }}-${{ matrix.browser }}
   #         path: cypress/screenshots
-  #     - uses: actions/upload-artifact@v1
-  #       if: always()
-  #       with:
+ #     - uses: actions/upload-artifact@v1  #       if: always()  #       with:
   #         name: e2e-videos-${{ matrix.os }}-${{ matrix.browser }}
   #         path: cypress/videos
   #     - uses: codecov/codecov-action@v1
@@ -149,10 +147,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - run: yarn install
       - name: a
-        run: echo "TACKLE_CONTROLS_HOST=yellow" >> $GITHUB_ENV
+        run: echo "CONTROLS_URL=192.168.1.6" >> $GITHUB_ENV
       - name: b
-        run: echo $TACKLE_CONTROLS_HOST
+        run: |
+          echo $CONTROLS_URL
+          yarn run ui:start
 
       # - name: Build
       #   run: |
