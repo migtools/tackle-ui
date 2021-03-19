@@ -96,14 +96,19 @@ context("Test business service list", () => {
 
     //
     cy.wait("@apiCheck");
-    cy.get("tbody > tr").should("have.length", 10);
+    cy.get("tbody > tr")
+      .not(".pf-c-table__expandable-row")
+      .should("have.length", 10);
 
     // Apply first filter: 'name'
     cy.get("input[aria-label='filter-text']").type("app-l");
     cy.get("button[aria-label='search']").click();
 
     cy.wait("@apiCheck");
-    cy.get("tbody > tr").should("have.length", 1).contains("app-l");
+    cy.get("tbody > tr")
+      .not(".pf-c-table__expandable-row")
+      .should("have.length", 1)
+      .contains("td", "app-l");
 
     // Apply second filter: 'name'
     cy.get("input[aria-label='filter-text']").type("app-e");
@@ -111,6 +116,7 @@ context("Test business service list", () => {
 
     cy.wait("@apiCheck");
     cy.get("tbody > tr")
+      .not(".pf-c-table__expandable-row")
       .should("have.length", 2)
       .should("contain", "app-l")
       .should("contain", "app-e");
@@ -122,6 +128,7 @@ context("Test business service list", () => {
 
     cy.wait("@apiCheck");
     cy.get("tbody > tr")
+      .not(".pf-c-table__expandable-row")
       .should("have.length", 10)
       .should("contain", "app-a")
       .should("contain", "app-j");
@@ -138,21 +145,45 @@ context("Test business service list", () => {
     // Remember that by default the table is sorted by name
 
     cy.wait("@apiCheck");
-    cy.get("tbody > tr").should("have.length", 10);
-    cy.get("tbody > tr").contains("app-a");
-    cy.get("tbody > tr").contains("app-j");
+    cy.get("tbody > tr")
+      .not(".pf-c-table__expandable-row")
+      .should("have.length", 10);
+    cy.get("tbody > tr")
+      .not(".pf-c-table__expandable-row")
+      .eq(0)
+      .contains("td", "app-a");
+    cy.get("tbody > tr")
+      .not(".pf-c-table__expandable-row")
+      .eq(9)
+      .contains("td", "app-j");
 
     cy.get("button[data-action='next']").first().click();
     cy.wait("@apiCheck");
-    cy.get("tbody > tr").should("have.length", 2);
-    cy.get("tbody > tr").contains("app-k");
-    cy.get("tbody > tr").contains("app-l");
+    cy.get("tbody > tr")
+      .not(".pf-c-table__expandable-row")
+      .should("have.length", 2);
+    cy.get("tbody > tr")
+      .not(".pf-c-table__expandable-row")
+      .eq(0)
+      .contains("td", "app-k");
+    cy.get("tbody > tr")
+      .not(".pf-c-table__expandable-row")
+      .eq(1)
+      .contains("td", "app-l");
 
     cy.get("button[data-action='previous']").first().click();
     cy.wait("@apiCheck");
-    cy.get("tbody > tr").should("have.length", 10);
-    cy.get("tbody > tr").contains("app-a");
-    cy.get("tbody > tr").contains("app-j");
+    cy.get("tbody > tr")
+      .not(".pf-c-table__expandable-row")
+      .should("have.length", 10);
+    cy.get("tbody > tr")
+      .not(".pf-c-table__expandable-row")
+      .eq(0)
+      .contains("td", "app-a");
+    cy.get("tbody > tr")
+      .not(".pf-c-table__expandable-row")
+      .eq(9)
+      .contains("td", "app-j");
   });
 
   it("Sorting", () => {
