@@ -159,6 +159,12 @@ jobs:
           minikube version: v1.9.2
           kubernetes version: v1.18.2
           start args: '--addons=registry --addons=ingress'
+      - name: Validate Minikube
+        run: minikube status | grep Running
+      - name: Validate Cluster
+        run: kubectl get nodes
+      - name: Validate enabled addon in arg
+        run: minikube addons list -o json | jq '.registry.Status' | grep enabled
       - name: Deploy Tackle        
         run: |          
           kubectl create ns tackle
