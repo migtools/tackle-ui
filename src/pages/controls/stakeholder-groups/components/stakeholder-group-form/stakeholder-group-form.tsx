@@ -28,7 +28,7 @@ import { SelectMemberFormField } from "../select-member-form-field";
 export interface FormValues {
   name: string;
   description: string;
-  members: Stakeholder[];
+  stakeholders: Stakeholder[];
 }
 
 export interface StakeholderGroupFormProps {
@@ -60,7 +60,7 @@ export const StakeholderGroupForm: React.FC<StakeholderGroupFormProps> = ({
   const initialValues: FormValues = {
     name: stakeholderGroup?.name || "",
     description: stakeholderGroup?.description || "",
-    members: stakeholderGroup?.members || [],
+    stakeholders: stakeholderGroup?.stakeholders || [],
   };
 
   const validationSchema = object().shape({
@@ -81,7 +81,7 @@ export const StakeholderGroupForm: React.FC<StakeholderGroupFormProps> = ({
     const payload: StakeholderGroup = {
       name: formValues.name,
       description: formValues.description,
-      members: [...formValues.members],
+      stakeholders: [...formValues.stakeholders],
     };
 
     let promise: AxiosPromise<StakeholderGroup>;
@@ -172,13 +172,13 @@ export const StakeholderGroupForm: React.FC<StakeholderGroupFormProps> = ({
         </FormGroup>
         <FormGroup
           label={t("terms.member(s)")}
-          fieldId="members"
+          fieldId="stakeholders"
           isRequired={false}
-          validated={getValidatedFromError(formik.errors.members)}
-          helperTextInvalid={formik.errors.members}
+          validated={getValidatedFromError(formik.errors.stakeholders)}
+          helperTextInvalid={formik.errors.stakeholders}
         >
           <SelectMemberFormField
-            name="members"
+            name="stakeholders"
             stakeholders={stakeholders?.data || []}
             isFetching={isFetching}
             fetchError={fetchError}

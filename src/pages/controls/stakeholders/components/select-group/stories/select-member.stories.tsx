@@ -16,7 +16,7 @@ const Template: Story<SelectGroupProps> = (args) => <SelectGroup {...args} />;
 
 export const Basic = Template.bind({});
 Basic.args = {
-  groups: [
+  stakeholderGroups: [
     {
       name: "aa",
       description: "somethingA",
@@ -49,7 +49,7 @@ for (let index = 0; index < 100; index++) {
 
 export const BigOptions = Template.bind({});
 BigOptions.args = {
-  groups: bigGroups,
+  stakeholderGroups: bigGroups,
 };
 
 export const IsFetching = Template.bind({});

@@ -29,14 +29,14 @@ export interface Stakeholder {
   displayName: string;
   email: string;
   jobFunction?: JobFunction;
-  groups?: StakeholderGroup[];
+  stakeholderGroups?: StakeholderGroup[];
 }
 
 export interface StakeholderGroup {
   id?: number;
   name: string;
   description: string;
-  members?: Stakeholder[];
+  stakeholders?: Stakeholder[];
 }
 
 export interface JobFunction {

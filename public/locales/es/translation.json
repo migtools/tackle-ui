@@ -57,7 +57,8 @@
         "applicationInventory": "Inventario de aplicaciones",
         "noDataStateTitle": "No existen {{what}} disponibles",
         "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
-        "selectOne": "Seleccione un(a) {{what}}"
+        "selectOne": "Seleccione un(a) {{what}}",
+        "selectMany": "Seleccione {{what}}"
     },
     "validation": {
         "required": "Este campo es requerido.",

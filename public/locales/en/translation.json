@@ -57,7 +57,8 @@
         "applicationInventory": "Application inventory",
         "noDataStateTitle": "No {{what}} available",
         "noDataStateBody": "Create a new {{what}} to start seeing data here",
-        "selectOne": "Select a {{what}}"
+        "selectOne": "Select a {{what}}",
+        "selectMany": "Select {{what}}"
     },
     "validation": {
         "required": "This field is required.",

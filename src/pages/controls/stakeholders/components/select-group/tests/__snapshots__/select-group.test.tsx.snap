@@ -31,7 +31,7 @@ exports[`SelectGroup Renders without crashing 1`] = `
   onToggle={[Function]}
   onTypeaheadInputChanged={null}
   ouiaSafe={true}
-  placeholderText="Select a group"
+  placeholderText="Select stakeholder groups"
   removeSelectionAriaLabel="Remove"
   selections={Array []}
   toggleAriaLabel="Options menu"
@@ -58,7 +58,7 @@ exports[`SelectGroup Renders without crashing 1`] = `
     sendRef={[Function]}
     value={
       Object {
-        "group": Object {
+        "stakeholderGroup": Object {
           "description": "somethingA",
           "name": "aa",
         },
@@ -83,7 +83,7 @@ exports[`SelectGroup Renders without crashing 1`] = `
     sendRef={[Function]}
     value={
       Object {
-        "group": Object {
+        "stakeholderGroup": Object {
           "description": "somethingB",
           "name": "bb",
         },

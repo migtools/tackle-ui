@@ -80,7 +80,7 @@ export interface IState {
     filters: {
       name?: string[];
       description?: string[];
-      member?: string[];
+      stakeholder?: string[];
     },
     page: PageQuery,
     sortBy?: StakeholderGroupSortByQuery
@@ -98,7 +98,7 @@ export const useFetchStakeholderGroups = (
       filters: {
         name?: string[];
         description?: string[];
-        member?: string[];
+        stakeholder?: string[];
       },
       page: PageQuery,
       sortBy?: StakeholderGroupSortByQuery

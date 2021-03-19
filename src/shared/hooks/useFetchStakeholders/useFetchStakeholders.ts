@@ -80,8 +80,8 @@ export interface IState {
     filters: {
       email?: string[];
       displayName?: string[];
-      jobFuction?: string[];
-      group?: string[];
+      jobFunction?: string[];
+      stakeholderGroup?: string[];
     },
     page: PageQuery,
     sortBy?: StakeholderSortByQuery
@@ -99,8 +99,8 @@ export const useFetchStakeholders = (
       filters: {
         email?: string[];
         displayName?: string[];
-        jobFuction?: string[];
-        group?: string[];
+        jobFunction?: string[];
+        stakeholderGroups?: string[];
       },
       page: PageQuery,
       sortBy?: StakeholderSortByQuery
