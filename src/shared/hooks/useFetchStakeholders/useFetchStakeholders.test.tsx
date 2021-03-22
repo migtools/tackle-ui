@@ -90,7 +90,7 @@ describe("useFetchStakeholders", () => {
     };
 
     new MockAdapter(axios)
-      .onGet(`${STAKEHOLDERS}?size=1000&sort=displayName`)
+      .onGet(`${STAKEHOLDERS}?page=0&size=1000&sort=displayName`)
       .reply(200, data);
 
     // Use hook
