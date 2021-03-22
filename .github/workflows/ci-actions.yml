@@ -179,11 +179,11 @@ jobs:
           kubectl wait deployment/tackle-controls --for condition=available --timeout=-1s -n tackle
 
           kubectl create -f kubernetes/application-inventory -n tackle
-          kubectl wait deployment/tackle-application-inventory --for condition=available --timeout=-1s -n tackle          
+          kubectl wait deployment/tackle-application-inventory --for condition=available --timeout=-1s -n tackle
 
           kubectl create -f kubernetes/ing.yml -n tackle
       - name: Wait for Ingress
-        run: bash -c 'external_ip=""; while [ -z $external_ip ]; do echo "Waiting for end point..."; external_ip=$(kubectl get ingress tackle --template="{{range .status.loadBalancer.ingress}}{{.ip}}{{end}}" -n tackle); [ -z "$external_ip" ] && sleep 10; done; echo "End point ready-" && echo $external_ip; export endpoint=$external_ip; export SSO_URL=https://$external_ip/auth; envsubst '${SSO_URL}' < ./build/keycloak.json.k8s.template > ./build/keycloak.json; echo "CONTROLS_URL=https://$external_ip" >> $GITHUB_ENV && echo "APPLICATION_INVENTORY_URL=https://$external_ip" && echo "CYPRESS_controls_base_url=https://$external_ip/controls" && echo "CYPRESS_application_inventory_base_url=https://$external_ip/application-inventory" >> $GITHUB_ENV'
+        run: bash -c 'external_ip=""; while [ -z $external_ip ]; do echo "Waiting for end point..."; external_ip=$(kubectl get ingress tackle --template="{{range .status.loadBalancer.ingress}}{{.ip}}{{end}}" -n tackle); [ -z "$external_ip" ] && sleep 10; done; echo "End point ready-" && echo $external_ip; export endpoint=$external_ip; export SSO_URL=https://$external_ip/auth; envsubst '${SSO_URL}' < ./build/keycloak.json.k8s.template > ./build/keycloak.json; echo "TACKLE_CONTROLS_HOST=https://$external_ip" >> $GITHUB_ENV && echo "TACKLE_APPLICATION_INVENTORY_HOST=https://$external_ip" >> $GITHUB_ENV && echo "CYPRESS_controls_base_url=https://$external_ip/controls" >> $GITHUB_ENV && echo "CYPRESS_application_inventory_base_url=https://$external_ip/application-inventory" >> $GITHUB_ENV && echo "CYPRESS_auth_base_url=https://$external_ip/auth" >> $GITHUB_ENV'
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
@@ -195,7 +195,6 @@ jobs:
           browser: ${{ matrix.browser }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CYPRESS_auth_base_url: http://localhost:3000/auth
       - uses: actions/upload-artifact@v1
         if: failure()
         with:
