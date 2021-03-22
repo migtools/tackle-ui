@@ -16,7 +16,7 @@ describe("useFetchJobFunctions", () => {
     };
 
     new MockAdapter(axios)
-      .onGet(`${JOB_FUNCTIONS}?size=1000&sort=role`)
+      .onGet(`${JOB_FUNCTIONS}?page=0&size=1000&sort=role`)
       .reply(200, data);
 
     // Use hook

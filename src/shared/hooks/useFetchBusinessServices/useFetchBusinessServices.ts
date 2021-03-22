@@ -4,8 +4,8 @@ import { ActionType, createAsyncAction, getType } from "typesafe-actions";
 
 import {
   getBusinessServices,
-  getAllBusinessServices,
   BusinessServiceSortByQuery,
+  BusinessServiceSortBy,
 } from "api/rest";
 import { PageRepresentation, BusinessService, PageQuery } from "api/models";
 
@@ -125,7 +125,11 @@ export const useFetchBusinessServices = (
   const fetchAllBusinessServices = useCallback(() => {
     dispatch(fetchRequest());
 
-    getAllBusinessServices()
+    getBusinessServices(
+      {},
+      { page: 1, perPage: 1000 },
+      { field: BusinessServiceSortBy.NAME }
+    )
       .then(({ data }) => {
         const list = data._embedded["business-service"];
         const total = data.total_count;
