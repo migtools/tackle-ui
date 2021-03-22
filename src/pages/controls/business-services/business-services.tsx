@@ -236,7 +236,9 @@ export const BusinessServices: React.FC = () => {
             row,
             () => {
               dispatch(confirmDialogActions.closeDialog());
-              refreshTable();
+              businessServices?.data.length === 1
+                ? handlePaginationChange({ page: paginationQuery.page - 1 })
+                : refreshTable();
             },
             (error) => {
               dispatch(confirmDialogActions.closeDialog());
