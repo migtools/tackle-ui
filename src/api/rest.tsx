@@ -99,7 +99,7 @@ export const getBusinessServices = (
 };
 
 export const getAllBusinessServices = (): AxiosPromise<BusinessServicePage> => {
-  return APIClient.get(`${BUSINESS_SERVICES}?size=1000`, { headers });
+  return APIClient.get(`${BUSINESS_SERVICES}?size=1000&sort=name`, { headers });
 };
 
 export const deleteBusinessService = (id: number | string): AxiosPromise => {
@@ -185,7 +185,9 @@ export const getStakeholders = (
 };
 
 export const getAllStakeholders = (): AxiosPromise<StakeholderPage> => {
-  return APIClient.get(`${STAKEHOLDERS}?size=1000`, { headers });
+  return APIClient.get(`${STAKEHOLDERS}?size=1000&sort=displayName`, {
+    headers,
+  });
 };
 
 export const deleteStakeholder = (id: number): AxiosPromise => {
@@ -255,7 +257,9 @@ export const getStakeholderGroups = (
 };
 
 export const getAllStakeholderGroups = (): AxiosPromise<StakeholderGroupPage> => {
-  return APIClient.get(`${STAKEHOLDER_GROUPS}?size=1000`, { headers });
+  return APIClient.get(`${STAKEHOLDER_GROUPS}?size=1000&sort=name`, {
+    headers,
+  });
 };
 
 export const deleteStakeholderGroup = (id: number): AxiosPromise => {
@@ -277,7 +281,7 @@ export const updateStakeholderGroup = (
 // Job functions
 
 export const getAllJobFunctions = (): AxiosPromise<JobFunctionPage> => {
-  return APIClient.get(`${JOB_FUNCTIONS}?size=1000`, { headers });
+  return APIClient.get(`${JOB_FUNCTIONS}?size=1000&sort=role`, { headers });
 };
 
 // App inventory

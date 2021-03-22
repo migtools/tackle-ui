@@ -96,7 +96,7 @@ describe("useFetchBusinessServices", () => {
     };
 
     new MockAdapter(axios)
-      .onGet(`${BUSINESS_SERVICES}?size=1000`)
+      .onGet(`${BUSINESS_SERVICES}?size=1000&sort=name`)
       .reply(200, data);
 
     // Use hook

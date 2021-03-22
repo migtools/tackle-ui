@@ -15,7 +15,9 @@ describe("useFetchJobFunctions", () => {
       total_count: 0,
     };
 
-    new MockAdapter(axios).onGet(`${JOB_FUNCTIONS}?size=1000`).reply(200, data);
+    new MockAdapter(axios)
+      .onGet(`${JOB_FUNCTIONS}?size=1000&sort=role`)
+      .reply(200, data);
 
     // Use hook
     const { result, waitForNextUpdate } = renderHook(() =>

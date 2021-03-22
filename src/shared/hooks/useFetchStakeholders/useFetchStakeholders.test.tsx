@@ -89,7 +89,9 @@ describe("useFetchStakeholders", () => {
       total_count: 0,
     };
 
-    new MockAdapter(axios).onGet(`${STAKEHOLDERS}?size=1000`).reply(200, data);
+    new MockAdapter(axios)
+      .onGet(`${STAKEHOLDERS}?size=1000&sort=displayName`)
+      .reply(200, data);
 
     // Use hook
     const { result, waitForNextUpdate } = renderHook(() =>
