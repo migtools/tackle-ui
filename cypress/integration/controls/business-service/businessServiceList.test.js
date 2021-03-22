@@ -5,82 +5,37 @@ context("Test business service list", () => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
 
+    const stakeholders = [];
+
     cy.get("@tokens").then((tokens) => {
-      const headers = {
-        "Content-Type": "application/json",
-        Accept: "application/hal+json",
-        Authorization: "Bearer " + tokens.access_token,
-      };
-
-      const stakeholders = [];
-
-      // Delete business services
-      cy.request({
-        method: "GET",
-        headers: headers,
-        url: `${Cypress.env("controls_base_url")}/business-service?size=1000`,
-      })
-        .then((response) => {
-          response.body._embedded["business-service"].forEach((elem) => {
-            cy.request({
-              method: "DELETE",
-              headers: headers,
-              url: `${Cypress.env("controls_base_url")}/business-service/${
-                elem.id
-              }`,
-            });
-          });
-        })
-
-        // Delete stakeholders
-        .then(() => {
-          cy.request({
-            method: "GET",
-            headers: headers,
-            url: `${Cypress.env("controls_base_url")}/stakeholder?size=1000`,
-          });
-        })
-        .then((response) => {
-          response.body._embedded["stakeholder"].forEach((elem) => {
-            cy.request({
-              method: "DELETE",
-              headers: headers,
-              url: `${Cypress.env("controls_base_url")}/stakeholder/${elem.id}`,
-            });
-          });
-        })
+      cy.log("Clear DB")
+        .then(() => cy.tackleControlsClean(tokens))
 
         // Create stakeholders
         .then(() => {
-          for (let i = 1; i <= 12; i++) {
-            cy.request({
-              method: "POST",
-              headers: headers,
-              body: {
-                email: `email${i}@domain.com`,
-                displayName: `stakeholder${i}`,
-              },
-              url: `${Cypress.env("controls_base_url")}/stakeholder`,
-            }).then((response) => {
-              stakeholders.push(response.body);
+          return [...Array(12)]
+            .map((_, i) => ({
+              email: `email${i + 1}@domain.com`,
+              displayName: `stakeholder${i + 1}`,
+            }))
+            .forEach((payload) => {
+              cy.createStakeholder(payload, tokens).then((body) => {
+                stakeholders.push(body);
+              });
             });
-          }
         })
 
         // Create business services
         .then(() => {
-          for (let i = 1; i <= 12; i++) {
-            cy.request({
-              method: "POST",
-              headers: headers,
-              body: {
-                name: `service${i}`,
-                description: `description${i}`,
-                owner: stakeholders[12 - i],
-              },
-              url: `${Cypress.env("controls_base_url")}/business-service`,
+          return [...Array(12)]
+            .map((_, i) => ({
+              name: `service${i + 1}`,
+              description: `description${i + 1}`,
+              owner: stakeholders[11 - i],
+            }))
+            .forEach((payload) => {
+              cy.createBusinessService(payload, tokens);
             });
-          }
         });
     });
   });

@@ -12,76 +12,32 @@ context("Test business service list", () => {
         Authorization: "Bearer " + tokens.access_token,
       };
 
-      // Delete all business services
-      cy.request({
-        method: "GET",
-        headers: headers,
-        url: `${Cypress.env("controls_base_url")}/business-service?size=1000`,
-      })
-        .then((response) => {
-          response.body._embedded["business-service"].forEach((elem) => {
-            cy.request({
-              method: "DELETE",
-              headers: headers,
-              url: `${Cypress.env("controls_base_url")}/business-service/${
-                elem.id
-              }`,
-            });
-          });
-        })
+      cy.log("Clear DB")
+        .then(() => cy.tackleControlsClean(tokens))
+        .then(() => cy.tackleAppInventoryClean(tokens))
 
         // Create business services
         .then(() => {
-          for (let i = 1; i <= 12; i++) {
-            cy.request({
-              method: "POST",
-              headers: headers,
-              body: {
-                name: `service${i}`,
-                description: `description${i}`,
-              },
-              url: `${Cypress.env("controls_base_url")}/business-service`,
+          return [...Array(12)]
+            .map((_, i) => ({
+              name: `service${i + 1}`,
+              description: `description${i + 1}`,
+            }))
+            .forEach((payload) => {
+              cy.createBusinessService(payload, tokens);
             });
-          }
-        })
-
-        // Delete applications
-        .then(() => {
-          cy.request({
-            method: "GET",
-            headers: headers,
-            url: `${Cypress.env(
-              "application_inventory_base_url"
-            )}/application?size=1000`,
-          });
-        })
-        .then((response) => {
-          response.body._embedded["application"].forEach((elem) => {
-            cy.request({
-              method: "DELETE",
-              headers: headers,
-              url: `${Cypress.env(
-                "application_inventory_base_url"
-              )}/application/${elem.id}`,
-            });
-          });
         })
 
         // Create applications
         .then(() => {
-          for (let i = 1; i <= 12; i++) {
-            cy.request({
-              method: "POST",
-              headers: headers,
-              body: {
-                name: `app-${(i + 9).toString(36)}`,
-                description: `description${i}`,
-              },
-              url: `${Cypress.env(
-                "application_inventory_base_url"
-              )}/application`,
+          return [...Array(12)]
+            .map((_, i) => ({
+              name: `app-${(i + 10).toString(36)}`,
+              description: `description${i}`,
+            }))
+            .forEach((payload) => {
+              cy.createApplication(payload, tokens);
             });
-          }
         });
     });
   });
@@ -255,7 +211,7 @@ context("Test business service list", () => {
     ).contains("my comments");
   });
 
-  it.only("Edit", () => {
+  it("Edit", () => {
     cy.intercept({
       method: "GET",
       url: "/api/application-inventory/application",

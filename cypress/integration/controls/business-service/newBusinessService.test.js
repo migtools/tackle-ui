@@ -6,61 +6,19 @@ context("Test NewBusinessService", () => {
     cy.kcLogin("alice").as("tokens");
 
     cy.get("@tokens").then((tokens) => {
-      const headers = {
-        "Content-Type": "application/json",
-        Accept: "application/hal+json",
-        Authorization: "Bearer " + tokens.access_token,
-      };
-
-      // Delete all business services
-      cy.request({
-        method: "GET",
-        headers: headers,
-        url: `${Cypress.env("controls_base_url")}/business-service?size=1000`,
-      })
-        .then((result) => {
-          result.body._embedded["business-service"].forEach((e) => {
-            cy.request({
-              method: "DELETE",
-              headers: headers,
-              url: `${Cypress.env("controls_base_url")}/business-service/${
-                e.id
-              }`,
-            });
-          });
-        })
-
-        // Delete all stakeholders
-        .then(() => {
-          cy.request({
-            method: "GET",
-            headers: headers,
-            url: `${Cypress.env("controls_base_url")}/stakeholder?size=1000`,
-          });
-        })
-        .then((response) => {
-          response.body._embedded["stakeholder"].forEach((elem) => {
-            cy.request({
-              method: "DELETE",
-              headers: headers,
-              url: `${Cypress.env("controls_base_url")}/stakeholder/${elem.id}`,
-            });
-          });
-        })
+      cy.log("Clear DB")
+        .then(() => cy.tackleControlsClean(tokens))
 
         // Create stakeholders
         .then(() => {
-          for (let i = 1; i <= 12; i++) {
-            cy.request({
-              method: "POST",
-              headers: headers,
-              body: {
-                email: `email${i}@domain.com`,
-                displayName: `stakeholder${i}`,
-              },
-              url: `${Cypress.env("controls_base_url")}/stakeholder`,
+          return [...Array(12)]
+            .map((_, i) => ({
+              email: `email${i + 1}@domain.com`,
+              displayName: `stakeholder${i + 1}`,
+            }))
+            .forEach((payload) => {
+              cy.createStakeholder(payload, tokens);
             });
-          }
         });
     });
   });

@@ -6,45 +6,19 @@ context("Test business service list", () => {
     cy.kcLogin("alice").as("tokens");
 
     cy.get("@tokens").then((tokens) => {
-      const headers = {
-        "Content-Type": "application/json",
-        Accept: "application/hal+json",
-        Authorization: "Bearer " + tokens.access_token,
-      };
-
-      const stakeholders = [];
-
-      // Delete stakeholders
-      cy.request({
-        method: "GET",
-        headers: headers,
-        url: `${Cypress.env("controls_base_url")}/stakeholder?size=1000`,
-      })
-        .then((response) => {
-          response.body._embedded["stakeholder"].forEach((elem) => {
-            cy.request({
-              method: "DELETE",
-              headers: headers,
-              url: `${Cypress.env("controls_base_url")}/stakeholder/${elem.id}`,
-            });
-          });
-        })
+      cy.log("Clear DB")
+        .then(() => cy.tackleControlsClean(tokens))
 
         // Create stakeholders
         .then(() => {
-          for (let i = 1; i <= 12; i++) {
-            cy.request({
-              method: "POST",
-              headers: headers,
-              body: {
-                email: `email-${(i + 9).toString(36)}@domain.com`,
-                displayName: `stakeholder${i}`,
-              },
-              url: `${Cypress.env("controls_base_url")}/stakeholder`,
-            }).then((response) => {
-              stakeholders.push(response.body);
+          return [...Array(12)]
+            .map((_, i) => ({
+              email: `email-${(i + 10).toString(36)}@domain.com`,
+              displayName: `stakeholder${i + 1}`,
+            }))
+            .forEach((payload) => {
+              cy.createStakeholder(payload, tokens);
             });
-          }
         });
     });
   });
