@@ -11,9 +11,11 @@ import {
   ButtonVariant,
   Form,
   FormGroup,
+  SelectOptionObject,
   TextInput,
 } from "@patternfly/react-core";
 
+import { SelectEntityFormikField } from "shared/components";
 import { useFetchStakeholderGroups, useFetchJobFunctions } from "shared/hooks";
 
 import { createStakeholder, updateStakeholder } from "api/rest";
@@ -24,8 +26,29 @@ import {
   getValidatedFromErrorTouched,
 } from "utils/utils";
 
-import { SelectGroupFormField } from "../select-group-form-field";
-import { SelectJobFunctionFormField } from "../select-job-function-form-field";
+import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
+
+interface SelectOptionEntity extends SelectOptionObject {
+  entity: JobFunction | StakeholderGroup;
+}
+
+const jobFunctionToSelectOptionEntity = (
+  entity: JobFunction
+): SelectOptionEntity => ({
+  entity: { ...entity },
+  toString: () => {
+    return entity.role;
+  },
+});
+
+const stakeholderGroupToSelectOptionEntity = (
+  entity: StakeholderGroup
+): SelectOptionEntity => ({
+  entity: { ...entity },
+  toString: () => {
+    return entity.name;
+  },
+});
 
 export interface FormValues {
   email: string;
@@ -50,7 +73,7 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
   const [error, setError] = useState<AxiosError>();
 
   const {
-    JobFunctions,
+    jobFunctions,
     isFetching: isFetchingJobFunctions,
     fetchError: fetchErrorJobFunctions,
     fetchAllJobFunctions,
@@ -196,11 +219,33 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
           validated={getValidatedFromError(formik.errors.jobFunction)}
           helperTextInvalid={formik.errors.jobFunction}
         >
-          <SelectJobFunctionFormField
-            name="jobFunction"
-            jobFunctions={JobFunctions?.data || []}
-            isFetching={isFetchingJobFunctions}
-            fetchError={fetchErrorJobFunctions}
+          <SelectEntityFormikField
+            fieldConfig={{
+              name: "jobFunction",
+            }}
+            selectConfig={{
+              isMulti: false,
+              options: (jobFunctions?.data || []).map((f) =>
+                jobFunctionToSelectOptionEntity(f)
+              ),
+              isEqual: (a: SelectOptionObject, b: SelectOptionObject) => {
+                return (
+                  (a as SelectOptionEntity).entity.id ===
+                  (b as SelectOptionEntity).entity.id
+                );
+              },
+
+              isFetching: isFetchingJobFunctions,
+              fetchError: fetchErrorJobFunctions,
+
+              menuAppendTo: () => document.body,
+              maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
+              placeholderText: t("composed.selectOne", {
+                what: t("terms.jobFunction").toLowerCase(),
+              }),
+              "aria-label": "job-function",
+              "aria-describedby": "job-function",
+            }}
           />
         </FormGroup>
         <FormGroup
@@ -210,11 +255,33 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
           validated={getValidatedFromError(formik.errors.stakeholderGroups)}
           helperTextInvalid={formik.errors.stakeholderGroups}
         >
-          <SelectGroupFormField
-            name="stakeholderGroups"
-            stakeholderGroups={stakeholderGroups?.data || []}
-            isFetching={isFetchingGroups}
-            fetchError={fetchErrorGroups}
+          <SelectEntityFormikField
+            fieldConfig={{
+              name: "stakeholderGroups",
+            }}
+            selectConfig={{
+              isMulti: true,
+              options: (stakeholderGroups?.data || []).map((f) =>
+                stakeholderGroupToSelectOptionEntity(f)
+              ),
+              isEqual: (a: SelectOptionObject, b: SelectOptionObject) => {
+                return (
+                  (a as SelectOptionEntity).entity.id ===
+                  (b as SelectOptionEntity).entity.id
+                );
+              },
+
+              isFetching: isFetchingGroups,
+              fetchError: fetchErrorGroups,
+
+              menuAppendTo: () => document.body,
+              maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
+              placeholderText: t("composed.selectOne", {
+                what: t("terms.group").toLowerCase(),
+              }),
+              "aria-label": "stakeholder-group",
+              "aria-describedby": "stakeholder-group",
+            }}
           />
         </FormGroup>
 

@@ -11,9 +11,13 @@ import {
   ButtonVariant,
   Form,
   FormGroup,
+  SelectOptionObject,
   TextArea,
   TextInput,
 } from "@patternfly/react-core";
+
+import { SelectEntityFormikField } from "shared/components";
+import { useFetchStakeholders } from "shared/hooks";
 
 import { createBusinessService, updateBusinessService } from "api/rest";
 import { BusinessService, Stakeholder } from "api/models";
@@ -23,8 +27,20 @@ import {
   getValidatedFromErrorTouched,
 } from "utils/utils";
 
-import { SelectStakeholderFormField } from "../select-stakeholder-form-field";
-import { useFetchStakeholders } from "shared/hooks";
+import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
+
+interface SelectOptionEntity extends SelectOptionObject {
+  entity: Stakeholder;
+}
+
+const stakeholderToSelectOptionEntity = (
+  entity: Stakeholder
+): SelectOptionEntity => ({
+  entity: { ...entity },
+  toString: () => {
+    return entity.email;
+  },
+});
 
 export interface FormValues {
   name: string;
@@ -49,8 +65,8 @@ export const BusinessServiceForm: React.FC<BusinessServiceFormProps> = ({
 
   const {
     stakeholders,
-    isFetching,
-    fetchError,
+    isFetching: isFetchingStakeholders,
+    fetchError: fetchErrorStakeholders,
     fetchAllStakeholders,
   } = useFetchStakeholders();
 
@@ -180,11 +196,31 @@ export const BusinessServiceForm: React.FC<BusinessServiceFormProps> = ({
           validated={getValidatedFromError(formik.errors.owner)}
           helperTextInvalid={formik.errors.owner}
         >
-          <SelectStakeholderFormField
-            name="owner"
-            stakeholders={stakeholders?.data || []}
-            isFetching={isFetching}
-            fetchError={fetchError}
+          <SelectEntityFormikField
+            fieldConfig={{
+              name: "owner",
+            }}
+            selectConfig={{
+              isMulti: false,
+              options: (stakeholders?.data || []).map((f) =>
+                stakeholderToSelectOptionEntity(f)
+              ),
+              isEqual: (a: SelectOptionObject, b: SelectOptionObject) => {
+                return (
+                  (a as SelectOptionEntity).entity.id ===
+                  (b as SelectOptionEntity).entity.id
+                );
+              },
+
+              isFetching: isFetchingStakeholders,
+              fetchError: fetchErrorStakeholders,
+
+              menuAppendTo: () => document.body,
+              maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
+              placeholderText: "Select owner from list of stakeholders",
+              "aria-label": "owner",
+              "aria-describedby": "owner",
+            }}
           />
         </FormGroup>
         <ActionGroup>

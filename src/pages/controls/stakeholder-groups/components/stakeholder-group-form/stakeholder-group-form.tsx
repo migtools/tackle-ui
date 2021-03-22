@@ -11,10 +11,15 @@ import {
   ButtonVariant,
   Form,
   FormGroup,
+  SelectOptionObject,
   TextArea,
   TextInput,
 } from "@patternfly/react-core";
 
+import { SelectEntityFormikField } from "shared/components";
+import { useFetchStakeholders } from "shared/hooks";
+
+import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 import { createStakeholderGroup, updateStakeholderGroup } from "api/rest";
 import { Stakeholder, StakeholderGroup } from "api/models";
 import {
@@ -22,8 +27,19 @@ import {
   getValidatedFromError,
   getValidatedFromErrorTouched,
 } from "utils/utils";
-import { useFetchStakeholders } from "shared/hooks";
-import { SelectMemberFormField } from "../select-member-form-field";
+
+interface SelectOptionEntity extends SelectOptionObject {
+  entity: Stakeholder;
+}
+
+const stakeholderToSelectOptionEntity = (
+  entity: Stakeholder
+): SelectOptionEntity => ({
+  entity: { ...entity },
+  toString: () => {
+    return entity.email;
+  },
+});
 
 export interface FormValues {
   name: string;
@@ -48,8 +64,8 @@ export const StakeholderGroupForm: React.FC<StakeholderGroupFormProps> = ({
 
   const {
     stakeholders,
-    isFetching,
-    fetchError,
+    isFetching: isFetchingStakeholders,
+    fetchError: fetchErrorStakeholders,
     fetchAllStakeholders,
   } = useFetchStakeholders();
 
@@ -177,11 +193,33 @@ export const StakeholderGroupForm: React.FC<StakeholderGroupFormProps> = ({
           validated={getValidatedFromError(formik.errors.stakeholders)}
           helperTextInvalid={formik.errors.stakeholders}
         >
-          <SelectMemberFormField
-            name="stakeholders"
-            stakeholders={stakeholders?.data || []}
-            isFetching={isFetching}
-            fetchError={fetchError}
+          <SelectEntityFormikField
+            fieldConfig={{
+              name: "stakeholders",
+            }}
+            selectConfig={{
+              isMulti: true,
+              options: (stakeholders?.data || []).map((f) =>
+                stakeholderToSelectOptionEntity(f)
+              ),
+              isEqual: (a: SelectOptionObject, b: SelectOptionObject) => {
+                return (
+                  (a as SelectOptionEntity).entity.id ===
+                  (b as SelectOptionEntity).entity.id
+                );
+              },
+
+              isFetching: isFetchingStakeholders,
+              fetchError: fetchErrorStakeholders,
+
+              menuAppendTo: () => document.body,
+              maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
+              placeholderText: t("composed.selectOne", {
+                what: t("terms.member").toLowerCase(),
+              }),
+              "aria-label": "stakeholders",
+              "aria-describedby": "stakeholders",
+            }}
           />
         </FormGroup>
 
