@@ -32,3 +32,23 @@ Cypress.Commands.add("pf4_table_select_kebabAction", (action) => {
     ".pf-c-table .pf-c-table__action .pf-c-dropdown__menu .pf-c-dropdown__menu-item"
   ).contains(action);
 });
+
+Cypress.Commands.add("pf4_table_verify_columnIsAsc", (column) => {
+  cy.get(".pf-c-table > thead > tr > th.pf-c-table__sort.pf-m-selected")
+    .should("have.attr", "aria-sort", "ascending")
+    .get("button")
+    .contains(column);
+});
+
+Cypress.Commands.add("pf4_table_verify_columnIsDesc", (column) => {
+  cy.get(".pf-c-table > thead > tr > th.pf-c-table__sort.pf-m-selected")
+    .should("have.attr", "aria-sort", "descending")
+    .get("button")
+    .contains(column);
+});
+
+Cypress.Commands.add("pf4_table_toggle_column", (column) => {
+  cy.get(".pf-c-table > thead > tr > th.pf-c-table__sort")
+    .contains(column)
+    .click();
+});
