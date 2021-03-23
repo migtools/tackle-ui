@@ -52,3 +52,7 @@ Cypress.Commands.add("pf4_table_toggle_column", (column) => {
     .contains(column)
     .click();
 });
+
+Cypress.Commands.add("pf4_table_select_mainRows", () => {
+  cy.get(".pf-c-table > tbody > tr").not(".pf-m-expanded");
+});
