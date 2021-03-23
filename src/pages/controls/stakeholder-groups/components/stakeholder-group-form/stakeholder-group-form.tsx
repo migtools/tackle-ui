@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AxiosError, AxiosPromise, AxiosResponse } from "axios";
 import { useFormik, FormikProvider, FormikHelpers } from "formik";
@@ -11,12 +11,14 @@ import {
   ButtonVariant,
   Form,
   FormGroup,
-  SelectOptionObject,
   TextArea,
   TextInput,
 } from "@patternfly/react-core";
 
-import { SelectEntityFormikField } from "shared/components";
+import {
+  SimpleSelectFetchFormikField,
+  OptionWithValue,
+} from "shared/components";
 import { useFetchStakeholders } from "shared/hooks";
 
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
@@ -28,23 +30,17 @@ import {
   getValidatedFromErrorTouched,
 } from "utils/utils";
 
-interface SelectOptionEntity extends SelectOptionObject {
-  entity: Stakeholder;
-}
-
-const stakeholderToSelectOptionEntity = (
-  entity: Stakeholder
-): SelectOptionEntity => ({
-  entity: { ...entity },
-  toString: () => {
-    return entity.email;
-  },
+const stakeholderToOption = (
+  value: Stakeholder
+): OptionWithValue<Stakeholder> => ({
+  value,
+  toString: () => value.displayName,
 });
 
 export interface FormValues {
   name: string;
   description: string;
-  stakeholders: Stakeholder[];
+  stakeholders?: OptionWithValue<Stakeholder>[];
 }
 
 export interface StakeholderGroupFormProps {
@@ -73,10 +69,18 @@ export const StakeholderGroupForm: React.FC<StakeholderGroupFormProps> = ({
     fetchAllStakeholders();
   }, [fetchAllStakeholders]);
 
+  const stakeholdersInitialValue:
+    | OptionWithValue<Stakeholder>[]
+    | undefined = useMemo(() => {
+    return stakeholderGroup && stakeholderGroup.stakeholders
+      ? stakeholderGroup.stakeholders.map(stakeholderToOption)
+      : undefined;
+  }, [stakeholderGroup]);
+
   const initialValues: FormValues = {
     name: stakeholderGroup?.name || "",
     description: stakeholderGroup?.description || "",
-    stakeholders: stakeholderGroup?.stakeholders || [],
+    stakeholders: stakeholdersInitialValue,
   };
 
   const validationSchema = object().shape({
@@ -97,7 +101,7 @@ export const StakeholderGroupForm: React.FC<StakeholderGroupFormProps> = ({
     const payload: StakeholderGroup = {
       name: formValues.name,
       description: formValues.description,
-      stakeholders: [...formValues.stakeholders],
+      stakeholders: formValues.stakeholders?.map((f) => f.value),
     };
 
     let promise: AxiosPromise<StakeholderGroup>;
@@ -193,32 +197,38 @@ export const StakeholderGroupForm: React.FC<StakeholderGroupFormProps> = ({
           validated={getValidatedFromError(formik.errors.stakeholders)}
           helperTextInvalid={formik.errors.stakeholders}
         >
-          <SelectEntityFormikField
-            fieldConfig={{
-              name: "stakeholders",
-            }}
+          <SimpleSelectFetchFormikField
+            fieldConfig={{ name: "stakeholders" }}
             selectConfig={{
-              isMulti: true,
-              options: (stakeholders?.data || []).map((f) =>
-                stakeholderToSelectOptionEntity(f)
-              ),
-              isEqual: (a: SelectOptionObject, b: SelectOptionObject) => {
-                return (
-                  (a as SelectOptionEntity).entity.id ===
-                  (b as SelectOptionEntity).entity.id
-                );
-              },
-
-              isFetching: isFetchingStakeholders,
-              fetchError: fetchErrorStakeholders,
-
-              menuAppendTo: () => document.body,
-              maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
+              variant: "typeaheadmulti",
+              "aria-label": "stakeholders",
+              "aria-describedby": "stakeholders",
               placeholderText: t("composed.selectOne", {
                 what: t("terms.member").toLowerCase(),
               }),
-              "aria-label": "stakeholders",
-              "aria-describedby": "stakeholders",
+              menuAppendTo: () => document.body,
+              maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
+              options: (stakeholders?.data || []).map(stakeholderToOption),
+              onChange: (selection) => {
+                const currentValue = formik.values.stakeholders || [];
+                const selectedOption = selection as OptionWithValue<Stakeholder>;
+
+                let nextValue: OptionWithValue<Stakeholder>[];
+                const elementExists = currentValue.find(
+                  (f) => f.value.id === selectedOption.value.id
+                );
+                if (elementExists) {
+                  nextValue = currentValue.filter(
+                    (f) => f.value.id !== selectedOption.value.id
+                  );
+                } else {
+                  nextValue = [...currentValue, selectedOption];
+                }
+
+                formik.setFieldValue("stakeholders", nextValue);
+              },
+              isFetching: isFetchingStakeholders,
+              fetchError: fetchErrorStakeholders,
             }}
           />
         </FormGroup>

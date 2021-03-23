@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AxiosError, AxiosPromise, AxiosResponse } from "axios";
 import { useFormik, FormikProvider, FormikHelpers } from "formik";
@@ -11,13 +11,16 @@ import {
   ButtonVariant,
   Form,
   FormGroup,
-  SelectOptionObject,
   TextInput,
 } from "@patternfly/react-core";
 
-import { SelectEntityFormikField } from "shared/components";
+import {
+  SimpleSelectFetchFormikField,
+  OptionWithValue,
+} from "shared/components";
 import { useFetchStakeholderGroups, useFetchJobFunctions } from "shared/hooks";
 
+import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 import { createStakeholder, updateStakeholder } from "api/rest";
 import { JobFunction, Stakeholder, StakeholderGroup } from "api/models";
 import {
@@ -26,35 +29,25 @@ import {
   getValidatedFromErrorTouched,
 } from "utils/utils";
 
-import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
-
-interface SelectOptionEntity extends SelectOptionObject {
-  entity: JobFunction | StakeholderGroup;
-}
-
-const jobFunctionToSelectOptionEntity = (
-  entity: JobFunction
-): SelectOptionEntity => ({
-  entity: { ...entity },
-  toString: () => {
-    return entity.role;
-  },
+const jobFunctionToOption = (
+  value: JobFunction
+): OptionWithValue<JobFunction> => ({
+  value,
+  toString: () => value.role,
 });
 
-const stakeholderGroupToSelectOptionEntity = (
-  entity: StakeholderGroup
-): SelectOptionEntity => ({
-  entity: { ...entity },
-  toString: () => {
-    return entity.name;
-  },
+const stakeholderGroupToOption = (
+  value: StakeholderGroup
+): OptionWithValue<StakeholderGroup> => ({
+  value,
+  toString: () => value.name,
 });
 
 export interface FormValues {
   email: string;
   displayName: string;
-  jobFunction?: JobFunction;
-  stakeholderGroups: StakeholderGroup[];
+  jobFunction?: OptionWithValue<JobFunction>;
+  stakeholderGroups?: OptionWithValue<StakeholderGroup>[];
 }
 
 export interface StakeholderFormProps {
@@ -94,11 +87,27 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
     fetchAllStakeholderGroups();
   }, [fetchAllStakeholderGroups]);
 
+  const jobFunctionInitialValue:
+    | OptionWithValue<JobFunction>
+    | undefined = useMemo(() => {
+    return stakeholder && stakeholder.jobFunction
+      ? jobFunctionToOption(stakeholder.jobFunction)
+      : undefined;
+  }, [stakeholder]);
+
+  const stakeholderGroupsInitialValue:
+    | OptionWithValue<StakeholderGroup>[]
+    | undefined = useMemo(() => {
+    return stakeholder && stakeholder.stakeholderGroups
+      ? stakeholder.stakeholderGroups.map(stakeholderGroupToOption)
+      : undefined;
+  }, [stakeholder]);
+
   const initialValues: FormValues = {
     email: stakeholder?.email || "",
     displayName: stakeholder?.displayName || "",
-    jobFunction: stakeholder?.jobFunction,
-    stakeholderGroups: stakeholder?.stakeholderGroups || [],
+    jobFunction: jobFunctionInitialValue,
+    stakeholderGroups: stakeholderGroupsInitialValue,
   };
 
   const validationSchema = object().shape({
@@ -122,8 +131,10 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
     const payload: Stakeholder = {
       email: formValues.email,
       displayName: formValues.displayName,
-      jobFunction: formValues.jobFunction,
-      stakeholderGroups: [...formValues.stakeholderGroups],
+      jobFunction: formValues.jobFunction
+        ? formValues.jobFunction.value
+        : undefined,
+      stakeholderGroups: formValues.stakeholderGroups?.map((f) => f.value),
     };
 
     let promise: AxiosPromise<Stakeholder>;
@@ -219,32 +230,23 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
           validated={getValidatedFromError(formik.errors.jobFunction)}
           helperTextInvalid={formik.errors.jobFunction}
         >
-          <SelectEntityFormikField
-            fieldConfig={{
-              name: "jobFunction",
-            }}
+          <SimpleSelectFetchFormikField
+            fieldConfig={{ name: "jobFunction" }}
             selectConfig={{
-              isMulti: false,
-              options: (jobFunctions?.data || []).map((f) =>
-                jobFunctionToSelectOptionEntity(f)
-              ),
-              isEqual: (a: SelectOptionObject, b: SelectOptionObject) => {
-                return (
-                  (a as SelectOptionEntity).entity.id ===
-                  (b as SelectOptionEntity).entity.id
-                );
-              },
-
-              isFetching: isFetchingJobFunctions,
-              fetchError: fetchErrorJobFunctions,
-
-              menuAppendTo: () => document.body,
-              maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
+              variant: "typeahead",
+              "aria-label": "job-function",
+              "aria-describedby": "job-function",
               placeholderText: t("composed.selectOne", {
                 what: t("terms.jobFunction").toLowerCase(),
               }),
-              "aria-label": "job-function",
-              "aria-describedby": "job-function",
+              menuAppendTo: () => document.body,
+              maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
+              options: (jobFunctions?.data || []).map(jobFunctionToOption),
+              onChange: (selection) => {
+                formik.setFieldValue("jobFunction", selection);
+              },
+              isFetching: isFetchingJobFunctions,
+              fetchError: fetchErrorJobFunctions,
             }}
           />
         </FormGroup>
@@ -255,32 +257,40 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
           validated={getValidatedFromError(formik.errors.stakeholderGroups)}
           helperTextInvalid={formik.errors.stakeholderGroups}
         >
-          <SelectEntityFormikField
-            fieldConfig={{
-              name: "stakeholderGroups",
-            }}
+          <SimpleSelectFetchFormikField
+            fieldConfig={{ name: "stakeholderGroups" }}
             selectConfig={{
-              isMulti: true,
-              options: (stakeholderGroups?.data || []).map((f) =>
-                stakeholderGroupToSelectOptionEntity(f)
-              ),
-              isEqual: (a: SelectOptionObject, b: SelectOptionObject) => {
-                return (
-                  (a as SelectOptionEntity).entity.id ===
-                  (b as SelectOptionEntity).entity.id
-                );
-              },
-
-              isFetching: isFetchingGroups,
-              fetchError: fetchErrorGroups,
-
-              menuAppendTo: () => document.body,
-              maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
+              variant: "typeaheadmulti",
+              "aria-label": "stakeholder-groups",
+              "aria-describedby": "stakeholder-groups",
               placeholderText: t("composed.selectOne", {
                 what: t("terms.group").toLowerCase(),
               }),
-              "aria-label": "stakeholder-group",
-              "aria-describedby": "stakeholder-group",
+              menuAppendTo: () => document.body,
+              maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
+              options: (stakeholderGroups?.data || []).map(
+                stakeholderGroupToOption
+              ),
+              onChange: (selection) => {
+                const currentValue = formik.values.stakeholderGroups || [];
+                const selectedOption = selection as OptionWithValue<StakeholderGroup>;
+
+                let nextValue: OptionWithValue<StakeholderGroup>[];
+                const elementExists = currentValue.find(
+                  (f) => f.value.id === selectedOption.value.id
+                );
+                if (elementExists) {
+                  nextValue = currentValue.filter(
+                    (f) => f.value.id !== selectedOption.value.id
+                  );
+                } else {
+                  nextValue = [...currentValue, selectedOption];
+                }
+
+                formik.setFieldValue("stakeholderGroups", nextValue);
+              },
+              isFetching: isFetchingGroups,
+              fetchError: fetchErrorGroups,
             }}
           />
         </FormGroup>

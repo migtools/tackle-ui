@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AxiosError, AxiosPromise, AxiosResponse } from "axios";
 import { useFormik, FormikProvider, FormikHelpers } from "formik";
@@ -11,14 +11,17 @@ import {
   ButtonVariant,
   Form,
   FormGroup,
-  SelectOptionObject,
   TextArea,
   TextInput,
 } from "@patternfly/react-core";
 
-import { SelectEntityFormikField } from "shared/components";
+import {
+  SimpleSelectFetchFormikField,
+  OptionWithValue,
+} from "shared/components";
 import { useFetchStakeholders } from "shared/hooks";
 
+import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 import { createBusinessService, updateBusinessService } from "api/rest";
 import { BusinessService, Stakeholder } from "api/models";
 import {
@@ -27,25 +30,17 @@ import {
   getValidatedFromErrorTouched,
 } from "utils/utils";
 
-import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
-
-interface SelectOptionEntity extends SelectOptionObject {
-  entity: Stakeholder;
-}
-
-const stakeholderToSelectOptionEntity = (
-  entity: Stakeholder
-): SelectOptionEntity => ({
-  entity: { ...entity },
-  toString: () => {
-    return entity.email;
-  },
+const stakeholderToOption = (
+  value: Stakeholder
+): OptionWithValue<Stakeholder> => ({
+  value,
+  toString: () => value.displayName,
 });
 
 export interface FormValues {
   name: string;
   description?: string;
-  owner?: Stakeholder;
+  owner?: OptionWithValue<Stakeholder>;
 }
 
 export interface BusinessServiceFormProps {
@@ -74,10 +69,18 @@ export const BusinessServiceForm: React.FC<BusinessServiceFormProps> = ({
     fetchAllStakeholders();
   }, [fetchAllStakeholders]);
 
+  const ownerInitialValue:
+    | OptionWithValue<Stakeholder>
+    | undefined = useMemo(() => {
+    return businessService && businessService.owner
+      ? stakeholderToOption(businessService.owner)
+      : undefined;
+  }, [businessService]);
+
   const initialValues: FormValues = {
     name: businessService?.name || "",
     description: businessService?.description || "",
-    owner: businessService?.owner,
+    owner: ownerInitialValue,
   };
 
   const validationSchema = object().shape({
@@ -99,7 +102,7 @@ export const BusinessServiceForm: React.FC<BusinessServiceFormProps> = ({
     const payload: BusinessService = {
       name: formValues.name,
       description: formValues.description,
-      owner: formValues.owner ? { ...formValues.owner } : undefined,
+      owner: formValues.owner ? formValues.owner.value : undefined,
     };
 
     let promise: AxiosPromise<BusinessService>;
@@ -196,33 +199,25 @@ export const BusinessServiceForm: React.FC<BusinessServiceFormProps> = ({
           validated={getValidatedFromError(formik.errors.owner)}
           helperTextInvalid={formik.errors.owner}
         >
-          <SelectEntityFormikField
-            fieldConfig={{
-              name: "owner",
-            }}
+          <SimpleSelectFetchFormikField
+            fieldConfig={{ name: "owner" }}
             selectConfig={{
-              isMulti: false,
-              options: (stakeholders?.data || []).map((f) =>
-                stakeholderToSelectOptionEntity(f)
-              ),
-              isEqual: (a: SelectOptionObject, b: SelectOptionObject) => {
-                return (
-                  (a as SelectOptionEntity).entity.id ===
-                  (b as SelectOptionEntity).entity.id
-                );
-              },
-
-              isFetching: isFetchingStakeholders,
-              fetchError: fetchErrorStakeholders,
-
-              menuAppendTo: () => document.body,
-              maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
-              placeholderText: "Select owner from list of stakeholders",
+              variant: "typeahead",
               "aria-label": "owner",
               "aria-describedby": "owner",
+              placeholderText: "Select owner from list of stakeholders",
+              menuAppendTo: () => document.body,
+              maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
+              options: (stakeholders?.data || []).map(stakeholderToOption),
+              onChange: (selection) => {
+                formik.setFieldValue("owner", selection);
+              },
+              fetchError: fetchErrorStakeholders,
+              isFetching: isFetchingStakeholders,
             }}
           />
         </FormGroup>
+
         <ActionGroup>
           <Button
             type="submit"
