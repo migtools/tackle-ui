@@ -15,8 +15,9 @@ import {
 } from "@patternfly/react-core";
 
 import {
-  SimpleSelectFetchFormikField,
+  SingleSelectFetchFormikField,
   OptionWithValue,
+  MultiSelectFetchFormikField,
 } from "shared/components";
 import { useFetchStakeholderGroups, useFetchJobFunctions } from "shared/hooks";
 
@@ -230,7 +231,7 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
           validated={getValidatedFromError(formik.errors.jobFunction)}
           helperTextInvalid={formik.errors.jobFunction}
         >
-          <SimpleSelectFetchFormikField
+          <SingleSelectFetchFormikField
             fieldConfig={{ name: "jobFunction" }}
             selectConfig={{
               variant: "typeahead",
@@ -242,9 +243,6 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
               menuAppendTo: () => document.body,
               maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
               options: (jobFunctions?.data || []).map(jobFunctionToOption),
-              onChange: (selection) => {
-                formik.setFieldValue("jobFunction", selection);
-              },
               isFetching: isFetchingJobFunctions,
               fetchError: fetchErrorJobFunctions,
             }}
@@ -257,7 +255,7 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
           validated={getValidatedFromError(formik.errors.stakeholderGroups)}
           helperTextInvalid={formik.errors.stakeholderGroups}
         >
-          <SimpleSelectFetchFormikField
+          <MultiSelectFetchFormikField
             fieldConfig={{ name: "stakeholderGroups" }}
             selectConfig={{
               variant: "typeaheadmulti",
@@ -271,26 +269,13 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
               options: (stakeholderGroups?.data || []).map(
                 stakeholderGroupToOption
               ),
-              onChange: (selection) => {
-                const currentValue = formik.values.stakeholderGroups || [];
-                const selectedOption = selection as OptionWithValue<StakeholderGroup>;
-
-                let nextValue: OptionWithValue<StakeholderGroup>[];
-                const elementExists = currentValue.find(
-                  (f) => f.value.id === selectedOption.value.id
-                );
-                if (elementExists) {
-                  nextValue = currentValue.filter(
-                    (f) => f.value.id !== selectedOption.value.id
-                  );
-                } else {
-                  nextValue = [...currentValue, selectedOption];
-                }
-
-                formik.setFieldValue("stakeholderGroups", nextValue);
-              },
               isFetching: isFetchingGroups,
               fetchError: fetchErrorGroups,
+            }}
+            isEqual={(a: any, b: any) => {
+              const option1 = a as OptionWithValue<StakeholderGroup>;
+              const option2 = b as OptionWithValue<StakeholderGroup>;
+              return option1.value.id === option2.value.id;
             }}
           />
         </FormGroup>

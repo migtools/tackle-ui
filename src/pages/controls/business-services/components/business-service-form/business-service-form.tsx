@@ -16,7 +16,7 @@ import {
 } from "@patternfly/react-core";
 
 import {
-  SimpleSelectFetchFormikField,
+  SingleSelectFetchFormikField,
   OptionWithValue,
 } from "shared/components";
 import { useFetchStakeholders } from "shared/hooks";
@@ -199,7 +199,7 @@ export const BusinessServiceForm: React.FC<BusinessServiceFormProps> = ({
           validated={getValidatedFromError(formik.errors.owner)}
           helperTextInvalid={formik.errors.owner}
         >
-          <SimpleSelectFetchFormikField
+          <SingleSelectFetchFormikField
             fieldConfig={{ name: "owner" }}
             selectConfig={{
               variant: "typeahead",
@@ -209,9 +209,6 @@ export const BusinessServiceForm: React.FC<BusinessServiceFormProps> = ({
               menuAppendTo: () => document.body,
               maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
               options: (stakeholders?.data || []).map(stakeholderToOption),
-              onChange: (selection) => {
-                formik.setFieldValue("owner", selection);
-              },
               fetchError: fetchErrorStakeholders,
               isFetching: isFetchingStakeholders,
             }}

@@ -11,13 +11,17 @@ import {
   ButtonVariant,
   Form,
   FormGroup,
-  SelectOptionObject,
   TextArea,
   TextInput,
 } from "@patternfly/react-core";
 
+import {
+  SingleSelectFetchFormikField,
+  OptionWithValue,
+} from "shared/components";
 import { useFetchBusinessServices } from "shared/hooks";
 
+import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 import { createApplication, updateApplication } from "api/rest";
 import { Application, BusinessService } from "api/models";
 import {
@@ -25,25 +29,19 @@ import {
   getValidatedFromError,
   getValidatedFromErrorTouched,
 } from "utils/utils";
-import { SelectEntityFormikField } from "shared/components";
-import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 
-interface SelectOptionEntity extends SelectOptionObject {
-  entity: BusinessService;
-}
-
-const selectOptionMapper = (entity: BusinessService): SelectOptionEntity => ({
-  entity: { ...entity },
-  toString: () => {
-    return entity.name;
-  },
+const businesServiceToOption = (
+  value: BusinessService
+): OptionWithValue<BusinessService> => ({
+  value,
+  toString: () => value.name,
 });
 
 export interface FormValues {
   name: string;
   description?: string;
   comments?: string;
-  businessService?: SelectOptionEntity;
+  businessService?: OptionWithValue<BusinessService>;
 }
 
 export interface ApplicationFormProps {
@@ -73,7 +71,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
   }, [fetchAllBusinessServices]);
 
   const businessServiceInitialValue = useMemo(() => {
-    let result: SelectOptionEntity | undefined = undefined;
+    let result: OptionWithValue<BusinessService> | undefined = undefined;
     if (
       application &&
       application.businessService &&
@@ -85,7 +83,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
         (f) => f.id === businessServiceId
       );
 
-      result = selectOptionMapper({
+      result = businesServiceToOption({
         id: businessServiceId,
         name: businessService ? businessService.name : t("terms.unknown"),
       });
@@ -124,7 +122,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
       description: formValues.description,
       comments: formValues.comments,
       businessService: formValues.businessService
-        ? `${formValues.businessService.entity.id}`
+        ? `${formValues.businessService.value.id}`
         : undefined,
     };
 
@@ -220,33 +218,32 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
           isRequired={false}
           validated={getValidatedFromError(formik.errors.businessService)}
           helperTextInvalid={formik.errors.businessService}
+        ></FormGroup>
+        <FormGroup
+          label={t("terms.businessService")}
+          fieldId="businessService"
+          isRequired={false}
+          validated={getValidatedFromError(formik.errors.businessService)}
+          helperTextInvalid={formik.errors.businessService}
         >
-          <SelectEntityFormikField
+          <SingleSelectFetchFormikField
             fieldConfig={{
               name: "businessService",
             }}
             selectConfig={{
-              isMulti: false,
-              options: (businessServices?.data || []).map((f) =>
-                selectOptionMapper(f)
-              ),
-              isEqual: (a: SelectOptionObject, b: SelectOptionObject) => {
-                return (
-                  (a as SelectOptionEntity).entity.id ===
-                  (b as SelectOptionEntity).entity.id
-                );
-              },
-
-              isFetching: isFetchingBusinessServices,
-              fetchError: fetchErrorBusinessServices,
-
-              menuAppendTo: () => document.body,
-              maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
+              variant: "typeahead",
+              "aria-label": "business-service",
+              "aria-describedby": "business-service",
               placeholderText: t("composed.selectOne", {
                 what: t("terms.businessService"),
               }),
-              "aria-label": "business-service",
-              "aria-describedby": "business-service",
+              menuAppendTo: () => document.body,
+              maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
+              options: (businessServices?.data || []).map(
+                businesServiceToOption
+              ),
+              isFetching: isFetchingBusinessServices,
+              fetchError: fetchErrorBusinessServices,
             }}
           />
         </FormGroup>

@@ -6,12 +6,12 @@ import {
   SimpleSelectFetch,
 } from "./simple-select-fetch";
 
-export interface ISimpleSelectFetchFormikFieldProps {
+export interface ISingleSelectFetchFormikFieldProps {
   fieldConfig: FieldHookConfig<any>;
-  selectConfig: Omit<ISimpleSelectFetchProps, "value" | "onClear">;
+  selectConfig: Omit<ISimpleSelectFetchProps, "value" | "onChange" | "onClear">;
 }
 
-export const SimpleSelectFetchFormikField: React.FC<ISimpleSelectFetchFormikFieldProps> = ({
+export const SingleSelectFetchFormikField: React.FC<ISingleSelectFetchFormikFieldProps> = ({
   fieldConfig,
   selectConfig,
 }) => {
@@ -20,6 +20,7 @@ export const SimpleSelectFetchFormikField: React.FC<ISimpleSelectFetchFormikFiel
   return (
     <SimpleSelectFetch
       value={field.value}
+      onChange={(selection) => helpers.setValue(selection)}
       onClear={() => helpers.setValue(undefined)}
       {...selectConfig}
     />

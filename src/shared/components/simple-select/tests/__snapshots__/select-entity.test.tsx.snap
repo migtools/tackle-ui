@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`SelectEntity Renders without crashing 1`] = `
+exports[`SimpleSelect Renders without crashing 1`] = `
 <Select
-  aria-label=""
+  aria-label="my-selection"
   aria-labelledby=""
   chipGroupComponent={null}
   className=""
@@ -30,14 +30,14 @@ exports[`SelectEntity Renders without crashing 1`] = `
   onToggle={[Function]}
   onTypeaheadInputChanged={null}
   ouiaSafe={true}
-  placeholderText=""
+  placeholderText="Select..."
   removeSelectionAriaLabel="Remove"
   selections={Array []}
   toggleAriaLabel="Options menu"
   toggleIcon={null}
   toggleId={null}
   typeAheadAriaLabel=""
-  variant="typeaheadmulti"
+  variant="single"
   width=""
 >
   <SelectOption
@@ -51,15 +51,11 @@ exports[`SelectEntity Renders without crashing 1`] = `
     isNoResultsOption={false}
     isPlaceholder={false}
     isSelected={false}
-    key="0"
+    key="0-uno"
     keyHandler={[Function]}
     onClick={[Function]}
     sendRef={[Function]}
-    value={
-      Object {
-        "toString": [Function],
-      }
-    }
+    value="uno"
   />
   <SelectOption
     className=""
@@ -72,15 +68,11 @@ exports[`SelectEntity Renders without crashing 1`] = `
     isNoResultsOption={false}
     isPlaceholder={false}
     isSelected={false}
-    key="1"
+    key="1-dos"
     keyHandler={[Function]}
     onClick={[Function]}
     sendRef={[Function]}
-    value={
-      Object {
-        "toString": [Function],
-      }
-    }
+    value="dos"
   />
 </Select>
 `;

@@ -16,8 +16,8 @@ import {
 } from "@patternfly/react-core";
 
 import {
-  SimpleSelectFetchFormikField,
   OptionWithValue,
+  MultiSelectFetchFormikField,
 } from "shared/components";
 import { useFetchStakeholders } from "shared/hooks";
 
@@ -197,7 +197,7 @@ export const StakeholderGroupForm: React.FC<StakeholderGroupFormProps> = ({
           validated={getValidatedFromError(formik.errors.stakeholders)}
           helperTextInvalid={formik.errors.stakeholders}
         >
-          <SimpleSelectFetchFormikField
+          <MultiSelectFetchFormikField
             fieldConfig={{ name: "stakeholders" }}
             selectConfig={{
               variant: "typeaheadmulti",
@@ -209,26 +209,13 @@ export const StakeholderGroupForm: React.FC<StakeholderGroupFormProps> = ({
               menuAppendTo: () => document.body,
               maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
               options: (stakeholders?.data || []).map(stakeholderToOption),
-              onChange: (selection) => {
-                const currentValue = formik.values.stakeholders || [];
-                const selectedOption = selection as OptionWithValue<Stakeholder>;
-
-                let nextValue: OptionWithValue<Stakeholder>[];
-                const elementExists = currentValue.find(
-                  (f) => f.value.id === selectedOption.value.id
-                );
-                if (elementExists) {
-                  nextValue = currentValue.filter(
-                    (f) => f.value.id !== selectedOption.value.id
-                  );
-                } else {
-                  nextValue = [...currentValue, selectedOption];
-                }
-
-                formik.setFieldValue("stakeholders", nextValue);
-              },
               isFetching: isFetchingStakeholders,
               fetchError: fetchErrorStakeholders,
+            }}
+            isEqual={(a: any, b: any) => {
+              const option1 = a as OptionWithValue<Stakeholder>;
+              const option2 = b as OptionWithValue<Stakeholder>;
+              return option1.value.id === option2.value.id;
             }}
           />
         </FormGroup>
