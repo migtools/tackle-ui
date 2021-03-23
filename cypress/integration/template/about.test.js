@@ -1,12 +1,12 @@
 /// <reference types="cypress" />
 
-context("Test template", () => {
+context("About modal", () => {
   beforeEach(() => {
     cy.kcLogout();
     cy.kcLogin("alice");
   });
 
-  it("Action buttons disabled when form is invalid", () => {
+  it("Should open modal", () => {
     cy.visit("/");
 
     cy.get("#aboutButton").click();
