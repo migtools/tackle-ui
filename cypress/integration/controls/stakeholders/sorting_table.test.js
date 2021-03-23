@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-context("Stakeholders table", () => {
+describe("Stakeholders table", () => {
   beforeEach(() => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
@@ -9,13 +9,29 @@ context("Stakeholders table", () => {
       cy.tackleControlsClean(tokens);
     });
 
+    const stakeholders = [];
+
     cy.get("@tokens").then((tokens) => {
-      cy.log("Create table rows")
+      cy.log("Create stakeholder groups")
+        .then(() => {
+          return [...Array(11)]
+            .map((_, i) => ({
+              name: `group-${(i + 10).toString(36)}`,
+            }))
+            .forEach((payload) => {
+              cy.createStakeholderGroup(payload, tokens).then((data) => {
+                stakeholders.push(data);
+              });
+            });
+        })
+
+        .log("Create stakeholder")
         .then(() => {
           return [...Array(11)]
             .map((_, i) => ({
               email: `email-${(i + 10).toString(36)}@domain.com`,
               displayName: `stakeholder-${(i + 10).toString(36)}`,
+              stakeholderGroups: stakeholders.slice(0, i),
             }))
             .forEach((payload) => {
               cy.createStakeholder(payload, tokens);
@@ -25,6 +41,7 @@ context("Stakeholders table", () => {
     });
 
     //
+
     cy.intercept({
       method: "GET",
       path: `/api/controls/stakeholder*`,
@@ -33,7 +50,8 @@ context("Stakeholders table", () => {
     cy.visit("/controls/stakeholders");
   });
 
-  it("Default sorting", () => {
+  it("Sort by email", () => {
+    // Asc is the default
     cy.wait("@getTableDataApi");
     cy.pf4_table_verify_columnIsAsc("Email");
 
@@ -46,13 +64,9 @@ context("Stakeholders table", () => {
       .not(".pf-m-expanded")
       .eq(9)
       .contains("email-j@domain.com");
-  });
 
-  it("Sort by email:desc", () => {
-    cy.wait("@getTableDataApi");
+    // Desc
     cy.pf4_table_toggle_column("Email");
-
-    // Verify
     cy.wait("@getTableDataApi");
 
     cy.get(".pf-c-table > tbody > tr")
@@ -66,11 +80,11 @@ context("Stakeholders table", () => {
       .contains("email-b@domain.com");
   });
 
-  it("Sort by displayName:asc", () => {
+  it("Sort by displayName", () => {
     cy.wait("@getTableDataApi");
-    cy.pf4_table_toggle_column("Display name");
 
-    // Verify
+    // Asc
+    cy.pf4_table_toggle_column("Display name");
     cy.wait("@getTableDataApi");
 
     cy.get(".pf-c-table > tbody > tr")
@@ -82,5 +96,49 @@ context("Stakeholders table", () => {
       .not(".pf-m-expanded")
       .eq(9)
       .contains("stakeholder-j");
+
+    // Desc
+    cy.pf4_table_toggle_column("Display name");
+    cy.wait("@getTableDataApi");
+
+    cy.get(".pf-c-table > tbody > tr")
+      .not(".pf-m-expanded")
+      .eq(0)
+      .contains("stakeholder-k");
+
+    cy.get(".pf-c-table > tbody > tr")
+      .not(".pf-m-expanded")
+      .eq(9)
+      .contains("stakeholder-b");
+  });
+
+  it("Sort by groups", () => {
+    cy.wait("@getTableDataApi");
+
+    // Asc
+    cy.pf4_table_toggle_column("Group(s)");
+    cy.wait("@getTableDataApi");
+
+    cy.get(".pf-c-table > tbody > tr")
+      .not(".pf-m-expanded")
+      .eq(0)
+      .contains("0");
+    cy.get(".pf-c-table > tbody > tr")
+      .not(".pf-m-expanded")
+      .eq(9)
+      .contains("9");
+
+    // Desc
+    cy.pf4_table_toggle_column("Group(s)");
+    cy.wait("@getTableDataApi");
+
+    cy.get(".pf-c-table > tbody > tr")
+      .not(".pf-m-expanded")
+      .eq(0)
+      .contains("10");
+    cy.get(".pf-c-table > tbody > tr")
+      .not(".pf-m-expanded")
+      .eq(9)
+      .contains("1");
   });
 });
