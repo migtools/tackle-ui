@@ -161,6 +161,7 @@ jobs:
           dockerfile: Dockerfile
           snapshot: false
           tags: "main"
+          buildoptions: "--pull"
 
   test-container-images:
     needs: [container-images]
