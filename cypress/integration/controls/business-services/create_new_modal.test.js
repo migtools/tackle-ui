@@ -58,7 +58,7 @@ describe("Create new business service", () => {
     cy.wait("@getTableDataApi");
 
     // Verify table
-    cy.pf4_table_select_mainRows()
+    cy.get(".pf-c-table").pf4_table_rows()
       .eq(0)
       .should("contain", "mybusinessservice")
       .should("contain", "mydescription");
@@ -93,7 +93,7 @@ describe("Create new business service", () => {
     cy.wait("@getTableDataApi");
 
     // Verify table
-    cy.pf4_table_select_mainRows()
+    cy.get(".pf-c-table").pf4_table_rows()
       .eq(0)
       .should("contain", "mybusinessservice")
       .should("contain", "mydescription")

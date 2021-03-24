@@ -57,13 +57,14 @@ describe("Create new stakeholder", () => {
     cy.wait("@getTableDataApi");
 
     // Verify table
-    cy.pf4_table_select_mainRows()
+    cy.get(".pf-c-table")
+      .pf4_table_rows()
       .eq(0)
       .should("contain", "aaa@domain.com")
       .should("contain", "myDisplayName");
   });
 
-  it("With job function", () => {
+  it.only("With job function", () => {
     cy.intercept({
       method: "GET",
       path: "/api/controls/job-function*",
@@ -92,7 +93,8 @@ describe("Create new stakeholder", () => {
     cy.wait("@getTableDataApi");
 
     // Verify table
-    cy.pf4_table_select_mainRows()
+    cy.get(".pf-c-table")
+      .pf4_table_rows()
       .eq(0)
       .should("contain", "aaa@domain.com")
       .should("contain", "myDisplayName")
@@ -132,7 +134,8 @@ describe("Create new stakeholder", () => {
     cy.wait("@getTableDataApi");
 
     // Verify table
-    cy.pf4_table_select_mainRows()
+    cy.get(".pf-c-table")
+      .pf4_table_rows()
       .eq(0)
       .should("contain", "aaa@domain.com")
       .should("contain", "myDisplayName")

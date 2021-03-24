@@ -53,9 +53,13 @@ Cypress.Commands.add("pf4_table_toggle_column", (column) => {
     .click();
 });
 
-Cypress.Commands.add("pf4_table_select_mainRows", () => {
-  cy.get(".pf-c-table > tbody > tr").not(".pf-m-expanded");
-});
+Cypress.Commands.add(
+  "pf4_table_rows",
+  { prevSubject: "element" },
+  (element) => {
+    return cy.wrap(element).find("tbody > tr").not(".pf-m-expanded");
+  }
+);
 
 // Dropdown
 

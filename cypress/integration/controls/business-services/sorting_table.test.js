@@ -54,15 +54,15 @@ describe("Business services table", () => {
     cy.wait("@getTableDataApi");
     cy.pf4_table_verify_columnIsAsc("Name");
 
-    cy.pf4_table_select_mainRows().eq(0).contains("service-a");
-    cy.pf4_table_select_mainRows().eq(9).contains("service-j");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("service-a");
+    cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("service-j");
 
     // Desc
     cy.pf4_table_toggle_column("Name");
     cy.wait("@getTableDataApi");
 
-    cy.pf4_table_select_mainRows().eq(0).contains("service-k");
-    cy.pf4_table_select_mainRows().eq(9).contains("service-b");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("service-k");
+    cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("service-b");
   });
 
   it("Sort by owner", () => {
@@ -72,14 +72,14 @@ describe("Business services table", () => {
     cy.pf4_table_toggle_column("Owner");
     cy.wait("@getTableDataApi");
 
-    cy.pf4_table_select_mainRows().eq(0).contains("stakeholder-a");
-    cy.pf4_table_select_mainRows().eq(9).contains("stakeholder-j");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-a");
+    cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("stakeholder-j");
 
     // Desc
     cy.pf4_table_toggle_column("Owner");
     cy.wait("@getTableDataApi");
 
-    cy.pf4_table_select_mainRows().eq(0).contains("stakeholder-k");
-    cy.pf4_table_select_mainRows().eq(9).contains("stakeholder-b");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-k");
+    cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("stakeholder-b");
   });
 });

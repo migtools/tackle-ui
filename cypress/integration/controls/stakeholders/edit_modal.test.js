@@ -65,7 +65,7 @@ describe("Edit stakeholder", () => {
     cy.wait("@getTableDataApi");
 
     // Verify table
-    cy.pf4_table_select_mainRows()
+    cy.get(".pf-c-table").pf4_table_rows()
       .eq(0)
       .should("contain", "newEmail@domain.com")
       .should("contain", "newDisplayName");
@@ -99,7 +99,7 @@ describe("Edit stakeholder", () => {
     cy.wait("@getTableDataApi");
 
     // Verify table
-    cy.pf4_table_select_mainRows().eq(0).should("contain", "Business Analyst");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).should("contain", "Business Analyst");
 
     //
 
@@ -126,7 +126,7 @@ describe("Edit stakeholder", () => {
     cy.wait("@getTableDataApi");
 
     // Verify table
-    cy.pf4_table_select_mainRows().eq(0).should("contain", "Consultant");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).should("contain", "Consultant");
   });
 
   // TODO test not working and should be uncommented
@@ -170,6 +170,6 @@ describe("Edit stakeholder", () => {
   //   cy.wait("@getTableDataApi");
 
   //   // Verify table
-  //   cy.pf4_table_select_mainRows().eq(0).should("contain", "2");
+  //   cy.get(".pf-c-table").pf4_table_rows().eq(0).should("contain", "2");
   // });
 });

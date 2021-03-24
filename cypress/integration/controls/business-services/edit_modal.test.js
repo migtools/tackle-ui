@@ -65,7 +65,7 @@ describe("Edit business service", () => {
     cy.wait("@getTableDataApi");
 
     // Verify table
-    cy.pf4_table_select_mainRows()
+    cy.get(".pf-c-table").pf4_table_rows()
       .eq(0)
       .should("contain", "newName")
       .should("contain", "newDescription");
@@ -100,6 +100,6 @@ describe("Edit business service", () => {
     cy.wait("@getTableDataApi");
 
     // Verify table
-    cy.pf4_table_select_mainRows().eq(0).should("contain", "stakeholder-b");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).should("contain", "stakeholder-b");
   });
 });

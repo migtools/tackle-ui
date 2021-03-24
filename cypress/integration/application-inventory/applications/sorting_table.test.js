@@ -36,14 +36,14 @@ describe("Applications table", () => {
     cy.wait("@getTableDataApi");
     cy.pf4_table_verify_columnIsAsc("Name");
 
-    cy.pf4_table_select_mainRows().eq(0).contains("application-a");
-    cy.pf4_table_select_mainRows().eq(9).contains("application-j");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("application-a");
+    cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("application-j");
 
     // Desc
     cy.pf4_table_toggle_column("Name");
     cy.wait("@getTableDataApi");
 
-    cy.pf4_table_select_mainRows().eq(0).contains("application-k");
-    cy.pf4_table_select_mainRows().eq(9).contains("application-b");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("application-k");
+    cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("application-b");
   });
 });

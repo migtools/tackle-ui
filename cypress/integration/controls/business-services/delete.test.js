@@ -32,7 +32,7 @@ describe("Delete business service", () => {
 
   it("Delete last item", () => {
     cy.wait("@getTableDataApi");
-    cy.pf4_table_select_mainRows().eq(0).contains("service-a");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("service-a");
 
     // Delete
     cy.get(".pf-c-table > tbody > tr > td button[aria-label='delete']")

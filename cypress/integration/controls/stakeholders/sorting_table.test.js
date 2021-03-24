@@ -54,15 +54,15 @@ describe("Stakeholders table", () => {
     cy.wait("@getTableDataApi");
     cy.pf4_table_verify_columnIsAsc("Email");
 
-    cy.pf4_table_select_mainRows().eq(0).contains("email-a@domain.com");
-    cy.pf4_table_select_mainRows().eq(9).contains("email-j@domain.com");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("email-a@domain.com");
+    cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("email-j@domain.com");
 
     // Desc
     cy.pf4_table_toggle_column("Email");
     cy.wait("@getTableDataApi");
 
-    cy.pf4_table_select_mainRows().eq(0).contains("email-k@domain.com");
-    cy.pf4_table_select_mainRows().eq(9).contains("email-b@domain.com");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("email-k@domain.com");
+    cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("email-b@domain.com");
   });
 
   it("Sort by displayName", () => {
@@ -72,15 +72,15 @@ describe("Stakeholders table", () => {
     cy.pf4_table_toggle_column("Display name");
     cy.wait("@getTableDataApi");
 
-    cy.pf4_table_select_mainRows().eq(0).contains("stakeholder-a");
-    cy.pf4_table_select_mainRows().eq(9).contains("stakeholder-j");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-a");
+    cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("stakeholder-j");
 
     // Desc
     cy.pf4_table_toggle_column("Display name");
     cy.wait("@getTableDataApi");
 
-    cy.pf4_table_select_mainRows().eq(0).contains("stakeholder-k");
-    cy.pf4_table_select_mainRows().eq(9).contains("stakeholder-b");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-k");
+    cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("stakeholder-b");
   });
 
   it("Sort by groups", () => {
@@ -90,14 +90,14 @@ describe("Stakeholders table", () => {
     cy.pf4_table_toggle_column("Group(s)");
     cy.wait("@getTableDataApi");
 
-    cy.pf4_table_select_mainRows().eq(0).contains("0");
-    cy.pf4_table_select_mainRows().eq(9).contains("9");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("0");
+    cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("9");
 
     // Desc
     cy.pf4_table_toggle_column("Group(s)");
     cy.wait("@getTableDataApi");
 
-    cy.pf4_table_select_mainRows().eq(0).contains("10");
-    cy.pf4_table_select_mainRows().eq(9).contains("1");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("10");
+    cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("1");
   });
 });

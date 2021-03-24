@@ -33,7 +33,7 @@ describe("Delete stakeholder", () => {
 
   it("Delete last item", () => {
     cy.wait("@getTableDataApi");
-    cy.pf4_table_select_mainRows().eq(0).contains("email-a@domain.com");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("email-a@domain.com");
 
     // Delete
     cy.get(".pf-c-table > tbody > tr > td button[aria-label='delete']")
