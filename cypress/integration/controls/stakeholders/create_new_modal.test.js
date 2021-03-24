@@ -5,7 +5,10 @@ describe("Create new stakeholder", () => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
 
+    // Clean controls
     cy.get("@tokens").then((tokens) => cy.tackleControlsClean(tokens));
+
+    // Create data
     cy.get("@tokens").then((tokens) => {
       cy.log("Create stakeholder groups").then(() => {
         return [...Array(11)]
@@ -23,19 +26,18 @@ describe("Create new stakeholder", () => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
 
+    // Delete all stakeholders
     cy.get("@tokens").then((tokens) =>
       cy.tackleControlsCleanStakeholders(tokens)
     );
 
-    cy.intercept({
-      method: "GET",
-      path: `/api/controls/stakeholder*`,
-    }).as("getTableDataApi");
-    cy.intercept({
-      method: "POST",
-      path: `/api/controls/stakeholder*`,
-    }).as("createDataApi");
+    // Interceptors
+    cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholdersApi");
+    cy.intercept("POST", "/api/controls/stakeholder*").as(
+      "createStakeholderApi"
+    );
 
+    // Go to page
     cy.visit("/controls/stakeholders");
   });
 
@@ -53,8 +55,8 @@ describe("Create new stakeholder", () => {
     cy.get("button[aria-label='submit']").should("not.be.disabled");
     cy.get("form").submit();
 
-    cy.wait("@createDataApi");
-    cy.wait("@getTableDataApi");
+    cy.wait("@createStakeholderApi");
+    cy.wait("@getStakeholdersApi");
 
     // Verify table
     cy.get(".pf-c-table")
@@ -65,14 +67,11 @@ describe("Create new stakeholder", () => {
   });
 
   it.only("With job function", () => {
-    cy.intercept({
-      method: "GET",
-      path: "/api/controls/job-function*",
-    }).as("apiCheckGetJobFunction");
+    cy.intercept("GET", "/api/controls/job-function*").as("getJobFunctionsApi");
 
     // Open modal
     cy.get("button[aria-label='create-stakeholder']").click();
-    cy.wait("@apiCheckGetJobFunction");
+    cy.wait("@getJobFunctionsApi");
 
     // Verify primary button is disabled
     cy.get("button[aria-label='submit']").should("be.disabled");
@@ -89,8 +88,8 @@ describe("Create new stakeholder", () => {
     cy.get("button[aria-label='submit']").should("not.be.disabled");
     cy.get("form").submit();
 
-    cy.wait("@createDataApi");
-    cy.wait("@getTableDataApi");
+    cy.wait("@createStakeholderApi");
+    cy.wait("@getStakeholdersApi");
 
     // Verify table
     cy.get(".pf-c-table")
@@ -102,14 +101,13 @@ describe("Create new stakeholder", () => {
   });
 
   it("With group", () => {
-    cy.intercept({
-      method: "GET",
-      path: "/api/controls/stakeholder-group*",
-    }).as("apiCheckGetStakeholderGroup");
+    cy.intercept("GET", "/api/controls/stakeholder-group*").as(
+      "getStakeholderGroupsApi"
+    );
 
     // Open modal
     cy.get("button[aria-label='create-stakeholder']").click();
-    cy.wait("@apiCheckGetStakeholderGroup");
+    cy.wait("@getStakeholderGroupsApi");
 
     // Verify primary button is disabled
     cy.get("button[aria-label='submit']").should("be.disabled");
@@ -130,8 +128,8 @@ describe("Create new stakeholder", () => {
     cy.get("button[aria-label='submit']").should("not.be.disabled");
     cy.get("form").submit();
 
-    cy.wait("@createDataApi");
-    cy.wait("@getTableDataApi");
+    cy.wait("@createStakeholderApi");
+    cy.wait("@getStakeholdersApi");
 
     // Verify table
     cy.get(".pf-c-table")

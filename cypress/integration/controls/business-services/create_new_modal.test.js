@@ -5,7 +5,10 @@ describe("Create new business service", () => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
 
+    // Clean controls
     cy.get("@tokens").then((tokens) => cy.tackleControlsClean(tokens));
+
+    // Create data
     cy.get("@tokens").then((tokens) => {
       cy.log("Create stakeholders").then(() => {
         return [...Array(11)]
@@ -28,15 +31,15 @@ describe("Create new business service", () => {
       cy.tackleControlsCleanBusinessServices(tokens)
     );
 
-    cy.intercept({
-      method: "GET",
-      path: `/api/controls/business-service*`,
-    }).as("getTableDataApi");
-    cy.intercept({
-      method: "POST",
-      path: `/api/controls/business-service*`,
-    }).as("createDataApi");
+    // Interceptors
+    cy.intercept("GET", "/api/controls/business-service*").as(
+      "getBusinessServicesApi"
+    );
+    cy.intercept("POST", "/api/controls/business-service*").as(
+      "createBusinessServiceApi"
+    );
 
+    // Go to page
     cy.visit("/controls/business-services");
   });
 
@@ -54,25 +57,23 @@ describe("Create new business service", () => {
     cy.get("button[aria-label='submit']").should("not.be.disabled");
     cy.get("form").submit();
 
-    cy.wait("@createDataApi");
-    cy.wait("@getTableDataApi");
+    cy.wait("@createBusinessServiceApi");
+    cy.wait("@getBusinessServicesApi");
 
     // Verify table
-    cy.get(".pf-c-table").pf4_table_rows()
+    cy.get(".pf-c-table")
+      .pf4_table_rows()
       .eq(0)
       .should("contain", "mybusinessservice")
       .should("contain", "mydescription");
   });
 
   it("With owner", () => {
-    cy.intercept({
-      method: "GET",
-      path: "/api/controls/stakeholder*",
-    }).as("apiCheckGetStakeholder");
+    cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholdersApi");
 
     // Open modal
     cy.get("button[aria-label='create-business-service']").click();
-    cy.wait("@apiCheckGetStakeholder");
+    cy.wait("@getStakeholdersApi");
 
     // Verify primary button is disabled
     cy.get("button[aria-label='submit']").should("be.disabled");
@@ -89,11 +90,12 @@ describe("Create new business service", () => {
     cy.get("button[aria-label='submit']").should("not.be.disabled");
     cy.get("form").submit();
 
-    cy.wait("@createDataApi");
-    cy.wait("@getTableDataApi");
+    cy.wait("@createBusinessServiceApi");
+    cy.wait("@getBusinessServicesApi");
 
     // Verify table
-    cy.get(".pf-c-table").pf4_table_rows()
+    cy.get(".pf-c-table")
+      .pf4_table_rows()
       .eq(0)
       .should("contain", "mybusinessservice")
       .should("contain", "mydescription")

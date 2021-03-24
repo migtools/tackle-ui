@@ -5,7 +5,10 @@ describe("Create new stakeholder group", () => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
 
+    // Clean controls
     cy.get("@tokens").then((tokens) => cy.tackleControlsClean(tokens));
+
+    // Create data
     cy.get("@tokens").then((tokens) => {
       cy.log("Create stakeholders").then(() => {
         return [...Array(11)]
@@ -28,15 +31,15 @@ describe("Create new stakeholder group", () => {
       cy.tackleControlsCleanStakeholderGroups(tokens)
     );
 
-    cy.intercept({
-      method: "GET",
-      path: `/api/controls/stakeholder-group*`,
-    }).as("getTableDataApi");
-    cy.intercept({
-      method: "POST",
-      path: `/api/controls/stakeholder-group*`,
-    }).as("createDataApi");
+    // Interceptors
+    cy.intercept("GET", "/api/controls/stakeholder-group*").as(
+      "getStakeholderGroupsApi"
+    );
+    cy.intercept("POST", "/api/controls/stakeholder-group*").as(
+      "createStakeholderGroupApi"
+    );
 
+    // Go to page
     cy.visit("/controls/stakeholder-groups");
   });
 
@@ -54,25 +57,23 @@ describe("Create new stakeholder group", () => {
     cy.get("button[aria-label='submit']").should("not.be.disabled");
     cy.get("form").submit();
 
-    cy.wait("@createDataApi");
-    cy.wait("@getTableDataApi");
+    cy.wait("@createStakeholderGroupApi");
+    cy.wait("@getStakeholderGroupsApi");
 
     // Verify table
-    cy.get(".pf-c-table").pf4_table_rows()
+    cy.get(".pf-c-table")
+      .pf4_table_rows()
       .eq(0)
       .should("contain", "mygroup")
       .should("contain", "mydescription");
   });
 
   it("With members", () => {
-    cy.intercept({
-      method: "GET",
-      path: "/api/controls/stakeholder*",
-    }).as("apiCheckGetStakeholder");
+    cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholdersApi");
 
     // Open modal
     cy.get("button[aria-label='create-stakeholder-group']").click();
-    cy.wait("@apiCheckGetStakeholder");
+    cy.wait("@getStakeholdersApi");
 
     // Verify primary button is disabled
     cy.get("button[aria-label='submit']").should("be.disabled");
@@ -93,11 +94,12 @@ describe("Create new stakeholder group", () => {
     cy.get("button[aria-label='submit']").should("not.be.disabled");
     cy.get("form").submit();
 
-    cy.wait("@createDataApi");
-    cy.wait("@getTableDataApi");
+    cy.wait("@createStakeholderGroupApi");
+    cy.wait("@getStakeholderGroupsApi");
 
     // Verify table
-    cy.get(".pf-c-table").pf4_table_rows()
+    cy.get(".pf-c-table")
+      .pf4_table_rows()
       .eq(0)
       .should("contain", "mygroup")
       .should("contain", "mydescription")
