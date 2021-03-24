@@ -47,22 +47,17 @@ Cypress.Commands.add("tackleControlsCleanStakeholderGroups", (tokens) => {
     });
 });
 
-Cypress.Commands.add("tackleControlsClean", (tokens) => {
+Cypress.Commands.add("tackleControlsCleanBusinessServices", (tokens) => {
   const sizeQueryParam = "size=1000";
   const headers = getHeaders(tokens);
 
-  cy.log("Tackle controls - clean started")
-
-    .log("Tackle controls - delete business services")
-    .then(() => {
-      return cy.request({
-        method: "GET",
-        headers: headers,
-        url: `${Cypress.env(
-          "controls_base_url"
-        )}/business-service?${sizeQueryParam}`,
-      });
-    })
+  cy.request({
+    method: "GET",
+    headers: headers,
+    url: `${Cypress.env(
+      "controls_base_url"
+    )}/business-service?${sizeQueryParam}`,
+  })
     .then((response) => response.body._embedded["business-service"])
     .each((item) => {
       return cy.request({
@@ -70,6 +65,15 @@ Cypress.Commands.add("tackleControlsClean", (tokens) => {
         headers: headers,
         url: `${Cypress.env("controls_base_url")}/business-service/${item.id}`,
       });
+    });
+});
+
+Cypress.Commands.add("tackleControlsClean", (tokens) => {
+  cy.log("Tackle controls - clean started")
+
+    .log("Tackle controls - delete business services")
+    .then(() => {
+      return cy.tackleControlsCleanBusinessServices(tokens);
     })
 
     .log("Tackle controls - delete stakeholders")
