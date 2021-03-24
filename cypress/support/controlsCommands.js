@@ -7,6 +7,25 @@ const getHeaders = (tokens) => {
   return headers;
 };
 
+Cypress.Commands.add("tackleControlsCleanStakeholders", (tokens) => {
+  const sizeQueryParam = "size=1000";
+  const headers = getHeaders(tokens);
+
+  cy.request({
+    method: "GET",
+    headers: headers,
+    url: `${Cypress.env("controls_base_url")}/stakeholder?${sizeQueryParam}`,
+  })
+    .then((response) => response.body._embedded["stakeholder"])
+    .each((item) => {
+      return cy.request({
+        method: "DELETE",
+        headers: headers,
+        url: `${Cypress.env("controls_base_url")}/stakeholder/${item.id}`,
+      });
+    });
+});
+
 Cypress.Commands.add("tackleControlsClean", (tokens) => {
   const sizeQueryParam = "size=1000";
   const headers = getHeaders(tokens);
@@ -34,21 +53,7 @@ Cypress.Commands.add("tackleControlsClean", (tokens) => {
 
     .log("Tackle controls - delete stakeholders")
     .then(() => {
-      return cy.request({
-        method: "GET",
-        headers: headers,
-        url: `${Cypress.env(
-          "controls_base_url"
-        )}/stakeholder?${sizeQueryParam}`,
-      });
-    })
-    .then((response) => response.body._embedded["stakeholder"])
-    .each((item) => {
-      return cy.request({
-        method: "DELETE",
-        headers: headers,
-        url: `${Cypress.env("controls_base_url")}/stakeholder/${item.id}`,
-      });
+      return cy.tackleControlsCleanStakeholders(tokens);
     })
 
     .log("Tackle controls - delete stakeholder groups")
