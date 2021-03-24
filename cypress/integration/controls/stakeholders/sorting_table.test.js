@@ -1,16 +1,13 @@
 /// <reference types="cypress" />
 
 describe("Stakeholders table", () => {
-  beforeEach(() => {
+  before(() => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
 
-    cy.get("@tokens").then((tokens) => {
-      cy.tackleControlsClean(tokens);
-    });
+    const stakeholderGroups = [];
 
-    const stakeholders = [];
-
+    cy.get("@tokens").then((tokens) => cy.tackleControlsClean(tokens));
     cy.get("@tokens").then((tokens) => {
       cy.log("Create stakeholder groups")
         .then(() => {
@@ -20,27 +17,29 @@ describe("Stakeholders table", () => {
             }))
             .forEach((payload) => {
               cy.createStakeholderGroup(payload, tokens).then((data) => {
-                stakeholders.push(data);
+                stakeholderGroups.push(data);
               });
             });
         })
 
-        .log("Create stakeholder")
+        .log("Create stakeholders")
         .then(() => {
           return [...Array(11)]
             .map((_, i) => ({
               email: `email-${(i + 10).toString(36)}@domain.com`,
               displayName: `stakeholder-${(i + 10).toString(36)}`,
-              stakeholderGroups: stakeholders.slice(0, i),
+              stakeholderGroups: stakeholderGroups.slice(0, i),
             }))
             .forEach((payload) => {
               cy.createStakeholder(payload, tokens);
             });
-        })
-        .then(() => {});
+        });
     });
+  });
 
-    //
+  beforeEach(() => {
+    cy.kcLogout();
+    cy.kcLogin("alice").as("tokens");
 
     cy.intercept({
       method: "GET",
