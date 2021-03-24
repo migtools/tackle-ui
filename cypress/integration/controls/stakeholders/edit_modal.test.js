@@ -5,9 +5,12 @@ describe("Edit stakeholder", () => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
 
+    // Clean controls
+    cy.get("@tokens").then((tokens) => cy.tackleControlsClean(tokens));
+
+    // Create data
     const stakeholders = [];
 
-    cy.get("@tokens").then((tokens) => cy.tackleControlsClean(tokens));
     cy.get("@tokens").then((tokens) => {
       cy.log("Create stakeholder groups")
         .then(() => {
@@ -33,15 +36,13 @@ describe("Edit stakeholder", () => {
         });
     });
 
-    cy.intercept({
-      method: "GET",
-      path: `/api/controls/stakeholder*`,
-    }).as("getTableDataApi");
-    cy.intercept({
-      method: "PUT",
-      path: `/api/controls/stakeholder/*`,
-    }).as("updateDataApi");
+    // Interceptors
+    cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholdersApi");
+    cy.intercept("PUT", "/api/controls/stakeholder/*").as(
+      "updateStakeholderApi"
+    );
 
+    // Go to page
     cy.visit("/controls/stakeholders");
   });
 
@@ -61,27 +62,25 @@ describe("Edit stakeholder", () => {
     cy.get("button[aria-label='submit']").should("not.be.disabled");
     cy.get("form").submit();
 
-    cy.wait("@updateDataApi");
-    cy.wait("@getTableDataApi");
+    cy.wait("@updateStakeholderApi");
+    cy.wait("@getStakeholdersApi");
 
     // Verify table
-    cy.get(".pf-c-table").pf4_table_rows()
+    cy.get(".pf-c-table")
+      .pf4_table_rows()
       .eq(0)
       .should("contain", "newEmail@domain.com")
       .should("contain", "newDisplayName");
   });
 
   it("Job function", () => {
-    cy.intercept({
-      method: "GET",
-      path: "/api/controls/job-function*",
-    }).as("apiCheckGetJobFunction");
+    cy.intercept("GET", "/api/controls/job-function*").as("getJobFunctionsApi");
 
     // Open modal
     cy.get(".pf-c-table > tbody > tr > td button[aria-label='edit']")
       .first()
       .click();
-    cy.wait("@apiCheckGetJobFunction");
+    cy.wait("@getJobFunctionsApi");
 
     // Verify primary button is disabled
     cy.get("button[aria-label='submit']").should("be.disabled");
@@ -95,11 +94,14 @@ describe("Edit stakeholder", () => {
     cy.get("button[aria-label='submit']").should("not.be.disabled");
     cy.get("form").submit();
 
-    cy.wait("@updateDataApi");
-    cy.wait("@getTableDataApi");
+    cy.wait("@updateStakeholderApi");
+    cy.wait("@getStakeholdersApi");
 
     // Verify table
-    cy.get(".pf-c-table").pf4_table_rows().eq(0).should("contain", "Business Analyst");
+    cy.get(".pf-c-table")
+      .pf4_table_rows()
+      .eq(0)
+      .should("contain", "Business Analyst");
 
     //
 
@@ -107,7 +109,7 @@ describe("Edit stakeholder", () => {
     cy.get(".pf-c-table > tbody > tr > td button[aria-label='edit']")
       .first()
       .click();
-    cy.wait("@apiCheckGetJobFunction");
+    cy.wait("@getJobFunctionsApi");
 
     // Verify primary button is disabled
     cy.get("button[aria-label='submit']").should("be.disabled");
@@ -122,11 +124,14 @@ describe("Edit stakeholder", () => {
     cy.get("button[aria-label='submit']").should("not.be.disabled");
     cy.get("form").submit();
 
-    cy.wait("@updateDataApi");
-    cy.wait("@getTableDataApi");
+    cy.wait("@updateStakeholderApi");
+    cy.wait("@getStakeholdersApi");
 
     // Verify table
-    cy.get(".pf-c-table").pf4_table_rows().eq(0).should("contain", "Consultant");
+    cy.get(".pf-c-table")
+      .pf4_table_rows()
+      .eq(0)
+      .should("contain", "Consultant");
   });
 
   // TODO test not working and should be uncommented
@@ -135,13 +140,15 @@ describe("Edit stakeholder", () => {
   //   cy.intercept({
   //     method: "GET",
   //     path: "/api/controls/stakeholder-group*",
-  //   }).as("apiCheckGetStakeholderGroup");
+  //   }).as("getStakeholderGroupsApi");
+
+  //   cy.intercept("GET", "/api/controls/stakeholder-group*").as("getStakeholderGroupsApi");
 
   //   // Open modal
   //   cy.get(".pf-c-table > tbody > tr > td button[aria-label='edit']")
   //     .first()
   //     .click();
-  //   cy.wait("@apiCheckGetStakeholderGroup");
+  //   cy.wait("@getStakeholderGroupsApi");
 
   //   // Verify primary button is disabled
   //   cy.get("button[aria-label='submit']").should("be.disabled");
@@ -166,8 +173,8 @@ describe("Edit stakeholder", () => {
   //   cy.get("button[aria-label='submit']").should("not.be.disabled");
   //   cy.get("form").submit();
 
-  //   cy.wait("@updateDataApi");
-  //   cy.wait("@getTableDataApi");
+  //   cy.wait("@updateStakeholderApi");
+  //   cy.wait("@getStakeholdersApi");
 
   //   // Verify table
   //   cy.get(".pf-c-table").pf4_table_rows().eq(0).should("contain", "2");

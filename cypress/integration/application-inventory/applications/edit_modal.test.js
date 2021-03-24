@@ -5,12 +5,14 @@ describe("Edit application", () => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
 
-    const businessServices = [];
-
+    // Clean controls and app inventory
     cy.get("@tokens").then((tokens) => {
       cy.tackleControlsClean(tokens);
       cy.tackleAppInventoryClean(tokens);
     });
+
+    // Create data
+    const businessServices = [];
 
     cy.get("@tokens").then((tokens) => {
       cy.log("Create business services")
@@ -36,15 +38,15 @@ describe("Edit application", () => {
         });
     });
 
-    cy.intercept({
-      method: "GET",
-      path: `/api/application-inventory/application*`,
-    }).as("getTableDataApi");
-    cy.intercept({
-      method: "PUT",
-      path: `/api/application-inventory/application/*`,
-    }).as("updateDataApi");
+    // Interceptors
+    cy.intercept("GET", "/api/application-inventory/application*").as(
+      "getApplicationsApi"
+    );
+    cy.intercept("PUT", "/api/application-inventory/application/*").as(
+      "updateApplicationApi"
+    );
 
+    // Go to page
     cy.visit("/application-inventory");
   });
 
@@ -63,8 +65,8 @@ describe("Edit application", () => {
     cy.get("button[aria-label='submit']").should("not.be.disabled");
     cy.get("form").submit();
 
-    cy.wait("@updateDataApi");
-    cy.wait("@getTableDataApi");
+    cy.wait("@updateApplicationApi");
+    cy.wait("@getApplicationsApi");
 
     // Verify table
     cy.get(".pf-c-table")
@@ -75,18 +77,13 @@ describe("Edit application", () => {
   });
 
   it("Business service", () => {
-    cy.intercept({
-      method: "GET",
-      path: "/api/controls/business-service*",
-    }).as("apiCheckGetAllBusinessServices");
-    cy.intercept({
-      method: "GET",
-      path: "/api/controls/business-service/*",
-    }).as("apiCheckGetOneBusinessServices");
+    cy.intercept("GET", new RegExp("/api/controls/business-service*")).as(
+      "getBusinessServicesApi"
+    );
 
     // Open modal
     cy.get(".pf-c-table").pf4_table_action_select(0, "Edit");
-    cy.wait("@apiCheckGetAllBusinessServices");
+    cy.wait("@getBusinessServicesApi");
 
     // Verify primary button is disabled
     cy.get("button[aria-label='submit']").should("be.disabled");
@@ -101,9 +98,9 @@ describe("Edit application", () => {
     cy.get("button[aria-label='submit']").should("not.be.disabled");
     cy.get("form").submit();
 
-    cy.wait("@updateDataApi");
-    cy.wait("@getTableDataApi");
-    cy.wait("@apiCheckGetOneBusinessServices");
+    cy.wait("@updateApplicationApi");
+    cy.wait("@getApplicationsApi");
+    cy.wait("@getBusinessServicesApi");
 
     // Verify table
     cy.get(".pf-c-table").pf4_table_rows().eq(0).should("contain", "service-b");
