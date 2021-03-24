@@ -5,9 +5,12 @@ describe("Stakeholders filtering table", () => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
 
+    // Clean controls
+    cy.get("@tokens").then((tokens) => cy.tackleControlsClean(tokens));
+
+    // Create data
     const stakeholderGroups = [];
 
-    cy.get("@tokens").then((tokens) => cy.tackleControlsClean(tokens));
     cy.get("@tokens").then((tokens) => {
       cy.log("Create stakeholder groups")
         .then(() => {
@@ -41,17 +44,16 @@ describe("Stakeholders filtering table", () => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
 
-    cy.intercept({
-      method: "GET",
-      path: `/api/controls/stakeholder*`,
-    }).as("getTableDataApi");
+    // Inteceptors
+    cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholdersApi");
 
+    // Go to page
     cy.visit("/controls/stakeholders");
   });
 
   it("By email", () => {
     // First filter
-    cy.wait("@getTableDataApi");
+    cy.wait("@getStakeholdersApi");
 
     cy.get(
       ".pf-c-toolbar .pf-c-toolbar__content input[aria-label='filter-text']"
@@ -80,7 +82,7 @@ describe("Stakeholders filtering table", () => {
     cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("select", 1).click();
 
     // First filter
-    cy.wait("@getTableDataApi");
+    cy.wait("@getStakeholdersApi");
 
     cy.get(
       ".pf-c-toolbar .pf-c-toolbar__content input[aria-label='filter-text']"
@@ -106,30 +108,21 @@ describe("Stakeholders filtering table", () => {
 
   it("Filter by group", () => {
     cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("toggle");
-    cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("select", 1).click();
+    cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("select", 3).click();
 
     // First filter
-    cy.wait("@getTableDataApi");
+    cy.wait("@getStakeholdersApi");
 
     cy.get(
       ".pf-c-toolbar .pf-c-toolbar__content input[aria-label='filter-text']"
-    ).type("stakeholder-a");
+    ).type("group-j");
     cy.get(
       ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
     ).click();
 
-    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-a");
-
-    // Second filter
-
-    cy.get(
-      ".pf-c-toolbar .pf-c-toolbar__content input[aria-label='filter-text']"
-    ).type("stakeholder-k");
-    cy.get(
-      ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
-    ).click();
-
-    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-a");
-    cy.get(".pf-c-table").pf4_table_rows().eq(1).contains("stakeholder-k");
+    cy.get(".pf-c-table").pf4_table_row_expand(0);
+    cy.get(".pf-c-table > tbody > tr.pf-c-table__expandable-row")
+      .find(".pf-c-description-list .pf-c-description-list__text")
+      .contains("group-j");
   });
 });

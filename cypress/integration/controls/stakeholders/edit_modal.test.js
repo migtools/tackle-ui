@@ -137,11 +137,6 @@ describe("Edit stakeholder", () => {
   // TODO test not working and should be uncommented
   // once https://github.com/konveyor/tackle-controls/issues/66 is resolved
   // it("Group", () => {
-  //   cy.intercept({
-  //     method: "GET",
-  //     path: "/api/controls/stakeholder-group*",
-  //   }).as("getStakeholderGroupsApi");
-
   //   cy.intercept("GET", "/api/controls/stakeholder-group*").as("getStakeholderGroupsApi");
 
   //   // Open modal

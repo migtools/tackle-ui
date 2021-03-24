@@ -37,6 +37,17 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add(
+  "pf4_table_row_expand",
+  { prevSubject: "element" },
+  (table, rowIndex) => {
+    cy.wrap(table)
+      .find("tbody > tr > td.pf-c-table__toggle")
+      .eq(rowIndex)
+      .click();
+  }
+);
+
+Cypress.Commands.add(
   "pf4_table_column_toggle",
   { prevSubject: "element" },
   (table, column) => {
