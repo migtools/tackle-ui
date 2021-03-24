@@ -142,9 +142,8 @@ const verifyPagination = (
   // Go to last page
   const lastPage = parseInt((total + perPage) / perPage);
 
-  cy.pf4_pagination_action_goToPage(lastPage);
+  cy.get(".pf-c-page__main-section").pf4_pagination_goToPage(lastPage);
   cy.wait("@getTableDataApi");
-  cy.pf4_pagination_select_currentPageInput().should("have.value", lastPage);
 
   for (let i = 0; i < lastPageElements.length; i++) {
     const element = lastPageElements[i];
@@ -152,9 +151,8 @@ const verifyPagination = (
   }
 
   // Go to first page
-  cy.pf4_pagination_action_goToPage(1);
+  cy.get(".pf-c-page__main-section").pf4_pagination_goToPage(1);
   cy.wait("@getTableDataApi");
-  cy.pf4_pagination_select_currentPageInput().should("have.value", 1);
 
   for (let i = 0; i < firstPageElements.length; i++) {
     const element = firstPageElements[i];
