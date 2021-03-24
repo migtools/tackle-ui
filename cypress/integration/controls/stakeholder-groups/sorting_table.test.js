@@ -58,7 +58,7 @@ describe("Stakeholder groups table", () => {
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("group-j");
 
     // Desc
-    cy.pf4_table_toggle_column("Name");
+    cy.get(".pf-c-table").pf4_table_column_toggle("Name");
     cy.wait("@getTableDataApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("group-k");
@@ -69,14 +69,14 @@ describe("Stakeholder groups table", () => {
     cy.wait("@getTableDataApi");
 
     // Asc
-    cy.pf4_table_toggle_column("Member(s)");
+    cy.get(".pf-c-table").pf4_table_column_toggle("Member(s)");
     cy.wait("@getTableDataApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("group-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("group-j");
 
     // Desc
-    cy.pf4_table_toggle_column("Member(s)");
+    cy.get(".pf-c-table").pf4_table_column_toggle("Member(s)");
     cy.wait("@getTableDataApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("group-k");

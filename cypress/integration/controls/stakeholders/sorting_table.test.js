@@ -58,7 +58,7 @@ describe("Stakeholders table", () => {
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("email-j@domain.com");
 
     // Desc
-    cy.pf4_table_toggle_column("Email");
+    cy.get(".pf-c-table").pf4_table_column_toggle("Email");
     cy.wait("@getTableDataApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("email-k@domain.com");
@@ -69,14 +69,14 @@ describe("Stakeholders table", () => {
     cy.wait("@getTableDataApi");
 
     // Asc
-    cy.pf4_table_toggle_column("Display name");
+    cy.get(".pf-c-table").pf4_table_column_toggle("Display name");
     cy.wait("@getTableDataApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("stakeholder-j");
 
     // Desc
-    cy.pf4_table_toggle_column("Display name");
+    cy.get(".pf-c-table").pf4_table_column_toggle("Display name");
     cy.wait("@getTableDataApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-k");
@@ -87,14 +87,14 @@ describe("Stakeholders table", () => {
     cy.wait("@getTableDataApi");
 
     // Asc
-    cy.pf4_table_toggle_column("Group(s)");
+    cy.get(".pf-c-table").pf4_table_column_toggle("Group(s)");
     cy.wait("@getTableDataApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("0");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("9");
 
     // Desc
-    cy.pf4_table_toggle_column("Group(s)");
+    cy.get(".pf-c-table").pf4_table_column_toggle("Group(s)");
     cy.wait("@getTableDataApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("10");

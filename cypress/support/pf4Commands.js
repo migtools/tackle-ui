@@ -23,6 +23,14 @@ Cypress.Commands.add("pf4_pagination_verify_total", (total) => {
 
 // Table
 
+Cypress.Commands.add(
+  "pf4_table_rows",
+  { prevSubject: "element" },
+  (element) => {
+    return cy.wrap(element).find("tbody > tr").not(".pf-m-expanded");
+  }
+);
+
 Cypress.Commands.add("pf4_table_select_kebabAction", (action) => {
   cy.get(".pf-c-table .pf-c-table__action .pf-c-dropdown__toggle")
     .first()
@@ -47,17 +55,14 @@ Cypress.Commands.add("pf4_table_verify_columnIsDesc", (column) => {
     .contains(column);
 });
 
-Cypress.Commands.add("pf4_table_toggle_column", (column) => {
-  cy.get(".pf-c-table > thead > tr > th.pf-c-table__sort")
-    .contains(column)
-    .click();
-});
-
 Cypress.Commands.add(
-  "pf4_table_rows",
+  "pf4_table_column_toggle",
   { prevSubject: "element" },
-  (element) => {
-    return cy.wrap(element).find("tbody > tr").not(".pf-m-expanded");
+  (element, column) => {
+    cy.wrap(element)
+      .find("thead > tr > th.pf-c-table__sort")
+      .contains(column)
+      .click();
   }
 );
 

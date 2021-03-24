@@ -58,7 +58,7 @@ describe("Business services table", () => {
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("service-j");
 
     // Desc
-    cy.pf4_table_toggle_column("Name");
+    cy.get(".pf-c-table").pf4_table_column_toggle("Name");
     cy.wait("@getTableDataApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("service-k");
@@ -69,14 +69,14 @@ describe("Business services table", () => {
     cy.wait("@getTableDataApi");
 
     // Asc
-    cy.pf4_table_toggle_column("Owner");
+    cy.get(".pf-c-table").pf4_table_column_toggle("Owner");
     cy.wait("@getTableDataApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("stakeholder-j");
 
     // Desc
-    cy.pf4_table_toggle_column("Owner");
+    cy.get(".pf-c-table").pf4_table_column_toggle("Owner");
     cy.wait("@getTableDataApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-k");

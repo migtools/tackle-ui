@@ -40,7 +40,7 @@ describe("Applications table", () => {
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("application-j");
 
     // Desc
-    cy.pf4_table_toggle_column("Name");
+    cy.get(".pf-c-table").pf4_table_column_toggle("Name");
     cy.wait("@getTableDataApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("application-k");
