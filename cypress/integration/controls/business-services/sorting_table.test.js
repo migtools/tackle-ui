@@ -5,9 +5,11 @@ describe("Business services table", () => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
 
-    const stakeholders = [];
-
+    // Clean controls
     cy.get("@tokens").then((tokens) => cy.tackleControlsClean(tokens));
+
+    // Create data
+    const stakeholders = [];
     cy.get("@tokens").then((tokens) => {
       cy.log("Create stakeholders")
         .then(() => {
@@ -41,17 +43,18 @@ describe("Business services table", () => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
 
-    cy.intercept({
-      method: "GET",
-      path: `/api/controls/business-service*`,
-    }).as("getTableDataApi");
+    // Interceptors
+    cy.intercept("GET", "/api/controls/business-service*").as(
+      "getBusinessServicesApi"
+    );
 
+    // Go to page
     cy.visit("/controls/business-services");
   });
 
   it("Sort by name", () => {
     // Asc is the default
-    cy.wait("@getTableDataApi");
+    cy.wait("@getBusinessServicesApi");
     cy.get(".pf-c-table").pf4_table_column_isAsc("Name");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("service-a");
@@ -59,25 +62,25 @@ describe("Business services table", () => {
 
     // Desc
     cy.get(".pf-c-table").pf4_table_column_toggle("Name");
-    cy.wait("@getTableDataApi");
+    cy.wait("@getBusinessServicesApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("service-k");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("service-b");
   });
 
   it("Sort by owner", () => {
-    cy.wait("@getTableDataApi");
+    cy.wait("@getBusinessServicesApi");
 
     // Asc
     cy.get(".pf-c-table").pf4_table_column_toggle("Owner");
-    cy.wait("@getTableDataApi");
+    cy.wait("@getBusinessServicesApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("stakeholder-j");
 
     // Desc
     cy.get(".pf-c-table").pf4_table_column_toggle("Owner");
-    cy.wait("@getTableDataApi");
+    cy.wait("@getBusinessServicesApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-k");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("stakeholder-b");

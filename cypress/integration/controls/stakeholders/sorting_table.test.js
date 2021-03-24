@@ -5,9 +5,11 @@ describe("Stakeholders table", () => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
 
-    const stakeholderGroups = [];
-
+    // Clean controls
     cy.get("@tokens").then((tokens) => cy.tackleControlsClean(tokens));
+
+    // Create data
+    const stakeholderGroups = [];
     cy.get("@tokens").then((tokens) => {
       cy.log("Create stakeholder groups")
         .then(() => {
@@ -41,17 +43,16 @@ describe("Stakeholders table", () => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
 
-    cy.intercept({
-      method: "GET",
-      path: `/api/controls/stakeholder*`,
-    }).as("getTableDataApi");
+    // Inteceptors
+    cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholdersApi");
 
+    // Go to page
     cy.visit("/controls/stakeholders");
   });
 
   it("Sort by email", () => {
     // Asc is the default
-    cy.wait("@getTableDataApi");
+    cy.wait("@getStakeholdersApi");
     cy.get(".pf-c-table").pf4_table_column_isAsc("Email");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("email-a@domain.com");
@@ -59,43 +60,43 @@ describe("Stakeholders table", () => {
 
     // Desc
     cy.get(".pf-c-table").pf4_table_column_toggle("Email");
-    cy.wait("@getTableDataApi");
+    cy.wait("@getStakeholdersApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("email-k@domain.com");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("email-b@domain.com");
   });
 
   it("Sort by displayName", () => {
-    cy.wait("@getTableDataApi");
+    cy.wait("@getStakeholdersApi");
 
     // Asc
     cy.get(".pf-c-table").pf4_table_column_toggle("Display name");
-    cy.wait("@getTableDataApi");
+    cy.wait("@getStakeholdersApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("stakeholder-j");
 
     // Desc
     cy.get(".pf-c-table").pf4_table_column_toggle("Display name");
-    cy.wait("@getTableDataApi");
+    cy.wait("@getStakeholdersApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-k");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("stakeholder-b");
   });
 
   it("Sort by groups", () => {
-    cy.wait("@getTableDataApi");
+    cy.wait("@getStakeholdersApi");
 
     // Asc
     cy.get(".pf-c-table").pf4_table_column_toggle("Group(s)");
-    cy.wait("@getTableDataApi");
+    cy.wait("@getStakeholdersApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("0");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("9");
 
     // Desc
     cy.get(".pf-c-table").pf4_table_column_toggle("Group(s)");
-    cy.wait("@getTableDataApi");
+    cy.wait("@getStakeholdersApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("10");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("1");

@@ -5,9 +5,13 @@ describe("Stakeholder groups table", () => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
 
-    const stakeholders = [];
+    // Clean controls
 
     cy.get("@tokens").then((tokens) => cy.tackleControlsClean(tokens));
+
+    // Create data
+    const stakeholders = [];
+
     cy.get("@tokens").then((tokens) => {
       cy.log("Create stakeholders")
         .then(() => {
@@ -41,17 +45,18 @@ describe("Stakeholder groups table", () => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
 
-    cy.intercept({
-      method: "GET",
-      path: `/api/controls/stakeholder-group*`,
-    }).as("getTableDataApi");
+    // Interceptors
+    cy.intercept("GET", "/api/controls/stakeholder-group*").as(
+      "getStakeholderGroupsApi"
+    );
 
+    // Go to page
     cy.visit("/controls/stakeholder-groups");
   });
 
   it("Sort by name", () => {
     // Asc is the default
-    cy.wait("@getTableDataApi");
+    cy.wait("@getStakeholderGroupsApi");
     cy.get(".pf-c-table").pf4_table_column_isAsc("Name");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("group-a");
@@ -59,25 +64,25 @@ describe("Stakeholder groups table", () => {
 
     // Desc
     cy.get(".pf-c-table").pf4_table_column_toggle("Name");
-    cy.wait("@getTableDataApi");
+    cy.wait("@getStakeholderGroupsApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("group-k");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("group-b");
   });
 
   it("Sort by members", () => {
-    cy.wait("@getTableDataApi");
+    cy.wait("@getStakeholderGroupsApi");
 
     // Asc
     cy.get(".pf-c-table").pf4_table_column_toggle("Member(s)");
-    cy.wait("@getTableDataApi");
+    cy.wait("@getStakeholderGroupsApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("group-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("group-j");
 
     // Desc
     cy.get(".pf-c-table").pf4_table_column_toggle("Member(s)");
-    cy.wait("@getTableDataApi");
+    cy.wait("@getStakeholderGroupsApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("group-k");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("group-b");
