@@ -218,13 +218,6 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
           isRequired={false}
           validated={getValidatedFromError(formik.errors.businessService)}
           helperTextInvalid={formik.errors.businessService}
-        ></FormGroup>
-        <FormGroup
-          label={t("terms.businessService")}
-          fieldId="businessService"
-          isRequired={false}
-          validated={getValidatedFromError(formik.errors.businessService)}
-          helperTextInvalid={formik.errors.businessService}
         >
           <SingleSelectFetchFormikField
             fieldConfig={{
