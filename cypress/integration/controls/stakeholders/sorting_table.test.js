@@ -52,7 +52,7 @@ describe("Stakeholders table", () => {
   it("Sort by email", () => {
     // Asc is the default
     cy.wait("@getTableDataApi");
-    cy.pf4_table_verify_columnIsAsc("Email");
+    cy.get(".pf-c-table").pf4_table_column_isAsc("Email");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("email-a@domain.com");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("email-j@domain.com");

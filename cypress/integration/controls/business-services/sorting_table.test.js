@@ -52,7 +52,7 @@ describe("Business services table", () => {
   it("Sort by name", () => {
     // Asc is the default
     cy.wait("@getTableDataApi");
-    cy.pf4_table_verify_columnIsAsc("Name");
+    cy.get(".pf-c-table").pf4_table_column_isAsc("Name");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("service-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("service-j");

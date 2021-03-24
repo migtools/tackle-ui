@@ -41,20 +41,6 @@ Cypress.Commands.add("pf4_table_select_kebabAction", (action) => {
   ).contains(action);
 });
 
-Cypress.Commands.add("pf4_table_verify_columnIsAsc", (column) => {
-  cy.get(".pf-c-table > thead > tr > th.pf-c-table__sort.pf-m-selected")
-    .should("have.attr", "aria-sort", "ascending")
-    .get("button")
-    .contains(column);
-});
-
-Cypress.Commands.add("pf4_table_verify_columnIsDesc", (column) => {
-  cy.get(".pf-c-table > thead > tr > th.pf-c-table__sort.pf-m-selected")
-    .should("have.attr", "aria-sort", "descending")
-    .get("button")
-    .contains(column);
-});
-
 Cypress.Commands.add(
   "pf4_table_column_toggle",
   { prevSubject: "element" },
@@ -63,6 +49,30 @@ Cypress.Commands.add(
       .find("thead > tr > th.pf-c-table__sort")
       .contains(column)
       .click();
+  }
+);
+
+Cypress.Commands.add(
+  "pf4_table_column_isAsc",
+  { prevSubject: "element" },
+  (element, column) => {
+    cy.wrap(element)
+      .find("thead > tr > th.pf-c-table__sort.pf-m-selected")
+      .should("have.attr", "aria-sort", "ascending")
+      .get("button")
+      .contains(column);
+  }
+);
+
+Cypress.Commands.add(
+  "pf4_table_column_isDesc",
+  { prevSubject: "element" },
+  (element, column) => {
+    cy.wrap(element)
+      .find("thead > tr > th.pf-c-table__sort.pf-m-selected")
+      .should("have.attr", "aria-sort", "descending")
+      .get("button")
+      .contains(column);
   }
 );
 
