@@ -2186,7 +2186,7 @@
   resolved "https://registry.yarnpkg.com/@patternfly/patternfly/-/patternfly-4.87.3.tgz#eb2e9b22aa8f6f106580e7451bf204a06cb9949e"
   integrity sha512-hDNMPa7B1zKD8LWFZO4SS5hC/N+yvuci2sAn8HJd+EIbAvbMAUkRsyZ0/XO3BG3RVtpSlgq7q8x1pAHC/FTFuA==
 
-"@patternfly/react-core@4.97.3", "@patternfly/react-core@^4.97.3":
+"@patternfly/react-core@4.97.3":
   version "4.97.3"
   resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.97.3.tgz#4bdb90024af28953432bc8980f5f865329963b99"
   integrity sha512-cEZld3HSVaTxUwfbQXCVVnECYOtUKErQiAwCdMItOOFQLvZT0tcunsA7fFszugukvdiMfvk+Qo8kGTR09WDH0A==
@@ -2199,33 +2199,45 @@
     tippy.js "5.1.2"
     tslib "1.13.0"
 
-"@patternfly/react-icons@^4.9.2":
-  version "4.9.2"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-4.9.2.tgz#dcb2efa9727de97d5aa5d6be47a75daee49addb8"
-  integrity sha512-3PY81A9mj9YyUpznSWhcWMKHRyGWNgZ1IDYqbMva7Q8wgd0fjsiTJ+5zAp4YQLo1mA8KwYX9v5s37hK8XiTbAA==
-
-"@patternfly/react-styles@^4.8.2":
-  version "4.8.2"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-styles/-/react-styles-4.8.2.tgz#4796a77b658541d75d616e2e2a00fc5d7ec42bc7"
-  integrity sha512-JLVZTUYa8LIyASLvfiAgByLgNcg+OPkuXSh8Za5KdjqrBaNVQ3Wlul+oWQGwlGjbq7KSiyDg1oWemxOuLJH1VQ==
-
-"@patternfly/react-table@4.23.3":
-  version "4.23.3"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-table/-/react-table-4.23.3.tgz#2125922b4090ebddb9e50116f27a26860c3578b0"
-  integrity sha512-mjJ5y17yOUuqJmmdu2J9yT28C/bOu0IKRoEd9Pc1Nf8Jwa5x9rxUC8RyfY5QXaM9VhMoxSR3r3VJz16bc11CFQ==
+"@patternfly/react-core@^4.101.3":
+  version "4.101.3"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.101.3.tgz#aecf6c0e05f4e4811e5d1d55cae9725d51440026"
+  integrity sha512-xmBzwtpTHjykwahWVEc+xlqEJ7k+g90EYlLDSIFhNylnoq6iAka8cWbiRWuxOzAIwmk4UrKy2lOYP/Ff5A8ZCw==
   dependencies:
-    "@patternfly/patternfly" "4.87.3"
-    "@patternfly/react-core" "^4.97.3"
-    "@patternfly/react-icons" "^4.9.2"
-    "@patternfly/react-styles" "^4.8.2"
-    "@patternfly/react-tokens" "^4.10.2"
+    "@patternfly/react-icons" "^4.9.5"
+    "@patternfly/react-styles" "^4.8.5"
+    "@patternfly/react-tokens" "^4.10.5"
+    focus-trap "6.2.2"
+    react-dropzone "9.0.0"
+    tippy.js "5.1.2"
+    tslib "1.13.0"
+
+"@patternfly/react-icons@^4.9.2", "@patternfly/react-icons@^4.9.5":
+  version "4.9.5"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-4.9.5.tgz#4f727ed1c161ba6932abd3fa7bddb0e03bca5ec1"
+  integrity sha512-5M6yBW2v0d7WDuW7AyR//84iFxz7CBp5clGReYS/2SNwBGX+TwWoedS8EM06xtLSKCMrTQG1lqeyZASn6KyoMA==
+
+"@patternfly/react-styles@^4.8.2", "@patternfly/react-styles@^4.8.5":
+  version "4.8.5"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-styles/-/react-styles-4.8.5.tgz#2e7579768d1b1e5d244ee9af6fd78524fc1e3e22"
+  integrity sha512-ANJoOJpcO0R7DY0CsTHMWaZfiLoMfMKu36ctnVnheJ3YfZievCo6O8mztNBB6QLhJvF/PrirJ8yffyVxOopT5w==
+
+"@patternfly/react-table@4.23.14":
+  version "4.23.14"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-table/-/react-table-4.23.14.tgz#16a8f57571fbc11d8b3647ad04776b1e27d354c8"
+  integrity sha512-C+/kXj0ukopwJ3o74UK128EmxFXRW0o03S4lonMNAS+0EMoNQ+PqTlaaKqzGsYuMoQFWmziEsJ3H2yWUiluvdg==
+  dependencies:
+    "@patternfly/react-core" "^4.101.3"
+    "@patternfly/react-icons" "^4.9.5"
+    "@patternfly/react-styles" "^4.8.5"
+    "@patternfly/react-tokens" "^4.10.5"
     lodash "^4.17.19"
     tslib "1.13.0"
 
-"@patternfly/react-tokens@^4.10.2":
-  version "4.10.2"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-tokens/-/react-tokens-4.10.2.tgz#fd0054379ac81c8490b901b5b8fb408263ce91fe"
-  integrity sha512-/G1MENPxVY7X9UUuieO79yfjJ3g6KjBUBsBQVKOQplCxuvcRCF1MpmQKAxfg9Yb804MbPY+IVzVD3c4u9S3Iww==
+"@patternfly/react-tokens@^4.10.2", "@patternfly/react-tokens@^4.10.5":
+  version "4.10.5"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-tokens/-/react-tokens-4.10.5.tgz#be8cccc1d350e0583a28b65914aefcfddfc8197c"
+  integrity sha512-/lJRrC1asoaMSJVt1e5eZNn+y87x0q9WzeKx+aMi44RmJLwRLSNYGe8CxZiOUP1gw45jpzjRAbLihU+AGESckg==
 
 "@pmmmwh/react-refresh-webpack-plugin@0.4.2":
   version "0.4.2"
@@ -12152,12 +12164,7 @@ lodash.uniq@4.5.0, lodash.uniq@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
-"lodash@>=3.5 <5", lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.5:
-  version "4.17.15"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
-  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
-
-lodash@^4.0.0, lodash@^4.0.1, lodash@^4.17.19, lodash@^4.17.20, lodash@~4.17.10:
+"lodash@>=3.5 <5", lodash@^4.0.0, lodash@^4.0.1, lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.5, lodash@~4.17.10:
   version "4.17.20"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
@@ -17819,12 +17826,7 @@ tslib@1.13.0:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.13.0.tgz#c881e13cc7015894ed914862d276436fa9a47043"
   integrity sha512-i/6DQjL8Xf3be4K/E6Wgpekn5Qasl1usyw++dAA35Ue5orEn65VIxOA+YvNNl9HV3qv70T7CNwjODHZrLwvd1Q==
 
-tslib@^1.10.0, tslib@^1.8.1, tslib@^1.9.0:
-  version "1.11.1"
-  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.11.1.tgz#eb15d128827fbee2841549e171f45ed338ac7e35"
-  integrity sha512-aZW88SY8kQbU7gpV19lN24LtXh/yD4ZZg6qieAJDDg+YBsJcSmLGK9QpnUjAKVG/xefmvJGd1WUmfpT/g6AJGA==
-
-tslib@^1.9.3:
+tslib@^1.10.0, tslib@^1.8.1, tslib@^1.9.0, tslib@^1.9.3:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
