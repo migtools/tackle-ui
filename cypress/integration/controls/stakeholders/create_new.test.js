@@ -39,30 +39,6 @@ describe("Create new stakeholder", () => {
     cy.visit("/controls/stakeholders");
   });
 
-  it("Min data", () => {
-    // Open modal
-    cy.get("button[aria-label='create-stakeholder']").click();
-
-    // Verify primary button is disabled
-    cy.get("button[aria-label='submit']").should("be.disabled");
-
-    // Fill form
-    cy.get("input[name='email']").type("aaa@domain.com");
-    cy.get("input[name='displayName']").type("myDisplayName");
-
-    cy.get("button[aria-label='submit']").should("not.be.disabled");
-    cy.get("form").submit();
-
-    cy.wait("@createDataApi");
-    cy.wait("@getTableDataApi");
-
-    // Verify table
-    cy.pf4_table_select_mainRows()
-      .eq(0)
-      .should("contain", "aaa@domain.com")
-      .should("contain", "myDisplayName");
-  });
-
   it("With min data", () => {
     // Open modal
     cy.get("button[aria-label='create-stakeholder']").click();
