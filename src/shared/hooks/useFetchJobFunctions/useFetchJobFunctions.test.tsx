@@ -25,7 +25,7 @@ describe("useFetchJobFunctions", () => {
     );
 
     const {
-      JobFunctions: items,
+      jobFunctions: items,
       isFetching,
       fetchError,
       fetchAllJobFunctions: fetchAll,
@@ -42,7 +42,7 @@ describe("useFetchJobFunctions", () => {
     // Fetch finished
     await waitForNextUpdate();
     expect(result.current.isFetching).toBe(false);
-    expect(result.current.JobFunctions).toMatchObject({
+    expect(result.current.jobFunctions).toMatchObject({
       data: [],
       meta: { count: 0 },
     });

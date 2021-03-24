@@ -68,7 +68,7 @@ const reducer = (state: State, action: Action): State => {
 };
 
 export interface IState {
-  JobFunctions?: PageRepresentation<JobFunction>;
+  jobFunctions?: PageRepresentation<JobFunction>;
   isFetching: boolean;
   fetchError?: AxiosError;
   fetchCount: number;
@@ -107,7 +107,7 @@ export const useFetchJobFunctions = (
   }, []);
 
   return {
-    JobFunctions: state.jobFunctions,
+    jobFunctions: state.jobFunctions,
     isFetching: state.isFetching,
     fetchError: state.fetchError,
     fetchCount: state.fetchCount,
