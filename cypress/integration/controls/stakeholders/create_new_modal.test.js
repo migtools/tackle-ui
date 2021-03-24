@@ -66,7 +66,7 @@ describe("Create new stakeholder", () => {
       .should("contain", "myDisplayName");
   });
 
-  it.only("With job function", () => {
+  it("With job function", () => {
     cy.intercept("GET", "/api/controls/job-function*").as("getJobFunctionsApi");
 
     // Open modal

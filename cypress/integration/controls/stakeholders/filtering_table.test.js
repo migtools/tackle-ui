@@ -75,7 +75,36 @@ describe("Stakeholders filtering table", () => {
     cy.get(".pf-c-table").pf4_table_rows().eq(1).contains("email-k@domain.com");
   });
 
-  it.only("Filter by displayName", () => {
+  it("Filter by displayName", () => {
+    cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("toggle");
+    cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("select", 1).click();
+
+    // First filter
+    cy.wait("@getTableDataApi");
+
+    cy.get(
+      ".pf-c-toolbar .pf-c-toolbar__content input[aria-label='filter-text']"
+    ).type("stakeholder-a");
+    cy.get(
+      ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
+    ).click();
+
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-a");
+
+    // Second filter
+
+    cy.get(
+      ".pf-c-toolbar .pf-c-toolbar__content input[aria-label='filter-text']"
+    ).type("stakeholder-k");
+    cy.get(
+      ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
+    ).click();
+
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-a");
+    cy.get(".pf-c-table").pf4_table_rows().eq(1).contains("stakeholder-k");
+  });
+
+  it("Filter by group", () => {
     cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("toggle");
     cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("select", 1).click();
 

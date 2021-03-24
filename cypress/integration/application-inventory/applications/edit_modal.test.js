@@ -50,7 +50,7 @@ describe("Edit application", () => {
     cy.visit("/application-inventory");
   });
 
-  it.only("Name, description, and comments", () => {
+  it("Name, description, and comments", () => {
     // Open modal
     cy.get(".pf-c-table").pf4_table_action_select(0, "Edit");
 
