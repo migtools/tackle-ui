@@ -56,3 +56,21 @@ Cypress.Commands.add("pf4_table_toggle_column", (column) => {
 Cypress.Commands.add("pf4_table_select_mainRows", () => {
   cy.get(".pf-c-table > tbody > tr").not(".pf-m-expanded");
 });
+
+// Dropdown
+
+Cypress.Commands.add(
+  "pf4_dropdown",
+  { prevSubject: "element" },
+  (element, method, eq) => {
+    switch (method) {
+      case "toggle":
+        return cy.wrap(element).find("button.pf-c-dropdown__toggle").click();
+      case "select":
+        return cy.wrap(element).find("ul > li").eq(eq);
+
+      default:
+        break;
+    }
+  }
+);
