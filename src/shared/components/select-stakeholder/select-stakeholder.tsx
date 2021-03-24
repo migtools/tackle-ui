@@ -9,6 +9,7 @@ import {
 } from "@patternfly/react-core";
 import { WarningTriangleIcon } from "@patternfly/react-icons";
 
+import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 import { Stakeholder } from "api/models";
 import { getAxiosErrorMessage } from "utils/utils";
 
@@ -117,7 +118,7 @@ export const SelectStakeholder: React.FC<SelectStakeholderProps> = ({
       }
       isOpen={isOpen}
       menuAppendTo={() => document.body}
-      maxHeight={350}
+      maxHeight={DEFAULT_SELECT_MAX_HEIGHT}
       customContent={customContent}
       placeholderText={placeholderText}
     >

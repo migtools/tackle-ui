@@ -9,6 +9,7 @@ import {
 } from "@patternfly/react-core";
 import { WarningTriangleIcon } from "@patternfly/react-icons";
 
+import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 import { JobFunction } from "api/models";
 import { getAxiosErrorMessage } from "utils/utils";
 
@@ -81,7 +82,7 @@ export const SelectJobFunction: React.FC<SelectJobFunctionProps> = ({
       selections={value ? value.role : undefined}
       isOpen={isOpen}
       menuAppendTo={() => document.body}
-      maxHeight={350}
+      maxHeight={DEFAULT_SELECT_MAX_HEIGHT}
       customContent={customContent}
       placeholderText="Select a job function"
       isCreatable={false}

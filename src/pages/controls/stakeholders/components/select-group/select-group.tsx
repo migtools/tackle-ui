@@ -9,6 +9,7 @@ import {
 } from "@patternfly/react-core";
 import { WarningTriangleIcon } from "@patternfly/react-icons";
 
+import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 import { StakeholderGroup } from "api/models";
 import { getAxiosErrorMessage } from "utils/utils";
 
@@ -90,7 +91,7 @@ export const SelectGroup: React.FC<SelectGroupProps> = ({
       selections={value?.map((f) => selectOptionMapper(f))}
       isOpen={isOpen}
       menuAppendTo={() => document.body}
-      maxHeight={350}
+      maxHeight={DEFAULT_SELECT_MAX_HEIGHT}
       customContent={customContent}
       placeholderText="Select stakeholder groups"
     >
