@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe("Edit stakeholder group", () => {
+describe("Edit business service", () => {
   beforeEach(() => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
@@ -23,26 +23,26 @@ describe("Edit stakeholder group", () => {
             });
         })
 
-        .log("Create stakeholder group")
+        .log("Create business service")
         .then(() => {
           const payload = {
-            name: `group-a`,
-            stakeholders: stakeholders.slice(0, 1),
+            name: `service-a`,
+            owner: stakeholders[0],
           };
-          return cy.createStakeholderGroup(payload, tokens);
+          return cy.createBusinessService(payload, tokens);
         });
     });
 
     cy.intercept({
       method: "GET",
-      path: `/api/controls/stakeholder-group*`,
+      path: `/api/controls/business-service*`,
     }).as("getTableDataApi");
     cy.intercept({
       method: "PUT",
-      path: `/api/controls/stakeholder-group/*`,
+      path: `/api/controls/business-service/*`,
     }).as("updateDataApi");
 
-    cy.visit("/controls/stakeholder-groups");
+    cy.visit("/controls/business-services");
   });
 
   it("Name and description", () => {
@@ -71,7 +71,7 @@ describe("Edit stakeholder group", () => {
       .should("contain", "newDescription");
   });
 
-  it("Members", () => {
+  it("Owner", () => {
     cy.intercept({
       method: "GET",
       path: "/api/controls/stakeholder*",
@@ -86,21 +86,11 @@ describe("Edit stakeholder group", () => {
     // Verify primary button is disabled
     cy.get("button[aria-label='submit']").should("be.disabled");
 
-    // Clean members
-    cy.get(
-      ".pf-c-form__group-control .pf-m-typeahead button[aria-label='Clear all']"
-    )
-      .first()
-      .click();
-
     // Fill form
     cy.get(".pf-c-form__group-control input.pf-c-select__toggle-typeahead")
       .eq(0)
+      .clear()
       .type("stakeholder-b")
-      .type("{enter}");
-    cy.get(".pf-c-form__group-control input.pf-c-select__toggle-typeahead")
-      .eq(0)
-      .type("stakeholder-c")
       .type("{enter}");
 
     cy.get("button[aria-label='submit']").should("not.be.disabled");
@@ -110,6 +100,6 @@ describe("Edit stakeholder group", () => {
     cy.wait("@getTableDataApi");
 
     // Verify table
-    cy.pf4_table_select_mainRows().eq(0).should("contain", "2");
+    cy.pf4_table_select_mainRows().eq(0).should("contain", "stakeholder-b");
   });
 });
