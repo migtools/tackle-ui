@@ -73,7 +73,7 @@ describe("Edit application", () => {
       .should("contain", "newDescription");
   });
 
-  it.only("Business service", () => {
+  it("Business service", () => {
     cy.intercept({
       method: "GET",
       path: "/api/controls/business-service*",
