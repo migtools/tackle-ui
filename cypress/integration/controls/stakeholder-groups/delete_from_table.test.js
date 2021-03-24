@@ -5,10 +5,10 @@ describe("Delete stakeholder group", () => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
 
-    cy.kcLogout();
-    cy.kcLogin("alice").as("tokens");
-
+    // Clean controls
     cy.get("@tokens").then((tokens) => cy.tackleControlsClean(tokens));
+
+    // Create data
     cy.get("@tokens").then((tokens) => {
       cy.log("Create stakeholder group").then(() => {
         const payload = {
@@ -18,20 +18,20 @@ describe("Delete stakeholder group", () => {
       });
     });
 
-    cy.intercept({
-      method: "GET",
-      path: `/api/controls/stakeholder-group*`,
-    }).as("getTableDataApi");
-    cy.intercept({
-      method: "DELETE",
-      path: `/api/controls/stakeholder-group/*`,
-    }).as("deleteTableRowApi");
+    // Interceptors
+    cy.intercept("GET", "/api/controls/stakeholder-group*").as(
+      "getStakeholderGroupsApi"
+    );
+    cy.intercept("DELETE", "/api/controls/stakeholder-group/*").as(
+      "deleteStakeholderGroupApi"
+    );
 
+    // Go to page
     cy.visit("/controls/stakeholder-groups");
   });
 
   it("Delete last item", () => {
-    cy.wait("@getTableDataApi");
+    cy.wait("@getStakeholderGroupsApi");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("group-a");
 
     // Delete
@@ -40,8 +40,8 @@ describe("Delete stakeholder group", () => {
       .click();
     cy.get("button[aria-label='confirm']").click();
 
-    cy.wait("@deleteTableRowApi");
-    cy.wait("@getTableDataApi");
+    cy.wait("@deleteStakeholderGroupApi");
+    cy.wait("@getStakeholderGroupsApi");
 
     // Verify
     cy.get(

@@ -5,10 +5,10 @@ describe("Delete stakeholder", () => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
 
-    cy.kcLogout();
-    cy.kcLogin("alice").as("tokens");
-
+    // Clean controls
     cy.get("@tokens").then((tokens) => cy.tackleControlsClean(tokens));
+
+    // Create data
     cy.get("@tokens").then((tokens) => {
       cy.log("Create stakeholder").then(() => {
         const payload = {
@@ -19,20 +19,18 @@ describe("Delete stakeholder", () => {
       });
     });
 
-    cy.intercept({
-      method: "GET",
-      path: `/api/controls/stakeholder*`,
-    }).as("getTableDataApi");
-    cy.intercept({
-      method: "DELETE",
-      path: `/api/controls/stakeholder/*`,
-    }).as("deleteTableRowApi");
+    // Interceptors
+    cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholdersApi");
+    cy.intercept("DELETE", "/api/controls/stakeholder/*").as(
+      "deleteStakeholderApi"
+    );
 
+    // Go to page
     cy.visit("/controls/stakeholders");
   });
 
   it("Delete last item", () => {
-    cy.wait("@getTableDataApi");
+    cy.wait("@getStakeholdersApi");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("email-a@domain.com");
 
     // Delete
@@ -41,8 +39,8 @@ describe("Delete stakeholder", () => {
       .click();
     cy.get("button[aria-label='confirm']").click();
 
-    cy.wait("@deleteTableRowApi");
-    cy.wait("@getTableDataApi");
+    cy.wait("@deleteStakeholderApi");
+    cy.wait("@getStakeholdersApi");
 
     // Verify
     cy.get(

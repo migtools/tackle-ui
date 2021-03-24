@@ -5,10 +5,10 @@ describe("Delete business service", () => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
 
-    cy.kcLogout();
-    cy.kcLogin("alice").as("tokens");
-
+    // Clean controls
     cy.get("@tokens").then((tokens) => cy.tackleControlsClean(tokens));
+
+    // Create data
     cy.get("@tokens").then((tokens) => {
       cy.log("Create business service").then(() => {
         const payload = {
@@ -18,20 +18,19 @@ describe("Delete business service", () => {
       });
     });
 
-    cy.intercept({
-      method: "GET",
-      path: `/api/controls/business-service*`,
-    }).as("getTableDataApi");
-    cy.intercept({
-      method: "DELETE",
-      path: `/api/controls/business-service/*`,
-    }).as("deleteTableRowApi");
+    // Interceptors
+    cy.intercept("GET", "/api/controls/business-service*").as(
+      "getBusinessServicesApi"
+    );
+    cy.intercept("DELETE", "/api/controls/business-service/*").as(
+      "deleteBusinessServiceApi"
+    );
 
     cy.visit("/controls/business-services");
   });
 
   it("Delete last item", () => {
-    cy.wait("@getTableDataApi");
+    cy.wait("@getBusinessServicesApi");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("service-a");
 
     // Delete
@@ -40,8 +39,8 @@ describe("Delete business service", () => {
       .click();
     cy.get("button[aria-label='confirm']").click();
 
-    cy.wait("@deleteTableRowApi");
-    cy.wait("@getTableDataApi");
+    cy.wait("@deleteBusinessServiceApi");
+    cy.wait("@getBusinessServicesApi");
 
     // Verify
     cy.get(
