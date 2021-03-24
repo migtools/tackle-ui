@@ -35,7 +35,7 @@ describe("Delete application", () => {
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("application-a");
 
     // Delete
-    cy.pf4_table_select_kebabAction("Delete").click();
+    cy.get(".pf-c-table").pf4_table_action_select(0, "Delete");
     cy.get("button[aria-label='confirm']").click();
 
     cy.wait("@deleteTableRowApi");

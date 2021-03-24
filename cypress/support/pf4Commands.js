@@ -31,15 +31,21 @@ Cypress.Commands.add(
   }
 );
 
-Cypress.Commands.add("pf4_table_select_kebabAction", (action) => {
-  cy.get(".pf-c-table .pf-c-table__action .pf-c-dropdown__toggle")
-    .first()
-    .click();
+Cypress.Commands.add(
+  "pf4_table_action_select",
+  { prevSubject: "element" },
+  (row, rowIndex, actionName) => {
+    cy.wrap(row)
+      .find("tbody > tr > td.pf-c-table__action")
+      .eq(rowIndex)
+      .click();
 
-  cy.get(
-    ".pf-c-table .pf-c-table__action .pf-c-dropdown__menu .pf-c-dropdown__menu-item"
-  ).contains(action);
-});
+    cy.wrap(row)
+      .find("tbody > tr > td.pf-c-table__action > .pf-c-dropdown > ul > li")
+      .contains(actionName)
+      .click();
+  }
+);
 
 Cypress.Commands.add(
   "pf4_table_column_toggle",

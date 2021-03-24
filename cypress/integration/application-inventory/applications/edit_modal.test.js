@@ -48,9 +48,9 @@ describe("Edit application", () => {
     cy.visit("/application-inventory");
   });
 
-  it("Name, description, and comments", () => {
+  it.only("Name, description, and comments", () => {
     // Open modal
-    cy.pf4_table_select_kebabAction("Edit").click();
+    cy.get(".pf-c-table").pf4_table_action_select(0, "Edit");
 
     // Verify primary button is disabled
     cy.get("button[aria-label='submit']").should("be.disabled");
@@ -67,7 +67,8 @@ describe("Edit application", () => {
     cy.wait("@getTableDataApi");
 
     // Verify table
-    cy.get(".pf-c-table").pf4_table_rows()
+    cy.get(".pf-c-table")
+      .pf4_table_rows()
       .eq(0)
       .should("contain", "newName")
       .should("contain", "newDescription");
@@ -84,7 +85,7 @@ describe("Edit application", () => {
     }).as("apiCheckGetOneBusinessServices");
 
     // Open modal
-    cy.pf4_table_select_kebabAction("Edit").click();
+    cy.get(".pf-c-table").pf4_table_action_select(0, "Edit");
     cy.wait("@apiCheckGetAllBusinessServices");
 
     // Verify primary button is disabled
