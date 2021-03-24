@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe("Stakeholder groups table", () => {
+describe("Business services table", () => {
   before(() => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
@@ -23,15 +23,15 @@ describe("Stakeholder groups table", () => {
             });
         })
 
-        .log("Create stakeholder groups")
+        .log("Create businessService")
         .then(() => {
           return [...Array(11)]
             .map((_, i) => ({
-              name: `group-${(i + 10).toString(36)}`,
-              stakeholders: stakeholders.slice(0, i),
+              name: `service-${(i + 10).toString(36)}`,
+              owner: stakeholders[i],
             }))
             .forEach((payload) => {
-              cy.createStakeholderGroup(payload, tokens);
+              cy.createBusinessService(payload, tokens);
             });
         });
     });
@@ -43,10 +43,10 @@ describe("Stakeholder groups table", () => {
 
     cy.intercept({
       method: "GET",
-      path: `/api/controls/stakeholder-group*`,
+      path: `/api/controls/business-service*`,
     }).as("getTableDataApi");
 
-    cy.visit("/controls/stakeholder-groups");
+    cy.visit("/controls/business-services");
   });
 
   it("Sort by name", () => {
@@ -54,32 +54,32 @@ describe("Stakeholder groups table", () => {
     cy.wait("@getTableDataApi");
     cy.pf4_table_verify_columnIsAsc("Name");
 
-    cy.pf4_table_select_mainRows().eq(0).contains("group-a");
-    cy.pf4_table_select_mainRows().eq(9).contains("group-j");
+    cy.pf4_table_select_mainRows().eq(0).contains("service-a");
+    cy.pf4_table_select_mainRows().eq(9).contains("service-j");
 
     // Desc
     cy.pf4_table_toggle_column("Name");
     cy.wait("@getTableDataApi");
 
-    cy.pf4_table_select_mainRows().eq(0).contains("group-k");
-    cy.pf4_table_select_mainRows().eq(9).contains("group-b");
+    cy.pf4_table_select_mainRows().eq(0).contains("service-k");
+    cy.pf4_table_select_mainRows().eq(9).contains("service-b");
   });
 
-  it("Sort by members", () => {
+  it("Sort by owner", () => {
     cy.wait("@getTableDataApi");
 
     // Asc
-    cy.pf4_table_toggle_column("Member(s)");
+    cy.pf4_table_toggle_column("Owner");
     cy.wait("@getTableDataApi");
 
-    cy.pf4_table_select_mainRows().eq(0).contains("group-a");
-    cy.pf4_table_select_mainRows().eq(9).contains("group-j");
+    cy.pf4_table_select_mainRows().eq(0).contains("stakeholder-a");
+    cy.pf4_table_select_mainRows().eq(9).contains("stakeholder-j");
 
     // Desc
-    cy.pf4_table_toggle_column("Member(s)");
+    cy.pf4_table_toggle_column("Owner");
     cy.wait("@getTableDataApi");
 
-    cy.pf4_table_select_mainRows().eq(0).contains("group-k");
-    cy.pf4_table_select_mainRows().eq(9).contains("group-b");
+    cy.pf4_table_select_mainRows().eq(0).contains("stakeholder-k");
+    cy.pf4_table_select_mainRows().eq(9).contains("stakeholder-b");
   });
 });
