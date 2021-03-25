@@ -411,10 +411,10 @@ export const ApplicationInventory: React.FC = () => {
             noDataState={
               <NoDataEmptyState
                 title={t("composed.noDataStateTitle", {
-                  what: t("terms.applications"),
+                  what: t("terms.applications").toLowerCase(),
                 })}
                 description={t("composed.noDataStateBody", {
-                  what: t("terms.application"),
+                  what: t("terms.application").toLowerCase(),
                 })}
               />
             }
