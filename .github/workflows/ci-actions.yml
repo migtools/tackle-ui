@@ -36,7 +36,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        browser: [chrome, firefox]
+        browser: [chrome]
     services:
       keycloak:
         image: quay.io/keycloak/keycloak:12.0.2
@@ -140,7 +140,7 @@ jobs:
   container-images:
     if: ${{ github.event_name != 'pull_request' && github.repository_owner == 'konveyor' }}
     runs-on: ubuntu-latest
-    needs: [unit-test, e2e]
+    needs: [unit-test]
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js
@@ -169,7 +169,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        browser: [chrome, firefox]
+        browser: [chrome]
     services:
       keycloak:
         image: quay.io/keycloak/keycloak:12.0.2
