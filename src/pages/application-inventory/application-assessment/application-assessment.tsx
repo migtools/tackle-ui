@@ -40,15 +40,6 @@ interface SelectOptionEntity extends SelectOptionObject {
   entity: Stakeholder | StakeholderGroup;
 }
 
-const isSelectOptionStakeholderEqual = (
-  a: SelectOptionObject,
-  b: SelectOptionObject
-) => {
-  return (
-    (a as SelectOptionEntity).entity.id === (b as SelectOptionEntity).entity.id
-  );
-};
-
 const toSelectOptionStakeholder = (
   entity: Stakeholder
 ): SelectOptionEntity => ({
@@ -78,13 +69,14 @@ export const ApplicationAssessment: React.FC = () => {
 
   useEffect(() => {
     if (assessmentId) {
-      getAssessmentById(assessmentId).then(({ data }) => {
-        setAssessment(data);
-      });
-
-      getApplicationById(assessmentId).then(({ data }) => {
-        setApplication(data);
-      });
+      getAssessmentById(assessmentId)
+        .then(({ data }) => {
+          setAssessment(data);
+          return getApplicationById(data.applicationId);
+        })
+        .then(({ data }) => {
+          setApplication(data);
+        });
     }
   }, [assessmentId]);
 
@@ -202,13 +194,9 @@ export const ApplicationAssessment: React.FC = () => {
           stakeholders={stakeholders?.data}
           isFetchingStakeholders={isFetchingStakeholders}
           fetchErrorStakeholders={fetchErrorStakeholders}
-          toSelectOptionStakeholder={toSelectOptionStakeholder}
-          isSelectOptionStakeholderEqual={isSelectOptionStakeholderEqual}
           stakeholderGroups={stakeholderGroups?.data}
           isFetchingStakeholderGroups={isFetchingStakeholderGroups}
           fetchErrorStakeholderGroups={fetchErrorStakeholderGroups}
-          toSelectOptionStakeholderGroup={toSelectOptionStakeholderGroup}
-          isSelectOptionStakeholderGroupEqual={isSelectOptionStakeholderEqual}
         />
       ),
       enableNext: areFieldsValid(["stakeholders", "stakeholderGroups"]),

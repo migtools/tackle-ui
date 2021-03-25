@@ -10,7 +10,9 @@
         "applications": "Aplicaciones",
         "assessment": "Evaluación",
         "stakeholders": "Interesados",
+        "stakeholder(s)": "Interesado(s)",
         "stakeholderGroups": "Grupos de interesados",
+        "stakeholderGroup(s)": "Grupo(s) de interesados",
         "name": "Nombre",
         "description": "Descripción",
         "businessService": "Servicio de negocio",
@@ -33,6 +35,7 @@
     "composed": {
         "selectStakeholders": "Seleccione interesados",
         "applicationAssessment": "Evaluar aplicación",
+        "selectMany": "Seleccione {{what}}",
         "applicationInventory": "Inventario de aplicaciones",
         "noDataStateTitle": "No existen {{what}} disponibles",
         "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
@@ -69,13 +72,6 @@
         "success": {
             "added": "Éxito! {{what}} fue creado como un {{type}}."
         }
-    },
-    "composed": {
-        "applicationInventory": "Inventario de aplicaciones",
-        "noDataStateTitle": "No existen {{what}} disponibles",
-        "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
-        "selectOne": "Seleccione un(a) {{what}}",
-        "selectMany": "Seleccione {{what}}"
     },
     "validation": {
         "required": "Este campo es requerido.",

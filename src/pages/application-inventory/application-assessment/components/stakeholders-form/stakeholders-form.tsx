@@ -6,53 +6,53 @@ import { AxiosError } from "axios";
 import {
   FormGroup,
   FormSection,
-  SelectOptionObject,
   Text,
   TextContent,
 } from "@patternfly/react-core";
 
-import { SelectEntityFormikField } from "shared/components";
+import {
+  OptionWithValue,
+  MultiSelectFetchFormikField,
+} from "shared/components";
 
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 import { getValidatedFromError } from "utils/utils";
+import { Stakeholder, StakeholderGroup } from "api/models";
 
 import { IFormValues } from "../../application-assessment";
-import { Stakeholder, StakeholderGroup } from "api/models";
+
+const stakeholderToOption = (
+  value: Stakeholder
+): OptionWithValue<Stakeholder> => ({
+  value,
+  toString: () => value.displayName,
+});
+
+const stakeholderGroupToOption = (
+  value: StakeholderGroup
+): OptionWithValue<StakeholderGroup> => ({
+  value,
+  toString: () => value.name,
+});
 
 export interface StakeholdersFormProps {
   stakeholders?: Stakeholder[];
   isFetchingStakeholders: boolean;
   fetchErrorStakeholders?: AxiosError;
-  toSelectOptionStakeholder: (item: Stakeholder) => SelectOptionObject;
-  isSelectOptionStakeholderEqual: (
-    a: SelectOptionObject,
-    b: SelectOptionObject
-  ) => boolean;
 
   stakeholderGroups?: StakeholderGroup[];
   isFetchingStakeholderGroups: boolean;
   fetchErrorStakeholderGroups?: AxiosError;
-  toSelectOptionStakeholderGroup: (
-    item: StakeholderGroup
-  ) => SelectOptionObject;
-  isSelectOptionStakeholderGroupEqual: (
-    a: SelectOptionObject,
-    b: SelectOptionObject
-  ) => boolean;
 }
 
 export const StakeholdersForm: React.FC<StakeholdersFormProps> = ({
   stakeholders,
   isFetchingStakeholders,
   fetchErrorStakeholders,
-  toSelectOptionStakeholder,
-  isSelectOptionStakeholderEqual,
 
   stakeholderGroups,
   isFetchingStakeholderGroups,
   fetchErrorStakeholderGroups,
-  toSelectOptionStakeholderGroup,
-  isSelectOptionStakeholderGroupEqual,
 }) => {
   const { t } = useTranslation();
   const formik = useFormikContext<IFormValues>();
@@ -76,24 +76,26 @@ export const StakeholdersForm: React.FC<StakeholdersFormProps> = ({
           validated={getValidatedFromError(formik.errors.stakeholders)}
           helperTextInvalid={formik.errors.stakeholders}
         >
-          <SelectEntityFormikField
+          <MultiSelectFetchFormikField
             fieldConfig={{
               name: "stakeholders",
             }}
             selectConfig={{
-              isMulti: true,
-              options: (stakeholders || []).map((f) =>
-                toSelectOptionStakeholder(f)
-              ),
-              isEqual: isSelectOptionStakeholderEqual,
-
-              isFetching: isFetchingStakeholders,
-              fetchError: fetchErrorStakeholders,
-
-              maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
-              placeholderText: "Select stakeholder(s)",
+              variant: "typeaheadmulti",
               "aria-label": "stakeholders",
               "aria-describedby": "stakeholders",
+              placeholderText: t("composed.selectMany", {
+                what: t("terms.stakeholder(s)").toLowerCase(),
+              }),
+              maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
+              options: (stakeholders || []).map(stakeholderToOption),
+              isFetching: isFetchingStakeholders,
+              fetchError: fetchErrorStakeholders,
+            }}
+            isEqual={(a: any, b: any) => {
+              const option1 = a as OptionWithValue<Stakeholder>;
+              const option2 = b as OptionWithValue<Stakeholder>;
+              return option1.value.id === option2.value.id;
             }}
           />
         </FormGroup>
@@ -104,24 +106,26 @@ export const StakeholdersForm: React.FC<StakeholdersFormProps> = ({
           validated={getValidatedFromError(formik.errors.stakeholderGroups)}
           helperTextInvalid={formik.errors.stakeholderGroups}
         >
-          <SelectEntityFormikField
+          <MultiSelectFetchFormikField
             fieldConfig={{
               name: "stakeholderGroups",
             }}
             selectConfig={{
-              isMulti: true,
-              options: (stakeholderGroups || []).map((f) =>
-                toSelectOptionStakeholderGroup(f)
-              ),
-              isEqual: isSelectOptionStakeholderGroupEqual,
-
-              isFetching: isFetchingStakeholderGroups,
-              fetchError: fetchErrorStakeholderGroups,
-
-              maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
-              placeholderText: "Select stakeholder group(s)",
+              variant: "typeaheadmulti",
               "aria-label": "stakeholder-groups",
               "aria-describedby": "stakeholder-groups",
+              placeholderText: t("composed.selectMany", {
+                what: t("terms.stakeholderGroup(s)").toLowerCase(),
+              }),
+              maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
+              options: (stakeholderGroups || []).map(stakeholderGroupToOption),
+              isFetching: isFetchingStakeholderGroups,
+              fetchError: fetchErrorStakeholderGroups,
+            }}
+            isEqual={(a: any, b: any) => {
+              const option1 = a as OptionWithValue<StakeholderGroup>;
+              const option2 = b as OptionWithValue<StakeholderGroup>;
+              return option1.value.id === option2.value.id;
             }}
           />
         </FormGroup>
