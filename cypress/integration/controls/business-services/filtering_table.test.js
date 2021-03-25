@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe("Stakeholder groups filtering table", () => {
+describe("Business service filtering table", () => {
   before(() => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
@@ -26,16 +26,16 @@ describe("Stakeholder groups filtering table", () => {
             });
         })
 
-        .log("Create stakeholder groups")
+        .log("Create business services")
         .then(() => {
           return [...Array(11)]
             .map((_, i) => ({
-              name: `group-${(i + 10).toString(36)}`,
+              name: `service-${(i + 10).toString(36)}`,
               description: `description-${(i + 10).toString(36)}`,
-              stakeholders: stakeholders.slice(0, i),
+              owner: stakeholders[i],
             }))
             .forEach((payload) => {
-              cy.createStakeholderGroup(payload, tokens);
+              cy.createBusinessService(payload, tokens);
             });
         });
     });
@@ -46,38 +46,38 @@ describe("Stakeholder groups filtering table", () => {
     cy.kcLogin("alice").as("tokens");
 
     // Inteceptors
-    cy.intercept("GET", "/api/controls/stakeholder-group*").as(
-      "getStakeholderGroupsApi"
+    cy.intercept("GET", "/api/controls/business-service*").as(
+      "getBusinessServicesApi"
     );
 
     // Go to page
-    cy.visit("/controls/stakeholder-groups");
+    cy.visit("/controls/business-services");
   });
 
   it("By name", () => {
     // First filter
-    cy.wait("@getStakeholderGroupsApi");
+    cy.wait("@getBusinessServicesApi");
 
     cy.get(
       ".pf-c-toolbar .pf-c-toolbar__content input[aria-label='filter-text']"
-    ).type("group-a");
+    ).type("service-a");
     cy.get(
       ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
     ).click();
 
-    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("group-a");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("service-a");
 
     // Second filter
 
     cy.get(
       ".pf-c-toolbar .pf-c-toolbar__content input[aria-label='filter-text']"
-    ).type("group-k");
+    ).type("service-k");
     cy.get(
       ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
     ).click();
 
-    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("group-a");
-    cy.get(".pf-c-table").pf4_table_rows().eq(1).contains("group-k");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("service-a");
+    cy.get(".pf-c-table").pf4_table_rows().eq(1).contains("service-k");
   });
 
   it("Filter by description", () => {
@@ -85,7 +85,7 @@ describe("Stakeholder groups filtering table", () => {
     cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("select", 1).click();
 
     // First filter
-    cy.wait("@getStakeholderGroupsApi");
+    cy.wait("@getBusinessServicesApi");
 
     cy.get(
       ".pf-c-toolbar .pf-c-toolbar__content input[aria-label='filter-text']"
@@ -109,12 +109,12 @@ describe("Stakeholder groups filtering table", () => {
     cy.get(".pf-c-table").pf4_table_rows().eq(1).contains("description-k");
   });
 
-  it("Filter by member", () => {
+  it("Filter by owner", () => {
     cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("toggle");
     cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("select", 2).click();
 
     // First filter
-    cy.wait("@getStakeholderGroupsApi");
+    cy.wait("@getBusinessServicesApi");
 
     cy.get(
       ".pf-c-toolbar .pf-c-toolbar__content input[aria-label='filter-text']"
@@ -123,9 +123,6 @@ describe("Stakeholder groups filtering table", () => {
       ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
     ).click();
 
-    cy.get(".pf-c-table").pf4_table_row_expand(0);
-    cy.get(".pf-c-table > tbody > tr.pf-c-table__expandable-row")
-      .find(".pf-c-description-list .pf-c-description-list__text")
-      .contains("stakeholder-j");
+    cy.get(".pf-c-table > tbody > tr").contains("stakeholder-j");
   });
 });
