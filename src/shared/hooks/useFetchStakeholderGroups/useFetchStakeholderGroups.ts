@@ -4,7 +4,7 @@ import { ActionType, createAsyncAction, getType } from "typesafe-actions";
 
 import {
   getStakeholderGroups,
-  getAllStakeholderGroups,
+  StakeholderGroupSortBy,
   StakeholderGroupSortByQuery,
 } from "api/rest";
 import { PageRepresentation, StakeholderGroup, PageQuery } from "api/models";
@@ -129,7 +129,11 @@ export const useFetchStakeholderGroups = (
   const fetchAllStakeholderGroups = useCallback(() => {
     dispatch(fetchRequest());
 
-    getAllStakeholderGroups()
+    getStakeholderGroups(
+      {},
+      { page: 1, perPage: 1000 },
+      { field: StakeholderGroupSortBy.NAME }
+    )
       .then(({ data }) => {
         const list = data._embedded["stakeholder-group"];
         const total = data.total_count;

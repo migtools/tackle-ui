@@ -102,10 +102,6 @@ export const getBusinessServices = (
   return APIClient.get(`${BUSINESS_SERVICES}?${query.join("&")}`, { headers });
 };
 
-export const getAllBusinessServices = (): AxiosPromise<BusinessServicePage> => {
-  return APIClient.get(`${BUSINESS_SERVICES}?size=1000`, { headers });
-};
-
 export const deleteBusinessService = (id: number | string): AxiosPromise => {
   return APIClient.delete(`${BUSINESS_SERVICES}/${id}`);
 };
@@ -162,7 +158,7 @@ export const getStakeholders = (
         field = "displayName";
         break;
       case StakeholderSortBy.JOB_FUNCTION:
-        field = "jobFunction";
+        field = "jobFunction.role";
         break;
       case StakeholderSortBy.STAKEHOLDER_GROUPS:
         field = "stakeholderGroups.size";
@@ -180,16 +176,12 @@ export const getStakeholders = (
 
     email: filters.email,
     displayName: filters.displayName,
-    jobFunction: filters.jobFunction,
+    "jobFunction.role": filters.jobFunction,
     "stakeholderGroups.name": filters.stakeholderGroup,
   };
 
   const query: string[] = buildQuery(params);
   return APIClient.get(`${STAKEHOLDERS}?${query.join("&")}`, { headers });
-};
-
-export const getAllStakeholders = (): AxiosPromise<StakeholderPage> => {
-  return APIClient.get(`${STAKEHOLDERS}?size=1000`, { headers });
 };
 
 export const deleteStakeholder = (id: number): AxiosPromise => {
@@ -258,10 +250,6 @@ export const getStakeholderGroups = (
   return APIClient.get(`${STAKEHOLDER_GROUPS}?${query.join("&")}`, { headers });
 };
 
-export const getAllStakeholderGroups = (): AxiosPromise<StakeholderGroupPage> => {
-  return APIClient.get(`${STAKEHOLDER_GROUPS}?size=1000`, { headers });
-};
-
 export const deleteStakeholderGroup = (id: number): AxiosPromise => {
   return APIClient.delete(`${STAKEHOLDER_GROUPS}/${id}`);
 };
@@ -280,8 +268,40 @@ export const updateStakeholderGroup = (
 
 // Job functions
 
-export const getAllJobFunctions = (): AxiosPromise<JobFunctionPage> => {
-  return APIClient.get(`${JOB_FUNCTIONS}?size=1000`, { headers });
+export enum JobFunctionSortBy {
+  ROLE,
+}
+export interface JobFunctionSortByQuery {
+  field: JobFunctionSortBy;
+  direction?: Direction;
+}
+
+export const getJobFunctions = (
+  filters: {},
+  pagination: PageQuery,
+  sortBy?: JobFunctionSortByQuery
+): AxiosPromise<JobFunctionPage> => {
+  let sortByQuery: string | undefined = undefined;
+  if (sortBy) {
+    let field;
+    switch (sortBy.field) {
+      case JobFunctionSortBy.ROLE:
+        field = "role";
+        break;
+      default:
+        throw new Error("Could not define SortBy field name");
+    }
+    sortByQuery = `${sortBy.direction === "desc" ? "-" : ""}${field}`;
+  }
+
+  const params = {
+    page: pagination.page - 1,
+    size: pagination.perPage,
+    sort: sortByQuery,
+  };
+
+  const query: string[] = buildQuery(params);
+  return APIClient.get(`${JOB_FUNCTIONS}?${query.join("&")}`, { headers });
 };
 
 // App inventory

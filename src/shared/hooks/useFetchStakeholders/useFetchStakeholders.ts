@@ -4,7 +4,7 @@ import { ActionType, createAsyncAction, getType } from "typesafe-actions";
 
 import {
   getStakeholders,
-  getAllStakeholders,
+  StakeholderSortBy,
   StakeholderSortByQuery,
 } from "api/rest";
 import { PageRepresentation, Stakeholder, PageQuery } from "api/models";
@@ -131,7 +131,11 @@ export const useFetchStakeholders = (
   const fetchAllStakeholders = useCallback(() => {
     dispatch(fetchRequest());
 
-    getAllStakeholders()
+    getStakeholders(
+      {},
+      { page: 1, perPage: 1000 },
+      { field: StakeholderSortBy.DISPLAY_NAME }
+    )
       .then(({ data }) => {
         const list = data._embedded.stakeholder;
         const total = data.total_count;

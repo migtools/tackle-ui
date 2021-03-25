@@ -2,7 +2,7 @@ import { useCallback, useReducer } from "react";
 import { AxiosError } from "axios";
 import { ActionType, createAsyncAction, getType } from "typesafe-actions";
 
-import { getAllJobFunctions } from "api/rest";
+import { getJobFunctions, JobFunctionSortBy } from "api/rest";
 import { PageRepresentation, JobFunction } from "api/models";
 
 export const {
@@ -68,7 +68,7 @@ const reducer = (state: State, action: Action): State => {
 };
 
 export interface IState {
-  JobFunctions?: PageRepresentation<JobFunction>;
+  jobFunctions?: PageRepresentation<JobFunction>;
   isFetching: boolean;
   fetchError?: AxiosError;
   fetchCount: number;
@@ -83,7 +83,11 @@ export const useFetchJobFunctions = (
   const fetchAllJobFunctions = useCallback(() => {
     dispatch(fetchRequest());
 
-    getAllJobFunctions()
+    getJobFunctions(
+      {},
+      { page: 1, perPage: 1000 },
+      { field: JobFunctionSortBy.ROLE }
+    )
       .then(({ data }) => {
         const list = data._embedded["job-function"];
         const total = data.total_count;
@@ -103,7 +107,7 @@ export const useFetchJobFunctions = (
   }, []);
 
   return {
-    JobFunctions: state.jobFunctions,
+    jobFunctions: state.jobFunctions,
     isFetching: state.isFetching,
     fetchError: state.fetchError,
     fetchCount: state.fetchCount,
