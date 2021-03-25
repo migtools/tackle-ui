@@ -27,7 +27,7 @@ export const AppRoutes = () => {
         {routes.map(({ path, component, ...rest }, index) => (
           <Route key={index} path={path} component={component} {...rest} />
         ))}
-        <Redirect from={Paths.base} to={Paths.controls} exact />
+        <Redirect from={Paths.base} to={Paths.applicationInventory} exact />
       </Switch>
     </Suspense>
   );

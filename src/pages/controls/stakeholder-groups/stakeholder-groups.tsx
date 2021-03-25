@@ -381,7 +381,7 @@ export const StakeholderGroups: React.FC = () => {
               <ToolbarItem>
                 <Button
                   type="button"
-                  aria-label="create-stakeholder"
+                  aria-label="create-stakeholder-group"
                   variant={ButtonVariant.primary}
                   onClick={handleOnOpenCreateNewModal}
                 >

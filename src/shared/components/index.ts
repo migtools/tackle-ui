@@ -9,6 +9,5 @@ export { NoDataEmptyState } from "./no-data-empty-state";
 export { PageHeader } from "./page-header";
 export { SearchFilter } from "./search-filter";
 export { SearchInput } from "./search-input";
-export { SelectEntity, SelectEntityFormikField } from "./select-entity";
-export { SelectStakeholder } from "./select-stakeholder";
+export * from "./simple-select";
 export { SimpleFilterDropdown } from "./simple-filter-dropdown";

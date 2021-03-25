@@ -5,6 +5,8 @@
         "controls": "Controles"
     },
     "terms": {
+        "application": "Applicación",
+        "applications": "Applicaciones",
         "name": "Nombre",
         "description": "Descripción",
         "comments": "Comentarios",

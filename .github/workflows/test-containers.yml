@@ -30,3 +30,4 @@ jobs:
           dockerfile: Dockerfile
           snapshot: false
           tags: "${{ steps.extract_branch.outputs.branch }}"
+          buildoptions: "--pull"
