@@ -25,3 +25,8 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 import "cypress-keycloak-commands";
+
+import "./controlsCommands.js";
+import "./appInventoryCommands.js";
+
+import "./pf4Commands.js";
