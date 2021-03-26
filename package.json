@@ -109,7 +109,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "pre-push": "npm run extract"
+      "post-commit": "npm run extract"
     }
   },
   "lint-staged": {
