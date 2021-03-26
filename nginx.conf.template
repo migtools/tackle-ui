@@ -67,6 +67,10 @@ http {
             proxy_pass      ${APPLICATION_INVENTORY_API_URL};
         }
 
+        location /api/pathfinder {
+            return 404;
+        }
+
         error_page 404 /404.html;
             location = /40x.html {
         }
