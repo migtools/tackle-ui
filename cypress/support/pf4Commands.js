@@ -21,13 +21,46 @@ Cypress.Commands.add("pf4_table_rows", { prevSubject: "element" }, (table) => {
 });
 
 Cypress.Commands.add(
-  "pf4_table_inline_editBtn_click",
+  "pf4_table_row_check",
   { prevSubject: "element" },
   (table, rowIndex) => {
     cy.wrap(table)
-      .find("tbody > tr > td.pf-c-table__inline-edit-action button")
+      .find("tbody > tr > td.pf-c-table__check > input")
       .eq(rowIndex)
-      .click();
+      .check();
+  }
+);
+
+Cypress.Commands.add(
+  "pf4_table_row_edit",
+  { prevSubject: "element" },
+  (table, rowIndex, action) => {
+    switch (action) {
+      case "open":
+        cy.wrap(table)
+          .find("tbody > tr > td.pf-c-table__inline-edit-action")
+          .eq(rowIndex)
+          .find("button")
+          .click();
+        break;
+      case "save":
+        cy.wrap(table)
+          .find("tbody > tr > td.pf-c-table__inline-edit-action")
+          .eq(rowIndex)
+          .find("button")
+          .eq(0)
+          .click();
+        break;
+      case "cancel":
+        cy.wrap(table)
+          .find("tbody > tr > td.pf-c-table__inline-edit-action")
+          .eq(rowIndex)
+          .find("button")
+          .eq(1)
+          .click();
+      default:
+        break;
+    }
   }
 );
 
