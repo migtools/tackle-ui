@@ -1,1 +1,1 @@
-export { ApplicationList as default } from "./application-inventory";
+export { ApplicationList as default } from "./application-list";

@@ -284,22 +284,24 @@ export const ApplicationList: React.FC = () => {
       ],
     });
 
-    rows.push({
-      parent: rows.length - 1,
-      fullWidth: false,
-      cells: [
-        <div className="pf-c-table__expandable-row-content">
-          <DescriptionList isHorizontal>
-            <DescriptionListGroup>
-              <DescriptionListTerm>{t("terms.comments")}</DescriptionListTerm>
-              <DescriptionListDescription>
-                {item.comments}
-              </DescriptionListDescription>
-            </DescriptionListGroup>
-          </DescriptionList>
-        </div>,
-      ],
-    });
+    if (isExpanded) {
+      rows.push({
+        parent: rows.length - 1,
+        fullWidth: false,
+        cells: [
+          <div className="pf-c-table__expandable-row-content">
+            <DescriptionList isHorizontal>
+              <DescriptionListGroup>
+                <DescriptionListTerm>{t("terms.comments")}</DescriptionListTerm>
+                <DescriptionListDescription>
+                  {item.comments}
+                </DescriptionListDescription>
+              </DescriptionListGroup>
+            </DescriptionList>
+          </div>,
+        ],
+      });
+    }
   });
 
   const actionResolver = (rowData: IRowData): (IAction | ISeparator)[] => {
