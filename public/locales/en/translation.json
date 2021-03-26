@@ -5,13 +5,12 @@
         "controls": "Controls"
     },
     "terms": {
-        "unknown": "Unknown",
         "application": "Application",
         "applications": "Applications",
         "name": "Name",
         "description": "Description",
-        "businessService": "Business service",
         "comments": "Comments",
+        "unknown": "Unknown",
         "businessService": "Business service",
         "owner": "Owner",
         "controls": "Controls",
@@ -33,25 +32,16 @@
         "inProgress": "In progress",
         "completed": "Completed"
     },
-    "composed": {
-        "selectStakeholders": "Select stakeholders",
-        "applicationAssessment": "Application assessment",
-        "applicationInventory": "Application inventory",
-        "noDataStateTitle": "No {{what}} available",
-        "noDataStateBody": "Create a new {{what}} to start seeing data here",
-        "selectOne": "Select a {{what}}",
-        "selectMany": "Select {{what}}"
-    },
     "actions": {
         "next": "Next",
         "back": "Back",
+        "edit": "Edit",
+        "delete": "Delete",
         "cancel": "Cancel",
         "assess": "Assess",
-        "delete": "Delete",
         "createNew": "Create new",
         "create": "Create",
         "save": "Save",
-        "edit": "Edit"
     },
     "dialog": {
         "title": {
@@ -73,6 +63,15 @@
         "success": {
             "added": "Success! {{what}} was added as a {{type}}."
         }
+    },
+    "composed": {
+        "applicationInventory": "Application inventory",
+        "noDataStateTitle": "No {{what}} available",
+        "noDataStateBody": "Create a new {{what}} to start seeing data here",
+        "selectOne": "Select a {{what}}",
+        "selectMany": "Select {{what}}",
+        "selectStakeholders": "Select stakeholders",
+        "applicationAssessment": "Application assessment"
     },
     "validation": {
         "required": "This field is required.",

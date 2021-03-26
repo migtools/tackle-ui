@@ -5,13 +5,13 @@
         "controls": "Controles"
     },
     "terms": {
-        "unknown": "Desconocido",
         "application": "Applicación",
         "applications": "Applicaciones",
         "assessment": "Evaluación",
         "name": "Nombre",
         "description": "Descripción",
         "comments": "Comentarios",
+        "unknown": "Desconocido",
         "businessService": "Servicio de negocio",
         "owner": "Propietario",
         "controls": "Controles",
@@ -32,25 +32,16 @@
         "inProgress": "En progreso",
         "completed": "Completado"
     },
-    "composed": {
-        "selectStakeholders": "Seleccione interesados",
-        "applicationAssessment": "Evaluar aplicación",
-        "applicationInventory": "Inventario de aplicaciones",
-        "noDataStateTitle": "No existen {{what}} disponibles",
-        "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
-        "selectOne": "Seleccione un(a) {{what}}",
-        "selectMany": "Seleccione {{what}}"
-    },
     "actions": {
         "next": "Siguiente",
         "back": "Atras",
-        "cancel": "Cancelar",
-        "assess": "Evaluar",
+        "edit": "Editar",
         "delete": "Eliminar",
+        "assess": "Evaluar",
+        "cancel": "Cancelar",
         "createNew": "Crear nuevo",
         "create": "Crear",
         "save": "Guardar",
-        "edit": "Editar"
     },
     "dialog": {
         "title": {
@@ -72,6 +63,15 @@
         "success": {
             "added": "Éxito! {{what}} fue creado como un {{type}}."
         }
+    },
+    "composed": {
+        "applicationInventory": "Inventario de aplicaciones",
+        "noDataStateTitle": "No existen {{what}} disponibles",
+        "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
+        "selectOne": "Seleccione un(a) {{what}}",
+        "selectMany": "Seleccione {{what}}",
+        "selectStakeholders": "Seleccione interesados",
+        "applicationAssessment": "Evaluar aplicación"
     },
     "validation": {
         "required": "Este campo es requerido.",
