@@ -53,7 +53,7 @@ http {
 
         location /auth {
             proxy_set_header Host $http_host;
-            proxy_set_header X-Real-IP $remote_addr;     
+            proxy_set_header X-Real-IP $remote_addr;
             proxy_pass      ${SSO_SERVER_URL};
         }
 
@@ -67,18 +67,13 @@ http {
             proxy_pass      ${APPLICATION_INVENTORY_API_URL};
         }
 
-        location /api/pathfinder {
-            rewrite         ^/api/pathfinder/(.*)$ /pathfinder/$1 break;
-            proxy_pass      ${PATHFINDER_API_URL};
-        }
-
         error_page 404 /404.html;
             location = /40x.html {
         }
 
         error_page 500 502 503 504 /50x.html;
             location = /50x.html {
-        }        
+        }
     }
 
 }
