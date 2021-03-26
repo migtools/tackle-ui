@@ -577,10 +577,10 @@ export const ApplicationList: React.FC = () => {
             noDataState={
               <NoDataEmptyState
                 title={t("composed.noDataStateTitle", {
-                  what: t("terms.applications").toLocaleLowerCase(),
+                  what: t("terms.applications").toLowerCase(),
                 })}
                 description={t("composed.noDataStateBody", {
-                  what: t("terms.application").toLocaleLowerCase(),
+                  what: t("terms.application").toLowerCase(),
                 })}
               />
             }
