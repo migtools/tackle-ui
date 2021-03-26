@@ -7,22 +7,17 @@ const getHeaders = (tokens) => {
   return headers;
 };
 
-Cypress.Commands.add("tackleAppInventoryClean", (tokens) => {
+Cypress.Commands.add("tackleControlsCleanApplications", (tokens) => {
   const sizeQueryParam = "size=1000";
   const headers = getHeaders(tokens);
 
-  cy.log("Tackle application inventory - clean started")
-
-    .log("Tackle application inventory - delete applications")
-    .then(() => {
-      return cy.request({
-        method: "GET",
-        headers: headers,
-        url: `${Cypress.env(
-          "application_inventory_base_url"
-        )}/application?${sizeQueryParam}`,
-      });
-    })
+  cy.request({
+    method: "GET",
+    headers: headers,
+    url: `${Cypress.env(
+      "application_inventory_base_url"
+    )}/application?${sizeQueryParam}`,
+  })
     .then((response) => response.body._embedded["application"])
     .each((item) => {
       return cy.request({
@@ -32,6 +27,15 @@ Cypress.Commands.add("tackleAppInventoryClean", (tokens) => {
           item.id
         }`,
       });
+    });
+});
+
+Cypress.Commands.add("tackleAppInventoryClean", (tokens) => {
+  cy.log("Tackle application inventory - clean started")
+
+    .log("Tackle application inventory - delete applications")
+    .then(() => {
+      return cy.tackleControlsCleanApplications(tokens);
     })
 
     .log("Tackle application inventory - clean finished");
