@@ -1,5 +1,6 @@
 {
     "actions": {
+        "zzz": "this should go to bottom",
         "cancel": "Cancel",
         "create": "Create",
         "createNew": "Create new",
