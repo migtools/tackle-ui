@@ -22,7 +22,7 @@ Cypress.Commands.add(
  */
 Cypress.Commands.add("pf4_table_rows", { prevSubject: "element" }, (table) => {
   cy.wait(500);
-  return cy.wrap(table).find("tbody > tr").not(".pf-m-expanded");
+  return cy.wrap(table).find("tbody > tr:visible").not(".pf-m-expanded");
 });
 
 Cypress.Commands.add(
