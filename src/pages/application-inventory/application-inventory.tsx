@@ -90,6 +90,9 @@ export const ApplicationInventory: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
+  const testing = t("actions.zzzzzz");
+  console.log(testing);
+
   const filters = [
     {
       key: FilterKey.NAME,
