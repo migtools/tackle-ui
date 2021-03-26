@@ -1,10 +1,10 @@
 {
     "actions": {
         "cancel": "Cancelar",
-        "create": "Crear",
         "createNew": "Crear nuevo",
         "delete": "Eliminar",
         "edit": "Editar",
+        "create": "Crear",
         "save": "Guardar"
     },
     "composed": {
