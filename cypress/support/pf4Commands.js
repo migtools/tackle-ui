@@ -21,6 +21,17 @@ Cypress.Commands.add("pf4_table_rows", { prevSubject: "element" }, (table) => {
 });
 
 Cypress.Commands.add(
+  "pf4_table_inline_editBtn_click",
+  { prevSubject: "element" },
+  (table, rowIndex) => {
+    cy.wrap(table)
+      .find("tbody > tr > td.pf-c-table__inline-edit-action button")
+      .eq(rowIndex)
+      .click();
+  }
+);
+
+Cypress.Commands.add(
   "pf4_table_action_select",
   { prevSubject: "element" },
   (table, rowIndex, actionName) => {
