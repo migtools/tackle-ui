@@ -1,72 +1,72 @@
 {
+    "actions": {
+        "cancel": "Cancel",
+        "create": "Create",
+        "createNew": "Create new",
+        "delete": "Delete",
+        "edit": "Edit",
+        "save": "Save"
+    },
+    "composed": {
+        "applicationInventory": "Application inventory",
+        "noDataStateBody": "Create a new {{what}} to start seeing data here",
+        "noDataStateTitle": "No {{what}} available",
+        "selectMany": "Select {{what}}",
+        "selectOne": "Select a {{what}}"
+    },
+    "dialog": {
+        "message": {
+            "delete": "Are you sure you want to delete '{{what}}'? This will delete all resources associated with it and cannot be undone. Make sure this is something you really want to do!"
+        },
+        "title": {
+            "delete": "Delete '{{what}}'",
+            "newApplication": "New application",
+            "newBusinessService": "New business service",
+            "newStakeholder": "New stakeholder",
+            "newStakeholderGroup": "New stakeholder group",
+            "updateApplication": "Update application",
+            "updateBusinessService": "Update business service",
+            "updateStakeholder": "Update stakeholder",
+            "updateStakeholderGroup": "Update stakeholder group"
+        }
+    },
     "sidebar": {
         "applicationInventory": "Application inventory",
-        "reports": "Reports",
-        "controls": "Controls"
+        "controls": "Controls",
+        "reports": "Reports"
     },
     "terms": {
         "application": "Application",
         "applications": "Applications",
-        "name": "Name",
-        "description": "Description",
-        "comments": "Comments",
-        "unknown": "Unknown",
         "businessService": "Business service",
-        "owner": "Owner",
-        "controls": "Controls",
-        "stakeholders": "Stakeholders",
-        "stakeholderGroups": "Stakeholder groups",
         "businessServices": "Business services",
-        "tags": "Tags",
-        "member(s)": "Member(s)",
-        "member": "Member",
-        "email": "Email",
+        "comments": "Comments",
+        "controls": "Controls",
+        "description": "Description",
         "displayName": "Display name",
-        "jobFunction": "Job function",
+        "email": "Email",
+        "group": "Group",
         "group(s)": "Group(s)",
-        "group": "Group"
-    },
-    "actions": {
-        "edit": "Edit",
-        "delete": "Delete",
-        "cancel": "Cancel",
-        "createNew": "Create new",
-        "create": "Create",
-        "save": "Save"
-    },
-    "dialog": {
-        "title": {
-            "delete": "Delete '{{what}}'",
-            "newApplication": "New application",
-            "updateApplication": "Update application",
-            "newBusinessService": "New business service",
-            "updateBusinessService": "Update business service",
-            "newStakeholderGroup": "New stakeholder group",
-            "updateStakeholderGroup": "Update stakeholder group",
-            "newStakeholder": "New stakeholder",
-            "updateStakeholder": "Update stakeholder"
-        },
-        "message": {
-            "delete": "Are you sure you want to delete '{{what}}'? This will delete all resources associated with it and cannot be undone. Make sure this is something you really want to do!"
-        }
+        "jobFunction": "Job function",
+        "member": "Member",
+        "member(s)": "Member(s)",
+        "name": "Name",
+        "owner": "Owner",
+        "stakeholderGroups": "Stakeholder groups",
+        "stakeholders": "Stakeholders",
+        "tags": "Tags",
+        "unknown": "Unknown"
     },
     "toastr": {
         "success": {
             "added": "Success! {{what}} was added as a {{type}}."
         }
     },
-    "composed": {
-        "applicationInventory": "Application inventory",
-        "noDataStateTitle": "No {{what}} available",
-        "noDataStateBody": "Create a new {{what}} to start seeing data here",
-        "selectOne": "Select a {{what}}",
-        "selectMany": "Select {{what}}"
-    },
     "validation": {
-        "required": "This field is required.",
-        "minLength": "This field must contain at least {{length}} characters.",
+        "email": "This field requires a valid email.",
         "maxLength": "This field must contain fewer than {{length}} characters.",
+        "minLength": "This field must contain at least {{length}} characters.",
         "onlyCharactersAndUnderscore": "This field must contain only alphanumeric characters including underscore.",
-        "email": "This field requires a valid email."
+        "required": "This field is required."
     }
 }
