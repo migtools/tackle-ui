@@ -1,23 +1,23 @@
 {
     "actions": {
+        "assess": "Assess",
+        "back": "Back",
         "cancel": "Cancel",
         "create": "Create",
         "createNew": "Create new",
         "delete": "Delete",
         "edit": "Edit",
-        "save": "Save",
         "next": "Next",
-        "back": "Back",
-        "assess": "Assess"
+        "save": "Save"
     },
     "composed": {
+        "applicationAssessment": "Application assessment",
         "applicationInventory": "Application inventory",
         "noDataStateBody": "Create a new {{what}} to start seeing data here",
         "noDataStateTitle": "No {{what}} available",
-        "selectOne": "Select a {{what}}",
         "selectMany": "Select {{what}}",
-        "selectStakeholders": "Select stakeholders",
-        "applicationAssessment": "Application assessment"
+        "selectOne": "Select a {{what}}",
+        "selectStakeholders": "Select stakeholders"
     },
     "dialog": {
         "message": {
@@ -43,29 +43,30 @@
     "terms": {
         "application": "Application",
         "applications": "Applications",
+        "assessment": "Assessment",
         "businessService": "Business service",
         "businessServices": "Business services",
         "comments": "Comments",
+        "completed": "Completed",
         "controls": "Controls",
         "description": "Description",
         "displayName": "Display name",
         "email": "Email",
         "group": "Group",
         "group(s)": "Group(s)",
+        "inProgress": "In progress",
         "jobFunction": "Job function",
         "member": "Member",
         "member(s)": "Member(s)",
         "name": "Name",
+        "notStarted": "Not started",
         "owner": "Owner",
+        "stakeholder(s)": "Stakeholder(s)",
+        "stakeholderGroup(s)": "Stakeholder group(s)",
         "stakeholderGroups": "Stakeholder groups",
         "stakeholders": "Stakeholders",
         "tags": "Tags",
-        "assessment": "Assessment",
-        "stakeholder(s)": "Stakeholder(s)",
-        "stakeholderGroup(s)": "Stakeholder group(s)",
-        "notStarted": "Not started",
-        "inProgress": "In progress",
-        "completed": "Completed"
+        "unknown": "Unknown"
     },
     "toastr": {
         "success": {

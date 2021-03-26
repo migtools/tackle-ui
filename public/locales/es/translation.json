@@ -1,23 +1,23 @@
 {
     "actions": {
+        "assess": "Evaluar",
+        "back": "Atras",
         "cancel": "Cancelar",
         "create": "Crear",
         "createNew": "Crear nuevo",
         "delete": "Eliminar",
         "edit": "Editar",
-        "save": "Guardar",
         "next": "Siguiente",
-        "back": "Atras",
-        "assess": "Evaluar"
+        "save": "Guardar"
     },
     "composed": {
+        "applicationAssessment": "Evaluar aplicación",
         "applicationInventory": "Inventario de aplicaciones",
         "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
         "noDataStateTitle": "No existen {{what}} disponibles",
-        "selectOne": "Seleccione un(a) {{what}}",
         "selectMany": "Seleccione {{what}}",
-        "selectStakeholders": "Seleccione interesados",
-        "applicationAssessment": "Evaluar aplicación"
+        "selectOne": "Seleccione un(a) {{what}}",
+        "selectStakeholders": "Seleccione interesados"
     },
     "dialog": {
         "message": {
@@ -43,30 +43,30 @@
     "terms": {
         "application": "Applicación",
         "applications": "Applicaciones",
+        "assessment": "Evaluación",
         "businessService": "Servicio de negocio",
         "businessServices": "Servicios de negocio",
         "comments": "Comentarios",
+        "completed": "Completado",
         "controls": "Controles",
         "description": "Descripción",
         "displayName": "Nombre a mostrar",
         "email": "Email",
         "group": "Grupo",
         "group(s)": "Grupo(s)",
+        "inProgress": "En progreso",
         "jobFunction": "Función laboral",
         "member": "Miembro",
         "member(s)": "Miembro(s)",
         "name": "Nombre",
+        "notStarted": "No empezado",
         "owner": "Propietario",
+        "stakeholder(s)": "Interesado(s)",
+        "stakeholderGroup(s)": "Grupo(s) de interesados",
         "stakeholderGroups": "Grupos de interesados",
         "stakeholders": "Interesados",
         "tags": "Etiquetas",
-        "unknown": "Desconocido",
-        "assessment": "Evaluación",
-        "stakeholder(s)": "Interesado(s)",
-        "stakeholderGroup(s)": "Grupo(s) de interesados",
-        "notStarted": "No empezado",
-        "inProgress": "En progreso",
-        "completed": "Completado"
+        "unknown": "Desconocido"
     },
     "toastr": {
         "success": {
