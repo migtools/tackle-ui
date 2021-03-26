@@ -11,7 +11,6 @@
         "applicationInventory": "Application inventory",
         "noDataStateBody": "Create a new {{what}} to start seeing data here",
         "noDataStateTitle": "No {{what}} available",
-        "selectMany": "Select {{what}}",
         "selectOne": "Select a {{what}}"
     },
     "dialog": {
