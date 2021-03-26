@@ -311,17 +311,6 @@ export const ApplicationList: React.FC = () => {
     }
 
     const actions: (IAction | ISeparator)[] = [
-      // {
-      //   title: t("actions.assess"),
-      //   onClick: (
-      //     event: React.MouseEvent,
-      //     rowIndex: number,
-      //     rowData: IRowData
-      //   ) => {
-      //     const row: Application = getRow(rowData);
-      //     startApplicationAssessment(row);
-      //   },
-      // },
       {
         title: t("actions.delete"),
         onClick: (
