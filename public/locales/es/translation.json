@@ -1,7 +1,7 @@
 {
     "actions": {
-        "create": "Crear",
         "cancel": "Cancelar",
+        "create": "Crear",
         "createNew": "Crear nuevo",
         "delete": "Eliminar",
         "edit": "Editar",
