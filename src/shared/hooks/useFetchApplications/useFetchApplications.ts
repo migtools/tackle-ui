@@ -75,6 +75,7 @@ export interface IState {
   fetchApplications: (
     filters: {
       name?: string[];
+      businessService?: string[];
     },
     page: PageQuery,
     sortBy?: ApplicationSortByQuery
@@ -90,6 +91,7 @@ export const useFetchApplications = (
     (
       filters: {
         name?: string[];
+        businessService?: string[];
       },
       page: PageQuery,
       sortBy?: ApplicationSortByQuery
