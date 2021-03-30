@@ -59,6 +59,7 @@ import { SelectBusinessServiceFilter } from "./components/toolbar-search-filter/
 
 enum FilterKey {
   NAME = "name",
+  DESCRIPTION = "description",
   BUSINESS_SERVICE = "businessService",
 }
 
@@ -98,6 +99,10 @@ export const ApplicationInventory: React.FC = () => {
     {
       key: FilterKey.NAME,
       name: t("terms.name"),
+    },
+    {
+      key: FilterKey.DESCRIPTION,
+      name: t("terms.description"),
     },
     {
       key: FilterKey.BUSINESS_SERVICE,
@@ -141,6 +146,7 @@ export const ApplicationInventory: React.FC = () => {
     fetchApplications(
       {
         name: filtersValue.get(FilterKey.NAME)?.map((f) => f.key),
+        description: filtersValue.get(FilterKey.DESCRIPTION)?.map((f) => f.key),
         businessService: filtersValue
           .get(FilterKey.BUSINESS_SERVICE)
           ?.map((f) => f.key),
@@ -154,6 +160,7 @@ export const ApplicationInventory: React.FC = () => {
     fetchApplications(
       {
         name: filtersValue.get(FilterKey.NAME)?.map((f) => f.key),
+        description: filtersValue.get(FilterKey.DESCRIPTION)?.map((f) => f.key),
         businessService: filtersValue
           .get(FilterKey.BUSINESS_SERVICE)
           ?.map((f) => f.key),
@@ -424,6 +431,19 @@ export const ApplicationInventory: React.FC = () => {
                         <InputTextFilter
                           onApplyFilter={(filterText) =>
                             handleOnAddFilter(FilterKey.NAME, {
+                              key: filterText,
+                              node: filterText,
+                            })
+                          }
+                        />
+                      ),
+                    },
+                    {
+                      key: FilterKey.DESCRIPTION,
+                      input: (
+                        <InputTextFilter
+                          onApplyFilter={(filterText) =>
+                            handleOnAddFilter(FilterKey.DESCRIPTION, {
                               key: filterText,
                               node: filterText,
                             })
