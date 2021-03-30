@@ -68,7 +68,8 @@ http {
         }
 
         location /api/pathfinder {
-            return 404;
+            rewrite         ^/api/pathfinder/(.*)$ /pathfinder/$1 break;
+            proxy_pass      ${PATHFINDER_API_URL};
         }
 
         error_page 404 /404.html;
