@@ -1,17 +1,21 @@
 {
     "actions": {
         "assess": "Assess",
+        "back": "Back",
         "cancel": "Cancel",
         "create": "Create",
         "createNew": "Create new",
         "delete": "Delete",
         "edit": "Edit",
+        "next": "Next",
         "save": "Save"
     },
     "composed": {
+        "applicationAssessment": "Application assessment",
         "applicationInventory": "Application inventory",
         "noDataStateBody": "Create a new {{what}} to start seeing data here",
         "noDataStateTitle": "No {{what}} available",
+        "selectMany": "Select {{what}}",
         "selectOne": "Select a {{what}}"
     },
     "dialog": {
@@ -56,6 +60,8 @@
         "name": "Name",
         "notStarted": "Not started",
         "owner": "Owner",
+        "stakeholder(s)": "Stakeholder(s)",
+        "stakeholderGroup(s)": "Stakeholder group(s)",
         "stakeholderGroups": "Stakeholder groups",
         "stakeholders": "Stakeholders",
         "tags": "Tags",
