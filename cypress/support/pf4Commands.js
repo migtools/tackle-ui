@@ -16,8 +16,17 @@ Cypress.Commands.add(
 
 // Table
 
+/**
+ * Using cy.wait() to avoid race conditions. This is a workaround
+ * until https://github.com/cypress-io/cypress/issues/7306 is fixed.
+ */
 Cypress.Commands.add("pf4_table_rows", { prevSubject: "element" }, (table) => {
-  return cy.wrap(table).find("tbody > tr").not(".pf-m-expanded");
+  cy.wait(250);
+  return cy
+    .wrap(table)
+    .find("tbody > tr")
+    .not(".pf-m-expanded")
+    .not(".pf-c-table__expandable-row");
 });
 
 Cypress.Commands.add(
