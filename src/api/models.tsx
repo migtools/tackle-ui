@@ -60,6 +60,35 @@ export interface Assessment {
   status: "EMPTY" | "STARTED" | "COMPLETE";
   stakeholders?: number[];
   stakeholderGroups?: number[];
+  questionnaire: Questionnaire;
+}
+
+export interface Questionnaire {
+  categories: QuestionnaireSection[];
+}
+
+export interface QuestionnaireSection {
+  id: number;
+  order: number;
+  title: string;
+  comments: string;
+  questions: Question[];
+}
+
+export interface Question {
+  id: number;
+  order: number;
+  question: string;
+  description: string;
+  // variant: "checkbox" | "radioButton" | "inputText";
+  options?: QuestionOption[];
+}
+
+export interface QuestionOption {
+  id: number;
+  order: number;
+  option: string;
+  checked: boolean;
 }
 
 export interface BusinessServicePage {

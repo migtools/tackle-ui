@@ -1,17 +1,21 @@
 {
     "actions": {
         "assess": "Evaluar",
+        "back": "Atrás",
         "cancel": "Cancelar",
         "create": "Crear",
         "createNew": "Crear nuevo",
         "delete": "Eliminar",
         "edit": "Editar",
+        "next": "Siguiente",
         "save": "Guardar"
     },
     "composed": {
+        "applicationAssessment": "Evaluación de la aplicación",
         "applicationInventory": "Inventario de aplicaciones",
         "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
         "noDataStateTitle": "No existen {{what}} disponibles",
+        "selectMany": "Seleccione {{what}}",
         "selectOne": "Seleccione un(a) {{what}}"
     },
     "dialog": {
@@ -56,6 +60,8 @@
         "name": "Nombre",
         "notStarted": "No empezado",
         "owner": "Propietario",
+        "stakeholder(s)": "Interesado(s)",
+        "stakeholderGroup(s)": "Grupo(s) de interesados",
         "stakeholderGroups": "Grupos de interesados",
         "stakeholders": "Interesados",
         "tags": "Etiquetas",
