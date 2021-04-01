@@ -52,7 +52,7 @@ describe("Edit application", () => {
 
   it("Name, description, and comments", () => {
     // Open modal
-    cy.get(".pf-c-table").pf4_table_row_edit(0, "open");
+    cy.get(".pf-c-table").pf4_table_action_select(0, "Edit");
 
     // Verify primary button is disabled
     cy.get("button[aria-label='submit']").should("be.disabled");
@@ -82,7 +82,7 @@ describe("Edit application", () => {
     );
 
     // Open modal
-    cy.get(".pf-c-table").pf4_table_row_edit(0, "open");
+    cy.get(".pf-c-table").pf4_table_action_select(0, "Edit");
     cy.wait("@getBusinessServicesApi");
 
     // Verify primary button is disabled
