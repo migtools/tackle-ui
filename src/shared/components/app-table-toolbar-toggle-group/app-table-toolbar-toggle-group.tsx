@@ -13,8 +13,8 @@ interface FilterOption {
 
 export interface AppTableToolbarToggleGroupProps {
   options: FilterOption[];
-  filtersValue: Map<string, string[]>;
-  onDeleteFilter: (key: string, value: string[]) => void;
+  filtersValue: Map<string, (string | ToolbarChip)[]>;
+  onDeleteFilter: (key: string, value: (string | ToolbarChip)[]) => void;
 
   children: React.ReactNode;
 }
@@ -29,10 +29,6 @@ export const AppTableToolbarToggleGroup: React.FC<AppTableToolbarToggleGroupProp
     category: string | ToolbarChipGroup,
     chip: ToolbarChip | string
   ) => {
-    if (typeof chip !== "string") {
-      throw new Error("Can not delete filter. Chip must be a string");
-    }
-
     let categoryKey: string;
     if (typeof category === "string") {
       categoryKey = category;
@@ -40,15 +36,27 @@ export const AppTableToolbarToggleGroup: React.FC<AppTableToolbarToggleGroupProp
       categoryKey = category.key;
     }
 
+    let chipKey: string;
+    if (typeof chip === "string") {
+      chipKey = chip;
+    } else {
+      chipKey = chip.key;
+    }
+
     const currentFilters = filtersValue.get(categoryKey);
     if (!currentFilters) {
       throw new Error("Could not find category");
     }
 
-    onDeleteFilter(
-      categoryKey,
-      currentFilters.filter((f) => f !== chip)
-    );
+    const newFilters = currentFilters.filter((f) => {
+      if (typeof f === "string") {
+        return f !== chipKey;
+      } else {
+        return f.key !== chipKey;
+      }
+    });
+
+    onDeleteFilter(categoryKey, newFilters);
   };
 
   const handleOnDeleteChipGroup = (category: string | ToolbarChipGroup) => {

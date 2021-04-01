@@ -65,6 +65,7 @@ describe("Business service filtering table", () => {
       ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
     ).click();
 
+    cy.wait("@getBusinessServicesApi");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("service-a");
 
     // Second filter
@@ -76,6 +77,7 @@ describe("Business service filtering table", () => {
       ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
     ).click();
 
+    cy.wait("@getBusinessServicesApi");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("service-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(1).contains("service-k");
   });
@@ -94,6 +96,7 @@ describe("Business service filtering table", () => {
       ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
     ).click();
 
+    cy.wait("@getBusinessServicesApi");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("description-a");
 
     // Second filter
@@ -105,6 +108,7 @@ describe("Business service filtering table", () => {
       ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
     ).click();
 
+    cy.wait("@getBusinessServicesApi");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("description-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(1).contains("description-k");
   });
@@ -123,6 +127,7 @@ describe("Business service filtering table", () => {
       ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
     ).click();
 
+    cy.wait("@getBusinessServicesApi");
     cy.get(".pf-c-table > tbody > tr").contains("stakeholder-j");
   });
 });

@@ -6,7 +6,10 @@ describe("Application filtering table", () => {
     cy.kcLogin("alice").as("tokens");
 
     // Clean app inventory
-    cy.get("@tokens").then((tokens) => cy.tackleAppInventoryClean(tokens));
+    cy.get("@tokens").then((tokens) => {
+      cy.tackleAppInventoryClean(tokens);
+      cy.tackleControlsClean(tokens);
+    });
 
     // Create data
     const businessServices = [];
@@ -48,6 +51,9 @@ describe("Application filtering table", () => {
     cy.intercept("GET", "/api/application-inventory/application*").as(
       "getApplicationsApi"
     );
+    cy.intercept("GET", "/api/controls/business-service?*").as(
+      "getBusinessServiceApi"
+    );
 
     // Go to page
     cy.visit("/application-inventory");
@@ -64,6 +70,7 @@ describe("Application filtering table", () => {
       ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
     ).click();
 
+    cy.wait("@getApplicationsApi");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("application-a");
 
     // Second filter
@@ -75,7 +82,44 @@ describe("Application filtering table", () => {
       ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
     ).click();
 
+    cy.wait("@getApplicationsApi");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("application-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(1).contains("application-k");
+  });
+
+  it("By business service", () => {
+    cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("toggle");
+    cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("select", 1).click();
+
+    // First filter
+    cy.wait("@getApplicationsApi");
+    cy.wait("@getBusinessServiceApi");
+
+    cy.get(
+      ".pf-c-toolbar .pf-c-select > .pf-c-select__toggle > button"
+    ).click();
+    cy.get(
+      ".pf-c-toolbar .pf-c-select > .pf-c-select__menu > .pf-c-form__fieldset > .pf-c-select__menu-search > input"
+    ).type("service-a");
+    cy.get(
+      ".pf-c-toolbar .pf-c-select > .pf-c-select__menu > .pf-c-form__fieldset > .pf-c-select__menu-item > input"
+    ).check();
+
+    cy.wait("@getApplicationsApi");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("service-a");
+
+    // Second filter
+    cy.get(
+      ".pf-c-toolbar .pf-c-select > .pf-c-select__menu > .pf-c-form__fieldset > .pf-c-select__menu-search > input"
+    )
+      .clear()
+      .type("service-k");
+    cy.get(
+      ".pf-c-toolbar .pf-c-select > .pf-c-select__menu > .pf-c-form__fieldset > .pf-c-select__menu-item > input"
+    ).check();
+
+    cy.wait("@getApplicationsApi");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("service-a");
+    cy.get(".pf-c-table").pf4_table_rows().eq(1).contains("service-k");
   });
 });
