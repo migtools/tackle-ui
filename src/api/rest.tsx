@@ -317,6 +317,8 @@ export interface ApplicationSortByQuery {
 export const getApplications = (
   filters: {
     name?: string[];
+    description?: string[];
+    businessService?: string[];
   },
   pagination: PageQuery,
   sortBy?: ApplicationSortByQuery
@@ -340,6 +342,8 @@ export const getApplications = (
     sort: sortByQuery,
 
     name: filters.name,
+    description: filters.description,
+    businessService: filters.businessService,
   };
 
   const query: string[] = buildQuery(params);
