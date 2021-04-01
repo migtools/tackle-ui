@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@konveyor/lib-ui": "^2.0.0",
-    "@patternfly/patternfly": "4.87.3",
+    "@patternfly/patternfly": "4.96.2",
     "@patternfly/react-core": "4.97.3",
     "@patternfly/react-table": "4.23.3",
     "@react-keycloak/web": "^3.4.0",
