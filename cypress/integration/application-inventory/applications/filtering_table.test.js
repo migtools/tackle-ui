@@ -49,13 +49,13 @@ describe("Application filtering table", () => {
 
     // Inteceptors
     cy.intercept("GET", "/api/application-inventory/application*").as(
-      "getApplicationsApi"
+        "getApplicationsApi"
     );
     cy.intercept("GET", "/api/controls/business-service?*").as(
-      "getBusinessServicesApi"
+        "getBusinessServicesApi"
     );
     cy.intercept("GET", "/api/controls/business-service/*").as(
-      "getBusinessServiceApi"
+        "getBusinessServiceApi"
     );
 
     // Go to page
@@ -98,10 +98,10 @@ describe("Application filtering table", () => {
     cy.wait("@getApplicationsApi");
 
     cy.get(
-      ".pf-c-toolbar .pf-c-toolbar__content input[aria-label='filter-text']"
+        ".pf-c-toolbar .pf-c-toolbar__content input[aria-label='filter-text']"
     ).type("description-a");
     cy.get(
-      ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
+        ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
     ).click();
 
     cy.wait("@getApplicationsApi");
@@ -109,10 +109,10 @@ describe("Application filtering table", () => {
 
     // Second filter
     cy.get(
-      ".pf-c-toolbar .pf-c-toolbar__content input[aria-label='filter-text']"
+        ".pf-c-toolbar .pf-c-toolbar__content input[aria-label='filter-text']"
     ).type("description-k");
     cy.get(
-      ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
+        ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
     ).click();
 
     cy.wait("@getApplicationsApi");
@@ -122,39 +122,36 @@ describe("Application filtering table", () => {
 
   it("By business service", () => {
     cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("toggle");
-    cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("select", 2).click();
+    cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("select", 1).click();
 
     // First filter
     cy.wait("@getApplicationsApi");
-    cy.wait("@getBusinessServicesApi");
+    cy.wait("@getBusinessServiceApi");
 
     cy.get(
-      ".pf-c-toolbar .pf-c-select > .pf-c-select__toggle > button"
+        ".pf-c-toolbar .pf-c-select > .pf-c-select__toggle > button"
     ).click();
     cy.get(
-      ".pf-c-toolbar .pf-c-select > .pf-c-select__menu > .pf-c-form__fieldset > .pf-c-select__menu-search > input"
+        ".pf-c-toolbar .pf-c-select > .pf-c-select__menu > .pf-c-form__fieldset > .pf-c-select__menu-search > input"
     ).type("service-a");
     cy.get(
-      ".pf-c-toolbar .pf-c-select > .pf-c-select__menu > .pf-c-form__fieldset > .pf-c-select__menu-item > input"
+        ".pf-c-toolbar .pf-c-select > .pf-c-select__menu > .pf-c-form__fieldset > .pf-c-select__menu-item > input"
     ).check();
 
     cy.wait("@getApplicationsApi");
-    cy.wait("@getBusinessServiceApi"); // Wait for businessService inside row
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("service-a");
 
     // Second filter
     cy.get(
-      ".pf-c-toolbar .pf-c-select > .pf-c-select__menu > .pf-c-form__fieldset > .pf-c-select__menu-search > input"
+        ".pf-c-toolbar .pf-c-select > .pf-c-select__menu > .pf-c-form__fieldset > .pf-c-select__menu-search > input"
     )
-      .clear()
-      .type("service-k");
+        .clear()
+        .type("service-k");
     cy.get(
-      ".pf-c-toolbar .pf-c-select > .pf-c-select__menu > .pf-c-form__fieldset > .pf-c-select__menu-item > input"
+        ".pf-c-toolbar .pf-c-select > .pf-c-select__menu > .pf-c-form__fieldset > .pf-c-select__menu-item > input"
     ).check();
 
     cy.wait("@getApplicationsApi");
-    cy.wait("@getBusinessServiceApi"); // Wait for businessService inside row
-    cy.wait("@getBusinessServiceApi"); // Wait for businessService inside row
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("service-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(1).contains("service-k");
   });
