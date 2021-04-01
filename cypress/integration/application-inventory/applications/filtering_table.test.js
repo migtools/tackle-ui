@@ -90,7 +90,7 @@ describe("Application filtering table", () => {
     cy.get(".pf-c-table").pf4_table_rows().eq(1).contains("application-k");
   });
 
-  it("By business description", () => {
+  it("By description", () => {
     cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("toggle");
     cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("select", 1).click();
 
