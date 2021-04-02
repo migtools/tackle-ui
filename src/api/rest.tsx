@@ -157,7 +157,7 @@ export const getStakeholders = (
         field = "jobFunction.role";
         break;
       case StakeholderSortBy.STAKEHOLDER_GROUPS:
-        field = "stakeholderGroups.size";
+        field = "stakeholderGroups.size()";
         break;
       default:
         throw new Error("Could not define SortBy field name");
@@ -224,7 +224,7 @@ export const getStakeholderGroups = (
         field = "name";
         break;
       case StakeholderGroupSortBy.STAKEHOLDERS:
-        field = "stakeholders.size";
+        field = "stakeholders.size()";
         break;
       default:
         throw new Error("Could not define SortBy field name");
