@@ -43,11 +43,11 @@ export const ApplicationAssessment: React.FC<ApplicationAssessmentProps> = ({
     <>
       {application.id && (
         <RemoteAssessment applicationId={application.id}>
-          {({ isFetching, fetchError, assessment }) => {
+          {({ isFetching, fetchError, fetchCount, assessment }) => {
             if (fetchError) {
               return t("terms.unknown");
             }
-            if (isFetching) {
+            if (isFetching || fetchCount === 0) {
               return "";
             }
 
