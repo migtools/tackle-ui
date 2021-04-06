@@ -19,6 +19,7 @@ import {
   ToolbarItem,
 } from "@patternfly/react-core";
 import {
+  cellWidth,
   expandable,
   IAction,
   ICell,
@@ -179,7 +180,7 @@ export const ApplicationInventory: React.FC = () => {
     },
     { title: t("terms.description"), transforms: [] },
     { title: t("terms.businessService"), transforms: [] },
-    { title: t("terms.assessment"), transforms: [] },
+    { title: t("terms.assessment"), transforms: [cellWidth(10)] },
   ];
 
   const rows: IRow[] = [];
