@@ -39,8 +39,6 @@ import {
   AppTableWithControls,
   ConditionalRender,
   NoDataEmptyState,
-  StatusIconAssessment,
-  StatusIconAssessmentType,
 } from "shared/components";
 import {
   useDeleteApplication,
@@ -48,17 +46,17 @@ import {
   useFetchApplications,
 } from "shared/hooks";
 
-import { Application, Assessment, SortByQuery } from "api/models";
+import { Application, SortByQuery } from "api/models";
 import { ApplicationSortBy, ApplicationSortByQuery } from "api/rest";
 import { getAxiosErrorMessage } from "utils/utils";
 
 import { NewApplicationModal } from "./components/new-application-modal";
 import { UpdateApplicationModal } from "./components/update-application-modal";
 import { RemoteBusinessService } from "./components/remote-business-service";
-import { RemoteAssessment } from "./components/remote-assessment";
 import { ToolbarSearchFilter } from "./components/toolbar-search-filter";
 import { InputTextFilter } from "./components/toolbar-search-filter/input-text-filter";
 import { SelectBusinessServiceFilter } from "./components/toolbar-search-filter/select-business-service-filter";
+import { ApplicationAssessment } from "./components/application-assessment";
 
 enum FilterKey {
   NAME = "name",
@@ -92,21 +90,6 @@ const ENTITY_FIELD = "entity";
 
 const getRow = (rowData: IRowData): Application => {
   return rowData[ENTITY_FIELD];
-};
-
-const getStatusIconFrom = (
-  assessment: Assessment
-): StatusIconAssessmentType => {
-  switch (assessment.status) {
-    case "EMPTY":
-      return "NotStarted";
-    case "STARTED":
-      return "InProgress";
-    case "COMPLETE":
-      return "Completed";
-    default:
-      return "NotStarted";
-  }
 };
 
 export const ApplicationInventory: React.FC = () => {
@@ -230,28 +213,7 @@ export const ApplicationInventory: React.FC = () => {
           ),
         },
         {
-          title: (
-            <>
-              {item.id && (
-                <RemoteAssessment applicationId={item.id}>
-                  {({ assessment, fetchError }) => (
-                    <ConditionalRender
-                      when={!!fetchError}
-                      then={t("terms.unknown")}
-                    >
-                      {assessment ? (
-                        <StatusIconAssessment
-                          status={getStatusIconFrom(assessment)}
-                        />
-                      ) : (
-                        <StatusIconAssessment status="NotStarted" />
-                      )}
-                    </ConditionalRender>
-                  )}
-                </RemoteAssessment>
-              )}
-            </>
-          ),
+          title: <>{<ApplicationAssessment application={item} />}</>,
         },
       ],
     });
