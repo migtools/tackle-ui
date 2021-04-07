@@ -22,9 +22,7 @@ const businessServiceToOption = (
   compareTo: (selectOption: any) => {
     // If "string" we are just filtering
     if (typeof selectOption === "string") {
-      return value.name
-        .toLowerCase()
-        .includes(selectOption.toString().toLowerCase());
+      return value.name.toLowerCase().includes(selectOption.toLowerCase());
     }
     // If not "string" we are selecting a checkbox
     else {
