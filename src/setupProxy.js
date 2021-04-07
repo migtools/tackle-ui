@@ -4,11 +4,8 @@ const TACKLE_CONTROLS_HOST =
   process.env.TACKLE_CONTROLS_HOST || "http://localhost:8081";
 const TACKLE_APPLICATION_INVENTORY_HOST =
   process.env.TACKLE_APPLICATION_INVENTORY_HOST || "http://localhost:8082";
-
-console.log("Using TACKLE_CONTROLS_HOST=" + TACKLE_CONTROLS_HOST);
-console.log(
-  "Using TACKLE_APPLICATION_INVENTORY_HOST=" + TACKLE_APPLICATION_INVENTORY_HOST
-);
+const TACKLE_PATHFINDER_HOST =
+  process.env.TACKLE_PATHFINDER_HOST || "http://localhost:8083";
 
 module.exports = function (app) {
   app.use(
@@ -38,7 +35,8 @@ module.exports = function (app) {
   app.use(
     "/api/pathfinder",
     createProxyMiddleware({
-      target: "http://localhost:8083",
+      target: TACKLE_PATHFINDER_HOST,
+      secure: false,
       changeOrigin: true,
       pathRewrite: {
         "^/api/pathfinder": "/pathfinder",
