@@ -16,9 +16,62 @@ Cypress.Commands.add(
 
 // Table
 
+/**
+ * Using cy.wait() to avoid race conditions. This is a workaround
+ * until https://github.com/cypress-io/cypress/issues/7306 is fixed.
+ */
 Cypress.Commands.add("pf4_table_rows", { prevSubject: "element" }, (table) => {
-  return cy.wrap(table).find("tbody > tr").not(".pf-m-expanded");
+  cy.wait(250);
+  return cy
+    .wrap(table)
+    .find("tbody > tr")
+    .not(".pf-m-expanded")
+    .not(".pf-c-table__expandable-row");
 });
+
+Cypress.Commands.add(
+  "pf4_table_row_check",
+  { prevSubject: "element" },
+  (table, rowIndex) => {
+    cy.wrap(table)
+      .find("tbody > tr > td.pf-c-table__check > input")
+      .eq(rowIndex)
+      .check();
+  }
+);
+
+Cypress.Commands.add(
+  "pf4_table_row_edit",
+  { prevSubject: "element" },
+  (table, rowIndex, action) => {
+    switch (action) {
+      case "open":
+        cy.wrap(table)
+          .find("tbody > tr > td.pf-c-table__inline-edit-action")
+          .eq(rowIndex)
+          .find("button")
+          .click();
+        break;
+      case "save":
+        cy.wrap(table)
+          .find("tbody > tr > td.pf-c-table__inline-edit-action")
+          .eq(rowIndex)
+          .find("button")
+          .eq(0)
+          .click();
+        break;
+      case "cancel":
+        cy.wrap(table)
+          .find("tbody > tr > td.pf-c-table__inline-edit-action")
+          .eq(rowIndex)
+          .find("button")
+          .eq(1)
+          .click();
+      default:
+        break;
+    }
+  }
+);
 
 Cypress.Commands.add(
   "pf4_table_action_select",

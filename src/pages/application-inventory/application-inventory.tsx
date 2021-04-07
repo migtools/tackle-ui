@@ -19,6 +19,7 @@ import {
   ToolbarItem,
 } from "@patternfly/react-core";
 import {
+  cellWidth,
   expandable,
   IAction,
   ICell,
@@ -56,6 +57,7 @@ import { RemoteBusinessService } from "./components/remote-business-service";
 import { ToolbarSearchFilter } from "./components/toolbar-search-filter";
 import { InputTextFilter } from "./components/toolbar-search-filter/input-text-filter";
 import { SelectBusinessServiceFilter } from "./components/toolbar-search-filter/select-business-service-filter";
+import { ApplicationAssessment } from "./components/application-assessment";
 
 enum FilterKey {
   NAME = "name",
@@ -178,6 +180,7 @@ export const ApplicationInventory: React.FC = () => {
     },
     { title: t("terms.description"), transforms: [] },
     { title: t("terms.businessService"), transforms: [] },
+    { title: t("terms.assessment"), transforms: [cellWidth(10)] },
   ];
 
   const rows: IRow[] = [];
@@ -195,14 +198,23 @@ export const ApplicationInventory: React.FC = () => {
         },
         {
           title: (
-            <RemoteBusinessService
-              businessServiceId={Number(item.businessService)}
-            >
-              {({ businessService, fetchError }) =>
-                fetchError ? t("terms.unknown") : businessService?.name || ""
-              }
-            </RemoteBusinessService>
+            <>
+              {item.businessService && (
+                <RemoteBusinessService
+                  businessServiceId={Number(item.businessService)}
+                >
+                  {({ businessService, fetchError }) =>
+                    fetchError
+                      ? t("terms.unknown")
+                      : businessService?.name || ""
+                  }
+                </RemoteBusinessService>
+              )}
+            </>
           ),
+        },
+        {
+          title: <>{<ApplicationAssessment application={item} />}</>,
         },
       ],
     });
