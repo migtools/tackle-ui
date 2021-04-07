@@ -65,10 +65,10 @@ describe("Stakeholder groups filtering table", () => {
       ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
     ).click();
 
+    cy.wait("@getStakeholderGroupsApi");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("group-a");
 
     // Second filter
-
     cy.get(
       ".pf-c-toolbar .pf-c-toolbar__content input[aria-label='filter-text']"
     ).type("group-k");
@@ -76,6 +76,7 @@ describe("Stakeholder groups filtering table", () => {
       ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
     ).click();
 
+    cy.wait("@getStakeholderGroupsApi");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("group-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(1).contains("group-k");
   });
@@ -94,10 +95,10 @@ describe("Stakeholder groups filtering table", () => {
       ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
     ).click();
 
+    cy.wait("@getStakeholderGroupsApi");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("description-a");
 
     // Second filter
-
     cy.get(
       ".pf-c-toolbar .pf-c-toolbar__content input[aria-label='filter-text']"
     ).type("description-k");
@@ -105,6 +106,7 @@ describe("Stakeholder groups filtering table", () => {
       ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
     ).click();
 
+    cy.wait("@getStakeholderGroupsApi");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("description-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(1).contains("description-k");
   });
@@ -123,6 +125,7 @@ describe("Stakeholder groups filtering table", () => {
       ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
     ).click();
 
+    cy.wait("@getStakeholderGroupsApi");
     cy.get(".pf-c-table").pf4_table_row_expand(0);
     cy.get(".pf-c-table > tbody > tr.pf-c-table__expandable-row")
       .find(".pf-c-description-list .pf-c-description-list__text")

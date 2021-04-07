@@ -18,7 +18,7 @@ type OptionLike = string | SelectOptionObject | OptionWithValue;
 export interface ISimpleSelectProps
   extends Omit<
     SelectProps,
-    "onChange" | "isExpanded" | "onToggle" | "onSelect" | "selections" | "value"
+    "onChange" | "isOpen" | "onToggle" | "onSelect" | "selections" | "value"
   > {
   "aria-label": string;
   onChange: (selection: OptionLike) => void;
@@ -43,7 +43,9 @@ export const SimpleSelect: React.FC<ISimpleSelectProps> = ({
       onToggle={setIsOpen}
       onSelect={(_, selection: OptionLike) => {
         onChange(selection);
-        setIsOpen(false);
+        if (props.variant !== "checkbox") {
+          setIsOpen(false);
+        }
       }}
       selections={value}
       {...props}

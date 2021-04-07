@@ -15,6 +15,7 @@ import {
   EmptyStateIcon,
   EmptyStateVariant,
   Title,
+  ToolbarChip,
   ToolbarGroup,
   ToolbarItem,
 } from "@patternfly/react-core";
@@ -298,9 +299,14 @@ export const StakeholderGroups: React.FC = () => {
     handlePaginationChange({ page: 1 });
   };
 
-  const handleOnDeleteFilter = (key: string, value: string[]) => {
+  const handleOnDeleteFilter = (
+    key: string,
+    value: (string | ToolbarChip)[]
+  ) => {
     const filterKey: FilterKey = key as FilterKey;
-    setFiltersValue((current) => new Map(current).set(filterKey, value));
+    setFiltersValue((current) =>
+      new Map(current).set(filterKey, value as string[])
+    );
   };
 
   // Create Modal
