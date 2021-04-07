@@ -37,7 +37,7 @@ spec:
             - name: PATHFINDER_API_URL
               value: "http://tackle-pathfinder:8080"
             - name: SSO_REALM
-              value: quarkus
+              value: konveyor
             - name: SSO_CLIENT_ID
               value: tackle-ui
             - name: SSO_SERVER_URL
