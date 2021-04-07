@@ -15,10 +15,12 @@ import {
   PageSectionVariants,
   Text,
   TextContent,
+  ToolbarChip,
   ToolbarGroup,
   ToolbarItem,
 } from "@patternfly/react-core";
 import {
+  cellWidth,
   expandable,
   IAction,
   ICell,
@@ -40,9 +42,6 @@ import {
   AppTableWithControls,
   ConditionalRender,
   NoDataEmptyState,
-  SearchFilter,
-  StatusIconAssessment,
-  StatusIconAssessmentType,
 } from "shared/components";
 import {
   useDeleteApplication,
@@ -50,7 +49,6 @@ import {
   useFetchApplications,
 } from "shared/hooks";
 
-import { formatPath, Paths } from "Paths";
 import { Application, Assessment, SortByQuery } from "api/models";
 import {
   ApplicationSortBy,
@@ -63,10 +61,16 @@ import { getAxiosErrorMessage } from "utils/utils";
 import { NewApplicationModal } from "./components/new-application-modal";
 import { UpdateApplicationModal } from "./components/update-application-modal";
 import { RemoteBusinessService } from "./components/remote-business-service";
-import { RemoteAssessment } from "./components/remote-assessment";
+import { ToolbarSearchFilter } from "./components/toolbar-search-filter";
+import { InputTextFilter } from "./components/toolbar-search-filter/input-text-filter";
+import { SelectBusinessServiceFilter } from "./components/toolbar-search-filter/select-business-service-filter";
+import { ApplicationAssessment } from "./components/application-assessment";
+import { formatPath, Paths } from "Paths";
 
 enum FilterKey {
   NAME = "name",
+  DESCRIPTION = "description",
+  BUSINESS_SERVICE = "businessService",
 }
 
 const toSortByQuery = (
@@ -97,52 +101,40 @@ const getRow = (rowData: IRowData): Application => {
   return rowData[ENTITY_FIELD];
 };
 
-const getStatusIconFrom = (
-  assessment: Assessment
-): StatusIconAssessmentType => {
-  switch (assessment.status) {
-    case "EMPTY":
-      return "NotStarted";
-    case "STARTED":
-      return "InProgress";
-    case "COMPLETE":
-      return "Completed";
-    default:
-      return "NotStarted";
-  }
-};
-
 export const ApplicationList: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const history = useHistory();
-
-  const { deleteApplication } = useDeleteApplication();
-  const {
-    applications,
-    isFetching,
-    fetchError,
-    fetchApplications,
-  } = useFetchApplications(true);
-
-  // Filters
 
   const filters = [
     {
       key: FilterKey.NAME,
       name: t("terms.name"),
     },
+    {
+      key: FilterKey.DESCRIPTION,
+      name: t("terms.description"),
+    },
+    {
+      key: FilterKey.BUSINESS_SERVICE,
+      name: t("terms.businessService"),
+    },
   ];
-  const [filtersValue, setFiltersValue] = useState<Map<FilterKey, string[]>>(
-    new Map([])
-  );
-
-  // Create and edit app modal states
+  const [filtersValue, setFiltersValue] = useState<
+    Map<FilterKey, ToolbarChip[]>
+  >(new Map([]));
 
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
   const [rowToUpdate, setRowToUpdate] = useState<Application>();
 
-  // Fetch data
+  const { deleteApplication } = useDeleteApplication();
+
+  const {
+    applications,
+    isFetching,
+    fetchError,
+    fetchApplications,
+  } = useFetchApplications(true);
 
   const {
     paginationQuery,
@@ -153,20 +145,28 @@ export const ApplicationList: React.FC = () => {
     sortByQuery: { direction: "asc", index: 2 },
   });
 
-  useEffect(() => {
+  const refreshTable = useCallback(() => {
     fetchApplications(
       {
-        name: filtersValue.get(FilterKey.NAME),
+        name: filtersValue.get(FilterKey.NAME)?.map((f) => f.key),
+        description: filtersValue.get(FilterKey.DESCRIPTION)?.map((f) => f.key),
+        businessService: filtersValue
+          .get(FilterKey.BUSINESS_SERVICE)
+          ?.map((f) => f.key),
       },
       paginationQuery,
       toSortByQuery(sortByQuery)
     );
   }, [filtersValue, paginationQuery, sortByQuery, fetchApplications]);
 
-  const refreshTable = useCallback(() => {
+  useEffect(() => {
     fetchApplications(
       {
-        name: filtersValue.get(FilterKey.NAME),
+        name: filtersValue.get(FilterKey.NAME)?.map((f) => f.key),
+        description: filtersValue.get(FilterKey.DESCRIPTION)?.map((f) => f.key),
+        businessService: filtersValue
+          .get(FilterKey.BUSINESS_SERVICE)
+          ?.map((f) => f.key),
       },
       paginationQuery,
       toSortByQuery(sortByQuery)
@@ -202,7 +202,7 @@ export const ApplicationList: React.FC = () => {
     },
     { title: t("terms.description"), transforms: [] },
     { title: t("terms.businessService"), transforms: [] },
-    { title: t("terms.assessment"), transforms: [] },
+    { title: t("terms.assessment"), transforms: [cellWidth(10)] },
     {
       title: "",
       props: {
@@ -245,28 +245,7 @@ export const ApplicationList: React.FC = () => {
           ),
         },
         {
-          title: (
-            <>
-              {item.id && (
-                <RemoteAssessment applicationId={item.id}>
-                  {({ assessment, fetchError }) => (
-                    <ConditionalRender
-                      when={!!fetchError}
-                      then={t("terms.unknown")}
-                    >
-                      {assessment ? (
-                        <StatusIconAssessment
-                          status={getStatusIconFrom(assessment)}
-                        />
-                      ) : (
-                        <StatusIconAssessment status="NotStarted" />
-                      )}
-                    </ConditionalRender>
-                  )}
-                </RemoteAssessment>
-              )}
-            </>
-          ),
+          title: <ApplicationAssessment application={item} />,
         },
         {
           title: (
@@ -284,22 +263,24 @@ export const ApplicationList: React.FC = () => {
       ],
     });
 
-    rows.push({
-      parent: rows.length - 1,
-      fullWidth: false,
-      cells: [
-        <div className="pf-c-table__expandable-row-content">
-          <DescriptionList isHorizontal>
-            <DescriptionListGroup>
-              <DescriptionListTerm>{t("terms.comments")}</DescriptionListTerm>
-              <DescriptionListDescription>
-                {item.comments}
-              </DescriptionListDescription>
-            </DescriptionListGroup>
-          </DescriptionList>
-        </div>,
-      ],
-    });
+    if (isExpanded) {
+      rows.push({
+        parent: rows.length - 1,
+        fullWidth: false,
+        cells: [
+          <div className="pf-c-table__expandable-row-content">
+            <DescriptionList isHorizontal>
+              <DescriptionListGroup>
+                <DescriptionListTerm>{t("terms.comments")}</DescriptionListTerm>
+                <DescriptionListDescription>
+                  {item.comments}
+                </DescriptionListDescription>
+              </DescriptionListGroup>
+            </DescriptionList>
+          </div>,
+        ],
+      });
+    }
   });
 
   const actionResolver = (rowData: IRowData): (IAction | ISeparator)[] => {
@@ -383,7 +364,7 @@ export const ApplicationList: React.FC = () => {
     );
   };
 
-  // Advanced filters event handlers
+  // Advanced filters
 
   const handleOnClearAllFilters = () => {
     setFiltersValue((current) => {
@@ -395,22 +376,35 @@ export const ApplicationList: React.FC = () => {
     });
   };
 
-  const handleOnAddFilter = (key: string, filterText: string) => {
+  const handleOnAddFilter = (
+    key: string,
+    value: ToolbarChip | ToolbarChip[]
+  ) => {
     const filterKey: FilterKey = key as FilterKey;
+
     setFiltersValue((current) => {
-      const values: string[] = current.get(filterKey) || [];
-      return new Map(current).set(filterKey, [...values, filterText]);
+      if (Array.isArray(value)) {
+        return new Map(current).set(filterKey, value);
+      } else {
+        const currentChips: ToolbarChip[] = current.get(filterKey) || [];
+        return new Map(current).set(filterKey, [...currentChips, value]);
+      }
     });
 
     handlePaginationChange({ page: 1 });
   };
 
-  const handleOnDeleteFilter = (key: string, value: string[]) => {
+  const handleOnDeleteFilter = (
+    key: string,
+    value: (string | ToolbarChip)[]
+  ) => {
     const filterKey: FilterKey = key as FilterKey;
-    setFiltersValue((current) => new Map(current).set(filterKey, value));
+    setFiltersValue((current) =>
+      new Map(current).set(filterKey, value as ToolbarChip[])
+    );
   };
 
-  // Create App modal
+  // Create Modal
 
   const handleOnOpenCreateNewModal = () => {
     setIsNewModalOpen(true);
@@ -434,7 +428,7 @@ export const ApplicationList: React.FC = () => {
     setIsNewModalOpen(false);
   };
 
-  // Update app Modal
+  // Update Modal
 
   const handleOnUpdated = () => {
     setRowToUpdate(undefined);
@@ -530,9 +524,50 @@ export const ApplicationList: React.FC = () => {
                 filtersValue={filtersValue}
                 onDeleteFilter={handleOnDeleteFilter}
               >
-                <SearchFilter
+                <ToolbarSearchFilter
                   options={filters}
-                  onApplyFilter={handleOnAddFilter}
+                  filterInputs={[
+                    {
+                      key: FilterKey.NAME,
+                      input: (
+                        <InputTextFilter
+                          onApplyFilter={(filterText) =>
+                            handleOnAddFilter(FilterKey.NAME, {
+                              key: filterText,
+                              node: filterText,
+                            })
+                          }
+                        />
+                      ),
+                    },
+                    {
+                      key: FilterKey.DESCRIPTION,
+                      input: (
+                        <InputTextFilter
+                          onApplyFilter={(filterText) =>
+                            handleOnAddFilter(FilterKey.DESCRIPTION, {
+                              key: filterText,
+                              node: filterText,
+                            })
+                          }
+                        />
+                      ),
+                    },
+                    {
+                      key: FilterKey.BUSINESS_SERVICE,
+                      input: (
+                        <SelectBusinessServiceFilter
+                          value={filtersValue.get(FilterKey.BUSINESS_SERVICE)}
+                          onApplyFilter={(values) =>
+                            handleOnAddFilter(
+                              FilterKey.BUSINESS_SERVICE,
+                              values
+                            )
+                          }
+                        />
+                      ),
+                    },
+                  ]}
                 />
               </AppTableToolbarToggleGroup>
             }
