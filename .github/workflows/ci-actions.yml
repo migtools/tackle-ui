@@ -335,11 +335,7 @@ jobs:
         browser: [chrome]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: Build
-        run: |
-          yarn install
-          yarn build:instrumentation
+        uses: actions/checkout@v2      
       - name: Setup Minikube
         uses: manusa/actions-setup-minikube@v2.3.1
         with:
@@ -373,6 +369,10 @@ jobs:
           kubectl wait deployment/tackle-pathfinder --for condition=available --timeout=-1s -n tackle
       - name: Kubectl create ingress
         run: kubectl create -f kubernetes/ing.yml -n tackle
+      - name: Build UI
+        run: |
+          yarn install
+          yarn build:instrumentation
       - name: Wait for Ingress
         run: |
           bash -c 'external_ip="";
