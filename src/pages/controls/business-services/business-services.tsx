@@ -21,7 +21,7 @@ import {
   sortable,
   TableText,
 } from "@patternfly/react-table";
-import { AddCircleOIcon } from "@patternfly/react-icons";
+import { CubesIcon } from "@patternfly/react-icons";
 
 import { useDispatch } from "react-redux";
 import { alertActions } from "store/alert";
@@ -371,7 +371,7 @@ export const BusinessServices: React.FC = () => {
           }
           noDataState={
             <EmptyState variant={EmptyStateVariant.small}>
-              <EmptyStateIcon icon={AddCircleOIcon} />
+              <EmptyStateIcon icon={CubesIcon} />
               <Title headingLevel="h2" size="lg">
                 No business services available
               </Title>
