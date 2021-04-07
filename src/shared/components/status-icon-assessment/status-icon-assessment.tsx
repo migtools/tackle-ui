@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Flex, FlexItem, SpinnerProps } from "@patternfly/react-core";
 import {
   CheckCircleIcon,
-  ErrorCircleOIcon,
+  TimesCircleIcon,
   InProgressIcon,
 } from "@patternfly/react-icons";
 import { SVGIconProps } from "@patternfly/react-icons/dist/js/createIcon";
@@ -30,7 +30,7 @@ type IconListType = {
 };
 const iconList: IconListType = {
   NotStarted: {
-    Icon: ErrorCircleOIcon,
+    Icon: TimesCircleIcon,
     color: unknownColor,
   },
   InProgress: {
