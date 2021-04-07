@@ -19,6 +19,7 @@ import {
   ToolbarItem,
 } from "@patternfly/react-core";
 import {
+  cellWidth,
   expandable,
   IAction,
   ICell,
@@ -55,6 +56,7 @@ import { UpdateApplicationModal } from "./components/update-application-modal";
 import { ToolbarSearchFilter } from "./components/toolbar-search-filter";
 import { InputTextFilter } from "./components/toolbar-search-filter/input-text-filter";
 import { SelectBusinessServiceFilter } from "./components/toolbar-search-filter/select-business-service-filter";
+import { ApplicationAssessment } from "./components/application-assessment";
 import { ApplicationBusinessService } from "./components/application-business-service";
 
 enum FilterKey {
@@ -178,6 +180,7 @@ export const ApplicationInventory: React.FC = () => {
     },
     { title: t("terms.description"), transforms: [] },
     { title: t("terms.businessService"), transforms: [] },
+    { title: t("terms.assessment"), transforms: [cellWidth(10)] },
   ];
 
   const rows: IRow[] = [];
@@ -195,6 +198,9 @@ export const ApplicationInventory: React.FC = () => {
         },
         {
           title: <ApplicationBusinessService application={item} />,
+        },
+        {
+          title: <>{<ApplicationAssessment application={item} />}</>,
         },
       ],
     });

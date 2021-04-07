@@ -12,3 +12,4 @@ export { SearchFilter } from "./search-filter";
 export { SearchInput } from "./search-input";
 export * from "./simple-select";
 export { SimpleFilterDropdown } from "./simple-filter-dropdown";
+export * from "./status-icon-assessment";
