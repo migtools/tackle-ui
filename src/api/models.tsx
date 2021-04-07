@@ -52,6 +52,16 @@ export interface Application {
   businessService?: string;
 }
 
+//
+
+export interface Assessment {
+  id?: number;
+  applicationId: number;
+  status: "EMPTY" | "STARTED" | "COMPLETE";
+  stakeholders?: number[];
+  stakeholderGroups?: number[];
+}
+
 export interface BusinessServicePage {
   _embedded: {
     "business-service": BusinessService[];

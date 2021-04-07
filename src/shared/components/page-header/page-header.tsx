@@ -13,13 +13,15 @@ import { HorizontalNav } from "../horizontal-nav/horizontal-nav";
 
 export interface PageHeaderProps {
   title: string;
+  description?: React.ReactNode;
   breadcrumbs: { title: string; path: string }[];
   menuActions: { label: string; callback: () => void }[];
-  navItems: { title: string; path: string }[];
+  navItems?: { title: string; path: string }[];
 }
 
 export const PageHeader: React.FC<PageHeaderProps> = ({
   title,
+  description,
   breadcrumbs,
   menuActions,
   navItems,
@@ -34,6 +36,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
           <SplitItem isFilled>
             <TextContent>
               <Text component="h1">{title}</Text>
+              {description}
             </TextContent>
           </SplitItem>
           {menuActions.length > 0 && (
@@ -43,9 +46,11 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
           )}
         </Split>
       </StackItem>
-      <StackItem>
-        <HorizontalNav navItems={navItems} />
-      </StackItem>
+      {navItems && (
+        <StackItem>
+          <HorizontalNav navItems={navItems} />
+        </StackItem>
+      )}
     </Stack>
   );
 };

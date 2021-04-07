@@ -15,7 +15,9 @@ describe("useFetchJobFunctions", () => {
       total_count: 0,
     };
 
-    new MockAdapter(axios).onGet(`${JOB_FUNCTIONS}?size=1000`).reply(200, data);
+    new MockAdapter(axios)
+      .onGet(`${JOB_FUNCTIONS}?page=0&size=1000&sort=role`)
+      .reply(200, data);
 
     // Use hook
     const { result, waitForNextUpdate } = renderHook(() =>
@@ -23,7 +25,7 @@ describe("useFetchJobFunctions", () => {
     );
 
     const {
-      JobFunctions: items,
+      jobFunctions: items,
       isFetching,
       fetchError,
       fetchAllJobFunctions: fetchAll,
@@ -40,7 +42,7 @@ describe("useFetchJobFunctions", () => {
     // Fetch finished
     await waitForNextUpdate();
     expect(result.current.isFetching).toBe(false);
-    expect(result.current.JobFunctions).toMatchObject({
+    expect(result.current.jobFunctions).toMatchObject({
       data: [],
       meta: { count: 0 },
     });

@@ -12,10 +12,12 @@ import {
   JobFunctionPage,
   ApplicationPage,
   Application,
+  Assessment,
 } from "./models";
 
 export const CONTROLS_BASE_URL = "controls";
 export const APP_INVENTORY_BASE_URL = "application-inventory";
+export const PATHFINDER_BASE_URL = "pathfinder";
 
 export const BUSINESS_SERVICES = CONTROLS_BASE_URL + "/business-service";
 export const STAKEHOLDERS = CONTROLS_BASE_URL + "/stakeholder";
@@ -23,6 +25,8 @@ export const STAKEHOLDER_GROUPS = CONTROLS_BASE_URL + "/stakeholder-group";
 export const JOB_FUNCTIONS = CONTROLS_BASE_URL + "/job-function";
 
 export const APPLICATIONS = APP_INVENTORY_BASE_URL + "/application";
+
+export const ASSESSMENTS = PATHFINDER_BASE_URL + "/assessments";
 
 const headers = { Accept: "application/hal+json" };
 
@@ -98,10 +102,6 @@ export const getBusinessServices = (
   return APIClient.get(`${BUSINESS_SERVICES}?${query.join("&")}`, { headers });
 };
 
-export const getAllBusinessServices = (): AxiosPromise<BusinessServicePage> => {
-  return APIClient.get(`${BUSINESS_SERVICES}?size=1000`, { headers });
-};
-
 export const deleteBusinessService = (id: number | string): AxiosPromise => {
   return APIClient.delete(`${BUSINESS_SERVICES}/${id}`);
 };
@@ -158,10 +158,10 @@ export const getStakeholders = (
         field = "displayName";
         break;
       case StakeholderSortBy.JOB_FUNCTION:
-        field = "jobFunction";
+        field = "jobFunction.role";
         break;
       case StakeholderSortBy.STAKEHOLDER_GROUPS:
-        field = "stakeholderGroups.size";
+        field = "stakeholderGroups.size()";
         break;
       default:
         throw new Error("Could not define SortBy field name");
@@ -176,16 +176,12 @@ export const getStakeholders = (
 
     email: filters.email,
     displayName: filters.displayName,
-    jobFunction: filters.jobFunction,
+    "jobFunction.role": filters.jobFunction,
     "stakeholderGroups.name": filters.stakeholderGroup,
   };
 
   const query: string[] = buildQuery(params);
   return APIClient.get(`${STAKEHOLDERS}?${query.join("&")}`, { headers });
-};
-
-export const getAllStakeholders = (): AxiosPromise<StakeholderPage> => {
-  return APIClient.get(`${STAKEHOLDERS}?size=1000`, { headers });
 };
 
 export const deleteStakeholder = (id: number): AxiosPromise => {
@@ -232,7 +228,7 @@ export const getStakeholderGroups = (
         field = "name";
         break;
       case StakeholderGroupSortBy.STAKEHOLDERS:
-        field = "stakeholders.size";
+        field = "stakeholders.size()";
         break;
       default:
         throw new Error("Could not define SortBy field name");
@@ -254,10 +250,6 @@ export const getStakeholderGroups = (
   return APIClient.get(`${STAKEHOLDER_GROUPS}?${query.join("&")}`, { headers });
 };
 
-export const getAllStakeholderGroups = (): AxiosPromise<StakeholderGroupPage> => {
-  return APIClient.get(`${STAKEHOLDER_GROUPS}?size=1000`, { headers });
-};
-
 export const deleteStakeholderGroup = (id: number): AxiosPromise => {
   return APIClient.delete(`${STAKEHOLDER_GROUPS}/${id}`);
 };
@@ -276,8 +268,40 @@ export const updateStakeholderGroup = (
 
 // Job functions
 
-export const getAllJobFunctions = (): AxiosPromise<JobFunctionPage> => {
-  return APIClient.get(`${JOB_FUNCTIONS}?size=1000`, { headers });
+export enum JobFunctionSortBy {
+  ROLE,
+}
+export interface JobFunctionSortByQuery {
+  field: JobFunctionSortBy;
+  direction?: Direction;
+}
+
+export const getJobFunctions = (
+  filters: {},
+  pagination: PageQuery,
+  sortBy?: JobFunctionSortByQuery
+): AxiosPromise<JobFunctionPage> => {
+  let sortByQuery: string | undefined = undefined;
+  if (sortBy) {
+    let field;
+    switch (sortBy.field) {
+      case JobFunctionSortBy.ROLE:
+        field = "role";
+        break;
+      default:
+        throw new Error("Could not define SortBy field name");
+    }
+    sortByQuery = `${sortBy.direction === "desc" ? "-" : ""}${field}`;
+  }
+
+  const params = {
+    page: pagination.page - 1,
+    size: pagination.perPage,
+    sort: sortByQuery,
+  };
+
+  const query: string[] = buildQuery(params);
+  return APIClient.get(`${JOB_FUNCTIONS}?${query.join("&")}`, { headers });
 };
 
 // App inventory
@@ -293,6 +317,8 @@ export interface ApplicationSortByQuery {
 export const getApplications = (
   filters: {
     name?: string[];
+    description?: string[];
+    businessService?: string[];
   },
   pagination: PageQuery,
   sortBy?: ApplicationSortByQuery
@@ -316,6 +342,8 @@ export const getApplications = (
     sort: sortByQuery,
 
     name: filters.name,
+    description: filters.description,
+    businessService: filters.businessService,
   };
 
   const query: string[] = buildQuery(params);
@@ -338,4 +366,33 @@ export const updateApplication = (
   obj: Application
 ): AxiosPromise<Application> => {
   return APIClient.put(`${APPLICATIONS}/${obj.id}`, obj);
+};
+
+export const getApplicationById = (
+  id: number | string
+): AxiosPromise<Application> => {
+  return APIClient.get(`${APPLICATIONS}/${id}`);
+};
+
+//
+
+export const getAssessments = (filters: {
+  applicationId?: number;
+}): AxiosPromise<Assessment[]> => {
+  const params = {
+    applicationId: filters.applicationId,
+  };
+
+  const query: string[] = buildQuery(params);
+  return APIClient.get(`${ASSESSMENTS}?${query.join("&")}`);
+};
+
+export const createAssessment = (obj: Assessment): AxiosPromise<Assessment> => {
+  return APIClient.post(`${ASSESSMENTS}`, obj);
+};
+
+export const getAssessmentById = (
+  id: number | string
+): AxiosPromise<Assessment> => {
+  return APIClient.get(`${ASSESSMENTS}/${id}`);
 };

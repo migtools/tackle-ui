@@ -1,70 +1,75 @@
 {
-    "sidebar": {
-        "applicationInventory": "Inventario de aplicaciones",
-        "reports": "Reportes",
-        "controls": "Controles"
-    },
-    "terms": {
-        "name": "Nombre",
-        "description": "Descripción",
-        "comments": "Comentarios",
-        "unknown": "Desconocido",
-        "businessService": "Servicio de negocio",
-        "owner": "Propietario",
-        "controls": "Controles",
-        "stakeholders": "Interesados",
-        "stakeholderGroups": "Grupos de interesados",
-        "businessServices": "Servicios de negocio",
-        "tags": "Etiquetas",
-        "member(s)": "Miembro(s)",
-        "member": "Miembro",
-        "email": "Email",
-        "displayName": "Nombre a mostrar",
-        "jobFunction": "Función laboral",
-        "group(s)": "Grupo(s)",
-        "group": "Grupo"
-    },
     "actions": {
-        "edit": "Editar",
-        "delete": "Eliminar",
         "cancel": "Cancelar",
-        "createNew": "Crear nuevo",
         "create": "Crear",
+        "createNew": "Crear nuevo",
+        "delete": "Eliminar",
+        "edit": "Editar",
         "save": "Guardar"
     },
+    "composed": {
+        "applicationInventory": "Inventario de aplicaciones",
+        "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
+        "noDataStateTitle": "No existen {{what}} disponibles",
+        "selectOne": "Seleccione un(a) {{what}}"
+    },
     "dialog": {
+        "message": {
+            "delete": "¿Estás seguro de querer eliminar '{{what}}'?. Esta acción eliminará todos los recursos asociados al mismo y no puede ser revertida. ¡Asegúrate de que esto es lo que realmente quieres!"
+        },
         "title": {
             "delete": "Eliminar '{{what}}'",
             "newApplication": "Nueva aplicación",
-            "updateApplication": "Actualizar aplicación",
             "newBusinessService": "Nuevo servicio de negocio",
-            "updateBusinessService": "Actualizar servicio de negocio",
-            "newStakeholderGroup": "Nuevo grupo de interesados",
-            "updateStakeholderGroup": "Actualizar grupo de interesados",
             "newStakeholder": "Nuevo interesado",
-            "updateStakeholder": "Actualizar interesado"
-        },
-        "message": {
-            "delete": "¿Estás seguro de querer eliminar '{{what}}'?. Esta acción eliminará todos los recursos asociados al mismo y no puede ser revertida. ¡Asegúrate de que esto es lo que realmente quieres!"
+            "newStakeholderGroup": "Nuevo grupo de interesados",
+            "updateApplication": "Actualizar aplicación",
+            "updateBusinessService": "Actualizar servicio de negocio",
+            "updateStakeholder": "Actualizar interesado",
+            "updateStakeholderGroup": "Actualizar grupo de interesados"
         }
+    },
+    "sidebar": {
+        "applicationInventory": "Inventario de aplicaciones",
+        "controls": "Controles",
+        "reports": "Reportes"
+    },
+    "terms": {
+        "application": "Applicación",
+        "applications": "Applicaciones",
+        "assessment": "Evaluación",
+        "businessService": "Servicio de negocio",
+        "businessServices": "Servicios de negocio",
+        "comments": "Comentarios",
+        "completed": "Completado",
+        "controls": "Controles",
+        "description": "Descripción",
+        "displayName": "Nombre a mostrar",
+        "email": "Email",
+        "group": "Grupo",
+        "group(s)": "Grupo(s)",
+        "inProgress": "En progreso",
+        "jobFunction": "Función laboral",
+        "member": "Miembro",
+        "member(s)": "Miembro(s)",
+        "name": "Nombre",
+        "notStarted": "No empezado",
+        "owner": "Propietario",
+        "stakeholderGroups": "Grupos de interesados",
+        "stakeholders": "Interesados",
+        "tags": "Etiquetas",
+        "unknown": "Desconocido"
     },
     "toastr": {
         "success": {
             "added": "Éxito! {{what}} fue creado como un {{type}}."
         }
     },
-    "composed": {
-        "applicationInventory": "Inventario de aplicaciones",
-        "noDataStateTitle": "No existen {{what}} disponibles",
-        "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
-        "selectOne": "Seleccione un(a) {{what}}",
-        "selectMany": "Seleccione {{what}}"
-    },
     "validation": {
-        "required": "Este campo es requerido.",
-        "minLength": "Este campo debe de tener al menos {{length}} caracteres.",
+        "email": "Este campo requiere un email válido.",
         "maxLength": "Este campo debe de tener menos de {{length}} caracteres.",
+        "minLength": "Este campo debe de tener al menos {{length}} caracteres.",
         "onlyCharactersAndUnderscore": "Este campo debe de contener solo caracteres alfanuméricos incluyendo el subguión.",
-        "email": "Este campo requiere un email válido."
+        "required": "Este campo es requerido."
     }
 }

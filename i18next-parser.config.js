@@ -20,5 +20,6 @@ module.exports = {
 
   input: ["src/**/*.{js,jsx,ts,tsx}"],
 
+  sort: true,
   verbose: true,
 };

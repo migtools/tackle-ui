@@ -14,10 +14,12 @@ import {
   PageSectionVariants,
   Text,
   TextContent,
+  ToolbarChip,
   ToolbarGroup,
   ToolbarItem,
 } from "@patternfly/react-core";
 import {
+  cellWidth,
   expandable,
   IAction,
   ICell,
@@ -38,7 +40,6 @@ import {
   AppTableWithControls,
   ConditionalRender,
   NoDataEmptyState,
-  SearchFilter,
 } from "shared/components";
 import {
   useDeleteApplication,
@@ -53,9 +54,15 @@ import { getAxiosErrorMessage } from "utils/utils";
 import { NewApplicationModal } from "./components/new-application-modal";
 import { UpdateApplicationModal } from "./components/update-application-modal";
 import { RemoteBusinessService } from "./components/remote-business-service";
+import { ToolbarSearchFilter } from "./components/toolbar-search-filter";
+import { InputTextFilter } from "./components/toolbar-search-filter/input-text-filter";
+import { SelectBusinessServiceFilter } from "./components/toolbar-search-filter/select-business-service-filter";
+import { ApplicationAssessment } from "./components/application-assessment";
 
 enum FilterKey {
   NAME = "name",
+  DESCRIPTION = "description",
+  BUSINESS_SERVICE = "businessService",
 }
 
 const toSortByQuery = (
@@ -95,10 +102,18 @@ export const ApplicationInventory: React.FC = () => {
       key: FilterKey.NAME,
       name: t("terms.name"),
     },
+    {
+      key: FilterKey.DESCRIPTION,
+      name: t("terms.description"),
+    },
+    {
+      key: FilterKey.BUSINESS_SERVICE,
+      name: t("terms.businessService"),
+    },
   ];
-  const [filtersValue, setFiltersValue] = useState<Map<FilterKey, string[]>>(
-    new Map([])
-  );
+  const [filtersValue, setFiltersValue] = useState<
+    Map<FilterKey, ToolbarChip[]>
+  >(new Map([]));
 
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
   const [rowToUpdate, setRowToUpdate] = useState<Application>();
@@ -132,7 +147,11 @@ export const ApplicationInventory: React.FC = () => {
   const refreshTable = useCallback(() => {
     fetchApplications(
       {
-        name: filtersValue.get(FilterKey.NAME),
+        name: filtersValue.get(FilterKey.NAME)?.map((f) => f.key),
+        description: filtersValue.get(FilterKey.DESCRIPTION)?.map((f) => f.key),
+        businessService: filtersValue
+          .get(FilterKey.BUSINESS_SERVICE)
+          ?.map((f) => f.key),
       },
       paginationQuery,
       toSortByQuery(sortByQuery)
@@ -142,7 +161,11 @@ export const ApplicationInventory: React.FC = () => {
   useEffect(() => {
     fetchApplications(
       {
-        name: filtersValue.get(FilterKey.NAME),
+        name: filtersValue.get(FilterKey.NAME)?.map((f) => f.key),
+        description: filtersValue.get(FilterKey.DESCRIPTION)?.map((f) => f.key),
+        businessService: filtersValue
+          .get(FilterKey.BUSINESS_SERVICE)
+          ?.map((f) => f.key),
       },
       paginationQuery,
       toSortByQuery(sortByQuery)
@@ -157,6 +180,7 @@ export const ApplicationInventory: React.FC = () => {
     },
     { title: t("terms.description"), transforms: [] },
     { title: t("terms.businessService"), transforms: [] },
+    { title: t("terms.assessment"), transforms: [cellWidth(10)] },
   ];
 
   const rows: IRow[] = [];
@@ -174,14 +198,23 @@ export const ApplicationInventory: React.FC = () => {
         },
         {
           title: (
-            <RemoteBusinessService
-              businessServiceId={Number(item.businessService)}
-            >
-              {({ businessService, fetchError }) =>
-                fetchError ? t("terms.unknown") : businessService?.name || ""
-              }
-            </RemoteBusinessService>
+            <>
+              {item.businessService && (
+                <RemoteBusinessService
+                  businessServiceId={Number(item.businessService)}
+                >
+                  {({ businessService, fetchError }) =>
+                    fetchError
+                      ? t("terms.unknown")
+                      : businessService?.name || ""
+                  }
+                </RemoteBusinessService>
+              )}
+            </>
           ),
+        },
+        {
+          title: <>{<ApplicationAssessment application={item} />}</>,
         },
       ],
     });
@@ -299,19 +332,32 @@ export const ApplicationInventory: React.FC = () => {
     });
   };
 
-  const handleOnAddFilter = (key: string, filterText: string) => {
+  const handleOnAddFilter = (
+    key: string,
+    value: ToolbarChip | ToolbarChip[]
+  ) => {
     const filterKey: FilterKey = key as FilterKey;
+
     setFiltersValue((current) => {
-      const values: string[] = current.get(filterKey) || [];
-      return new Map(current).set(filterKey, [...values, filterText]);
+      if (Array.isArray(value)) {
+        return new Map(current).set(filterKey, value);
+      } else {
+        const currentChips: ToolbarChip[] = current.get(filterKey) || [];
+        return new Map(current).set(filterKey, [...currentChips, value]);
+      }
     });
 
     handlePaginationChange({ page: 1 });
   };
 
-  const handleOnDeleteFilter = (key: string, value: string[]) => {
+  const handleOnDeleteFilter = (
+    key: string,
+    value: (string | ToolbarChip)[]
+  ) => {
     const filterKey: FilterKey = key as FilterKey;
-    setFiltersValue((current) => new Map(current).set(filterKey, value));
+    setFiltersValue((current) =>
+      new Map(current).set(filterKey, value as ToolbarChip[])
+    );
   };
 
   // Create Modal
@@ -388,9 +434,50 @@ export const ApplicationInventory: React.FC = () => {
                 filtersValue={filtersValue}
                 onDeleteFilter={handleOnDeleteFilter}
               >
-                <SearchFilter
+                <ToolbarSearchFilter
                   options={filters}
-                  onApplyFilter={handleOnAddFilter}
+                  filterInputs={[
+                    {
+                      key: FilterKey.NAME,
+                      input: (
+                        <InputTextFilter
+                          onApplyFilter={(filterText) =>
+                            handleOnAddFilter(FilterKey.NAME, {
+                              key: filterText,
+                              node: filterText,
+                            })
+                          }
+                        />
+                      ),
+                    },
+                    {
+                      key: FilterKey.DESCRIPTION,
+                      input: (
+                        <InputTextFilter
+                          onApplyFilter={(filterText) =>
+                            handleOnAddFilter(FilterKey.DESCRIPTION, {
+                              key: filterText,
+                              node: filterText,
+                            })
+                          }
+                        />
+                      ),
+                    },
+                    {
+                      key: FilterKey.BUSINESS_SERVICE,
+                      input: (
+                        <SelectBusinessServiceFilter
+                          value={filtersValue.get(FilterKey.BUSINESS_SERVICE)}
+                          onApplyFilter={(values) =>
+                            handleOnAddFilter(
+                              FilterKey.BUSINESS_SERVICE,
+                              values
+                            )
+                          }
+                        />
+                      ),
+                    },
+                  ]}
                 />
               </AppTableToolbarToggleGroup>
             }
@@ -410,11 +497,13 @@ export const ApplicationInventory: React.FC = () => {
             }
             noDataState={
               <NoDataEmptyState
+                // t('terms.applications')
                 title={t("composed.noDataStateTitle", {
-                  what: t("terms.applications"),
+                  what: t("terms.applications").toLowerCase(),
                 })}
+                // t('terms.application')
                 description={t("composed.noDataStateBody", {
-                  what: t("terms.application"),
+                  what: t("terms.application").toLowerCase(),
                 })}
               />
             }

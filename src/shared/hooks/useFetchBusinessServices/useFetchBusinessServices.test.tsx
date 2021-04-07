@@ -2,11 +2,7 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { renderHook, act } from "@testing-library/react-hooks";
 import { useFetchBusinessServices } from "./useFetchBusinessServices";
-import {
-  BusinessService,
-  BusinessServicePage,
-  PageRepresentation,
-} from "api/models";
+import { BusinessServicePage } from "api/models";
 import { BUSINESS_SERVICES } from "api/rest";
 
 describe("useFetchBusinessServices", () => {
@@ -96,7 +92,7 @@ describe("useFetchBusinessServices", () => {
     };
 
     new MockAdapter(axios)
-      .onGet(`${BUSINESS_SERVICES}?size=1000`)
+      .onGet(`${BUSINESS_SERVICES}?page=0&size=1000&sort=name`)
       .reply(200, data);
 
     // Use hook
