@@ -53,12 +53,13 @@
         "member": "Miembro",
         "member(s)": "Miembro(s)",
         "name": "Nombre",
-        "notStarted": "No empezado",
         "notAvailable": "No disponible",
+        "notStarted": "No empezado",
         "owner": "Propietario",
         "stakeholderGroups": "Grupos de interesados",
         "stakeholders": "Interesados",
-        "tags": "Etiquetas"
+        "tags": "Etiquetas",
+        "unknown": "Desconocido"
     },
     "toastr": {
         "success": {

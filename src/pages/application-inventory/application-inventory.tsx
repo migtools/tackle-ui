@@ -200,7 +200,7 @@ export const ApplicationInventory: React.FC = () => {
           title: <ApplicationBusinessService application={item} />,
         },
         {
-          title: <>{<ApplicationAssessment application={item} />}</>,
+          title: <ApplicationAssessment application={item} />,
         },
       ],
     });
