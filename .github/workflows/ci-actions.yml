@@ -341,7 +341,7 @@ jobs:
         with:
           minikube version: v1.17.1
           kubernetes version: v1.20.2
-          driver: docker
+          # driver: docker
           start args: "--addons=registry --addons=ingress"
       - name: Validate Minikube
         run: minikube status | grep Running
