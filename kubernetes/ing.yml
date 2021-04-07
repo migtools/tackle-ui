@@ -32,3 +32,10 @@ spec:
                 name: tackle-application-inventory
                 port:
                   number: 8080
+          - path: /pathfinder
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: tackle-pathfinder
+                port:
+                  number: 8080
