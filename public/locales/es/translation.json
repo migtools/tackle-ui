@@ -50,11 +50,11 @@
         "member": "Miembro",
         "member(s)": "Miembro(s)",
         "name": "Nombre",
+        "notAvailable": "No disponible",
         "owner": "Propietario",
         "stakeholderGroups": "Grupos de interesados",
         "stakeholders": "Interesados",
-        "tags": "Etiquetas",
-        "unknown": "Desconocido"
+        "tags": "Etiquetas"
     },
     "toastr": {
         "success": {
