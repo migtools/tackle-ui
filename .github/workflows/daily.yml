@@ -69,9 +69,6 @@ jobs:
           echo "End point ready:" &&
           echo $external_ip;
           export endpoint=$external_ip;
-          echo "TACKLE_CONTROLS_HOST=https://$external_ip" >> $GITHUB_ENV &&
-          echo "TACKLE_APPLICATION_INVENTORY_HOST=https://$external_ip" >> $GITHUB_ENV &&
-          echo "TACKLE_PATHFINDER_HOST=https://$external_ip" >> $GITHUB_ENV &&
           echo "CYPRESS_BASE_URL=https://$external_ip" >>$GITHUB_ENV &&
           echo "CYPRESS_controls_base_url=https://$external_ip/controls" >>$GITHUB_ENV &&
           echo "CYPRESS_application_inventory_base_url=https://$external_ip/application-inventory" >> $GITHUB_ENV &&
