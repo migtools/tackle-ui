@@ -1,11 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-import {
-  SelectOption,
-  SelectVariant,
-  ToolbarChip,
-} from "@patternfly/react-core";
+import { SelectVariant, ToolbarChip } from "@patternfly/react-core";
 
 import { SimpleSelectFetch, OptionWithValue } from "shared/components";
 import { useFetchBusinessServices } from "shared/hooks";
@@ -24,11 +20,17 @@ const businessServiceToOption = (
   value,
   toString: () => value.name,
   compareTo: (selectOption: any) => {
-    return (
-      typeof selectOption !== "string" &&
-      selectOption.value &&
-      (selectOption as OptionWithValue<BusinessService>).value.id === value.id
-    );
+    // If "string" we are just filtering
+    if (typeof selectOption === "string") {
+      return value.name.toLowerCase().includes(selectOption.toLowerCase());
+    }
+    // If not "string" we are selecting a checkbox
+    else {
+      return (
+        selectOption.value &&
+        (selectOption as OptionWithValue<BusinessService>).value.id === value.id
+      );
+    }
   },
 });
 
@@ -43,8 +45,6 @@ export const SelectBusinessServiceFilter: React.FC<BusinessServiceFilterProps> =
 }) => {
   const { t } = useTranslation();
 
-  const [filterText, setFilterText] = useState("");
-
   const {
     businessServices,
     isFetching: isFetchingBusinessServices,
@@ -55,29 +55,6 @@ export const SelectBusinessServiceFilter: React.FC<BusinessServiceFilterProps> =
   useEffect(() => {
     fetchAllBusinessServices();
   }, [fetchAllBusinessServices]);
-
-  const handleOnFilter = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ): React.ReactElement[] => {
-    const inputText = event && event.target ? event.target.value : filterText;
-    setFilterText(inputText);
-
-    let input: RegExp;
-    try {
-      input = new RegExp(inputText, "i");
-    } catch (err) {}
-
-    const filteredValues =
-      inputText !== ""
-        ? businessServices?.data.filter((f) => input.test(f.name))
-        : businessServices?.data;
-
-    return (filteredValues || [])
-      .map(businessServiceToOption)
-      .map((option, index) => (
-        <SelectOption key={`${index}-${option.toString()}`} value={option} />
-      ));
-  };
 
   return (
     <SimpleSelectFetch
@@ -109,7 +86,6 @@ export const SelectBusinessServiceFilter: React.FC<BusinessServiceFilterProps> =
       fetchError={fetchErrorBusinessServices}
       hasInlineFilter
       onClear={() => onApplyFilter([])}
-      onFilter={handleOnFilter}
     />
   );
 };
