@@ -3,11 +3,7 @@ name: Daliy CI
 on:
   schedule:
     - cron: "0 0 * * *"
-  workflow_dispatch:
-    inputs:
-      message:
-        description: "Hello"
-        required: false
+  workflow_dispatch: {}
 
 jobs:
   ks8:
