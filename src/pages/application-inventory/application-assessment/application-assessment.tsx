@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { FormikHelpers, FormikProvider, useFormik } from "formik";
 
@@ -24,7 +24,7 @@ import {
 } from "api/models";
 import { getApplicationById, getAssessmentById } from "api/rest";
 
-import { WizardFooter } from "./components/wizard-footer";
+import { CustomWizardFooter } from "./components/custom-wizard-footer";
 import { StakeholdersForm } from "./components/stakeholders-form";
 
 enum StepId {
@@ -61,6 +61,7 @@ const toSelectOptionStakeholderGroup = (
 export const ApplicationAssessment: React.FC = () => {
   const { t } = useTranslation();
   const { assessmentId } = useParams<AssessmentRoute>();
+  const history = useHistory();
 
   // Fetch assessment and application
 
@@ -204,13 +205,15 @@ export const ApplicationAssessment: React.FC = () => {
   ];
 
   const wizardFooter = (
-    <WizardFooter
-      isFirstStep={false}
+    <CustomWizardFooter
+      isFirstStep={true}
       isDisabled={false}
       isNextDisabled={true}
       onBack={() => {}}
       onNext={() => {}}
-      onCancel={() => {}}
+      onCancel={() => {
+        history.push(Paths.applicationInventory_applicationList);
+      }}
     />
   );
 
