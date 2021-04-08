@@ -51,6 +51,8 @@
         "member(s)": "Miembro(s)",
         "name": "Nombre",
         "owner": "Propietario",
+        "stakeholder": "Interesado",
+        "stakeholderGroup": "Grupo interesado",
         "stakeholderGroups": "Grupos de interesados",
         "stakeholders": "Interesados",
         "tags": "Etiquetas",

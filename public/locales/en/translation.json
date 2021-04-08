@@ -51,6 +51,8 @@
         "member(s)": "Member(s)",
         "name": "Name",
         "owner": "Owner",
+        "stakeholder": "Stakeholder",
+        "stakeholderGroup": "Stakeholder group",
         "stakeholderGroups": "Stakeholder groups",
         "stakeholders": "Stakeholders",
         "tags": "Tags",

@@ -5,11 +5,6 @@ import { useTranslation } from "react-i18next";
 import {
   Button,
   ButtonVariant,
-  EmptyState,
-  EmptyStateBody,
-  EmptyStateIcon,
-  EmptyStateVariant,
-  Title,
   ToolbarChip,
   ToolbarGroup,
   ToolbarItem,
@@ -21,7 +16,6 @@ import {
   sortable,
   TableText,
 } from "@patternfly/react-table";
-import { CubesIcon } from "@patternfly/react-icons";
 
 import { useDispatch } from "react-redux";
 import { alertActions } from "store/alert";
@@ -34,6 +28,7 @@ import {
   SearchFilter,
   AppTableActionButtons,
   AppTableToolbarToggleGroup,
+  NoDataEmptyState,
 } from "shared/components";
 import {
   useTableControls,
@@ -370,15 +365,18 @@ export const BusinessServices: React.FC = () => {
             </ToolbarGroup>
           }
           noDataState={
-            <EmptyState variant={EmptyStateVariant.small}>
-              <EmptyStateIcon icon={CubesIcon} />
-              <Title headingLevel="h2" size="lg">
-                No business services available
-              </Title>
-              <EmptyStateBody>
-                Create a new business service to start seeing data here.
-              </EmptyStateBody>
-            </EmptyState>
+            <NoDataEmptyState
+              // t('terms.businessServices')
+              title={t("composed.noDataStateTitle", {
+                what: t("terms.businessServices").toLowerCase(),
+              })}
+              // t('terms.businessService')
+              description={
+                t("composed.noDataStateBody", {
+                  what: t("terms.businessService").toLowerCase(),
+                }) + "."
+              }
+            />
           }
         />
       </ConditionalRender>
