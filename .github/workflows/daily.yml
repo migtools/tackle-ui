@@ -74,6 +74,8 @@ jobs:
           echo "CYPRESS_application_inventory_base_url=https://$external_ip/api/application-inventory" >> $GITHUB_ENV &&
           echo "CYPRESS_pathfinder_base_url=https://$external_ip/api/pathfinder" >> $GITHUB_ENV &&
           echo "CYPRESS_auth_base_url=https://$external_ip/auth" >> $GITHUB_ENV'
+      - name: Yarn install
+        run: yarn install
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
