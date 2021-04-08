@@ -55,6 +55,8 @@
         "name": "Nombre",
         "notStarted": "No empezado",
         "owner": "Propietario",
+        "stakeholder": "Interesado",
+        "stakeholderGroup": "Grupo interesado",
         "stakeholderGroups": "Grupos de interesados",
         "stakeholders": "Interesados",
         "tags": "Etiquetas",
