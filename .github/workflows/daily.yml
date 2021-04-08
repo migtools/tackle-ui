@@ -70,9 +70,9 @@ jobs:
           echo $external_ip;
           export endpoint=$external_ip;
           echo "CYPRESS_BASE_URL=https://$external_ip" >>$GITHUB_ENV &&
-          echo "CYPRESS_controls_base_url=https://$external_ip/controls" >>$GITHUB_ENV &&
-          echo "CYPRESS_application_inventory_base_url=https://$external_ip/application-inventory" >> $GITHUB_ENV &&
-          echo "CYPRESS_pathfinder_base_url=https://$external_ip/pathfinder" >> $GITHUB_ENV &&
+          echo "CYPRESS_controls_base_url=https://$external_ip/api/controls" >>$GITHUB_ENV &&
+          echo "CYPRESS_application_inventory_base_url=https://$external_ip/api/application-inventory" >> $GITHUB_ENV &&
+          echo "CYPRESS_pathfinder_base_url=https://$external_ip/api/pathfinder" >> $GITHUB_ENV &&
           echo "CYPRESS_auth_base_url=https://$external_ip/auth" >> $GITHUB_ENV'
       - name: Cypress run
         uses: cypress-io/github-action@v2
