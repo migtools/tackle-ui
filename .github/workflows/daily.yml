@@ -8,6 +8,9 @@ on:
       message:
         description: "Hello"
         required: false
+  push:
+    branches:
+      - minikube
 
 jobs:
   ks8:
