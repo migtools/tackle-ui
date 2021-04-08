@@ -1,4 +1,4 @@
-name: Daliy CI
+name: CI Daily
 
 on:
   schedule:
