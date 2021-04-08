@@ -10,11 +10,6 @@ import {
   DescriptionListDescription,
   DescriptionListGroup,
   DescriptionListTerm,
-  EmptyState,
-  EmptyStateBody,
-  EmptyStateIcon,
-  EmptyStateVariant,
-  Title,
   ToolbarChip,
   ToolbarGroup,
   ToolbarItem,
@@ -27,7 +22,6 @@ import {
   IRowData,
   sortable,
 } from "@patternfly/react-table";
-import { AddCircleOIcon } from "@patternfly/react-icons";
 
 import { useDispatch } from "react-redux";
 import { alertActions } from "store/alert";
@@ -40,6 +34,7 @@ import {
   ConditionalRender,
   SearchFilter,
   AppTableToolbarToggleGroup,
+  NoDataEmptyState,
 } from "shared/components";
 import {
   useTableControls,
@@ -412,15 +407,18 @@ export const Stakeholders: React.FC = () => {
             </ToolbarGroup>
           }
           noDataState={
-            <EmptyState variant={EmptyStateVariant.small}>
-              <EmptyStateIcon icon={AddCircleOIcon} />
-              <Title headingLevel="h2" size="lg">
-                No stakeholders available
-              </Title>
-              <EmptyStateBody>
-                Create a new stakeholder to start seeing data here.
-              </EmptyStateBody>
-            </EmptyState>
+            <NoDataEmptyState
+              // t('terms.stakeholders')
+              title={t("composed.noDataStateTitle", {
+                what: t("terms.stakeholders").toLowerCase(),
+              })}
+              // t('terms.stakeholder')
+              description={
+                t("composed.noDataStateBody", {
+                  what: t("terms.stakeholder").toLowerCase(),
+                }) + "."
+              }
+            />
           }
         />
       </ConditionalRender>
