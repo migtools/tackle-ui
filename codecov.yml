@@ -2,13 +2,13 @@ coverage:
   status:
     project:
       default:
-        target: 10%
+        target: 30%
       unitests:
-        target: 10%
+        target: 20%
         flags:
           - unitests
       e2etests:
-        target: 10%
+        target: 40%
         flags:
           - e2etests
 
