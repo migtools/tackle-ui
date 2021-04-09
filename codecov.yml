@@ -1,0 +1,19 @@
+coverage:
+  status:
+    project:
+      default:
+        target: 10%
+      unitests:
+        target: 10%
+        flags:
+          - unitests
+      e2etests:
+        target: 10%
+        flags:
+          - e2etests
+
+flags:
+  unitests:
+    carryforward: false
+  e2etests:
+    carryforward: true
