@@ -1,6 +1,8 @@
 coverage:
   status:
     project:
+      default:
+        target: 10%
       unitests:
         target: 10%
         flags:
