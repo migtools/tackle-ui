@@ -29,7 +29,6 @@ exports[`AppTable Renders without crashing 1`] = `
   expandId="expandable-toggle"
   gridBreakPoint="grid-md"
   isStickyHeader={false}
-  isTreeTable={false}
   ouiaSafe={true}
   role="grid"
   rowLabeledBy="simple-node"
