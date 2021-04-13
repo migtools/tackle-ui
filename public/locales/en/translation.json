@@ -3,9 +3,22 @@
         "cancel": "Cancel",
         "create": "Create",
         "createNew": "Create new",
+        "createTag": "Create tag",
+        "createTagType": "Create tag type",
         "delete": "Delete",
         "edit": "Edit",
         "save": "Save"
+    },
+    "colors": {
+        "blue": "Blue",
+        "cyan": "Cyan",
+        "gold": "Gold",
+        "green": "Green",
+        "lightBlue": "Light blue",
+        "lightGreen": "Light green",
+        "orange": "Orange",
+        "purple": "Purple",
+        "red": "Red"
     },
     "composed": {
         "applicationInventory": "Application inventory",
@@ -23,10 +36,12 @@
             "newBusinessService": "New business service",
             "newStakeholder": "New stakeholder",
             "newStakeholderGroup": "New stakeholder group",
+            "newTagType": "New tag type",
             "updateApplication": "Update application",
             "updateBusinessService": "Update business service",
             "updateStakeholder": "Update stakeholder",
-            "updateStakeholderGroup": "Update stakeholder group"
+            "updateStakeholderGroup": "Update stakeholder group",
+            "updateTagType": "Update tag type"
         }
     },
     "sidebar": {
@@ -40,6 +55,7 @@
         "assessment": "Assessment",
         "businessService": "Business service",
         "businessServices": "Business services",
+        "color": "Color",
         "comments": "Comments",
         "completed": "Completed",
         "controls": "Controls",
@@ -55,11 +71,16 @@
         "name": "Name",
         "notStarted": "Not started",
         "owner": "Owner",
+        "rank": "Rank",
         "stakeholder": "Stakeholder",
         "stakeholderGroup": "Stakeholder group",
         "stakeholderGroups": "Stakeholder groups",
         "stakeholders": "Stakeholders",
+        "tag": "Tag",
+        "tag(s)": "Tag(s)",
         "tags": "Tags",
+        "tagType": "Tag type",
+        "tagTypes": "Tag types",
         "unknown": "Unknown"
     },
     "toastr": {
@@ -70,6 +91,7 @@
     "validation": {
         "email": "This field requires a valid email.",
         "maxLength": "This field must contain fewer than {{length}} characters.",
+        "min": "This field must be greater than {{value}}.",
         "minLength": "This field must contain at least {{length}} characters.",
         "onlyCharactersAndUnderscore": "This field must contain only alphanumeric characters including underscore.",
         "required": "This field is required."

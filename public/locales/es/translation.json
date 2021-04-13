@@ -3,9 +3,22 @@
         "cancel": "Cancelar",
         "create": "Crear",
         "createNew": "Crear nuevo",
+        "createTag": "Crear etiqueta",
+        "createTagType": "Crear typo de etiqueta",
         "delete": "Eliminar",
         "edit": "Editar",
         "save": "Guardar"
+    },
+    "colors": {
+        "blue": "Azul",
+        "cyan": "Cian",
+        "gold": "Dorado",
+        "green": "Verde",
+        "lightBlue": "Azul claro",
+        "lightGreen": "Verde claro",
+        "orange": "Anaranjado",
+        "purple": "Morado",
+        "red": "Rojo"
     },
     "composed": {
         "applicationInventory": "Inventario de aplicaciones",
@@ -23,10 +36,12 @@
             "newBusinessService": "Nuevo servicio de negocio",
             "newStakeholder": "Nuevo interesado",
             "newStakeholderGroup": "Nuevo grupo de interesados",
+            "newTagType": "Nuevo tipo de etiqueta",
             "updateApplication": "Actualizar aplicación",
             "updateBusinessService": "Actualizar servicio de negocio",
             "updateStakeholder": "Actualizar interesado",
-            "updateStakeholderGroup": "Actualizar grupo de interesados"
+            "updateStakeholderGroup": "Actualizar grupo de interesados",
+            "updateTagType": "Actualizar tipo de etiqueta"
         }
     },
     "sidebar": {
@@ -40,6 +55,7 @@
         "assessment": "Evaluación",
         "businessService": "Servicio de negocio",
         "businessServices": "Servicios de negocio",
+        "color": "Color",
         "comments": "Comentarios",
         "completed": "Completado",
         "controls": "Controles",
@@ -55,11 +71,16 @@
         "name": "Nombre",
         "notStarted": "No empezado",
         "owner": "Propietario",
+        "rank": "Rango",
         "stakeholder": "Interesado",
         "stakeholderGroup": "Grupo interesado",
         "stakeholderGroups": "Grupos de interesados",
         "stakeholders": "Interesados",
+        "tag": "Etiqueta",
+        "tag(s)": "Etiqueta(s)",
         "tags": "Etiquetas",
+        "tagType": "Tipo de etiqueta",
+        "tagTypes": "Tipos de etiqueta",
         "unknown": "Desconocido"
     },
     "toastr": {
@@ -70,6 +91,7 @@
     "validation": {
         "email": "Este campo requiere un email válido.",
         "maxLength": "Este campo debe de tener menos de {{length}} caracteres.",
+        "min": "Este campo debe de ser mayor a {{value}}.",
         "minLength": "Este campo debe de tener al menos {{length}} caracteres.",
         "onlyCharactersAndUnderscore": "Este campo debe de contener solo caracteres alfanuméricos incluyendo el subguión.",
         "required": "Este campo es requerido."
