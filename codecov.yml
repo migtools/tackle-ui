@@ -8,7 +8,7 @@ coverage:
         flags:
           - unitests
       e2etests:
-        target: 40%
+        target: 70%
         flags:
           - e2etests
 
