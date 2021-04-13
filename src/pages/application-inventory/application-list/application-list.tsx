@@ -49,13 +49,9 @@ import {
   useFetchApplications,
 } from "shared/hooks";
 
+import { formatPath, Paths } from "Paths";
 import { Application, Assessment, SortByQuery } from "api/models";
-import {
-  ApplicationSortBy,
-  ApplicationSortByQuery,
-  createAssessment,
-  getAssessments,
-} from "api/rest";
+import { ApplicationSortBy, ApplicationSortByQuery } from "api/rest";
 import { getAxiosErrorMessage } from "utils/utils";
 
 import { NewApplicationModal } from "./components/new-application-modal";
@@ -65,7 +61,8 @@ import { ToolbarSearchFilter } from "./components/toolbar-search-filter";
 import { InputTextFilter } from "./components/toolbar-search-filter/input-text-filter";
 import { SelectBusinessServiceFilter } from "./components/toolbar-search-filter/select-business-service-filter";
 import { ApplicationAssessment } from "./components/application-assessment";
-import { formatPath, Paths } from "Paths";
+
+import { useAssessApplication } from "./hooks/useAssessApplication";
 
 enum FilterKey {
   NAME = "name",
@@ -128,6 +125,10 @@ export const ApplicationList: React.FC = () => {
   const [rowToUpdate, setRowToUpdate] = useState<Application>();
 
   const { deleteApplication } = useDeleteApplication();
+  const {
+    assessApplication,
+    inProgress: isApplicationAssessInProgress,
+  } = useAssessApplication();
 
   const {
     applications,
@@ -440,31 +441,19 @@ export const ApplicationList: React.FC = () => {
   // General actions
 
   const startApplicationAssessment = (row: Application) => {
-    getAssessments({ applicationId: row.id })
-      .then(({ data }) => {
-        const currentAssessment: Assessment | undefined = data[0];
-
-        const newAssessment = {
-          applicationId: row.id,
-        } as Assessment;
-
-        return Promise.all([
-          currentAssessment,
-          !currentAssessment ? createAssessment(newAssessment) : undefined,
-        ]);
-      })
-      .then(([currentAssessment, newAssessment]) => {
+    assessApplication(
+      row,
+      (assessment: Assessment) => {
         history.push(
           formatPath(Paths.applicationInventory_assessment, {
-            assessmentId: currentAssessment
-              ? currentAssessment.id
-              : newAssessment?.data.id,
+            assessmentId: assessment.id,
           })
         );
-      })
-      .catch((error) => {
+      },
+      (error) => {
         dispatch(alertActions.addDanger(getAxiosErrorMessage(error)));
-      });
+      }
+    );
   };
 
   const handleOnAssessSelectedRow = () => {
@@ -588,7 +577,11 @@ export const ApplicationList: React.FC = () => {
                       aria-label="assess-application"
                       variant={ButtonVariant.primary}
                       onClick={handleOnAssessSelectedRow}
-                      isDisabled={selectedRows.length !== 1}
+                      isDisabled={
+                        selectedRows.length !== 1 ||
+                        isApplicationAssessInProgress
+                      }
+                      isLoading={isApplicationAssessInProgress}
                     >
                       {t("actions.assess")}
                     </Button>
