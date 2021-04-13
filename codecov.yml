@@ -2,7 +2,7 @@ coverage:
   status:
     project:
       default:
-        target: 30%
+        target: 75%
       unitests:
         target: 20%
         flags:
