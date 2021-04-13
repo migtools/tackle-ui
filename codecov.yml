@@ -4,7 +4,7 @@ coverage:
       default:
         target: 75%
       unitests:
-        target: 20%
+        target: 30%
         flags:
           - unitests
       e2etests:
