@@ -36,11 +36,13 @@
             "newBusinessService": "Nuevo servicio de negocio",
             "newStakeholder": "Nuevo interesado",
             "newStakeholderGroup": "Nuevo grupo de interesados",
+            "newTag": "Nueva etiqueta",
             "newTagType": "Nuevo tipo de etiqueta",
             "updateApplication": "Actualizar aplicación",
             "updateBusinessService": "Actualizar servicio de negocio",
             "updateStakeholder": "Actualizar interesado",
             "updateStakeholderGroup": "Actualizar grupo de interesados",
+            "updateTag": "Actualizar etiqueta",
             "updateTagType": "Actualizar tipo de etiqueta"
         }
     },
@@ -79,6 +81,7 @@
         "stakeholders": "Interesados",
         "tag": "Etiqueta",
         "tag(s)": "Etiqueta(s)",
+        "tagName": "Nombde de etiqueta",
         "tags": "Etiquetas",
         "tagType": "Tipo de etiqueta",
         "tagTypes": "Tipos de etiqueta",

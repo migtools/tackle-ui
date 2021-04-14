@@ -15,6 +15,7 @@ import {
   Assessment,
   TagTypePage,
   TagType,
+  Tag,
 } from "./models";
 
 export const CONTROLS_BASE_URL = "controls";
@@ -26,6 +27,7 @@ export const STAKEHOLDERS = CONTROLS_BASE_URL + "/stakeholder";
 export const STAKEHOLDER_GROUPS = CONTROLS_BASE_URL + "/stakeholder-group";
 export const JOB_FUNCTIONS = CONTROLS_BASE_URL + "/job-function";
 export const TAG_TYPES = CONTROLS_BASE_URL + "/tag-type";
+export const TAG = CONTROLS_BASE_URL + "/tag";
 
 export const APPLICATIONS = APP_INVENTORY_BASE_URL + "/application";
 
@@ -377,6 +379,22 @@ export const updateTagType = (obj: TagType): AxiosPromise<TagType> => {
 
 export const getTagTypeById = (id: number): AxiosPromise<TagType> => {
   return APIClient.get(`${TAG_TYPES}/${id}`);
+};
+
+export const deleteTag = (id: number): AxiosPromise => {
+  return APIClient.delete(`${TAG}/${id}`);
+};
+
+export const createTag = (obj: Tag): AxiosPromise<Tag> => {
+  return APIClient.post(`${TAG}`, obj);
+};
+
+export const updateTag = (obj: Tag): AxiosPromise<Tag> => {
+  return APIClient.put(`${TAG}/${obj.id}`, obj);
+};
+
+export const getTagById = (id: number): AxiosPromise<Tag> => {
+  return APIClient.get(`${TAG}/${id}`);
 };
 
 // App inventory

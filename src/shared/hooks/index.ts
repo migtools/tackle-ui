@@ -2,6 +2,7 @@ export { useDeleteApplication } from "./useDeleteApplication";
 export { useDeleteBusinessService } from "./useDeleteBusinessService";
 export { useDeleteStakeholder } from "./useDeleteStakeholder";
 export { useDeleteStakeholderGroup } from "./useDeleteStakeholderGroup";
+export { useDeleteTag } from "./useDeleteTag";
 export { useDeleteTagType } from "./useDeleteTagType";
 export { useFetchApplications } from "./useFetchApplications";
 export { useFetchBusinessServices } from "./useFetchBusinessServices";

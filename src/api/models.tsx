@@ -56,7 +56,8 @@ export interface TagType {
 
 export interface Tag {
   id?: number;
-  name: number;
+  name: string;
+  tagType?: TagType;
 }
 
 // Application inventory
