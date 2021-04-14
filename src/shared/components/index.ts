@@ -6,6 +6,7 @@ export { AppTableWithControls } from "./app-table-with-controls";
 export { Color, defaultColorsPalete } from "./color";
 export { ConditionalRender } from "./conditional-render";
 export { ConfirmDialog } from "./confirm-dialog";
+export { EmptyTextMessage } from "./empty-text-message";
 export { NoDataEmptyState } from "./no-data-empty-state";
 export { PageHeader } from "./page-header";
 export { SearchFilter } from "./search-filter";

@@ -85,7 +85,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
       result = businesServiceToOption({
         id: businessServiceId,
-        name: businessService ? businessService.name : t("terms.unknown"),
+        name: businessService ? businessService.name : t("terms.notAvailable"),
       });
     }
 

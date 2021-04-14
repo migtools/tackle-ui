@@ -122,7 +122,7 @@ export const updateBusinessService = (
 };
 
 export const getBusinessServiceById = (
-  id: number
+  id: number | string
 ): AxiosPromise<BusinessService> => {
   return APIClient.get(`${BUSINESS_SERVICES}/${id}`);
 };

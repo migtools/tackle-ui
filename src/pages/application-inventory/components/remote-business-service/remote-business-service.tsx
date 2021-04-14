@@ -11,7 +11,7 @@ export interface ChildrenProps {
 }
 
 export interface RemoteBusinessServiceProps {
-  businessServiceId: number;
+  businessServiceId: number | string;
   children: (args: ChildrenProps) => any;
 }
 
