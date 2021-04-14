@@ -56,15 +56,21 @@ export interface ColorProps {
 export const Color: React.FC<ColorProps> = ({ hex }) => {
   const { t } = useTranslation();
 
-  const colorName = defaultColorLabels.get(hex);
+  const colorName = defaultColorLabels.get(hex.toLowerCase());
 
   return (
     <Split hasGutter>
       <SplitItem>
-        <div className={styles.color} style={{ backgroundColor: hex }}></div>
+        <div
+          className={styles.color}
+          style={{ backgroundColor: hex }}
+          cy-data="color-box"
+        ></div>
       </SplitItem>
       <SplitItem isFilled>
-        {colorName ? t(`colors.${colorName}`) : hex}
+        <span cy-data="color-label">
+          {colorName ? t(`colors.${colorName}`) : hex}
+        </span>
       </SplitItem>
     </Split>
   );
