@@ -145,3 +145,14 @@ Cypress.Commands.add("createBusinessService", (payload, tokens) => {
     url: `${Cypress.env("controls_base_url")}/business-service`,
   }).its("body");
 });
+
+Cypress.Commands.add("createTagType", (payload, tokens) => {
+  const headers = getHeaders(tokens);
+
+  cy.request({
+    method: "POST",
+    headers: headers,
+    body: payload,
+    url: `${Cypress.env("controls_base_url")}/tag-type`,
+  }).its("body");
+});
