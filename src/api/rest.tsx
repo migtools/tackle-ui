@@ -16,6 +16,7 @@ import {
   TagTypePage,
   TagType,
   Tag,
+  JobFunction,
 } from "./models";
 
 export const CONTROLS_BASE_URL = "controls";
@@ -189,6 +190,22 @@ export const getStakeholders = (
   return APIClient.get(`${STAKEHOLDERS}?${query.join("&")}`, { headers });
 };
 
+export const createJobFunction = (
+  obj: JobFunction
+): AxiosPromise<JobFunction> => {
+  return APIClient.post(`${JOB_FUNCTIONS}`, obj);
+};
+
+export const updateJobFunction = (
+  obj: JobFunction
+): AxiosPromise<JobFunction> => {
+  return APIClient.put(`${JOB_FUNCTIONS}/${obj.id}`, obj);
+};
+
+export const deleteJobFunction = (id: number): AxiosPromise => {
+  return APIClient.delete(`${JOB_FUNCTIONS}/${id}`);
+};
+
 export const deleteStakeholder = (id: number): AxiosPromise => {
   return APIClient.delete(`${STAKEHOLDERS}/${id}`);
 };
@@ -282,7 +299,9 @@ export interface JobFunctionSortByQuery {
 }
 
 export const getJobFunctions = (
-  filters: {},
+  filters: {
+    role?: string[];
+  },
   pagination: PageQuery,
   sortBy?: JobFunctionSortByQuery
 ): AxiosPromise<JobFunctionPage> => {
@@ -303,6 +322,8 @@ export const getJobFunctions = (
     page: pagination.page - 1,
     size: pagination.perPage,
     sort: sortByQuery,
+
+    role: filters.role,
   };
 
   const query: string[] = buildQuery(params);

@@ -2,8 +2,12 @@ import { useCallback, useReducer } from "react";
 import { AxiosError } from "axios";
 import { ActionType, createAsyncAction, getType } from "typesafe-actions";
 
-import { getJobFunctions, JobFunctionSortBy } from "api/rest";
-import { PageRepresentation, JobFunction } from "api/models";
+import {
+  getJobFunctions,
+  JobFunctionSortBy,
+  JobFunctionSortByQuery,
+} from "api/rest";
+import { PageRepresentation, JobFunction, PageQuery } from "api/models";
 
 export const {
   request: fetchRequest,
@@ -72,6 +76,13 @@ export interface IState {
   isFetching: boolean;
   fetchError?: AxiosError;
   fetchCount: number;
+  fetchJobFunctions: (
+    filters: {
+      role?: string[];
+    },
+    page: PageQuery,
+    sortBy?: JobFunctionSortByQuery
+  ) => void;
   fetchAllJobFunctions: () => void;
 }
 
@@ -79,6 +90,35 @@ export const useFetchJobFunctions = (
   defaultIsFetching: boolean = false
 ): IState => {
   const [state, dispatch] = useReducer(reducer, defaultIsFetching, initReducer);
+
+  const fetchJobFunctions = useCallback(
+    (
+      filters: { role?: string[] },
+      page: PageQuery,
+      sortBy?: JobFunctionSortByQuery
+    ) => {
+      dispatch(fetchRequest());
+
+      getJobFunctions(filters, page, sortBy)
+        .then(({ data }) => {
+          const list = data._embedded["job-function"];
+          const total = data.total_count;
+
+          dispatch(
+            fetchSuccess({
+              data: list,
+              meta: {
+                count: total,
+              },
+            })
+          );
+        })
+        .catch((error: AxiosError) => {
+          dispatch(fetchFailure(error));
+        });
+    },
+    []
+  );
 
   const fetchAllJobFunctions = useCallback(() => {
     dispatch(fetchRequest());
@@ -111,6 +151,7 @@ export const useFetchJobFunctions = (
     isFetching: state.isFetching,
     fetchError: state.fetchError,
     fetchCount: state.fetchCount,
+    fetchJobFunctions,
     fetchAllJobFunctions,
   };
 };

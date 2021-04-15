@@ -22,6 +22,7 @@ export enum Paths {
   controls_businessServices = "/controls/business-services",
   controls_stakeholders = "/controls/stakeholders",
   controls_stakeholderGroups = "/controls/stakeholder-groups",
+  controls_jobFunctions = "/controls/job-functions",
   controls_tags = "/controls/tags",
 }
 
