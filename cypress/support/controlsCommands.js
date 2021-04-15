@@ -156,3 +156,14 @@ Cypress.Commands.add("createTagType", (payload, tokens) => {
     url: `${Cypress.env("controls_base_url")}/tag-type`,
   }).its("body");
 });
+
+Cypress.Commands.add("createTag", (payload, tokens) => {
+  const headers = getHeaders(tokens);
+
+  cy.request({
+    method: "POST",
+    headers: headers,
+    body: payload,
+    url: `${Cypress.env("controls_base_url")}/tag`,
+  }).its("body");
+});
