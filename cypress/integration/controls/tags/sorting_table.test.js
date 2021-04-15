@@ -67,26 +67,23 @@ describe("TagType table sorting", () => {
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("type-b");
   });
 
-  /**
-   * Removed until https://github.com/konveyor/tackle-controls/issues/98 is solved
-   */
-  // it("Sort by rank", () => {
-  //   cy.wait("@getTagTypeApi");
+  it("Sort by rank", () => {
+    cy.wait("@getTagTypeApi");
 
-  //   // Asc
-  //   cy.get(".pf-c-table").pf4_table_column_toggle("Rank");
-  //   cy.wait("@getTagTypeApi");
+    // Asc
+    cy.get(".pf-c-table").pf4_table_column_toggle("Rank");
+    cy.wait("@getTagTypeApi");
 
-  //   cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("type-a");
-  //   cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("type-j");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("type-a");
+    cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("type-j");
 
-  //   // Desc
-  //   cy.get(".pf-c-table").pf4_table_column_toggle("Rank");
-  //   cy.wait("@getTagTypeApi");
+    // Desc
+    cy.get(".pf-c-table").pf4_table_column_toggle("Rank");
+    cy.wait("@getTagTypeApi");
 
-  //   cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("type-k");
-  //   cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("type-b");
-  // });
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("type-k");
+    cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("type-b");
+  });
 
   it("Sort by tags", () => {
     cy.wait("@getTagTypeApi");
