@@ -34,7 +34,7 @@ describe("Create new tag", () => {
     cy.visit("/controls/tags");
   });
 
-  it.only("With min data", () => {
+  it("With min data", () => {
     // Open modal
     cy.get("button[aria-label='create-tag']").click();
 
@@ -66,7 +66,8 @@ describe("Create new tag", () => {
 
     cy.get(".pf-c-table").pf4_table_row_expand(0);
     cy.get(".pf-c-table__expandable-row-content > div > .pf-c-table")
-      .pf4_table_rows(0)
+      .pf4_table_rows()
+      .eq(0)
       .should("contain", "tag-a");
   });
 });
