@@ -155,8 +155,8 @@ export const TagForm: React.FC<TagFormProps> = ({ tag, onSaved, onCancel }) => {
           />
         </FormGroup>
         <FormGroup
-          label={t("terms.color")}
-          fieldId="color"
+          label={t("terms.tagType")}
+          fieldId="tagType"
           isRequired={false}
           validated={getValidatedFromError(formik.errors.tagType)}
           helperTextInvalid={formik.errors.tagType}

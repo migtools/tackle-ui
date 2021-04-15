@@ -87,6 +87,25 @@ Cypress.Commands.add("tackleControlsCleanTagTypes", (tokens) => {
     });
 });
 
+Cypress.Commands.add("tackleControlsCleanTags", (tokens) => {
+  const sizeQueryParam = "size=1000";
+  const headers = getHeaders(tokens);
+
+  cy.request({
+    method: "GET",
+    headers: headers,
+    url: `${Cypress.env("controls_base_url")}/tag?${sizeQueryParam}`,
+  })
+    .then((response) => response.body._embedded["tag"])
+    .each((item) => {
+      return cy.request({
+        method: "DELETE",
+        headers: headers,
+        url: `${Cypress.env("controls_base_url")}/tag/${item.id}`,
+      });
+    });
+});
+
 Cypress.Commands.add("tackleControlsClean", (tokens) => {
   cy.log("Tackle controls - clean started")
 
