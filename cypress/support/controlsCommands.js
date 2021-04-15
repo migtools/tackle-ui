@@ -68,6 +68,25 @@ Cypress.Commands.add("tackleControlsCleanBusinessServices", (tokens) => {
     });
 });
 
+Cypress.Commands.add("tackleControlsCleanTagTypes", (tokens) => {
+  const sizeQueryParam = "size=1000";
+  const headers = getHeaders(tokens);
+
+  cy.request({
+    method: "GET",
+    headers: headers,
+    url: `${Cypress.env("controls_base_url")}/tag-type?${sizeQueryParam}`,
+  })
+    .then((response) => response.body._embedded["tag-type"])
+    .each((item) => {
+      return cy.request({
+        method: "DELETE",
+        headers: headers,
+        url: `${Cypress.env("controls_base_url")}/tag-type/${item.id}`,
+      });
+    });
+});
+
 Cypress.Commands.add("tackleControlsClean", (tokens) => {
   cy.log("Tackle controls - clean started")
 
@@ -84,6 +103,11 @@ Cypress.Commands.add("tackleControlsClean", (tokens) => {
     .log("Tackle controls - delete stakeholder groups")
     .then(() => {
       return cy.tackleControlsCleanStakeholderGroups(tokens);
+    })
+
+    .log("Tackle controls - delete tagTypes")
+    .then(() => {
+      return cy.tackleControlsCleanTagTypes(tokens);
     })
 
     .log("Tackle controls - clean finished");
