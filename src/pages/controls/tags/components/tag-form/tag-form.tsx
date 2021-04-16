@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AxiosError, AxiosPromise, AxiosResponse } from "axios";
 import { useFormik, FormikProvider, FormikHelpers } from "formik";
-import { object, string } from "yup";
+import { object, string, mixed } from "yup";
 
 import {
   ActionGroup,
@@ -78,6 +78,7 @@ export const TagForm: React.FC<TagFormProps> = ({ tag, onSaved, onCancel }) => {
       .min(3, t("validation.minLength", { length: 3 }))
       .max(120, t("validation.maxLength", { length: 120 }))
       .matches(/^[- \w]+$/, t("validation.onlyCharactersAndUnderscore")),
+    tagType: mixed().required(t("validation.required")),
   });
 
   const onSubmit = (
@@ -157,7 +158,7 @@ export const TagForm: React.FC<TagFormProps> = ({ tag, onSaved, onCancel }) => {
         <FormGroup
           label={t("terms.tagType")}
           fieldId="tagType"
-          isRequired={false}
+          isRequired={true}
           validated={getValidatedFromError(formik.errors.tagType)}
           helperTextInvalid={formik.errors.tagType}
         >
