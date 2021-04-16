@@ -10,6 +10,8 @@ import {
   DescriptionListDescription,
   DescriptionListGroup,
   DescriptionListTerm,
+  Modal,
+  ModalVariant,
   ToolbarChip,
   ToolbarGroup,
   ToolbarItem,
@@ -40,14 +42,14 @@ import {
   useTableControls,
   useFetchStakeholders,
   useDeleteStakeholder,
+  useEntityModal,
 } from "shared/hooks";
 
 import { getAxiosErrorMessage } from "utils/utils";
 import { StakeholderSortBy, StakeholderSortByQuery } from "api/rest";
 import { Stakeholder, SortByQuery } from "api/models";
 
-import { NewStakeholderModal } from "./components/new-stakeholder-modal";
-import { UpdateStakeholderModal } from "./components/update-stakeholder-modal";
+import { StakeholderForm } from "./components/stakeholder-form";
 
 enum FilterKey {
   EMAIL = "email",
@@ -119,8 +121,13 @@ export const Stakeholders: React.FC = () => {
     new Map([])
   );
 
-  const [isNewModalOpen, setIsNewModalOpen] = useState(false);
-  const [rowToUpdate, setRowToUpdate] = useState<Stakeholder>();
+  const {
+    isOpen: isCreateUpdateModalOpen,
+    entity: rowToUpdate,
+    create: openCreateModal,
+    update: openUpdateModal,
+    close: closeCreateUpdateModal,
+  } = useEntityModal<Stakeholder>();
 
   const { deleteStakeholder } = useDeleteStakeholder();
 
@@ -258,7 +265,7 @@ export const Stakeholders: React.FC = () => {
   };
 
   const editRow = (row: Stakeholder) => {
-    setRowToUpdate(row);
+    openUpdateModal(row);
   };
 
   const deleteRow = (row: Stakeholder) => {
@@ -319,39 +326,25 @@ export const Stakeholders: React.FC = () => {
     );
   };
 
-  // Create Modal
+  // Create/update Modal
 
-  const handleOnOpenCreateNewModal = () => {
-    setIsNewModalOpen(true);
-  };
+  const handleOnCreateUpdateModalSaved = (
+    response: AxiosResponse<Stakeholder>
+  ) => {
+    if (!rowToUpdate) {
+      dispatch(
+        alertActions.addSuccess(
+          // t('terms.stakeholder')
+          t("toastr.success.added", {
+            what: response.data.displayName,
+            type: t("terms.stakeholder").toLowerCase(),
+          })
+        )
+      );
+    }
 
-  const handleOnCreatedNew = (response: AxiosResponse<Stakeholder>) => {
-    setIsNewModalOpen(false);
+    closeCreateUpdateModal();
     refreshTable();
-
-    dispatch(
-      alertActions.addSuccess(
-        t("toastr.success.added", {
-          what: response.data.displayName,
-          type: "stakeholder",
-        })
-      )
-    );
-  };
-
-  const handleOnCreateNewCancel = () => {
-    setIsNewModalOpen(false);
-  };
-
-  // Update Modal
-
-  const handleOnUpdated = () => {
-    setRowToUpdate(undefined);
-    refreshTable();
-  };
-
-  const handleOnUpdatedCancel = () => {
-    setRowToUpdate(undefined);
   };
 
   return (
@@ -399,7 +392,7 @@ export const Stakeholders: React.FC = () => {
                   type="button"
                   aria-label="create-stakeholder"
                   variant={ButtonVariant.primary}
-                  onClick={handleOnOpenCreateNewModal}
+                  onClick={openCreateModal}
                 >
                   {t("actions.createNew")}
                 </Button>
@@ -423,16 +416,22 @@ export const Stakeholders: React.FC = () => {
         />
       </ConditionalRender>
 
-      <NewStakeholderModal
-        isOpen={isNewModalOpen}
-        onSaved={handleOnCreatedNew}
-        onCancel={handleOnCreateNewCancel}
-      />
-      <UpdateStakeholderModal
-        stakeholder={rowToUpdate}
-        onSaved={handleOnUpdated}
-        onCancel={handleOnUpdatedCancel}
-      />
+      <Modal
+        // t('dialog.title.update')
+        // t('dialog.title.new')
+        title={t(`dialog.title.${rowToUpdate ? "update" : "new"}`, {
+          what: t("terms.stakeholder").toLowerCase(),
+        })}
+        variant={ModalVariant.medium}
+        isOpen={isCreateUpdateModalOpen}
+        onClose={closeCreateUpdateModal}
+      >
+        <StakeholderForm
+          stakeholder={rowToUpdate}
+          onSaved={handleOnCreateUpdateModalSaved}
+          onCancel={closeCreateUpdateModal}
+        />
+      </Modal>
     </>
   );
 };

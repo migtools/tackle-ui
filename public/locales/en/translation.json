@@ -20,13 +20,7 @@
         "title": {
             "delete": "Delete '{{what}}'",
             "new": "New {{what}}",
-            "newApplication": "New application",
-            "newStakeholder": "New stakeholder",
-            "newStakeholderGroup": "New stakeholder group",
-            "update": "Update {{what}}",
-            "updateApplication": "Update application",
-            "updateStakeholder": "Update stakeholder",
-            "updateStakeholderGroup": "Update stakeholder group"
+            "update": "Update {{what}}"
         }
     },
     "sidebar": {

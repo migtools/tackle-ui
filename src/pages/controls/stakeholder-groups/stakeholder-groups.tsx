@@ -10,6 +10,8 @@ import {
   DescriptionListDescription,
   DescriptionListGroup,
   DescriptionListTerm,
+  Modal,
+  ModalVariant,
   ToolbarChip,
   ToolbarGroup,
   ToolbarItem,
@@ -40,14 +42,14 @@ import {
   useTableControls,
   useFetchStakeholderGroups,
   useDeleteStakeholderGroup,
+  useEntityModal,
 } from "shared/hooks";
 
 import { getAxiosErrorMessage } from "utils/utils";
 import { StakeholderGroupSortBy, StakeholderGroupSortByQuery } from "api/rest";
 import { StakeholderGroup, SortByQuery } from "api/models";
 
-import { NewStakeholderGroupModal } from "./components/new-stakeholder-group-modal";
-import { UpdateStakeholderGroupModal } from "./components/update-stakeholder-group-modal";
+import { StakeholderGroupForm } from "./components/stakeholder-group-form";
 
 enum FilterKey {
   NAME = "name",
@@ -108,8 +110,13 @@ export const StakeholderGroups: React.FC = () => {
     new Map([])
   );
 
-  const [isNewModalOpen, setIsNewModalOpen] = useState(false);
-  const [rowToUpdate, setRowToUpdate] = useState<StakeholderGroup>();
+  const {
+    isOpen: isCreateUpdateModalOpen,
+    entity: rowToUpdate,
+    create: openCreateModal,
+    update: openUpdateModal,
+    close: closeCreateUpdateModal,
+  } = useEntityModal<StakeholderGroup>();
 
   const { deleteStakeholderGroup } = useDeleteStakeholderGroup();
 
@@ -243,7 +250,7 @@ export const StakeholderGroups: React.FC = () => {
   };
 
   const editRow = (row: StakeholderGroup) => {
-    setRowToUpdate(row);
+    openUpdateModal(row);
   };
 
   const deleteRow = (row: StakeholderGroup) => {
@@ -304,39 +311,25 @@ export const StakeholderGroups: React.FC = () => {
     );
   };
 
-  // Create Modal
+  // Create/update Modal
 
-  const handleOnOpenCreateNewModal = () => {
-    setIsNewModalOpen(true);
-  };
+  const handleOnCreateUpdateModalSaved = (
+    response: AxiosResponse<StakeholderGroup>
+  ) => {
+    if (!rowToUpdate) {
+      dispatch(
+        alertActions.addSuccess(
+          // t('terms.stakeholderGroup')
+          t("toastr.success.added", {
+            what: response.data.name,
+            type: t("terms.stakeholderGroup").toLowerCase(),
+          })
+        )
+      );
+    }
 
-  const handleOnCreatedNew = (response: AxiosResponse<StakeholderGroup>) => {
-    setIsNewModalOpen(false);
+    closeCreateUpdateModal();
     refreshTable();
-
-    dispatch(
-      alertActions.addSuccess(
-        t("toastr.success.added", {
-          what: response.data.name,
-          type: "stakeholder group",
-        })
-      )
-    );
-  };
-
-  const handleOnCreateNewCancel = () => {
-    setIsNewModalOpen(false);
-  };
-
-  // Update Modal
-
-  const handleOnUpdated = () => {
-    setRowToUpdate(undefined);
-    refreshTable();
-  };
-
-  const handleOnUpdatedCancel = () => {
-    setRowToUpdate(undefined);
   };
 
   return (
@@ -384,7 +377,7 @@ export const StakeholderGroups: React.FC = () => {
                   type="button"
                   aria-label="create-stakeholder-group"
                   variant={ButtonVariant.primary}
-                  onClick={handleOnOpenCreateNewModal}
+                  onClick={openCreateModal}
                 >
                   {t("actions.createNew")}
                 </Button>
@@ -408,16 +401,22 @@ export const StakeholderGroups: React.FC = () => {
         />
       </ConditionalRender>
 
-      <NewStakeholderGroupModal
-        isOpen={isNewModalOpen}
-        onSaved={handleOnCreatedNew}
-        onCancel={handleOnCreateNewCancel}
-      />
-      <UpdateStakeholderGroupModal
-        stakeholderGroup={rowToUpdate}
-        onSaved={handleOnUpdated}
-        onCancel={handleOnUpdatedCancel}
-      />
+      <Modal
+        // t('dialog.title.update')
+        // t('dialog.title.new')
+        title={t(`dialog.title.${rowToUpdate ? "update" : "new"}`, {
+          what: t("terms.stakeholderGroup").toLowerCase(),
+        })}
+        variant={ModalVariant.medium}
+        isOpen={isCreateUpdateModalOpen}
+        onClose={closeCreateUpdateModal}
+      >
+        <StakeholderGroupForm
+          stakeholderGroup={rowToUpdate}
+          onSaved={handleOnCreateUpdateModalSaved}
+          onCancel={closeCreateUpdateModal}
+        />
+      </Modal>
     </>
   );
 };

@@ -20,13 +20,7 @@
         "title": {
             "delete": "Eliminar '{{what}}'",
             "new": "Nuevo(a) {{what}}",
-            "newApplication": "Nueva aplicación",
-            "newStakeholder": "Nuevo interesado",
-            "newStakeholderGroup": "Nuevo grupo de interesados",
-            "update": "Actualizar {{what}}",
-            "updateApplication": "Actualizar aplicación",
-            "updateStakeholder": "Actualizar interesado",
-            "updateStakeholderGroup": "Actualizar grupo de interesados"
+            "update": "Actualizar {{what}}"
         }
     },
     "sidebar": {
