@@ -3,7 +3,6 @@ export { AppPlaceholder } from "./app-placeholder";
 export { AppTableActionButtons } from "./app-table-action-buttons";
 export { AppTableToolbarToggleGroup } from "./app-table-toolbar-toggle-group";
 export { AppTableWithControls } from "./app-table-with-controls";
-export { Color, defaultColorsPalete } from "./color";
 export { ConditionalRender } from "./conditional-render";
 export { ConfirmDialog } from "./confirm-dialog";
 export { EmptyTextMessage } from "./empty-text-message";

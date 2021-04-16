@@ -46,20 +46,6 @@ export interface JobFunction {
   role: string;
 }
 
-export interface TagType {
-  id?: number;
-  name: string;
-  rank?: number;
-  colour?: string;
-  tags?: Tag[];
-}
-
-export interface Tag {
-  id?: number;
-  name: string;
-  tagType?: TagType;
-}
-
 // Application inventory
 
 export interface Application {
@@ -106,13 +92,6 @@ export interface StakeholderGroupPage {
 export interface JobFunctionPage {
   _embedded: {
     "job-function": JobFunction[];
-  };
-  total_count: number;
-}
-
-export interface TagTypePage {
-  _embedded: {
-    "tag-type": TagType[];
   };
   total_count: number;
 }

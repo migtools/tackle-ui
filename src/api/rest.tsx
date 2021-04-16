@@ -13,9 +13,6 @@ import {
   ApplicationPage,
   Application,
   Assessment,
-  TagTypePage,
-  TagType,
-  Tag,
   JobFunction,
 } from "./models";
 
@@ -27,8 +24,6 @@ export const BUSINESS_SERVICES = CONTROLS_BASE_URL + "/business-service";
 export const STAKEHOLDERS = CONTROLS_BASE_URL + "/stakeholder";
 export const STAKEHOLDER_GROUPS = CONTROLS_BASE_URL + "/stakeholder-group";
 export const JOB_FUNCTIONS = CONTROLS_BASE_URL + "/job-function";
-export const TAG_TYPES = CONTROLS_BASE_URL + "/tag-type";
-export const TAG = CONTROLS_BASE_URL + "/tag";
 
 export const APPLICATIONS = APP_INVENTORY_BASE_URL + "/application";
 
@@ -328,94 +323,6 @@ export const getJobFunctions = (
 
   const query: string[] = buildQuery(params);
   return APIClient.get(`${JOB_FUNCTIONS}?${query.join("&")}`, { headers });
-};
-
-// Tag types
-
-export enum TagTypeSortBy {
-  NAME,
-  RANK,
-  COLOR,
-  TAGS,
-}
-export interface TagTypeSortByQuery {
-  field: TagTypeSortBy;
-  direction?: Direction;
-}
-
-export const getTagTypes = (
-  filters: {
-    name?: string[];
-    tags?: string[];
-  },
-  pagination: PageQuery,
-  sortBy?: TagTypeSortByQuery
-): AxiosPromise<TagTypePage> => {
-  let sortByQuery: string | undefined = undefined;
-  if (sortBy) {
-    let field;
-    switch (sortBy.field) {
-      case TagTypeSortBy.NAME:
-        field = "name";
-        break;
-      case TagTypeSortBy.RANK:
-        field = "rank";
-        break;
-      case TagTypeSortBy.COLOR:
-        field = "rank";
-        break;
-      case TagTypeSortBy.TAGS:
-        field = "tags.size()";
-        break;
-      default:
-        throw new Error("Could not define SortBy field name");
-    }
-    sortByQuery = `${sortBy.direction === "desc" ? "-" : ""}${field}`;
-  }
-
-  const params = {
-    page: pagination.page - 1,
-    size: pagination.perPage,
-    sort: sortByQuery,
-
-    name: filters.name,
-    "tags.name": filters.tags,
-  };
-
-  const query: string[] = buildQuery(params);
-  return APIClient.get(`${TAG_TYPES}?${query.join("&")}`, { headers });
-};
-
-export const deleteTagType = (id: number): AxiosPromise => {
-  return APIClient.delete(`${TAG_TYPES}/${id}`);
-};
-
-export const createTagType = (obj: TagType): AxiosPromise<TagType> => {
-  return APIClient.post(`${TAG_TYPES}`, obj);
-};
-
-export const updateTagType = (obj: TagType): AxiosPromise<TagType> => {
-  return APIClient.put(`${TAG_TYPES}/${obj.id}`, obj);
-};
-
-export const getTagTypeById = (id: number): AxiosPromise<TagType> => {
-  return APIClient.get(`${TAG_TYPES}/${id}`);
-};
-
-export const deleteTag = (id: number): AxiosPromise => {
-  return APIClient.delete(`${TAG}/${id}`);
-};
-
-export const createTag = (obj: Tag): AxiosPromise<Tag> => {
-  return APIClient.post(`${TAG}`, obj);
-};
-
-export const updateTag = (obj: Tag): AxiosPromise<Tag> => {
-  return APIClient.put(`${TAG}/${obj.id}`, obj);
-};
-
-export const getTagById = (id: number): AxiosPromise<Tag> => {
-  return APIClient.get(`${TAG}/${id}`);
 };
 
 // App inventory
