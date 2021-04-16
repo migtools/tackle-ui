@@ -220,7 +220,7 @@ export const Tags: React.FC = () => {
     const isExpanded = isItemExpanded(item);
     rows.push({
       [ENTITY_FIELD]: item,
-      isOpen: isExpanded,
+      isOpen: (item.tags || []).length > 0 ? isExpanded : undefined,
       cells: [
         {
           title: item.name,
