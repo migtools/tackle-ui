@@ -19,12 +19,12 @@
         },
         "title": {
             "delete": "Delete '{{what}}'",
+            "new": "New {{what}}",
             "newApplication": "New application",
-            "newBusinessService": "New business service",
             "newStakeholder": "New stakeholder",
             "newStakeholderGroup": "New stakeholder group",
+            "update": "Update {{what}}",
             "updateApplication": "Update application",
-            "updateBusinessService": "Update business service",
             "updateStakeholder": "Update stakeholder",
             "updateStakeholderGroup": "Update stakeholder group"
         }
