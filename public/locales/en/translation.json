@@ -3,22 +3,9 @@
         "cancel": "Cancel",
         "create": "Create",
         "createNew": "Create new",
-        "createTag": "Create tag",
-        "createTagType": "Create tag type",
         "delete": "Delete",
         "edit": "Edit",
         "save": "Save"
-    },
-    "colors": {
-        "blue": "Blue",
-        "cyan": "Cyan",
-        "gold": "Gold",
-        "green": "Green",
-        "lightBlue": "Light blue",
-        "lightGreen": "Light green",
-        "orange": "Orange",
-        "purple": "Purple",
-        "red": "Red"
     },
     "composed": {
         "applicationInventory": "Application inventory",
@@ -37,15 +24,11 @@
             "newJobFunction": "New job function",
             "newStakeholder": "New stakeholder",
             "newStakeholderGroup": "New stakeholder group",
-            "newTag": "New Tag",
-            "newTagType": "New tag type",
             "updateApplication": "Update application",
             "updateBusinessService": "Update business service",
             "updateJobFunction": "Update job function",
             "updateStakeholder": "Update stakeholder",
-            "updateStakeholderGroup": "Update stakeholder group",
-            "updateTag": "Update tag",
-            "updateTagType": "Update tag type"
+            "updateStakeholderGroup": "Update stakeholder group"
         }
     },
     "sidebar": {
@@ -59,7 +42,6 @@
         "assessment": "Assessment",
         "businessService": "Business service",
         "businessServices": "Business services",
-        "color": "Color",
         "comments": "Comments",
         "completed": "Completed",
         "controls": "Controls",
@@ -77,17 +59,11 @@
         "notAvailable": "Not available",
         "notStarted": "Not started",
         "owner": "Owner",
-        "rank": "Rank",
         "stakeholder": "Stakeholder",
         "stakeholderGroup": "Stakeholder group",
         "stakeholderGroups": "Stakeholder groups",
         "stakeholders": "Stakeholders",
-        "tag": "Tag",
-        "tag(s)": "Tag(s)",
-        "tagName": "Tag name",
         "tags": "Tags",
-        "tagType": "Tag type",
-        "tagTypes": "Tag types",
         "unknown": "Unknown"
     },
     "toastr": {
@@ -98,7 +74,6 @@
     "validation": {
         "email": "This field requires a valid email.",
         "maxLength": "This field must contain fewer than {{length}} characters.",
-        "min": "This field must be greater than {{value}}.",
         "minLength": "This field must contain at least {{length}} characters.",
         "onlyCharactersAndUnderscore": "This field must contain only alphanumeric characters including underscore.",
         "required": "This field is required."
