@@ -74,7 +74,7 @@ export interface IState {
   fetchCount: number;
   fetchTagTypes: (
     filters: {
-      name?: string[];
+      tagTypes?: string[];
       tags?: string[];
     },
     page: PageQuery,
@@ -92,7 +92,7 @@ export const useFetchTagTypes = (
     (
       filters: {
         name?: string[];
-        tags?: string[];
+        tagTypes?: string[];
       },
       page: PageQuery,
       sortBy?: TagTypeSortByQuery

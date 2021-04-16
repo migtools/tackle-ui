@@ -51,7 +51,7 @@ import { UpdateTagModal } from "./components/update-tag-modal";
 import { TagTable } from "./components/tag-table";
 
 enum FilterKey {
-  NAME = "name",
+  TAG_TYPE = "tagType",
   TAG = "tags",
 }
 
@@ -98,8 +98,8 @@ export const Tags: React.FC = () => {
 
   const filters = [
     {
-      key: FilterKey.NAME,
-      name: t("terms.name"),
+      key: FilterKey.TAG_TYPE,
+      name: t("terms.tagType"),
     },
     {
       key: FilterKey.TAG,
@@ -143,7 +143,7 @@ export const Tags: React.FC = () => {
   const refreshTable = useCallback(() => {
     fetchTagTypes(
       {
-        name: filtersValue.get(FilterKey.NAME),
+        tagTypes: filtersValue.get(FilterKey.TAG_TYPE),
         tags: filtersValue.get(FilterKey.TAG),
       },
       paginationQuery,
@@ -154,7 +154,7 @@ export const Tags: React.FC = () => {
   useEffect(() => {
     fetchTagTypes(
       {
-        name: filtersValue.get(FilterKey.NAME),
+        tagTypes: filtersValue.get(FilterKey.TAG_TYPE),
         tags: filtersValue.get(FilterKey.TAG),
       },
       paginationQuery,

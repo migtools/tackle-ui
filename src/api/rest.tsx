@@ -324,7 +324,7 @@ export interface TagTypeSortByQuery {
 
 export const getTagTypes = (
   filters: {
-    name?: string[];
+    tagTypes?: string[];
     tags?: string[];
   },
   pagination: PageQuery,
@@ -357,7 +357,7 @@ export const getTagTypes = (
     size: pagination.perPage,
     sort: sortByQuery,
 
-    name: filters.name,
+    name: filters.tagTypes,
     "tags.name": filters.tags,
   };
 
