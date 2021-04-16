@@ -17,8 +17,6 @@ export interface Meta {
   count: number;
 }
 
-// Controls
-
 export interface BusinessService {
   id?: number;
   name: string;
@@ -46,8 +44,6 @@ export interface JobFunction {
   role: string;
 }
 
-// Application inventory
-
 export interface Application {
   id?: number;
   name: string;
@@ -56,7 +52,7 @@ export interface Application {
   businessService?: string;
 }
 
-// Pathfinder
+//
 
 export interface Assessment {
   id?: number;
@@ -65,8 +61,6 @@ export interface Assessment {
   stakeholders?: number[];
   stakeholderGroups?: number[];
 }
-
-// Pagination
 
 export interface BusinessServicePage {
   _embedded: {
