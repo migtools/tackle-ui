@@ -40,8 +40,6 @@ import {
   AppTableWithControls,
   ConditionalRender,
   NoDataEmptyState,
-  ToolbarSearchFilter,
-  InputTextFilter,
 } from "shared/components";
 import {
   useDeleteApplication,
@@ -55,7 +53,9 @@ import { getAxiosErrorMessage } from "utils/utils";
 
 import { NewApplicationModal } from "./components/new-application-modal";
 import { UpdateApplicationModal } from "./components/update-application-modal";
-import { SelectBusinessServiceFilter } from "./components/select-business-service-filter";
+import { ToolbarSearchFilter } from "./components/toolbar-search-filter";
+import { InputTextFilter } from "./components/toolbar-search-filter/input-text-filter";
+import { SelectBusinessServiceFilter } from "./components/toolbar-search-filter/select-business-service-filter";
 import { ApplicationAssessment } from "./components/application-assessment";
 import { ApplicationBusinessService } from "./components/application-business-service";
 
