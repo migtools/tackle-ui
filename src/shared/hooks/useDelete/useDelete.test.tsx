@@ -1,43 +1,50 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { renderHook, act } from "@testing-library/react-hooks";
-import { useDeleteStakeholderGroup } from "./useDeleteStakeholderGroup";
-import { StakeholderGroup } from "api/models";
-import { STAKEHOLDER_GROUPS } from "api/rest";
 
-describe("useDeleteStakeholderGroup", () => {
+import { Application } from "api/models";
+import { deleteApplication, APPLICATIONS } from "api/rest";
+
+import { useDelete } from "./useDelete";
+
+describe("useDelete", () => {
   it("Valid initial status", () => {
     // Use hook
-    const { result } = renderHook(() => useDeleteStakeholderGroup());
+    const { result } = renderHook(() =>
+      useDelete<Application>({
+        onDelete: jest.fn(),
+      })
+    );
 
-    const { isDeleting, deleteStakeholderGroup } = result.current;
+    const { isDeleting, requestDelete } = result.current;
 
     expect(isDeleting).toBe(false);
-    expect(deleteStakeholderGroup).toBeDefined();
+    expect(requestDelete).toBeDefined();
   });
 
   it("Delete error", async () => {
-    const version: StakeholderGroup = {
+    const app: Application = {
       id: 1,
-      name: "some",
-      description: "my description",
+      name: "any name",
     };
     const onSuccessMock = jest.fn();
     const onErrorMock = jest.fn();
 
     // Mock REST API
-    new MockAdapter(axios)
-      .onDelete(`${STAKEHOLDER_GROUPS}/${version.id}`)
-      .networkError();
+    new MockAdapter(axios).onDelete(`${APPLICATIONS}/${app.id}`).networkError();
 
     // Use hook
+    const onDelete = (application: Application) => {
+      return deleteApplication(application.id!);
+    };
+
     const { result, waitForNextUpdate } = renderHook(() =>
-      useDeleteStakeholderGroup()
+      useDelete<Application>({ onDelete })
     );
-    const { deleteStakeholderGroup } = result.current;
+    const { requestDelete } = result.current;
 
     // Init delete
-    act(() => deleteStakeholderGroup(version, onSuccessMock, onErrorMock));
+    act(() => requestDelete(app, onSuccessMock, onErrorMock));
     expect(result.current.isDeleting).toBe(true);
 
     // Delete finished
@@ -48,27 +55,28 @@ describe("useDeleteStakeholderGroup", () => {
   });
 
   it("Delete success", async () => {
-    const version: StakeholderGroup = {
+    const version: Application = {
       id: 1,
-      name: "some",
-      description: "my description",
+      name: "any name",
     };
     const onSuccessMock = jest.fn();
     const onErrorMock = jest.fn();
 
     // Mock REST API
-    new MockAdapter(axios)
-      .onDelete(`${STAKEHOLDER_GROUPS}/${version.id}`)
-      .reply(201);
+    new MockAdapter(axios).onDelete(`${APPLICATIONS}/${version.id}`).reply(201);
 
     // Use hook
+    const onDelete = (application: Application) => {
+      return deleteApplication(application.id!);
+    };
+
     const { result, waitForNextUpdate } = renderHook(() =>
-      useDeleteStakeholderGroup()
+      useDelete<Application>({ onDelete })
     );
-    const { deleteStakeholderGroup } = result.current;
+    const { requestDelete: deleteBusinessService } = result.current;
 
     // Init delete
-    act(() => deleteStakeholderGroup(version, onSuccessMock, onErrorMock));
+    act(() => deleteBusinessService(version, onSuccessMock, onErrorMock));
     expect(result.current.isDeleting).toBe(true);
 
     // Delete finished

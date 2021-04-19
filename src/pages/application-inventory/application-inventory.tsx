@@ -42,13 +42,17 @@ import {
   NoDataEmptyState,
 } from "shared/components";
 import {
-  useDeleteApplication,
+  useDelete,
   useTableControls,
   useFetchApplications,
 } from "shared/hooks";
 
 import { Application, SortByQuery } from "api/models";
-import { ApplicationSortBy, ApplicationSortByQuery } from "api/rest";
+import {
+  ApplicationSortBy,
+  ApplicationSortByQuery,
+  deleteApplication,
+} from "api/rest";
 import { getAxiosErrorMessage } from "utils/utils";
 
 import { NewApplicationModal } from "./components/new-application-modal";
@@ -118,7 +122,9 @@ export const ApplicationInventory: React.FC = () => {
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
   const [rowToUpdate, setRowToUpdate] = useState<Application>();
 
-  const { deleteApplication } = useDeleteApplication();
+  const { requestDelete: requestDeleteApplication } = useDelete<Application>({
+    onDelete: (t: Application) => deleteApplication(t.id!),
+  });
 
   const {
     applications,
@@ -290,7 +296,7 @@ export const ApplicationInventory: React.FC = () => {
         cancelBtnLabel: t("actions.cancel"),
         onConfirm: () => {
           dispatch(confirmDialogActions.processing());
-          deleteApplication(
+          requestDeleteApplication(
             row,
             () => {
               dispatch(confirmDialogActions.closeDialog());
