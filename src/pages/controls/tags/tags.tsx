@@ -103,7 +103,7 @@ export const Tags: React.FC = () => {
     },
     {
       key: FilterKey.TAG,
-      name: t("terms.tag"),
+      name: t("terms.tagName"),
     },
   ];
   const [filtersValue, setFiltersValue] = useState<Map<FilterKey, string[]>>(
