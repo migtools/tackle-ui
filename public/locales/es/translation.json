@@ -34,6 +34,10 @@
             "updateStakeholderGroup": "Actualizar grupo de interesados"
         }
     },
+    "message": {
+        "couldNotFetchBody": "El recurso no existe o no tienes permiso para acceder al mismo",
+        "couldNotFetchTitle": "No disponible"
+    },
     "sidebar": {
         "applicationInventory": "Inventario de aplicaciones",
         "controls": "Controles",

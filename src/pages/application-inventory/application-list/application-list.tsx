@@ -56,11 +56,11 @@ import { getAxiosErrorMessage } from "utils/utils";
 
 import { NewApplicationModal } from "./components/new-application-modal";
 import { UpdateApplicationModal } from "./components/update-application-modal";
-import { RemoteBusinessService } from "./components/remote-business-service";
 import { ToolbarSearchFilter } from "./components/toolbar-search-filter";
 import { InputTextFilter } from "./components/toolbar-search-filter/input-text-filter";
 import { SelectBusinessServiceFilter } from "./components/toolbar-search-filter/select-business-service-filter";
 import { ApplicationAssessment } from "./components/application-assessment";
+import { ApplicationBusinessService } from "./components/application-business-service";
 
 import { useAssessApplication } from "./hooks/useAssessApplication";
 
@@ -229,21 +229,7 @@ export const ApplicationList: React.FC = () => {
           title: item.description,
         },
         {
-          title: (
-            <>
-              {item.businessService && (
-                <RemoteBusinessService
-                  businessServiceId={Number(item.businessService)}
-                >
-                  {({ businessService, fetchError }) =>
-                    fetchError
-                      ? t("terms.unknown")
-                      : businessService?.name || ""
-                  }
-                </RemoteBusinessService>
-              )}
-            </>
-          ),
+          title: <ApplicationBusinessService application={item} />,
         },
         {
           title: <ApplicationAssessment application={item} />,
@@ -309,7 +295,7 @@ export const ApplicationList: React.FC = () => {
     return false;
   };
 
-  // Row event handlers
+  // Rows
 
   const collapseRow = (
     event: React.MouseEvent,
@@ -417,7 +403,7 @@ export const ApplicationList: React.FC = () => {
       alertActions.addSuccess(
         t("toastr.success.added", {
           what: response.data.name,
-          type: "stakeholder",
+          type: "application",
         })
       )
     );
