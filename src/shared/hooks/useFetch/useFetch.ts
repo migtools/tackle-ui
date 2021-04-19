@@ -1,13 +1,6 @@
-import { useCallback, useReducer } from "react";
+import { useReducer } from "react";
 import { AxiosError, AxiosPromise } from "axios";
 import { ActionType, createAsyncAction, getType } from "typesafe-actions";
-
-import {
-  getBusinessServices,
-  BusinessServiceSortByQuery,
-  BusinessServiceSortBy,
-} from "api/rest";
-import { PageRepresentation, BusinessService, PageQuery } from "api/models";
 
 export const {
   request: fetchRequest,
@@ -84,7 +77,7 @@ export interface IState<T> {
   requestFetch: () => void;
 }
 
-export const useFetchBusinessServices = <T>({
+export const useFetch = <T>({
   defaultIsFetching = false,
   onFetch,
 }: IArgs<T>): IState<T> => {
@@ -95,11 +88,7 @@ export const useFetchBusinessServices = <T>({
 
     onFetch()
       .then(({ data }) => {
-        dispatch(
-          fetchSuccess({
-            data,
-          })
-        );
+        dispatch(fetchSuccess(data));
       })
       .catch((error: AxiosError) => {
         dispatch(fetchFailure(error));
@@ -115,4 +104,4 @@ export const useFetchBusinessServices = <T>({
   };
 };
 
-export default useFetchBusinessServices;
+export default useFetch;

@@ -1,127 +1,65 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { renderHook, act } from "@testing-library/react-hooks";
-import { useFetchBusinessServices } from "./useFetch";
-import { BusinessServicePage } from "api/models";
-import { BUSINESS_SERVICES } from "api/rest";
 
-describe("useFetchBusinessServices", () => {
+import { useFetch } from "./useFetch";
+
+describe("useFetch", () => {
   it("Fetch error due to no REST API found", async () => {
     // Mock REST API
-    new MockAdapter(axios).onGet(BUSINESS_SERVICES).networkError();
+    new MockAdapter(axios).onGet("/myendpoint").networkError();
 
     // Use hook
     const { result, waitForNextUpdate } = renderHook(() =>
-      useFetchBusinessServices()
+      useFetch<string>({ onFetch: () => axios.get("/myendpoint") })
     );
 
-    const {
-      businessServices,
-      isFetching,
-      fetchError,
-      fetchBusinessServices,
-    } = result.current;
+    const { data, isFetching, fetchError, requestFetch } = result.current;
 
     expect(isFetching).toBe(false);
-    expect(businessServices).toBeUndefined();
+    expect(data).toBeUndefined();
     expect(fetchError).toBeUndefined();
 
     // Init fetch
-    act(() => fetchBusinessServices({}, { page: 2, perPage: 50 }));
+    act(() => requestFetch());
     expect(result.current.isFetching).toBe(true);
 
     // Fetch finished
     await waitForNextUpdate();
     expect(result.current.isFetching).toBe(false);
-    expect(result.current.businessServices).toBeUndefined();
+    expect(result.current.data).toBeUndefined();
     expect(result.current.fetchError).not.toBeUndefined();
   });
 
   it("Fetch success", async () => {
     // Mock REST API
-    const data: BusinessServicePage = {
-      _embedded: {
-        "business-service": [],
-      },
-      total_count: 0,
-    };
+    const responseData = "hello world!";
 
-    new MockAdapter(axios)
-      .onGet(`${BUSINESS_SERVICES}?page=0&size=10&name=something`)
-      .reply(200, data);
+    new MockAdapter(axios).onGet("/myendpoint").reply(200, responseData);
 
     // Use hook
     const { result, waitForNextUpdate } = renderHook(() =>
-      useFetchBusinessServices()
+      useFetch<string>({
+        onFetch: () => {
+          return axios.get("/myendpoint");
+        },
+      })
     );
 
-    const {
-      businessServices,
-      isFetching,
-      fetchError,
-      fetchBusinessServices,
-    } = result.current;
+    const { data, isFetching, fetchError, requestFetch } = result.current;
 
     expect(isFetching).toBe(false);
-    expect(businessServices).toBeUndefined();
+    expect(data).toBeUndefined();
     expect(fetchError).toBeUndefined();
 
     // Init fetch
-    act(() =>
-      fetchBusinessServices({ name: ["something"] }, { page: 1, perPage: 10 })
-    );
+    act(() => requestFetch());
     expect(result.current.isFetching).toBe(true);
 
     // Fetch finished
     await waitForNextUpdate();
     expect(result.current.isFetching).toBe(false);
-    expect(result.current.businessServices).toMatchObject({
-      data: [],
-      meta: { count: 0 },
-    });
-    expect(result.current.fetchError).toBeUndefined();
-  });
-
-  it("Fetch all", async () => {
-    // Mock REST API
-    const data: BusinessServicePage = {
-      _embedded: {
-        "business-service": [],
-      },
-      total_count: 0,
-    };
-
-    new MockAdapter(axios)
-      .onGet(`${BUSINESS_SERVICES}?page=0&size=1000&sort=name`)
-      .reply(200, data);
-
-    // Use hook
-    const { result, waitForNextUpdate } = renderHook(() =>
-      useFetchBusinessServices()
-    );
-
-    const {
-      businessServices: items,
-      isFetching,
-      fetchError,
-      fetchAllBusinessServices: fetchAll,
-    } = result.current;
-
-    expect(isFetching).toBe(false);
-    expect(items).toBeUndefined();
-    expect(fetchError).toBeUndefined();
-
-    // Init fetch
-    act(() => fetchAll());
-    expect(result.current.isFetching).toBe(true);
-
-    // Fetch finished
-    await waitForNextUpdate();
-    expect(result.current.isFetching).toBe(false);
-    expect(result.current.businessServices).toMatchObject({
-      data: [],
-      meta: { count: 0 },
-    });
+    expect(result.current.data).toBe(responseData);
     expect(result.current.fetchError).toBeUndefined();
   });
 });
