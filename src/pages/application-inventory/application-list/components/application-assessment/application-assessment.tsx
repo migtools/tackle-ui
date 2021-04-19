@@ -3,6 +3,7 @@ import { AxiosError } from "axios";
 import { useTranslation } from "react-i18next";
 
 import {
+  EmptyTextMessage,
   StatusIconAssessment,
   StatusIconAssessmentType,
 } from "shared/components";
@@ -45,7 +46,7 @@ export const ApplicationAssessment: React.FC<ApplicationAssessmentProps> = ({
         <RemoteAssessment applicationId={application.id}>
           {({ isFetching, fetchError, fetchCount, assessment }) => {
             if (fetchError) {
-              return t("terms.unknown");
+              return <EmptyTextMessage message={t("terms.notAvailable")} />;
             }
             if (isFetching || fetchCount === 0) {
               return "";
