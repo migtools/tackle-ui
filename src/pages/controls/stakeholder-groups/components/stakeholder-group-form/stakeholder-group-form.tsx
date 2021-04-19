@@ -19,16 +19,22 @@ import {
   OptionWithValue,
   MultiSelectFetchFormikField,
 } from "shared/components";
-import { useFetchStakeholders } from "shared/hooks";
+import { useFetch } from "shared/hooks";
 
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 import { createStakeholderGroup, updateStakeholderGroup } from "api/rest";
-import { Stakeholder, StakeholderGroup } from "api/models";
+import {
+  PageRepresentation,
+  Stakeholder,
+  StakeholderGroup,
+  StakeholderPage,
+} from "api/models";
 import {
   getAxiosErrorMessage,
   getValidatedFromError,
   getValidatedFromErrorTouched,
 } from "utils/utils";
+import { getAllStakeholders, stakeholderPageMapper } from "api/apiUtils";
 
 const stakeholderToOption = (
   value: Stakeholder
@@ -59,11 +65,15 @@ export const StakeholderGroupForm: React.FC<StakeholderGroupFormProps> = ({
   const [error, setError] = useState<AxiosError>();
 
   const {
-    stakeholders,
+    data: stakeholders,
     isFetching: isFetchingStakeholders,
     fetchError: fetchErrorStakeholders,
-    fetchAllStakeholders,
-  } = useFetchStakeholders();
+    requestFetch: fetchAllStakeholders,
+  } = useFetch<StakeholderPage, PageRepresentation<Stakeholder>>({
+    defaultIsFetching: true,
+    onFetch: getAllStakeholders,
+    mapper: stakeholderPageMapper,
+  });
 
   useEffect(() => {
     fetchAllStakeholders();

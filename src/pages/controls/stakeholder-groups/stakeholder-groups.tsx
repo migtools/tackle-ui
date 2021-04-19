@@ -38,13 +38,24 @@ import {
 } from "shared/components";
 import {
   useTableControls,
-  useFetchStakeholderGroups,
+  useFetch,
   useDeleteStakeholderGroup,
 } from "shared/hooks";
 
 import { getAxiosErrorMessage } from "utils/utils";
-import { StakeholderGroupSortBy, StakeholderGroupSortByQuery } from "api/rest";
-import { StakeholderGroup, SortByQuery } from "api/models";
+
+import {
+  getStakeholderGroups,
+  StakeholderGroupSortBy,
+  StakeholderGroupSortByQuery,
+} from "api/rest";
+import {
+  StakeholderGroup,
+  SortByQuery,
+  StakeholderGroupPage,
+  PageRepresentation,
+} from "api/models";
+import { stakeholderGroupPageMapper } from "api/apiUtils";
 
 import { NewStakeholderGroupModal } from "./components/new-stakeholder-group-modal";
 import { UpdateStakeholderGroupModal } from "./components/update-stakeholder-group-modal";
@@ -114,13 +125,6 @@ export const StakeholderGroups: React.FC = () => {
   const { deleteStakeholderGroup } = useDeleteStakeholderGroup();
 
   const {
-    stakeholderGroups,
-    isFetching,
-    fetchError,
-    fetchStakeholderGroups,
-  } = useFetchStakeholderGroups(true);
-
-  const {
     paginationQuery,
     sortByQuery,
     handlePaginationChange,
@@ -129,6 +133,33 @@ export const StakeholderGroups: React.FC = () => {
     sortByQuery: { direction: "asc", index: 1 },
   });
 
+  const fetchStakeholderGroups = useCallback(() => {
+    return getStakeholderGroups(
+      {
+        name: filtersValue.get(FilterKey.NAME),
+        description: filtersValue.get(FilterKey.DESCRIPTION),
+        stakeholder: filtersValue.get(FilterKey.STAKEHOLDER),
+      },
+      paginationQuery,
+      toSortByQuery(sortByQuery)
+    );
+  }, [filtersValue, paginationQuery, sortByQuery]);
+
+  const {
+    data: stakeholderGroups,
+    isFetching,
+    fetchError,
+    requestFetch: refreshTable,
+  } = useFetch<StakeholderGroupPage, PageRepresentation<StakeholderGroup>>({
+    defaultIsFetching: true,
+    onFetch: fetchStakeholderGroups,
+    mapper: stakeholderGroupPageMapper,
+  });
+
+  useEffect(() => {
+    refreshTable();
+  }, [filtersValue, paginationQuery, sortByQuery, refreshTable]);
+
   const {
     isItemSelected: isItemExpanded,
     toggleItemSelected: toggleItemExpanded,
@@ -136,30 +167,6 @@ export const StakeholderGroups: React.FC = () => {
     items: stakeholderGroups?.data || [],
     isEqual: (a, b) => a.id === b.id,
   });
-
-  const refreshTable = useCallback(() => {
-    fetchStakeholderGroups(
-      {
-        name: filtersValue.get(FilterKey.NAME),
-        description: filtersValue.get(FilterKey.DESCRIPTION),
-        stakeholder: filtersValue.get(FilterKey.STAKEHOLDER),
-      },
-      paginationQuery,
-      toSortByQuery(sortByQuery)
-    );
-  }, [filtersValue, paginationQuery, sortByQuery, fetchStakeholderGroups]);
-
-  useEffect(() => {
-    fetchStakeholderGroups(
-      {
-        name: filtersValue.get(FilterKey.NAME),
-        description: filtersValue.get(FilterKey.DESCRIPTION),
-        stakeholder: filtersValue.get(FilterKey.STAKEHOLDER),
-      },
-      paginationQuery,
-      toSortByQuery(sortByQuery)
-    );
-  }, [filtersValue, paginationQuery, sortByQuery, fetchStakeholderGroups]);
 
   const columns: ICell[] = [
     {

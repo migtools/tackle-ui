@@ -41,14 +41,21 @@ import {
   ConditionalRender,
   NoDataEmptyState,
 } from "shared/components";
-import {
-  useDeleteApplication,
-  useTableControls,
-  useFetchApplications,
-} from "shared/hooks";
+import { useDeleteApplication, useTableControls, useFetch } from "shared/hooks";
 
-import { Application, SortByQuery } from "api/models";
-import { ApplicationSortBy, ApplicationSortByQuery } from "api/rest";
+import {
+  Application,
+  ApplicationPage,
+  PageRepresentation,
+  SortByQuery,
+} from "api/models";
+import {
+  ApplicationSortBy,
+  ApplicationSortByQuery,
+  getApplications,
+} from "api/rest";
+import { applicationPageMapper } from "api/apiUtils";
+
 import { getAxiosErrorMessage } from "utils/utils";
 
 import { NewApplicationModal } from "./components/new-application-modal";
@@ -121,13 +128,6 @@ export const ApplicationInventory: React.FC = () => {
   const { deleteApplication } = useDeleteApplication();
 
   const {
-    applications,
-    isFetching,
-    fetchError,
-    fetchApplications,
-  } = useFetchApplications(true);
-
-  const {
     paginationQuery,
     sortByQuery,
     handlePaginationChange,
@@ -136,6 +136,35 @@ export const ApplicationInventory: React.FC = () => {
     sortByQuery: { direction: "asc", index: 1 },
   });
 
+  const fetchApplications = useCallback(() => {
+    return getApplications(
+      {
+        name: filtersValue.get(FilterKey.NAME)?.map((f) => f.key),
+        description: filtersValue.get(FilterKey.DESCRIPTION)?.map((f) => f.key),
+        businessService: filtersValue
+          .get(FilterKey.BUSINESS_SERVICE)
+          ?.map((f) => f.key),
+      },
+      paginationQuery,
+      toSortByQuery(sortByQuery)
+    );
+  }, [filtersValue, paginationQuery, sortByQuery]);
+
+  const {
+    data: applications,
+    isFetching,
+    fetchError,
+    requestFetch: refreshTable,
+  } = useFetch<ApplicationPage, PageRepresentation<Application>>({
+    defaultIsFetching: true,
+    onFetch: fetchApplications,
+    mapper: applicationPageMapper,
+  });
+
+  useEffect(() => {
+    refreshTable();
+  }, [filtersValue, paginationQuery, sortByQuery, refreshTable]);
+
   const {
     isItemSelected: isItemExpanded,
     toggleItemSelected: toggleItemExpanded,
@@ -143,34 +172,6 @@ export const ApplicationInventory: React.FC = () => {
     items: applications?.data || [],
     isEqual: (a, b) => a.id === b.id,
   });
-
-  const refreshTable = useCallback(() => {
-    fetchApplications(
-      {
-        name: filtersValue.get(FilterKey.NAME)?.map((f) => f.key),
-        description: filtersValue.get(FilterKey.DESCRIPTION)?.map((f) => f.key),
-        businessService: filtersValue
-          .get(FilterKey.BUSINESS_SERVICE)
-          ?.map((f) => f.key),
-      },
-      paginationQuery,
-      toSortByQuery(sortByQuery)
-    );
-  }, [filtersValue, paginationQuery, sortByQuery, fetchApplications]);
-
-  useEffect(() => {
-    fetchApplications(
-      {
-        name: filtersValue.get(FilterKey.NAME)?.map((f) => f.key),
-        description: filtersValue.get(FilterKey.DESCRIPTION)?.map((f) => f.key),
-        businessService: filtersValue
-          .get(FilterKey.BUSINESS_SERVICE)
-          ?.map((f) => f.key),
-      },
-      paginationQuery,
-      toSortByQuery(sortByQuery)
-    );
-  }, [filtersValue, paginationQuery, sortByQuery, fetchApplications]);
 
   const columns: ICell[] = [
     {

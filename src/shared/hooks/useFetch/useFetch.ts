@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useCallback, useReducer } from "react";
 import { AxiosError, AxiosPromise } from "axios";
 import { ActionType, createAsyncAction, getType } from "typesafe-actions";
 
@@ -64,36 +64,38 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-export interface IArgs<T> {
+export interface IArgs<T, R> {
   defaultIsFetching?: boolean;
   onFetch: () => AxiosPromise<T>;
+  mapper: (t: T) => R;
 }
 
-export interface IState<T> {
-  data?: T;
+export interface IState<R> {
+  data?: R;
   isFetching: boolean;
   fetchError?: AxiosError;
   fetchCount: number;
   requestFetch: () => void;
 }
 
-export const useFetch = <T>({
+export const useFetch = <T, R>({
   defaultIsFetching = false,
   onFetch,
-}: IArgs<T>): IState<T> => {
+  mapper,
+}: IArgs<T, R>): IState<R> => {
   const [state, dispatch] = useReducer(reducer, defaultIsFetching, initReducer);
 
-  const fetchHandler = () => {
+  const fetchHandler = useCallback(() => {
     dispatch(fetchRequest());
 
     onFetch()
       .then(({ data }) => {
-        dispatch(fetchSuccess(data));
+        dispatch(fetchSuccess(mapper(data)));
       })
       .catch((error: AxiosError) => {
         dispatch(fetchFailure(error));
       });
-  };
+  }, [onFetch, mapper]);
 
   return {
     data: state.data,

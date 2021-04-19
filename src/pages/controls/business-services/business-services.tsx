@@ -32,12 +32,22 @@ import {
 } from "shared/components";
 import {
   useTableControls,
-  useFetchBusinessServices,
+  useFetch,
   useDeleteBusinessService,
 } from "shared/hooks";
 
-import { BusinessService, SortByQuery } from "api/models";
-import { BusinessServiceSortBy, BusinessServiceSortByQuery } from "api/rest";
+import {
+  BusinessService,
+  BusinessServicePage,
+  PageRepresentation,
+  SortByQuery,
+} from "api/models";
+import {
+  BusinessServiceSortBy,
+  BusinessServiceSortByQuery,
+  getBusinessServices,
+} from "api/rest";
+import { bussinessServicePageMapper } from "api/apiUtils";
 import { getAxiosErrorMessage } from "utils/utils";
 
 import { NewBusinessServiceModal } from "./components/new-business-service-modal";
@@ -108,13 +118,6 @@ export const BusinessServices: React.FC = () => {
   const { deleteBusinessService } = useDeleteBusinessService();
 
   const {
-    businessServices,
-    isFetching,
-    fetchError,
-    fetchBusinessServices,
-  } = useFetchBusinessServices(true);
-
-  const {
     paginationQuery,
     sortByQuery,
     handlePaginationChange,
@@ -123,8 +126,8 @@ export const BusinessServices: React.FC = () => {
     sortByQuery: { direction: "asc", index: 0 },
   });
 
-  const refreshTable = useCallback(() => {
-    fetchBusinessServices(
+  const fetchBusinessServices = useCallback(() => {
+    return getBusinessServices(
       {
         name: filtersValue.get(FilterKey.NAME),
         description: filtersValue.get(FilterKey.DESCRIPTION),
@@ -133,19 +136,22 @@ export const BusinessServices: React.FC = () => {
       paginationQuery,
       toSortByQuery(sortByQuery)
     );
-  }, [filtersValue, paginationQuery, sortByQuery, fetchBusinessServices]);
+  }, [filtersValue, paginationQuery, sortByQuery]);
+
+  const {
+    data: businessServices,
+    isFetching,
+    fetchError,
+    requestFetch: refreshTable,
+  } = useFetch<BusinessServicePage, PageRepresentation<BusinessService>>({
+    defaultIsFetching: true,
+    onFetch: fetchBusinessServices,
+    mapper: bussinessServicePageMapper,
+  });
 
   useEffect(() => {
-    fetchBusinessServices(
-      {
-        name: filtersValue.get(FilterKey.NAME),
-        description: filtersValue.get(FilterKey.DESCRIPTION),
-        owner: filtersValue.get(FilterKey.OWNER),
-      },
-      paginationQuery,
-      toSortByQuery(sortByQuery)
-    );
-  }, [filtersValue, paginationQuery, sortByQuery, fetchBusinessServices]);
+    refreshTable();
+  }, [filtersValue, paginationQuery, sortByQuery, refreshTable]);
 
   const columns: ICell[] = [
     { title: t("terms.name"), transforms: [sortable, cellWidth(25)] },

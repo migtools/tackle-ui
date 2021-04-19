@@ -19,16 +19,29 @@ import {
   OptionWithValue,
   MultiSelectFetchFormikField,
 } from "shared/components";
-import { useFetchStakeholderGroups, useFetchJobFunctions } from "shared/hooks";
+import { useFetch } from "shared/hooks";
 
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 import { createStakeholder, updateStakeholder } from "api/rest";
-import { JobFunction, Stakeholder, StakeholderGroup } from "api/models";
+import {
+  JobFunction,
+  JobFunctionPage,
+  PageRepresentation,
+  Stakeholder,
+  StakeholderGroup,
+  StakeholderGroupPage,
+} from "api/models";
 import {
   getAxiosErrorMessage,
   getValidatedFromError,
   getValidatedFromErrorTouched,
 } from "utils/utils";
+import {
+  getAllJobFunctions,
+  getAllStakeholderGroups,
+  jobFunctionPageMapper,
+  stakeholderGroupPageMapper,
+} from "api/apiUtils";
 
 const jobFunctionToOption = (
   value: JobFunction
@@ -67,22 +80,30 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
   const [error, setError] = useState<AxiosError>();
 
   const {
-    jobFunctions,
+    data: jobFunctions,
     isFetching: isFetchingJobFunctions,
     fetchError: fetchErrorJobFunctions,
-    fetchAllJobFunctions,
-  } = useFetchJobFunctions();
+    requestFetch: fetchAllJobFunctions,
+  } = useFetch<JobFunctionPage, PageRepresentation<JobFunction>>({
+    defaultIsFetching: true,
+    onFetch: getAllJobFunctions,
+    mapper: jobFunctionPageMapper,
+  });
 
   useEffect(() => {
     fetchAllJobFunctions();
   }, [fetchAllJobFunctions]);
 
   const {
-    stakeholderGroups,
+    data: stakeholderGroups,
     isFetching: isFetchingGroups,
     fetchError: fetchErrorGroups,
-    fetchAllStakeholderGroups,
-  } = useFetchStakeholderGroups();
+    requestFetch: fetchAllStakeholderGroups,
+  } = useFetch<StakeholderGroupPage, PageRepresentation<StakeholderGroup>>({
+    defaultIsFetching: true,
+    onFetch: getAllStakeholderGroups,
+    mapper: stakeholderGroupPageMapper,
+  });
 
   useEffect(() => {
     fetchAllStakeholderGroups();

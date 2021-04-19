@@ -19,16 +19,25 @@ import {
   SingleSelectFetchFormikField,
   OptionWithValue,
 } from "shared/components";
-import { useFetchBusinessServices } from "shared/hooks";
+import { useFetch } from "shared/hooks";
 
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 import { createApplication, updateApplication } from "api/rest";
-import { Application, BusinessService } from "api/models";
+import {
+  Application,
+  BusinessService,
+  BusinessServicePage,
+  PageRepresentation,
+} from "api/models";
 import {
   getAxiosErrorMessage,
   getValidatedFromError,
   getValidatedFromErrorTouched,
 } from "utils/utils";
+import {
+  bussinessServicePageMapper,
+  getAllBusinessServices,
+} from "api/apiUtils";
 
 const businesServiceToOption = (
   value: BusinessService
@@ -60,11 +69,15 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
   const [error, setError] = useState<AxiosError>();
 
   const {
-    businessServices,
+    data: businessServices,
     isFetching: isFetchingBusinessServices,
     fetchError: fetchErrorBusinessServices,
-    fetchAllBusinessServices,
-  } = useFetchBusinessServices();
+    requestFetch: fetchAllBusinessServices,
+  } = useFetch<BusinessServicePage, PageRepresentation<BusinessService>>({
+    defaultIsFetching: true,
+    onFetch: getAllBusinessServices,
+    mapper: bussinessServicePageMapper,
+  });
 
   useEffect(() => {
     fetchAllBusinessServices();

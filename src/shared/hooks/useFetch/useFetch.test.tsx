@@ -5,13 +5,33 @@ import { renderHook, act } from "@testing-library/react-hooks";
 import { useFetch } from "./useFetch";
 
 describe("useFetch", () => {
+  it("Initial value", async () => {
+    // Use hook
+    const { result, waitForNextUpdate } = renderHook(() =>
+      useFetch<number, string>({
+        defaultIsFetching: true,
+        onFetch: () => axios.get("/myendpoint"),
+        mapper: (t: number) => t.toString(),
+      })
+    );
+
+    const { data, isFetching, fetchError, requestFetch } = result.current;
+
+    expect(isFetching).toBe(true);
+    expect(data).toBeUndefined();
+    expect(fetchError).toBeUndefined();
+  });
+
   it("Fetch error due to no REST API found", async () => {
     // Mock REST API
     new MockAdapter(axios).onGet("/myendpoint").networkError();
 
     // Use hook
     const { result, waitForNextUpdate } = renderHook(() =>
-      useFetch<string>({ onFetch: () => axios.get("/myendpoint") })
+      useFetch<number, string>({
+        onFetch: () => axios.get("/myendpoint"),
+        mapper: (t: number) => t.toString(),
+      })
     );
 
     const { data, isFetching, fetchError, requestFetch } = result.current;
@@ -33,16 +53,17 @@ describe("useFetch", () => {
 
   it("Fetch success", async () => {
     // Mock REST API
-    const responseData = "hello world!";
+    const responseData = 123;
 
     new MockAdapter(axios).onGet("/myendpoint").reply(200, responseData);
 
     // Use hook
     const { result, waitForNextUpdate } = renderHook(() =>
-      useFetch<string>({
+      useFetch<number, string>({
         onFetch: () => {
           return axios.get("/myendpoint");
         },
+        mapper: (t: number) => "Hello world " + t,
       })
     );
 
@@ -59,7 +80,7 @@ describe("useFetch", () => {
     // Fetch finished
     await waitForNextUpdate();
     expect(result.current.isFetching).toBe(false);
-    expect(result.current.data).toBe(responseData);
+    expect(result.current.data).toBe("Hello world 123");
     expect(result.current.fetchError).toBeUndefined();
   });
 });

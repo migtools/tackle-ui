@@ -4,9 +4,17 @@ import { useTranslation } from "react-i18next";
 import { SelectVariant, ToolbarChip } from "@patternfly/react-core";
 
 import { SimpleSelectFetch, OptionWithValue } from "shared/components";
-import { useFetchBusinessServices } from "shared/hooks";
+import { useFetch } from "shared/hooks";
 
-import { BusinessService } from "api/models";
+import {
+  BusinessService,
+  BusinessServicePage,
+  PageRepresentation,
+} from "api/models";
+import {
+  bussinessServicePageMapper,
+  getAllBusinessServices,
+} from "api/apiUtils";
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 
 const businessServiceToToolbarChip = (value: BusinessService): ToolbarChip => ({
@@ -46,11 +54,15 @@ export const SelectBusinessServiceFilter: React.FC<BusinessServiceFilterProps> =
   const { t } = useTranslation();
 
   const {
-    businessServices,
+    data: businessServices,
     isFetching: isFetchingBusinessServices,
     fetchError: fetchErrorBusinessServices,
-    fetchAllBusinessServices,
-  } = useFetchBusinessServices();
+    requestFetch: fetchAllBusinessServices,
+  } = useFetch<BusinessServicePage, PageRepresentation<BusinessService>>({
+    defaultIsFetching: true,
+    onFetch: getAllBusinessServices,
+    mapper: bussinessServicePageMapper,
+  });
 
   useEffect(() => {
     fetchAllBusinessServices();
