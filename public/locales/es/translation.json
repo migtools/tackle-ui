@@ -29,10 +29,12 @@
             "delete": "Eliminar '{{what}}'",
             "newApplication": "Nueva aplicación",
             "newBusinessService": "Nuevo servicio de negocio",
+            "newJobFunction": "Nueva función laboral",
             "newStakeholder": "Nuevo interesado",
             "newStakeholderGroup": "Nuevo grupo de interesados",
             "updateApplication": "Actualizar aplicación",
             "updateBusinessService": "Actualizar servicio de negocio",
+            "updateJobFunction": "Actualizar función laboral",
             "updateStakeholder": "Actualizar interesado",
             "updateStakeholderGroup": "Actualizar grupo de interesados"
         }
@@ -62,6 +64,7 @@
         "group(s)": "Grupo(s)",
         "inProgress": "En progreso",
         "jobFunction": "Función laboral",
+        "jobFunctions": "Funciones laborales",
         "member": "Miembro",
         "member(s)": "Miembro(s)",
         "name": "Nombre",

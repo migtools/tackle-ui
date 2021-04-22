@@ -33,6 +33,23 @@ describe("Edit stakeholder", () => {
             stakeholderGroups: stakeholders.slice(0, 1),
           };
           cy.createStakeholder(payload, tokens);
+        })
+
+        .log("Create job functions")
+        .then(() => {
+          return [
+            {
+              role: "Business Analyst",
+            },
+            {
+              role: "Consultant",
+            },
+            {
+              role: "DBA",
+            },
+          ].forEach((payload) => {
+            cy.createJobFunction(payload, tokens);
+          });
         });
     });
 

@@ -78,7 +78,7 @@ Cypress.Commands.add(
   { prevSubject: "element" },
   (table, rowIndex, actionName) => {
     cy.wrap(table)
-      .find("tbody > tr > td.pf-c-table__action")
+      .find("tbody > tr > td.pf-c-table__action button.pf-c-dropdown__toggle")
       .eq(rowIndex)
       .click();
 
