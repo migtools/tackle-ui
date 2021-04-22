@@ -16,7 +16,7 @@ describe("useFetchApplicationDependencies", () => {
     };
 
     new MockAdapter(axios)
-      .onGet(`${APPLICATION_DEPENDENCY}?page=0&size=1000`)
+      .onGet(`${APPLICATION_DEPENDENCY}?page=0&size=1000&from.id=1`)
       .reply(200, data);
 
     // Use hook
@@ -36,7 +36,7 @@ describe("useFetchApplicationDependencies", () => {
     expect(fetchError).toBeUndefined();
 
     // Init fetch
-    act(() => fetchAll());
+    act(() => fetchAll({ from: ["1"] }));
     expect(result.current.isFetching).toBe(true);
 
     // Fetch finished
