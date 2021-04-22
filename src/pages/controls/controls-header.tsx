@@ -23,6 +23,10 @@ export const EditCompanyHeader: React.FC = () => {
             path: Paths.controls_stakeholderGroups,
           },
           {
+            title: t("terms.jobFunctions"),
+            path: Paths.controls_jobFunctions,
+          },
+          {
             title: t("terms.businessServices"),
             path: Paths.controls_businessServices,
           },
