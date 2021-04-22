@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { AxiosError } from "axios";
 
 import {
   ActionGroup,
@@ -8,31 +7,20 @@ import {
   ButtonVariant,
   Form,
   FormGroup,
+  Spinner,
 } from "@patternfly/react-core";
 
-import { OptionWithValue, SimpleSelectFetch } from "shared/components";
+import { OptionWithValue } from "shared/components";
 import {
   useFetchApplicationDependencies,
   useFetchApplications,
 } from "shared/hooks";
 
-import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
-import {
-  createApplicationDependency,
-  deleteApplicationDependency,
-} from "api/rest";
 import { Application, ApplicationDependency } from "api/models";
-import { getAxiosErrorMessage } from "utils/utils";
 
-const isEqual = (
-  a: OptionWithValue<ApplicationDependency>,
-  b: OptionWithValue<ApplicationDependency>
-) => {
-  return (
-    (a.value.id && b.value.id && a.value.id === b.value.id) ||
-    (a.value.from.id === b.value.from.id && a.value.to.id === b.value.to.id)
-  );
-};
+import { FormContext } from "./form-context";
+import { SelectDependency } from "./select-dependency";
+import { getAxiosErrorMessage } from "utils/utils";
 
 const northToStringFn = (value: ApplicationDependency) => value.from.name;
 const southToStringFn = (value: ApplicationDependency) => value.to.name;
@@ -54,6 +42,17 @@ export const ApplicationDependenciesForm: React.FC<ApplicationDependenciesFormPr
   application,
   onCancel,
 }) => {
+  const {
+    isNorthBeingSaved,
+    isSouthBeingSaved,
+    northSaveError,
+    southSaveError,
+    setIsNorthBeingSaved,
+    setIsSouthBeingSaved,
+    setNorthSaveError,
+    setSouthSaveError,
+  } = useContext(FormContext);
+
   const { t } = useTranslation();
 
   const [northboundDependencies, setNorthboundDependencies] = useState<
@@ -124,36 +123,72 @@ export const ApplicationDependenciesForm: React.FC<ApplicationDependenciesFormPr
     }
   }, [application, southDependencies]);
 
+  const savingMsg = (
+    <div className="pf-u-font-size-sm">
+      <Spinner isSVG size="sm" /> {`${t("message.savingSelection")}...`}
+    </div>
+  );
+
   return (
     <Form>
-      <DependencyFormGroup
-        label={t("terms.northboundDependencies")}
+      <FormGroup
+        // t("terms.northboundDependencies")
+        label={t("composed.add", { what: t("terms.northboundDependencies") })}
         fieldId="northbound-dependencies"
-        toStringFn={northToStringFn}
-        value={northboundDependencies}
-        setValue={setNorthboundDependencies}
-        options={(applications?.data || [])
-          .filter((f) => f.id !== application.id)
-          .map((f) =>
-            dependencyToOption({ from: f, to: application }, northToStringFn)
-          )}
-        isFetching={isFetchingApplications || isFetchingNorthDependencies}
-        fetchError={fetchErrorApplications || fetchErrorNorthDependencies}
-      />
-      <DependencyFormGroup
-        label={t("terms.southboundDependencies")}
+        isRequired={false}
+        validated={northSaveError ? "error" : "default"}
+        helperTextInvalid={
+          northSaveError ? getAxiosErrorMessage(northSaveError) : ""
+        }
+        helperText={isNorthBeingSaved ? savingMsg : ""}
+      >
+        <SelectDependency
+          fieldId="northbound-dependencies"
+          toStringFn={northToStringFn}
+          value={northboundDependencies}
+          setValue={setNorthboundDependencies}
+          options={(applications?.data || [])
+            .filter((f) => f.id !== application.id)
+            .map((f) =>
+              dependencyToOption({ from: f, to: application }, northToStringFn)
+            )}
+          isFetching={isFetchingApplications || isFetchingNorthDependencies}
+          fetchError={fetchErrorApplications || fetchErrorNorthDependencies}
+          isSaving={isNorthBeingSaved}
+          setIsSaving={setIsNorthBeingSaved}
+          saveError={northSaveError}
+          setSaveError={setNorthSaveError}
+        />
+      </FormGroup>
+      <FormGroup
+        // t("terms.southboundDependencies")
+        label={t("composed.add", { what: t("terms.southboundDependencies") })}
         fieldId="southbound-dependencies"
-        toStringFn={southToStringFn}
-        value={southboundDependencies}
-        setValue={setSouthboundDependencies}
-        options={(applications?.data || [])
-          .filter((f) => f.id !== application.id)
-          .map((f) =>
-            dependencyToOption({ from: application, to: f }, southToStringFn)
-          )}
-        isFetching={isFetchingApplications || isFetchingSouthDependencies}
-        fetchError={fetchErrorApplications || fetchErrorSouthDependencies}
-      />
+        isRequired={false}
+        validated={southSaveError ? "error" : "default"}
+        helperTextInvalid={
+          southSaveError ? getAxiosErrorMessage(southSaveError) : ""
+        }
+        helperText={isSouthBeingSaved ? savingMsg : ""}
+      >
+        <SelectDependency
+          fieldId="southbound-dependencies"
+          toStringFn={southToStringFn}
+          value={southboundDependencies}
+          setValue={setSouthboundDependencies}
+          options={(applications?.data || [])
+            .filter((f) => f.id !== application.id)
+            .map((f) =>
+              dependencyToOption({ from: application, to: f }, southToStringFn)
+            )}
+          isFetching={isFetchingApplications || isFetchingSouthDependencies}
+          fetchError={fetchErrorApplications || fetchErrorSouthDependencies}
+          isSaving={isSouthBeingSaved}
+          setIsSaving={setIsSouthBeingSaved}
+          saveError={southSaveError}
+          setSaveError={setSouthSaveError}
+        />
+      </FormGroup>
 
       <ActionGroup>
         <Button
@@ -161,112 +196,11 @@ export const ApplicationDependenciesForm: React.FC<ApplicationDependenciesFormPr
           aria-label="close"
           variant={ButtonVariant.primary}
           onClick={onCancel}
+          isDisabled={isNorthBeingSaved || isSouthBeingSaved}
         >
           {t("actions.close")}
         </Button>
       </ActionGroup>
     </Form>
-  );
-};
-
-export interface DependencyFormGroupProps {
-  label: string;
-  fieldId: string;
-  toStringFn: (value: ApplicationDependency) => string;
-
-  value: OptionWithValue<ApplicationDependency>[];
-  options: OptionWithValue<ApplicationDependency>[];
-  setValue: (value: OptionWithValue<ApplicationDependency>[]) => void;
-
-  isFetching: boolean;
-  fetchError?: AxiosError;
-}
-
-export const DependencyFormGroup: React.FC<DependencyFormGroupProps> = ({
-  label,
-  fieldId,
-  toStringFn,
-
-  value,
-  options,
-  setValue,
-
-  isFetching,
-  fetchError,
-}) => {
-  const { t } = useTranslation();
-
-  const [isDisabled, setIsDisabled] = useState(false);
-  const [error, setError] = useState<AxiosError>();
-
-  return (
-    <FormGroup
-      label={label}
-      fieldId={fieldId}
-      isRequired={false}
-      validated={error ? "error" : "default"}
-      helperTextInvalid={error ? getAxiosErrorMessage(error) : ""}
-    >
-      <SimpleSelectFetch
-        isDisabled={isDisabled}
-        value={value}
-        onChange={(selection) => {
-          const selectionWithValue = selection as OptionWithValue<ApplicationDependency>;
-          const elementExists = value.find((f) => {
-            return isEqual(f, selectionWithValue);
-          });
-
-          setIsDisabled(true);
-
-          if (elementExists) {
-            deleteApplicationDependency(elementExists.value.id!)
-              .then(() => {
-                let nextValue: OptionWithValue<ApplicationDependency>[];
-                nextValue = value.filter(
-                  (f: OptionWithValue<ApplicationDependency>) => {
-                    return !isEqual(f, elementExists);
-                  }
-                );
-
-                setValue(nextValue);
-
-                setIsDisabled(false);
-                setError(undefined);
-              })
-              .catch((error) => {
-                setIsDisabled(false);
-                setError(error);
-              });
-          } else {
-            createApplicationDependency(selectionWithValue.value)
-              .then(({ data }) => {
-                let nextValue: OptionWithValue<ApplicationDependency>[];
-                nextValue = [...value, dependencyToOption(data, toStringFn)];
-
-                setValue(nextValue);
-
-                setIsDisabled(false);
-                setError(undefined);
-              })
-              .catch((error) => {
-                setIsDisabled(false);
-                setError(error);
-              });
-          }
-        }}
-        variant="typeaheadmulti"
-        aria-label={fieldId}
-        aria-describedby={fieldId}
-        // t("terms.applications")
-        placeholderText={t("composed.selectMany", {
-          what: t("terms.applications").toLowerCase(),
-        })}
-        menuAppendTo={() => document.body}
-        maxHeight={DEFAULT_SELECT_MAX_HEIGHT}
-        options={options}
-        isFetching={isFetching}
-        fetchError={fetchError}
-      />
-    </FormGroup>
   );
 };

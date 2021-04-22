@@ -13,6 +13,7 @@
         "save": "Guardar"
     },
     "composed": {
+        "add": "Agregar {{what}}",
         "applicationAssessment": "Evaluación de la aplicación",
         "applicationInventory": "Inventario de aplicaciones",
         "manageDependenciesFor": "Administrar dependencias para {{what}}",
@@ -41,7 +42,8 @@
     },
     "message": {
         "couldNotFetchBody": "El recurso no existe o no tienes permiso para acceder al mismo",
-        "couldNotFetchTitle": "No disponible"
+        "couldNotFetchTitle": "No disponible",
+        "savingSelection": "Guardando selección"
     },
     "sidebar": {
         "applicationInventory": "Inventario de aplicaciones",

@@ -64,7 +64,7 @@ import { ApplicationAssessment } from "./components/application-assessment";
 import { ApplicationBusinessService } from "./components/application-business-service";
 
 import { useAssessApplication } from "./hooks/useAssessApplication";
-import { ApplicationDependenciesForm } from "./components/application-dependencies-form";
+import ApplicationDependenciesForm from "./components/application-dependencies-form";
 
 enum FilterKey {
   NAME = "name",
