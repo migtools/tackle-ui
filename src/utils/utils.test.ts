@@ -26,9 +26,7 @@ describe("utils", () => {
       message: "Network error",
       config: {},
       response: {
-        data: {
-          message: errorMsg,
-        },
+        data: errorMsg,
         status: 400,
         statusText: "",
         headers: {},
