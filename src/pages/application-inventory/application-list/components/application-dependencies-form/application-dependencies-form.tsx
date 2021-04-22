@@ -133,7 +133,9 @@ export const ApplicationDependenciesForm: React.FC<ApplicationDependenciesFormPr
     <Form>
       <FormGroup
         // t("terms.northboundDependencies")
-        label={t("composed.add", { what: t("terms.northboundDependencies") })}
+        label={t("composed.add", {
+          what: t("terms.northboundDependencies").toLowerCase(),
+        })}
         fieldId="northbound-dependencies"
         isRequired={false}
         validated={northSaveError ? "error" : "default"}
@@ -162,7 +164,9 @@ export const ApplicationDependenciesForm: React.FC<ApplicationDependenciesFormPr
       </FormGroup>
       <FormGroup
         // t("terms.southboundDependencies")
-        label={t("composed.add", { what: t("terms.southboundDependencies") })}
+        label={t("composed.add", {
+          what: t("terms.southboundDependencies").toLowerCase(),
+        })}
         fieldId="southbound-dependencies"
         isRequired={false}
         validated={southSaveError ? "error" : "default"}
