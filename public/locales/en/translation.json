@@ -26,10 +26,12 @@
             "delete": "Delete '{{what}}'",
             "newApplication": "New application",
             "newBusinessService": "New business service",
+            "newJobFunction": "New job function",
             "newStakeholder": "New stakeholder",
             "newStakeholderGroup": "New stakeholder group",
             "updateApplication": "Update application",
             "updateBusinessService": "Update business service",
+            "updateJobFunction": "Update job function",
             "updateStakeholder": "Update stakeholder",
             "updateStakeholderGroup": "Update stakeholder group"
         }
@@ -59,6 +61,7 @@
         "group(s)": "Group(s)",
         "inProgress": "In-progress",
         "jobFunction": "Job function",
+        "jobFunctions": "Job functions",
         "member": "Member",
         "member(s)": "Member(s)",
         "name": "Name",
