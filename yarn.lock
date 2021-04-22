@@ -2182,10 +2182,10 @@
   dependencies:
     mkdirp "^1.0.4"
 
-"@patternfly/patternfly@4.96.2":
-  version "4.96.2"
-  resolved "https://registry.yarnpkg.com/@patternfly/patternfly/-/patternfly-4.96.2.tgz#a30d2f95fbb4e92635acdb112a3fda7e148c2b3d"
-  integrity sha512-nxXLyAGVYubXdJ8XuSPDuPBuUbuY1XPyYYzkIg6AmWp/bLA5Fs1kqX32F4djjGgR1eOteqRz478W/CE7Xi5E4A==
+"@patternfly/patternfly@4.102.1":
+  version "4.102.1"
+  resolved "https://registry.yarnpkg.com/@patternfly/patternfly/-/patternfly-4.102.1.tgz#a453c4e866941db1348f0580fdc08f1441b8fdf3"
+  integrity sha512-YQSJH4EirnFdwJ3eN7BUgGj/Q3bg/Lmc+8vU/bhIDnRuk5KqGZ7xbVCPrWwrV0oYrfIUAWgbrbJjpP03VjrJLw==
 
 "@patternfly/react-core@4.106.2", "@patternfly/react-core@^4.106.2":
   version "4.106.2"
