@@ -68,6 +68,63 @@ Cypress.Commands.add("tackleControlsCleanBusinessServices", (tokens) => {
     });
 });
 
+Cypress.Commands.add("tackleControlsCleanTagTypes", (tokens) => {
+  const sizeQueryParam = "size=1000";
+  const headers = getHeaders(tokens);
+
+  cy.request({
+    method: "GET",
+    headers: headers,
+    url: `${Cypress.env("controls_base_url")}/tag-type?${sizeQueryParam}`,
+  })
+    .then((response) => response.body._embedded["tag-type"])
+    .each((item) => {
+      return cy.request({
+        method: "DELETE",
+        headers: headers,
+        url: `${Cypress.env("controls_base_url")}/tag-type/${item.id}`,
+      });
+    });
+});
+
+Cypress.Commands.add("tackleControlsCleanTags", (tokens) => {
+  const sizeQueryParam = "size=1000";
+  const headers = getHeaders(tokens);
+
+  cy.request({
+    method: "GET",
+    headers: headers,
+    url: `${Cypress.env("controls_base_url")}/tag?${sizeQueryParam}`,
+  })
+    .then((response) => response.body._embedded["tag"])
+    .each((item) => {
+      return cy.request({
+        method: "DELETE",
+        headers: headers,
+        url: `${Cypress.env("controls_base_url")}/tag/${item.id}`,
+      });
+    });
+});
+
+Cypress.Commands.add("tackleControlsCleanJobFunctions", (tokens) => {
+  const sizeQueryParam = "size=1000";
+  const headers = getHeaders(tokens);
+
+  cy.request({
+    method: "GET",
+    headers: headers,
+    url: `${Cypress.env("controls_base_url")}/job-function?${sizeQueryParam}`,
+  })
+    .then((response) => response.body._embedded["job-function"])
+    .each((item) => {
+      return cy.request({
+        method: "DELETE",
+        headers: headers,
+        url: `${Cypress.env("controls_base_url")}/job-function/${item.id}`,
+      });
+    });
+});
+
 Cypress.Commands.add("tackleControlsClean", (tokens) => {
   cy.log("Tackle controls - clean started")
 
@@ -84,6 +141,16 @@ Cypress.Commands.add("tackleControlsClean", (tokens) => {
     .log("Tackle controls - delete stakeholder groups")
     .then(() => {
       return cy.tackleControlsCleanStakeholderGroups(tokens);
+    })
+
+    .log("Tackle controls - delete tagTypes")
+    .then(() => {
+      return cy.tackleControlsCleanTagTypes(tokens);
+    })
+
+    .log("Tackle controls - delete jobFunctions")
+    .then(() => {
+      return cy.tackleControlsCleanJobFunctions(tokens);
     })
 
     .log("Tackle controls - clean finished");
@@ -119,5 +186,38 @@ Cypress.Commands.add("createBusinessService", (payload, tokens) => {
     headers: headers,
     body: payload,
     url: `${Cypress.env("controls_base_url")}/business-service`,
+  }).its("body");
+});
+
+Cypress.Commands.add("createTagType", (payload, tokens) => {
+  const headers = getHeaders(tokens);
+
+  cy.request({
+    method: "POST",
+    headers: headers,
+    body: payload,
+    url: `${Cypress.env("controls_base_url")}/tag-type`,
+  }).its("body");
+});
+
+Cypress.Commands.add("createTag", (payload, tokens) => {
+  const headers = getHeaders(tokens);
+
+  cy.request({
+    method: "POST",
+    headers: headers,
+    body: payload,
+    url: `${Cypress.env("controls_base_url")}/tag`,
+  }).its("body");
+});
+
+Cypress.Commands.add("createJobFunction", (payload, tokens) => {
+  const headers = getHeaders(tokens);
+
+  cy.request({
+    method: "POST",
+    headers: headers,
+    body: payload,
+    url: `${Cypress.env("controls_base_url")}/job-function`,
   }).its("body");
 });
