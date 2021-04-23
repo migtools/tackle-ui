@@ -1,0 +1,1 @@
+export { useFetchTags } from "./useFetchTags";

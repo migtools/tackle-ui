@@ -14,6 +14,7 @@ import {
   Application,
   Assessment,
   JobFunction,
+  TagPage,
 } from "./models";
 
 export const CONTROLS_BASE_URL = "controls";
@@ -24,6 +25,7 @@ export const BUSINESS_SERVICES = CONTROLS_BASE_URL + "/business-service";
 export const STAKEHOLDERS = CONTROLS_BASE_URL + "/stakeholder";
 export const STAKEHOLDER_GROUPS = CONTROLS_BASE_URL + "/stakeholder-group";
 export const JOB_FUNCTIONS = CONTROLS_BASE_URL + "/job-function";
+export const TAGS = CONTROLS_BASE_URL + "/tag";
 
 export const APPLICATIONS = APP_INVENTORY_BASE_URL + "/application";
 
@@ -323,6 +325,49 @@ export const getJobFunctions = (
 
   const query: string[] = buildQuery(params);
   return APIClient.get(`${JOB_FUNCTIONS}?${query.join("&")}`, { headers });
+};
+
+// Tags
+
+export enum TagSortBy {
+  NAME,
+}
+export interface TagSortByQuery {
+  field: TagSortBy;
+  direction?: Direction;
+}
+
+export const getTags = (
+  filters: {
+    name?: string[];
+  },
+  pagination: PageQuery,
+  sortBy?: TagSortByQuery
+): AxiosPromise<TagPage> => {
+  let sortByQuery: string | undefined = undefined;
+  if (sortBy) {
+    let field;
+    switch (sortBy.field) {
+      case TagSortBy.NAME:
+        field = "name";
+        break;
+
+      default:
+        throw new Error("Could not define SortBy field name");
+    }
+    sortByQuery = `${sortBy.direction === "desc" ? "-" : ""}${field}`;
+  }
+
+  const params = {
+    page: pagination.page - 1,
+    size: pagination.perPage,
+    sort: sortByQuery,
+
+    name: filters.name,
+  };
+
+  const query: string[] = buildQuery(params);
+  return APIClient.get(`${TAGS}?${query.join("&")}`, { headers });
 };
 
 // App inventory

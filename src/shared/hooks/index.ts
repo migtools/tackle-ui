@@ -8,4 +8,5 @@ export { useFetchBusinessServices } from "./useFetchBusinessServices";
 export { useFetchJobFunctions } from "./useFetchJobFunctions";
 export { useFetchStakeholderGroups } from "./useFetchStakeholderGroups";
 export { useFetchStakeholders } from "./useFetchStakeholders";
+export { useFetchTags } from "./useFetchTags";
 export { useTableControls } from "./useTableControls";

@@ -44,12 +44,27 @@ export interface JobFunction {
   role: string;
 }
 
+export interface TagType {
+  id?: number;
+  name: string;
+  rank?: number;
+  colour?: string;
+  tags?: Tag[];
+}
+
+export interface Tag {
+  id?: number;
+  name: string;
+  tagType?: TagType;
+}
+
 export interface Application {
   id?: number;
   name: string;
   description?: string;
   comments?: string;
   businessService?: string;
+  tags?: string[];
 }
 
 //
@@ -86,6 +101,13 @@ export interface StakeholderGroupPage {
 export interface JobFunctionPage {
   _embedded: {
     "job-function": JobFunction[];
+  };
+  total_count: number;
+}
+
+export interface TagPage {
+  _embedded: {
+    tag: Tag[];
   };
   total_count: number;
 }

@@ -10,6 +10,7 @@ import {
   DescriptionListDescription,
   DescriptionListGroup,
   DescriptionListTerm,
+  Label,
   PageSection,
   PageSectionVariants,
   Text,
@@ -29,6 +30,7 @@ import {
   ISeparator,
   sortable,
 } from "@patternfly/react-table";
+import { TagIcon } from "@patternfly/react-icons";
 
 import { useDispatch } from "react-redux";
 import { alertActions } from "store/alert";
@@ -181,6 +183,7 @@ export const ApplicationInventory: React.FC = () => {
     { title: t("terms.description"), transforms: [] },
     { title: t("terms.businessService"), transforms: [] },
     { title: t("terms.assessment"), transforms: [cellWidth(10)] },
+    { title: t("terms.tags"), transforms: [cellWidth(10)] },
   ];
 
   const rows: IRow[] = [];
@@ -202,6 +205,13 @@ export const ApplicationInventory: React.FC = () => {
         {
           title: <ApplicationAssessment application={item} />,
         },
+        {
+          title: (
+            <>
+              <TagIcon /> {item.tags ? item.tags.length : 0}
+            </>
+          ),
+        },
       ],
     });
 
@@ -212,6 +222,14 @@ export const ApplicationInventory: React.FC = () => {
         cells: [
           <div className="pf-c-table__expandable-row-content">
             <DescriptionList isHorizontal>
+              <DescriptionListGroup>
+                <DescriptionListTerm>{t("terms.tags")}</DescriptionListTerm>
+                <DescriptionListDescription>
+                  {item.tags?.map((f) => (
+                    <Label>{f}</Label>
+                  ))}
+                </DescriptionListDescription>
+              </DescriptionListGroup>
               <DescriptionListGroup>
                 <DescriptionListTerm>{t("terms.comments")}</DescriptionListTerm>
                 <DescriptionListDescription>
