@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
@@ -14,6 +13,8 @@ import keycloak from "./keycloak";
 
 import i18n from "./i18n";
 import { NinjaErrorBoundary } from "./ninja-error-boundary";
+
+import "./index.css";
 
 initApi();
 i18n.init();

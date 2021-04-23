@@ -4,9 +4,9 @@
   "private": true,
   "dependencies": {
     "@konveyor/lib-ui": "^2.0.0",
-    "@patternfly/patternfly": "4.96.2",
-    "@patternfly/react-core": "4.106.2",
-    "@patternfly/react-table": "4.24.1",
+    "@patternfly/patternfly": "4.102.1",
+    "@patternfly/react-core": "4.115.1",
+    "@patternfly/react-table": "4.26.6",
     "@react-keycloak/web": "^3.4.0",
     "@redhat-cloud-services/frontend-components-notifications": "3.0.3",
     "@testing-library/jest-dom": "^5.11.4",

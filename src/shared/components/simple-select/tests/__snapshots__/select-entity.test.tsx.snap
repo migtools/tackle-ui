@@ -2,6 +2,8 @@
 
 exports[`SimpleSelect Renders without crashing 1`] = `
 <Select
+  aria-describedby=""
+  aria-invalid={false}
   aria-label="my-selection"
   aria-labelledby=""
   chipGroupComponent={null}
@@ -37,6 +39,7 @@ exports[`SimpleSelect Renders without crashing 1`] = `
   toggleIcon={null}
   toggleId={null}
   typeAheadAriaLabel=""
+  validated="default"
   variant="single"
   width=""
 >
