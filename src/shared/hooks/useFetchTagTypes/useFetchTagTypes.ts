@@ -2,29 +2,29 @@ import { useCallback, useReducer } from "react";
 import { AxiosError } from "axios";
 import { ActionType, createAsyncAction, getType } from "typesafe-actions";
 
-import { getTags, TagSortByQuery, TagSortBy } from "api/rest";
-import { PageRepresentation, Tag, PageQuery } from "api/models";
+import { getTagTypes, TagTypeSortBy, TagTypeSortByQuery } from "api/rest";
+import { PageRepresentation, PageQuery, TagType } from "api/models";
 
 export const {
   request: fetchRequest,
   success: fetchSuccess,
   failure: fetchFailure,
 } = createAsyncAction(
-  "useFetchTags/fetch/request",
-  "useFetchTags/fetch/success",
-  "useFetchTags/fetch/failure"
-)<void, PageRepresentation<Tag>, AxiosError>();
+  "useFetchTagTypes/fetch/request",
+  "useFetchTagTypes/fetch/success",
+  "useFetchTagTypes/fetch/failure"
+)<void, PageRepresentation<TagType>, AxiosError>();
 
 type State = Readonly<{
   isFetching: boolean;
-  tags?: PageRepresentation<Tag>;
+  tagTypes?: PageRepresentation<TagType>;
   fetchError?: AxiosError;
   fetchCount: number;
 }>;
 
 const defaultState: State = {
   isFetching: false,
-  tags: undefined,
+  tagTypes: undefined,
   fetchError: undefined,
   fetchCount: 0,
 };
@@ -52,7 +52,7 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         isFetching: false,
         fetchError: undefined,
-        tags: action.payload,
+        tagTypes: action.payload,
         fetchCount: state.fetchCount + 1,
       };
     case getType(fetchFailure):
@@ -68,34 +68,40 @@ const reducer = (state: State, action: Action): State => {
 };
 
 export interface IState {
-  tags?: PageRepresentation<Tag>;
+  tagTypes?: PageRepresentation<TagType>;
   isFetching: boolean;
   fetchError?: AxiosError;
   fetchCount: number;
-  fetchTags: (
+  fetchTagTypes: (
     filters: {
-      name?: string[];
+      tagTypes?: string[];
+      tags?: string[];
     },
     page: PageQuery,
-    sortBy?: TagSortByQuery
+    sortBy?: TagTypeSortByQuery
   ) => void;
-  fetchAllTags: () => void;
+  fetchAllTagTypes: (sortBy?: TagTypeSortByQuery) => void;
 }
 
-export const useFetchTags = (defaultIsFetching: boolean = false): IState => {
+export const useFetchTagTypes = (
+  defaultIsFetching: boolean = false
+): IState => {
   const [state, dispatch] = useReducer(reducer, defaultIsFetching, initReducer);
 
-  const fetchTags = useCallback(
+  const fetchTagTypes = useCallback(
     (
-      filters: { name?: string[] },
+      filters: {
+        name?: string[];
+        tagTypes?: string[];
+      },
       page: PageQuery,
-      sortBy?: TagSortByQuery
+      sortBy?: TagTypeSortByQuery
     ) => {
       dispatch(fetchRequest());
 
-      getTags(filters, page, sortBy)
+      getTagTypes(filters, page, sortBy)
         .then(({ data }) => {
-          const list = data._embedded.tag;
+          const list = data._embedded["tag-type"];
           const total = data.total_count;
 
           dispatch(
@@ -114,12 +120,16 @@ export const useFetchTags = (defaultIsFetching: boolean = false): IState => {
     []
   );
 
-  const fetchAllTags = useCallback(() => {
+  const fetchAllTagTypes = useCallback((sortBy?: TagTypeSortByQuery) => {
     dispatch(fetchRequest());
 
-    getTags({}, { page: 1, perPage: 1000 }, { field: TagSortBy.NAME })
+    getTagTypes(
+      {},
+      { page: 1, perPage: 1000 },
+      sortBy || { field: TagTypeSortBy.NAME }
+    )
       .then(({ data }) => {
-        const list = data._embedded.tag;
+        const list = data._embedded["tag-type"];
         const total = data.total_count;
 
         dispatch(
@@ -137,13 +147,13 @@ export const useFetchTags = (defaultIsFetching: boolean = false): IState => {
   }, []);
 
   return {
-    tags: state.tags,
+    tagTypes: state.tagTypes,
     isFetching: state.isFetching,
     fetchError: state.fetchError,
     fetchCount: state.fetchCount,
-    fetchTags: fetchTags,
-    fetchAllTags: fetchAllTags,
+    fetchTagTypes,
+    fetchAllTagTypes,
   };
 };
 
-export default useFetchTags;
+export default useFetchTagTypes;

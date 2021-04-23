@@ -112,6 +112,13 @@ export interface TagPage {
   total_count: number;
 }
 
+export interface TagTypePage {
+  _embedded: {
+    "tag-type": TagType[];
+  };
+  total_count: number;
+}
+
 export interface ApplicationPage {
   _embedded: {
     application: Application[];

@@ -20,10 +20,10 @@ import {
   MultiSelectFetchFormikField,
   OptionWithValue,
 } from "shared/components";
-import { useFetchBusinessServices, useFetchTags } from "shared/hooks";
+import { useFetchBusinessServices, useFetchTagTypes } from "shared/hooks";
 
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
-import { createApplication, updateApplication } from "api/rest";
+import { createApplication, TagTypeSortBy, updateApplication } from "api/rest";
 import { Application, BusinessService, Tag } from "api/models";
 import {
   getAxiosErrorMessage,
@@ -66,6 +66,8 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
   const [error, setError] = useState<AxiosError>();
 
+  // Business services
+
   const {
     businessServices,
     isFetching: isFetchingBusinessServices,
@@ -77,16 +79,30 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
     fetchAllBusinessServices();
   }, [fetchAllBusinessServices]);
 
+  // TagTypes
+
   const {
-    tags,
-    isFetching: isFetchingTags,
-    fetchError: fetchErrorTags,
-    fetchAllTags,
-  } = useFetchTags();
+    tagTypes,
+    isFetching: isFetchingTagTypes,
+    fetchError: fetchErrorTagTypes,
+    fetchAllTagTypes,
+  } = useFetchTagTypes();
 
   useEffect(() => {
-    fetchAllTags();
-  }, [fetchAllTags]);
+    fetchAllTagTypes({ field: TagTypeSortBy.RANK });
+  }, [fetchAllTagTypes]);
+
+  // Tags
+
+  const [tags, setTags] = useState<Tag[]>();
+
+  useEffect(() => {
+    if (tagTypes) {
+      setTags(tagTypes.data.flatMap((f) => f.tags || []));
+    }
+  }, [tagTypes]);
+
+  // Formik
 
   const businessServiceInitialValue = useMemo(() => {
     let result: OptionWithValue<BusinessService> | undefined = undefined;
@@ -114,11 +130,11 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
     let result: OptionWithValue<Tag>[] | undefined = undefined;
 
     const notAvailable = t("terms.notAvailable");
-    if (application && application.tags && tags && tags.data) {
+    if (application && application.tags && tags) {
       result = application.tags.map((t) => {
-        const dbTag = tags.data.find((f) => `${f.id}` === t);
-        return dbTag
-          ? tagToOption(dbTag)
+        const exists = tags.find((f) => `${f.id}` === t);
+        return exists
+          ? tagToOption(exists)
           : tagToOption({ id: Number(t), name: notAvailable });
       });
     }
@@ -265,8 +281,9 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
               variant: "typeahead",
               "aria-label": "business-service",
               "aria-describedby": "business-service",
+              // t("terms.businessService")
               placeholderText: t("composed.selectOne", {
-                what: t("terms.businessService"),
+                what: t("terms.businessService").toLowerCase(),
               }),
               menuAppendTo: () => document.body,
               maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
@@ -299,9 +316,9 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
               }),
               menuAppendTo: () => document.body,
               maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
-              options: (tags?.data || []).map(tagToOption),
-              isFetching: isFetchingTags,
-              fetchError: fetchErrorTags,
+              options: (tags || []).map(tagToOption),
+              isFetching: isFetchingTagTypes,
+              fetchError: fetchErrorTagTypes,
             }}
             isEqual={(a: any, b: any) => {
               const option1 = a as OptionWithValue<Tag>;

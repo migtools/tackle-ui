@@ -1,75 +1,75 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { renderHook, act } from "@testing-library/react-hooks";
-import { useFetchTags } from "./useFetchTags";
-import { TagPage } from "api/models";
-import { TAGS } from "api/rest";
+import { useFetchTagTypes } from "./useFetchTagTypes";
+import { TagTypePage } from "api/models";
+import { TAG_TYPES } from "api/rest";
 
-describe("useFetchTags", () => {
+describe("useFetchTagTypes", () => {
   it("Fetch error due to no REST API found", async () => {
     // Mock REST API
-    new MockAdapter(axios).onGet(TAGS).networkError();
+    new MockAdapter(axios).onGet(TAG_TYPES).networkError();
 
     // Use hook
-    const { result, waitForNextUpdate } = renderHook(() => useFetchTags());
+    const { result, waitForNextUpdate } = renderHook(() => useFetchTagTypes());
 
     const {
-      tags: businessServices,
+      tagTypes: items,
       isFetching,
       fetchError,
-      fetchTags: fetchItems,
+      fetchTagTypes: fetchEntities,
     } = result.current;
 
     expect(isFetching).toBe(false);
-    expect(businessServices).toBeUndefined();
+    expect(items).toBeUndefined();
     expect(fetchError).toBeUndefined();
 
     // Init fetch
-    act(() => fetchItems({}, { page: 2, perPage: 50 }));
+    act(() => fetchEntities({}, { page: 2, perPage: 50 }));
     expect(result.current.isFetching).toBe(true);
 
     // Fetch finished
     await waitForNextUpdate();
     expect(result.current.isFetching).toBe(false);
-    expect(result.current.tags).toBeUndefined();
+    expect(result.current.tagTypes).toBeUndefined();
     expect(result.current.fetchError).not.toBeUndefined();
   });
 
   it("Fetch success", async () => {
     // Mock REST API
-    const data: TagPage = {
+    const data: TagTypePage = {
       _embedded: {
-        tag: [],
+        "tag-type": [],
       },
       total_count: 0,
     };
 
     new MockAdapter(axios)
-      .onGet(`${TAGS}?page=0&size=10&name=something`)
+      .onGet(`${TAG_TYPES}?page=0&size=10`)
       .reply(200, data);
 
     // Use hook
-    const { result, waitForNextUpdate } = renderHook(() => useFetchTags());
+    const { result, waitForNextUpdate } = renderHook(() => useFetchTagTypes());
 
     const {
-      tags: businessServices,
+      tagTypes: stakeholders,
       isFetching,
       fetchError,
-      fetchTags: fetchItems,
+      fetchTagTypes: fetchStakeholders,
     } = result.current;
 
     expect(isFetching).toBe(false);
-    expect(businessServices).toBeUndefined();
+    expect(stakeholders).toBeUndefined();
     expect(fetchError).toBeUndefined();
 
     // Init fetch
-    act(() => fetchItems({ name: ["something"] }, { page: 1, perPage: 10 }));
+    act(() => fetchStakeholders({}, { page: 1, perPage: 10 }));
     expect(result.current.isFetching).toBe(true);
 
     // Fetch finished
     await waitForNextUpdate();
     expect(result.current.isFetching).toBe(false);
-    expect(result.current.tags).toMatchObject({
+    expect(result.current.tagTypes).toMatchObject({
       data: [],
       meta: { count: 0 },
     });
@@ -78,25 +78,25 @@ describe("useFetchTags", () => {
 
   it("Fetch all", async () => {
     // Mock REST API
-    const data: TagPage = {
+    const data: TagTypePage = {
       _embedded: {
-        tag: [],
+        "tag-type": [],
       },
       total_count: 0,
     };
 
     new MockAdapter(axios)
-      .onGet(`${TAGS}?page=0&size=1000&sort=name`)
+      .onGet(`${TAG_TYPES}?page=0&size=1000&sort=name`)
       .reply(200, data);
 
     // Use hook
-    const { result, waitForNextUpdate } = renderHook(() => useFetchTags());
+    const { result, waitForNextUpdate } = renderHook(() => useFetchTagTypes());
 
     const {
-      tags: items,
+      tagTypes: items,
       isFetching,
       fetchError,
-      fetchAllTags: fetchAll,
+      fetchAllTagTypes: fetchAll,
     } = result.current;
 
     expect(isFetching).toBe(false);
@@ -110,7 +110,7 @@ describe("useFetchTags", () => {
     // Fetch finished
     await waitForNextUpdate();
     expect(result.current.isFetching).toBe(false);
-    expect(result.current.tags).toMatchObject({
+    expect(result.current.tagTypes).toMatchObject({
       data: [],
       meta: { count: 0 },
     });

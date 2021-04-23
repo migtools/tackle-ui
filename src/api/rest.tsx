@@ -14,7 +14,9 @@ import {
   Application,
   Assessment,
   JobFunction,
+  TagTypePage,
   TagPage,
+  Tag,
 } from "./models";
 
 export const CONTROLS_BASE_URL = "controls";
@@ -25,6 +27,7 @@ export const BUSINESS_SERVICES = CONTROLS_BASE_URL + "/business-service";
 export const STAKEHOLDERS = CONTROLS_BASE_URL + "/stakeholder";
 export const STAKEHOLDER_GROUPS = CONTROLS_BASE_URL + "/stakeholder-group";
 export const JOB_FUNCTIONS = CONTROLS_BASE_URL + "/job-function";
+export const TAG_TYPES = CONTROLS_BASE_URL + "/tag-type";
 export const TAGS = CONTROLS_BASE_URL + "/tag";
 
 export const APPLICATIONS = APP_INVENTORY_BASE_URL + "/application";
@@ -327,7 +330,61 @@ export const getJobFunctions = (
   return APIClient.get(`${JOB_FUNCTIONS}?${query.join("&")}`, { headers });
 };
 
-// Tags
+// Tag types
+
+export enum TagTypeSortBy {
+  NAME,
+  RANK,
+  COLOR,
+  TAGS,
+}
+export interface TagTypeSortByQuery {
+  field: TagTypeSortBy;
+  direction?: Direction;
+}
+
+export const getTagTypes = (
+  filters: {
+    tagTypes?: string[];
+    tags?: string[];
+  },
+  pagination: PageQuery,
+  sortBy?: TagTypeSortByQuery
+): AxiosPromise<TagTypePage> => {
+  let sortByQuery: string | undefined = undefined;
+  if (sortBy) {
+    let field;
+    switch (sortBy.field) {
+      case TagTypeSortBy.NAME:
+        field = "name";
+        break;
+      case TagTypeSortBy.RANK:
+        field = "rank";
+        break;
+      case TagTypeSortBy.COLOR:
+        field = "rank";
+        break;
+      case TagTypeSortBy.TAGS:
+        field = "tags.size()";
+        break;
+      default:
+        throw new Error("Could not define SortBy field name");
+    }
+    sortByQuery = `${sortBy.direction === "desc" ? "-" : ""}${field}`;
+  }
+
+  const params = {
+    page: pagination.page - 1,
+    size: pagination.perPage,
+    sort: sortByQuery,
+
+    name: filters.tagTypes,
+    "tags.name": filters.tags,
+  };
+
+  const query: string[] = buildQuery(params);
+  return APIClient.get(`${TAG_TYPES}?${query.join("&")}`, { headers });
+};
 
 export enum TagSortBy {
   NAME,
@@ -368,6 +425,10 @@ export const getTags = (
 
   const query: string[] = buildQuery(params);
   return APIClient.get(`${TAGS}?${query.join("&")}`, { headers });
+};
+
+export const getTagById = (id: number | string): AxiosPromise<Tag> => {
+  return APIClient.get(`${TAGS}/${id}`);
 };
 
 // App inventory
