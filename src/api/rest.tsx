@@ -15,7 +15,6 @@ import {
   Assessment,
   JobFunction,
   TagTypePage,
-  TagPage,
   Tag,
 } from "./models";
 
@@ -386,47 +385,6 @@ export const getTagTypes = (
   return APIClient.get(`${TAG_TYPES}?${query.join("&")}`, { headers });
 };
 
-export enum TagSortBy {
-  NAME,
-}
-export interface TagSortByQuery {
-  field: TagSortBy;
-  direction?: Direction;
-}
-
-export const getTags = (
-  filters: {
-    name?: string[];
-  },
-  pagination: PageQuery,
-  sortBy?: TagSortByQuery
-): AxiosPromise<TagPage> => {
-  let sortByQuery: string | undefined = undefined;
-  if (sortBy) {
-    let field;
-    switch (sortBy.field) {
-      case TagSortBy.NAME:
-        field = "name";
-        break;
-
-      default:
-        throw new Error("Could not define SortBy field name");
-    }
-    sortByQuery = `${sortBy.direction === "desc" ? "-" : ""}${field}`;
-  }
-
-  const params = {
-    page: pagination.page - 1,
-    size: pagination.perPage,
-    sort: sortByQuery,
-
-    name: filters.name,
-  };
-
-  const query: string[] = buildQuery(params);
-  return APIClient.get(`${TAGS}?${query.join("&")}`, { headers });
-};
-
 export const getTagById = (id: number | string): AxiosPromise<Tag> => {
   return APIClient.get(`${TAGS}/${id}`);
 };
@@ -435,6 +393,7 @@ export const getTagById = (id: number | string): AxiosPromise<Tag> => {
 
 export enum ApplicationSortBy {
   NAME,
+  TAGS,
 }
 export interface ApplicationSortByQuery {
   field: ApplicationSortBy;
@@ -456,6 +415,9 @@ export const getApplications = (
     switch (sortBy.field) {
       case ApplicationSortBy.NAME:
         field = "name";
+        break;
+      case ApplicationSortBy.TAGS:
+        field = "tags.size()";
         break;
       default:
         throw new Error("Could not define SortBy field name");

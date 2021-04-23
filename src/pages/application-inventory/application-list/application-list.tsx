@@ -83,6 +83,9 @@ const toSortByQuery = (
     case 2:
       field = ApplicationSortBy.NAME;
       break;
+    case 6:
+      field = ApplicationSortBy.TAGS;
+      break;
     default:
       throw new Error("Invalid column index=" + sortBy.index);
   }
@@ -205,7 +208,7 @@ export const ApplicationList: React.FC = () => {
     { title: t("terms.description"), transforms: [] },
     { title: t("terms.businessService"), transforms: [] },
     { title: t("terms.assessment"), transforms: [cellWidth(10)] },
-    { title: t("terms.tags"), transforms: [cellWidth(10)] },
+    { title: t("terms.tags"), transforms: [sortable, cellWidth(10)] },
     {
       title: "",
       props: {

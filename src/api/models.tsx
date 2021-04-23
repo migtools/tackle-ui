@@ -105,13 +105,6 @@ export interface JobFunctionPage {
   total_count: number;
 }
 
-export interface TagPage {
-  _embedded: {
-    tag: Tag[];
-  };
-  total_count: number;
-}
-
 export interface TagTypePage {
   _embedded: {
     "tag-type": TagType[];
