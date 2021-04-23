@@ -8,13 +8,13 @@
         "createNew": "Create new",
         "delete": "Delete",
         "edit": "Edit",
-        "manageDependencies": "Manage dependencies",
         "next": "Next",
+        "manageDependencies": "Manage dependencies",
         "save": "Save"
     },
     "composed": {
-        "add": "Add {{what}}",
         "applicationAssessment": "Application assessment",
+        "add": "Add {{what}}",
         "applicationInventory": "Application inventory",
         "manageDependenciesFor": "Manage dependencies for {{what}}",
         "noDataStateBody": "Create a new {{what}} to start seeing data here",

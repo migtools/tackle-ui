@@ -8,8 +8,8 @@
         "createNew": "Crear nuevo",
         "delete": "Eliminar",
         "edit": "Editar",
-        "manageDependencies": "Administrar dependencias",
         "next": "Siguiente",
+        "manageDependencies": "Administrar dependencias",
         "save": "Guardar"
     },
     "composed": {
