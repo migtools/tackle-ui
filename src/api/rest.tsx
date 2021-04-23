@@ -405,6 +405,7 @@ export const getApplications = (
     name?: string[];
     description?: string[];
     businessService?: string[];
+    tag?: string[];
   },
   pagination: PageQuery,
   sortBy?: ApplicationSortByQuery
@@ -433,6 +434,7 @@ export const getApplications = (
     name: filters.name,
     description: filters.description,
     businessService: filters.businessService,
+    "tags.tag": filters.tag,
   };
 
   const query: string[] = buildQuery(params);

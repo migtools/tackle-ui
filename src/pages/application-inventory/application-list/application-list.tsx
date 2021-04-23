@@ -64,11 +64,13 @@ import { ApplicationBusinessService } from "./components/application-business-se
 
 import { useAssessApplication } from "./hooks/useAssessApplication";
 import { ApplicationTags } from "./components/application-tags/application-tags";
+import { SelectTagFilter } from "./components/toolbar-search-filter/select-tag-filter";
 
 enum FilterKey {
   NAME = "name",
   DESCRIPTION = "description",
   BUSINESS_SERVICE = "businessService",
+  TAG = "tag",
 }
 
 const toSortByQuery = (
@@ -120,6 +122,10 @@ export const ApplicationList: React.FC = () => {
       key: FilterKey.BUSINESS_SERVICE,
       name: t("terms.businessService"),
     },
+    {
+      key: FilterKey.TAG,
+      name: t("terms.tag"),
+    },
   ];
   const [filtersValue, setFiltersValue] = useState<
     Map<FilterKey, ToolbarChip[]>
@@ -158,6 +164,7 @@ export const ApplicationList: React.FC = () => {
         businessService: filtersValue
           .get(FilterKey.BUSINESS_SERVICE)
           ?.map((f) => f.key),
+        tag: filtersValue.get(FilterKey.TAG)?.map((f) => f.key),
       },
       paginationQuery,
       toSortByQuery(sortByQuery)
@@ -172,6 +179,7 @@ export const ApplicationList: React.FC = () => {
         businessService: filtersValue
           .get(FilterKey.BUSINESS_SERVICE)
           ?.map((f) => f.key),
+        tag: filtersValue.get(FilterKey.TAG)?.map((f) => f.key),
       },
       paginationQuery,
       toSortByQuery(sortByQuery)
@@ -554,6 +562,17 @@ export const ApplicationList: React.FC = () => {
                               FilterKey.BUSINESS_SERVICE,
                               values
                             )
+                          }
+                        />
+                      ),
+                    },
+                    {
+                      key: FilterKey.TAG,
+                      input: (
+                        <SelectTagFilter
+                          value={filtersValue.get(FilterKey.TAG)}
+                          onApplyFilter={(values) =>
+                            handleOnAddFilter(FilterKey.TAG, values)
                           }
                         />
                       ),
