@@ -5,6 +5,8 @@ import { useTranslation } from "react-i18next";
 import {
   Button,
   ButtonVariant,
+  Modal,
+  ModalVariant,
   ToolbarChip,
   ToolbarGroup,
   ToolbarItem,
@@ -28,14 +30,14 @@ import {
   useTableControls,
   useDeleteJobFunction,
   useFetchJobFunctions,
+  useEntityModal,
 } from "shared/hooks";
 
 import { getAxiosErrorMessage } from "utils/utils";
 import { JobFunctionSortBy, JobFunctionSortByQuery } from "api/rest";
 import { SortByQuery, JobFunction } from "api/models";
 
-import { NewJobFunctionModal } from "./components/new-job-function-modal";
-import { UpdateJobFunctionModal } from "./components/update-job-function-modal";
+import { JobFunctionForm } from "./components/job-function-form";
 
 enum FilterKey {
   NAME = "name",
@@ -79,8 +81,13 @@ export const JobFunctions: React.FC = () => {
     new Map([])
   );
 
-  const [isNewModalOpen, setIsNewModalOpen] = useState(false);
-  const [rowToUpdate, setRowToUpdate] = useState<JobFunction>();
+  const {
+    isOpen: isCreateUpdateModalOpen,
+    entity: rowToUpdate,
+    create: openCreateModal,
+    update: openUpdateModal,
+    close: closeCreateUpdateModal,
+  } = useEntityModal<JobFunction>();
 
   const { deleteJobFunction } = useDeleteJobFunction();
 
@@ -147,7 +154,7 @@ export const JobFunctions: React.FC = () => {
         {
           title: (
             <AppTableActionButtons
-              onEdit={() => setRowToUpdate(item)}
+              onEdit={() => editRow(item)}
               onDelete={() => deleteRow(item)}
             />
           ),
@@ -157,6 +164,10 @@ export const JobFunctions: React.FC = () => {
   });
 
   // Rows
+
+  const editRow = (row: JobFunction) => {
+    openUpdateModal(row);
+  };
 
   const deleteRow = (row: JobFunction) => {
     dispatch(
@@ -216,39 +227,25 @@ export const JobFunctions: React.FC = () => {
     );
   };
 
-  // Create Modal
+  // Create/update Modal
 
-  const handleOnOpenCreateModal = () => {
-    setIsNewModalOpen(true);
-  };
+  const handleOnCreateUpdateModalSaved = (
+    response: AxiosResponse<JobFunction>
+  ) => {
+    if (!rowToUpdate) {
+      dispatch(
+        alertActions.addSuccess(
+          // t('terms.jobFunction')
+          t("toastr.success.added", {
+            what: response.data.role,
+            type: t("terms.jobFunction").toLowerCase(),
+          })
+        )
+      );
+    }
 
-  const handleOnCreatedNew = (response: AxiosResponse<JobFunction>) => {
-    setIsNewModalOpen(false);
+    closeCreateUpdateModal();
     refreshTable();
-
-    dispatch(
-      alertActions.addSuccess(
-        t("toastr.success.added", {
-          what: response.data.role,
-          type: "job function",
-        })
-      )
-    );
-  };
-
-  const handleOnCreateNewCancel = () => {
-    setIsNewModalOpen(false);
-  };
-
-  // Update Modal
-
-  const handleOnJobFunctionUpdated = () => {
-    setRowToUpdate(undefined);
-    refreshTable();
-  };
-
-  const handleOnUpdatedCancel = () => {
-    setRowToUpdate(undefined);
   };
 
   return (
@@ -294,7 +291,7 @@ export const JobFunctions: React.FC = () => {
                   type="button"
                   aria-label="create-job-function"
                   variant={ButtonVariant.primary}
-                  onClick={handleOnOpenCreateModal}
+                  onClick={openCreateModal}
                 >
                   {t("actions.createNew")}
                 </Button>
@@ -318,16 +315,23 @@ export const JobFunctions: React.FC = () => {
         />
       </ConditionalRender>
 
-      <NewJobFunctionModal
-        isOpen={isNewModalOpen}
-        onSaved={handleOnCreatedNew}
-        onCancel={handleOnCreateNewCancel}
-      />
-      <UpdateJobFunctionModal
-        jobFunction={rowToUpdate}
-        onSaved={handleOnJobFunctionUpdated}
-        onCancel={handleOnUpdatedCancel}
-      />
+      <Modal
+        // t('dialog.title.update')
+        // t('dialog.title.new')
+        // t('terms.jobFunction')
+        title={t(`dialog.title.${rowToUpdate ? "update" : "new"}`, {
+          what: t("terms.jobFunction").toLowerCase(),
+        })}
+        variant={ModalVariant.medium}
+        isOpen={isCreateUpdateModalOpen}
+        onClose={closeCreateUpdateModal}
+      >
+        <JobFunctionForm
+          jobFunction={rowToUpdate}
+          onSaved={handleOnCreateUpdateModalSaved}
+          onCancel={closeCreateUpdateModal}
+        />
+      </Modal>
     </>
   );
 };
