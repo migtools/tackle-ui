@@ -1,5 +1,7 @@
 {
     "actions": {
+        "assess": "Evaluar",
+        "back": "Atrás",
         "cancel": "Cancelar",
         "create": "Crear",
         "createNew": "Crear nuevo",
@@ -7,6 +9,7 @@
         "createTagType": "Crear typo de etiqueta",
         "delete": "Eliminar",
         "edit": "Editar",
+        "next": "Siguiente",
         "save": "Guardar"
     },
     "colors": {
@@ -21,9 +24,11 @@
         "red": "Rojo"
     },
     "composed": {
+        "applicationAssessment": "Evaluación de la aplicación",
         "applicationInventory": "Inventario de aplicaciones",
         "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
         "noDataStateTitle": "No existen {{what}} disponibles",
+        "selectMany": "Seleccione {{what}}",
         "selectOne": "Seleccione un(a) {{what}}"
     },
     "dialog": {
@@ -47,6 +52,10 @@
             "updateTag": "Actualizar etiqueta",
             "updateTagType": "Actualizar tipo de etiqueta"
         }
+    },
+    "message": {
+        "couldNotFetchBody": "El recurso no existe o no tienes permiso para acceder al mismo",
+        "couldNotFetchTitle": "No disponible"
     },
     "sidebar": {
         "applicationInventory": "Inventario de aplicaciones",
@@ -79,7 +88,9 @@
         "owner": "Propietario",
         "rank": "Rango",
         "stakeholder": "Interesado",
+        "stakeholder(s)": "Interesado(s)",
         "stakeholderGroup": "Grupo interesado",
+        "stakeholderGroup(s)": "Grupo(s) de interesados",
         "stakeholderGroups": "Grupos de interesados",
         "stakeholders": "Interesados",
         "tag(s)": "Etiqueta(s)",
