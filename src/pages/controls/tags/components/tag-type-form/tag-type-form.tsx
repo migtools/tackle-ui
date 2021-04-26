@@ -19,10 +19,12 @@ import {
   SingleSelectFormikField,
   OptionWithValue,
   Color,
-  defaultColorsPalete,
 } from "shared/components";
 
-import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
+import {
+  DEFAULT_SELECT_MAX_HEIGHT,
+  DEFAULT_COLOR_PALETE as DEFAULT_COLOR_PALETTE,
+} from "Constants";
 import { createTagType, updateTagType } from "api/rest";
 import { TagType } from "api/models";
 import {
@@ -198,7 +200,7 @@ export const TagTypeForm: React.FC<TagTypeFormProps> = ({
               }),
               menuAppendTo: () => document.body,
               maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
-              options: defaultColorsPalete.map(colorToOption),
+              options: DEFAULT_COLOR_PALETTE.map(colorToOption),
             }}
           />
         </FormGroup>
