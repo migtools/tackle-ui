@@ -90,7 +90,7 @@ describe("useFetchApplications", () => {
     };
 
     new MockAdapter(axios)
-      .onGet(`${APPLICATIONS}?page=0&size=1000`)
+      .onGet(`${APPLICATIONS}?page=0&size=1000&sort=name`)
       .reply(200, data);
 
     // Use hook
