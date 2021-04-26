@@ -11,6 +11,8 @@ import {
   DescriptionListDescription,
   DescriptionListGroup,
   DescriptionListTerm,
+  Modal,
+  ModalVariant,
   PageSection,
   PageSectionVariants,
   Text,
@@ -47,6 +49,7 @@ import {
   useDeleteApplication,
   useTableControls,
   useFetchApplications,
+  useEntityModal,
 } from "shared/hooks";
 
 import { formatPath, Paths } from "Paths";
@@ -54,13 +57,12 @@ import { Application, Assessment, SortByQuery } from "api/models";
 import { ApplicationSortBy, ApplicationSortByQuery } from "api/rest";
 import { getAxiosErrorMessage } from "utils/utils";
 
-import { NewApplicationModal } from "./components/new-application-modal";
-import { UpdateApplicationModal } from "./components/update-application-modal";
 import { ToolbarSearchFilter } from "./components/toolbar-search-filter";
 import { InputTextFilter } from "./components/toolbar-search-filter/input-text-filter";
 import { SelectBusinessServiceFilter } from "./components/toolbar-search-filter/select-business-service-filter";
 import { ApplicationAssessment } from "./components/application-assessment";
 import { ApplicationBusinessService } from "./components/application-business-service";
+import { ApplicationForm } from "./components/application-form";
 
 import { useAssessApplication } from "./hooks/useAssessApplication";
 
@@ -121,8 +123,13 @@ export const ApplicationList: React.FC = () => {
     Map<FilterKey, ToolbarChip[]>
   >(new Map([]));
 
-  const [isNewModalOpen, setIsNewModalOpen] = useState(false);
-  const [rowToUpdate, setRowToUpdate] = useState<Application>();
+  const {
+    isOpen: isCreateUpdateModalOpen,
+    entity: rowToUpdate,
+    create: openCreateModal,
+    update: openUpdateModal,
+    close: closeCreateUpdateModal,
+  } = useEntityModal<Application>();
 
   const { deleteApplication } = useDeleteApplication();
   const {
@@ -320,7 +327,7 @@ export const ApplicationList: React.FC = () => {
   };
 
   const editRow = (row: Application) => {
-    setRowToUpdate(row);
+    openUpdateModal(row);
   };
 
   const deleteRow = (row: Application) => {
@@ -389,39 +396,25 @@ export const ApplicationList: React.FC = () => {
     );
   };
 
-  // Create Modal
+  // Create/update Modal
 
-  const handleOnOpenCreateNewModal = () => {
-    setIsNewModalOpen(true);
-  };
+  const handleOnCreateUpdateModalSaved = (
+    response: AxiosResponse<Application>
+  ) => {
+    if (!rowToUpdate) {
+      dispatch(
+        alertActions.addSuccess(
+          // t('terms.application')
+          t("toastr.success.added", {
+            what: response.data.name,
+            type: t("terms.application").toLowerCase(),
+          })
+        )
+      );
+    }
 
-  const handleOnCreatedNew = (response: AxiosResponse<Application>) => {
-    setIsNewModalOpen(false);
+    closeCreateUpdateModal();
     refreshTable();
-
-    dispatch(
-      alertActions.addSuccess(
-        t("toastr.success.added", {
-          what: response.data.name,
-          type: "application",
-        })
-      )
-    );
-  };
-
-  const handleOnCreateNewCancel = () => {
-    setIsNewModalOpen(false);
-  };
-
-  // Update Modal
-
-  const handleOnUpdated = () => {
-    setRowToUpdate(undefined);
-    refreshTable();
-  };
-
-  const handleOnUpdatedCancel = () => {
-    setRowToUpdate(undefined);
   };
 
   // General actions
@@ -552,7 +545,7 @@ export const ApplicationList: React.FC = () => {
                       type="button"
                       aria-label="create-application"
                       variant={ButtonVariant.primary}
-                      onClick={handleOnOpenCreateNewModal}
+                      onClick={openCreateModal}
                     >
                       {t("actions.createNew")}
                     </Button>
@@ -593,16 +586,22 @@ export const ApplicationList: React.FC = () => {
         </ConditionalRender>
       </PageSection>
 
-      <NewApplicationModal
-        isOpen={isNewModalOpen}
-        onSaved={handleOnCreatedNew}
-        onCancel={handleOnCreateNewCancel}
-      />
-      <UpdateApplicationModal
-        application={rowToUpdate}
-        onSaved={handleOnUpdated}
-        onCancel={handleOnUpdatedCancel}
-      />
+      <Modal
+        // t('dialog.title.update')
+        // t('dialog.title.new')
+        title={t(`dialog.title.${rowToUpdate ? "update" : "new"}`, {
+          what: t("terms.application").toLowerCase(),
+        })}
+        variant={ModalVariant.medium}
+        isOpen={isCreateUpdateModalOpen}
+        onClose={closeCreateUpdateModal}
+      >
+        <ApplicationForm
+          application={rowToUpdate}
+          onSaved={handleOnCreateUpdateModalSaved}
+          onCancel={closeCreateUpdateModal}
+        />
+      </Modal>
     </>
   );
 };
