@@ -62,6 +62,7 @@ describe("Stakeholders filtering table", () => {
       ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
     ).click();
 
+    cy.wait("@getStakeholdersApi");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("email-a@domain.com");
 
     // Second filter
@@ -73,6 +74,7 @@ describe("Stakeholders filtering table", () => {
       ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
     ).click();
 
+    cy.wait("@getStakeholdersApi");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("email-a@domain.com");
     cy.get(".pf-c-table").pf4_table_rows().eq(1).contains("email-k@domain.com");
   });
@@ -91,10 +93,10 @@ describe("Stakeholders filtering table", () => {
       ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
     ).click();
 
+    cy.wait("@getStakeholdersApi");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-a");
 
     // Second filter
-
     cy.get(
       ".pf-c-toolbar .pf-c-toolbar__content input[aria-label='filter-text']"
     ).type("stakeholder-k");
@@ -102,6 +104,7 @@ describe("Stakeholders filtering table", () => {
       ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
     ).click();
 
+    cy.wait("@getStakeholdersApi");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(1).contains("stakeholder-k");
   });
@@ -120,6 +123,7 @@ describe("Stakeholders filtering table", () => {
       ".pf-c-toolbar .pf-c-toolbar__content button[aria-label='search']"
     ).click();
 
+    cy.wait("@getStakeholdersApi");
     cy.get(".pf-c-table").pf4_table_row_expand(0);
     cy.get(".pf-c-table > tbody > tr.pf-c-table__expandable-row")
       .find(".pf-c-description-list .pf-c-description-list__text")

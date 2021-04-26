@@ -5,4 +5,4 @@ export const DEFAULT_PAGINATION: PageQuery = {
   perPage: 10,
 };
 
-export const DEFAULT_SELECT_MAX_HEIGHT = 350;
+export const DEFAULT_SELECT_MAX_HEIGHT = 200;

@@ -8,6 +8,7 @@ export interface ChildrenProps {
   assessment?: Assessment;
   isFetching: boolean;
   fetchError?: AxiosError;
+  fetchCount: number;
 }
 
 export interface RemoteAssessmentProps {
@@ -23,8 +24,11 @@ export const RemoteAssessment: React.FC<RemoteAssessmentProps> = ({
   const [fetchError, setFetchError] = useState<AxiosError>();
   const [isFetching, setIsFetching] = useState(false);
 
+  const [fetchCount, setFetchCount] = useState(0);
+
   useEffect(() => {
     setIsFetching(true);
+    setFetchCount((current) => current + 1);
 
     getAssessments({ applicationId })
       .then(({ data }) => {
@@ -42,5 +46,6 @@ export const RemoteAssessment: React.FC<RemoteAssessmentProps> = ({
     assessment: entity,
     fetchError,
     isFetching,
+    fetchCount,
   });
 };

@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { FormikHelpers, FormikProvider, useFormik } from "formik";
 
 import {
+  Bullseye,
   PageSection,
   PageSectionTypes,
   SelectOptionObject,
@@ -11,8 +12,14 @@ import {
   Wizard,
   WizardStep,
 } from "@patternfly/react-core";
+import { BanIcon } from "@patternfly/react-icons";
 
-import { PageHeader } from "shared/components";
+import {
+  ConditionalRender,
+  SimpleEmptyState,
+  PageHeader,
+  AppPlaceholder,
+} from "shared/components";
 import { useFetchStakeholderGroups, useFetchStakeholders } from "shared/hooks";
 
 import { AssessmentRoute, Paths } from "Paths";
@@ -24,81 +31,9 @@ import {
 } from "api/models";
 import { getApplicationById, getAssessmentById } from "api/rest";
 
-import { WizardFooter } from "./components/wizard-footer";
+import { CustomWizardFooter } from "./components/custom-wizard-footer";
 import { StakeholdersForm } from "./components/stakeholders-form";
-import { WizardQuestionnaireStep } from "./components/wizard-questionnaire-step";
-
-const FAKE_ASSESSMENT: Assessment = {
-  id: 1,
-  applicationId: 2,
-  status: "STARTED",
-  stakeholders: [],
-  stakeholderGroups: [],
-  questionnaire: {
-    categories: [
-      {
-        id: 1,
-        order: 0,
-        title: "General questions",
-        comments: "It was hard to answer these questions, I hope I did it well",
-        questions: [
-          {
-            id: 1,
-            order: 0,
-            question: "What's you favorite movie?",
-            description: "This represents a multiple option choice",
-            options: [
-              {
-                id: 1,
-                order: 0,
-                option: "Titanic",
-                checked: true,
-              },
-              {
-                id: 2,
-                order: 1,
-                option: "Start war",
-                checked: false,
-              },
-              {
-                id: 3,
-                order: 2,
-                option: "Dr. Strange",
-                checked: true,
-              },
-            ],
-          },
-          {
-            id: 2,
-            order: 1,
-            question: "How old are you?",
-            description: "This represents a single option choice",
-            options: [
-              {
-                id: 4,
-                order: 0,
-                option: "I'm younger than 30",
-                checked: true,
-              },
-              {
-                id: 5,
-                order: 1,
-                option: "I'm older than 30",
-                checked: false,
-              },
-              {
-                id: 6,
-                order: 2,
-                option: "I'm too old to tell you",
-                checked: false,
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-};
+import { AxiosError } from "axios";
 
 enum StepId {
   Stakeholders = 1,
@@ -134,28 +69,43 @@ const toSelectOptionStakeholderGroup = (
 export const ApplicationAssessment: React.FC = () => {
   const { t } = useTranslation();
   const { assessmentId } = useParams<AssessmentRoute>();
+  const history = useHistory();
 
-  // Fetch assessment and application
-
+  // Assessment
   const [assessment, setAssessment] = useState<Assessment>();
-  const [application, setApplication] = useState<Application>();
+  const [
+    fetchAssessmentError,
+    setFetchAssessmentError,
+  ] = useState<AxiosError>();
+  const [isFetchingAssessment, setIsFetchingAssessment] = useState(true);
 
   useEffect(() => {
     if (assessmentId) {
+      setIsFetchingAssessment(true);
+
       getAssessmentById(assessmentId)
         .then(({ data }) => {
           setAssessment(data);
-          return getApplicationById(data.applicationId);
-        })
-        .then(({ data }) => {
-          setApplication(data);
+          setIsFetchingAssessment(false);
         })
         .catch((error) => {
-          // TODO replace the code above
-          setAssessment(FAKE_ASSESSMENT);
+          setFetchAssessmentError(error);
+          setIsFetchingAssessment(false);
         });
     }
   }, [assessmentId]);
+
+  // Application
+
+  const [application, setApplication] = useState<Application>();
+
+  useEffect(() => {
+    if (assessment) {
+      getApplicationById(assessment.applicationId).then(({ data }) => {
+        setApplication(data);
+      });
+    }
+  }, [assessment]);
 
   // Fetch stakeholders
 
@@ -260,12 +210,15 @@ export const ApplicationAssessment: React.FC = () => {
     return fieldKeys.every((fieldKey) => !formik.errors[fieldKey]);
   };
 
-  // Wizard step1
+  // Wizard
 
   const wizardSteps: WizardStep[] = [
     {
       id: StepId.Stakeholders,
-      name: t("composed.selectMany", { what: t("terms.stakeholders") }),
+      name: t("composed.selectMany", {
+        // t('terms.stakeholders')
+        what: t("terms.stakeholders").toLowerCase(),
+      }),
       component: (
         <StakeholdersForm
           stakeholders={stakeholders?.data}
@@ -280,27 +233,16 @@ export const ApplicationAssessment: React.FC = () => {
     },
   ];
 
-  if (assessment) {
-    assessment.questionnaire.categories.forEach((section) => {
-      wizardSteps.push({
-        id: section.id,
-        name: section.title,
-        component: <WizardQuestionnaireStep section={section} />,
-        enableNext: true,
-      });
-    });
-  }
-
-  //
-
   const wizardFooter = (
-    <WizardFooter
-      isFirstStep={false}
+    <CustomWizardFooter
+      isFirstStep={true}
       isDisabled={false}
       isNextDisabled={true}
       onBack={() => {}}
       onNext={() => {}}
-      onCancel={() => {}}
+      onCancel={() => {
+        history.push(Paths.applicationInventory_applicationList);
+      }}
     />
   );
 
@@ -324,14 +266,29 @@ export const ApplicationAssessment: React.FC = () => {
         />
       </PageSection>
       <PageSection variant="light" type={PageSectionTypes.wizard}>
-        <FormikProvider value={formik}>
-          <Wizard
-            navAriaLabel="assessment-wizard"
-            mainAriaLabel="assesment-wizard"
-            steps={wizardSteps}
-            footer={wizardFooter}
-          />
-        </FormikProvider>
+        <ConditionalRender
+          when={isFetchingAssessment}
+          then={<AppPlaceholder />}
+        >
+          {fetchAssessmentError ? (
+            <Bullseye>
+              <SimpleEmptyState
+                icon={BanIcon}
+                title={t("message.couldNotFetchTitle")}
+                description={t("message.couldNotFetchBody") + "."}
+              />
+            </Bullseye>
+          ) : (
+            <FormikProvider value={formik}>
+              <Wizard
+                navAriaLabel="assessment-wizard"
+                mainAriaLabel="assesment-wizard"
+                steps={wizardSteps}
+                footer={wizardFooter}
+              />
+            </FormikProvider>
+          )}
+        </ConditionalRender>
       </PageSection>
     </>
   );

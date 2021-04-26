@@ -25,7 +25,7 @@ exports[`StatusIconAssessment Renders without crashing 1`] = `
   }
 >
   <FlexItem>
-    <ErrorCircleOIcon
+    <TimesCircleIcon
       className=""
       color="#6a6e73"
       noVerticalAlign={false}

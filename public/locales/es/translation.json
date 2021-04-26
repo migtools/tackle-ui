@@ -26,13 +26,19 @@
             "delete": "Eliminar '{{what}}'",
             "newApplication": "Nueva aplicación",
             "newBusinessService": "Nuevo servicio de negocio",
+            "newJobFunction": "Nueva función laboral",
             "newStakeholder": "Nuevo interesado",
             "newStakeholderGroup": "Nuevo grupo de interesados",
             "updateApplication": "Actualizar aplicación",
             "updateBusinessService": "Actualizar servicio de negocio",
+            "updateJobFunction": "Actualizar función laboral",
             "updateStakeholder": "Actualizar interesado",
             "updateStakeholderGroup": "Actualizar grupo de interesados"
         }
+    },
+    "message": {
+        "couldNotFetchBody": "El recurso no existe o no tienes permiso para acceder al mismo",
+        "couldNotFetchTitle": "No disponible"
     },
     "sidebar": {
         "applicationInventory": "Inventario de aplicaciones",
@@ -55,12 +61,16 @@
         "group(s)": "Grupo(s)",
         "inProgress": "En progreso",
         "jobFunction": "Función laboral",
+        "jobFunctions": "Funciones laborales",
         "member": "Miembro",
         "member(s)": "Miembro(s)",
         "name": "Nombre",
+        "notAvailable": "No disponible",
         "notStarted": "No empezado",
         "owner": "Propietario",
+        "stakeholder": "Interesado",
         "stakeholder(s)": "Interesado(s)",
+        "stakeholderGroup": "Grupo interesado",
         "stakeholderGroup(s)": "Grupo(s) de interesados",
         "stakeholderGroups": "Grupos de interesados",
         "stakeholders": "Interesados",

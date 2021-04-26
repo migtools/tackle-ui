@@ -6,7 +6,7 @@ import {
   EmptyStateVariant,
   Title,
 } from "@patternfly/react-core";
-import { AddCircleOIcon } from "@patternfly/react-icons";
+import { CubesIcon } from "@patternfly/react-icons";
 
 export interface NoDataEmptyStateProps {
   title: string;
@@ -19,7 +19,7 @@ export const NoDataEmptyState: React.FC<NoDataEmptyStateProps> = ({
 }) => {
   return (
     <EmptyState variant={EmptyStateVariant.small}>
-      <EmptyStateIcon icon={AddCircleOIcon} />
+      <EmptyStateIcon icon={CubesIcon} />
       <Title headingLevel="h2" size="lg">
         {title}
       </Title>

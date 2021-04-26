@@ -4,9 +4,9 @@
   "private": true,
   "dependencies": {
     "@konveyor/lib-ui": "^2.0.0",
-    "@patternfly/patternfly": "4.87.3",
-    "@patternfly/react-core": "4.97.3",
-    "@patternfly/react-table": "4.23.3",
+    "@patternfly/patternfly": "4.96.2",
+    "@patternfly/react-core": "4.106.2",
+    "@patternfly/react-table": "4.24.1",
     "@react-keycloak/web": "^3.4.0",
     "@redhat-cloud-services/frontend-components-notifications": "3.0.3",
     "@testing-library/jest-dom": "^5.11.4",
@@ -68,7 +68,7 @@
     ]
   },
   "devDependencies": {
-    "@cypress/code-coverage": "^3.9.2",
+    "@cypress/code-coverage": "^3.9.4",
     "@cypress/instrument-cra": "^1.4.0",
     "@storybook/addon-actions": "^6.1.14",
     "@storybook/addon-essentials": "^6.1.14",
@@ -85,7 +85,7 @@
     "@types/redux-logger": "^3.0.8",
     "@types/yup": "^0.29.11",
     "axios-mock-adapter": "^1.19.0",
-    "cypress": "6.8.0",
+    "cypress": "7.1.0",
     "cypress-keycloak-commands": "^1.2.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
@@ -116,5 +116,8 @@
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
       "prettier --write"
     ]
+  },
+  "nyc": {
+    "exclude": "src/reportWebVitals.ts"
   }
 }

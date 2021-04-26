@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x]
+        node-version: [12.x, 14.x]
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
@@ -285,7 +285,7 @@ jobs:
           -e QUARKUS_HTTP_PORT=8080 \
           -e QUARKUS_DATASOURCE_USERNAME=user \
           -e QUARKUS_DATASOURCE_PASSWORD=password \
-          -e QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://pathfinder-db:5432/application_inventory_db \
+          -e QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://pathfinder-db:5432/pathfinder_db \
           -e QUARKUS_OIDC_AUTH_SERVER_URL=http://keycloak:8080/auth/realms/konveyor \
           -e QUARKUS_OIDC_CLIENT_ID=pathfinder-api \
           -e QUARKUS_OIDC_CREDENTIALS_SECRET=secret \
@@ -299,6 +299,7 @@ jobs:
           -e SSO_SERVER_URL=http://keycloak:8080/auth \
           -e CONTROLS_API_URL=http://controls:8080/controls \
           -e APPLICATION_INVENTORY_API_URL=http://application-inventory:8080/application-inventory \
+          -e PATHFINDER_API_URL=http://pathfinder:8080/pathfinder \
           quay.io/konveyor/tackle-ui:main
           sleep 5s && docker logs tackle-ui
       - name: Cypress run

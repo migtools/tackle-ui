@@ -10,15 +10,33 @@ describe("Create new stakeholder", () => {
 
     // Create data
     cy.get("@tokens").then((tokens) => {
-      cy.log("Create stakeholder groups").then(() => {
-        return [...Array(11)]
-          .map((_, i) => ({
-            name: `group-${(i + 10).toString(36)}`,
-          }))
-          .forEach((payload) => {
-            cy.createStakeholderGroup(payload, tokens);
+      cy.log("Create stakeholder groups")
+        .then(() => {
+          return [...Array(11)]
+            .map((_, i) => ({
+              name: `group-${(i + 10).toString(36)}`,
+            }))
+            .forEach((payload) => {
+              cy.createStakeholderGroup(payload, tokens);
+            });
+        })
+
+        .log("Create job functions")
+        .then(() => {
+          return [
+            {
+              role: "Business Analyst",
+            },
+            {
+              role: "Consultant",
+            },
+            {
+              role: "DBA",
+            },
+          ].forEach((payload) => {
+            cy.createJobFunction(payload, tokens);
           });
-      });
+        });
     });
   });
 

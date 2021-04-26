@@ -10,11 +10,7 @@ import {
   DescriptionListDescription,
   DescriptionListGroup,
   DescriptionListTerm,
-  EmptyState,
-  EmptyStateBody,
-  EmptyStateIcon,
-  EmptyStateVariant,
-  Title,
+  ToolbarChip,
   ToolbarGroup,
   ToolbarItem,
 } from "@patternfly/react-core";
@@ -26,7 +22,6 @@ import {
   IRowData,
   sortable,
 } from "@patternfly/react-table";
-import { AddCircleOIcon } from "@patternfly/react-icons";
 
 import { useDispatch } from "react-redux";
 import { alertActions } from "store/alert";
@@ -39,6 +34,7 @@ import {
   ConditionalRender,
   SearchFilter,
   AppTableToolbarToggleGroup,
+  NoDataEmptyState,
 } from "shared/components";
 import {
   useTableControls,
@@ -298,9 +294,14 @@ export const StakeholderGroups: React.FC = () => {
     handlePaginationChange({ page: 1 });
   };
 
-  const handleOnDeleteFilter = (key: string, value: string[]) => {
+  const handleOnDeleteFilter = (
+    key: string,
+    value: (string | ToolbarChip)[]
+  ) => {
     const filterKey: FilterKey = key as FilterKey;
-    setFiltersValue((current) => new Map(current).set(filterKey, value));
+    setFiltersValue((current) =>
+      new Map(current).set(filterKey, value as string[])
+    );
   };
 
   // Create Modal
@@ -391,15 +392,18 @@ export const StakeholderGroups: React.FC = () => {
             </ToolbarGroup>
           }
           noDataState={
-            <EmptyState variant={EmptyStateVariant.small}>
-              <EmptyStateIcon icon={AddCircleOIcon} />
-              <Title headingLevel="h2" size="lg">
-                No stakeholder groups available
-              </Title>
-              <EmptyStateBody>
-                Create a new stakeholder group to start seeing data here.
-              </EmptyStateBody>
-            </EmptyState>
+            <NoDataEmptyState
+              // t('terms.stakeholderGroups')
+              title={t("composed.noDataStateTitle", {
+                what: t("terms.stakeholderGroups").toLowerCase(),
+              })}
+              // t('terms.stakeholderGroup')
+              description={
+                t("composed.noDataStateBody", {
+                  what: t("terms.stakeholderGroup").toLowerCase(),
+                }) + "."
+              }
+            />
           }
         />
       </ConditionalRender>

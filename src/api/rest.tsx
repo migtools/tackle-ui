@@ -13,6 +13,7 @@ import {
   ApplicationPage,
   Application,
   Assessment,
+  JobFunction,
 } from "./models";
 
 export const CONTROLS_BASE_URL = "controls";
@@ -119,7 +120,7 @@ export const updateBusinessService = (
 };
 
 export const getBusinessServiceById = (
-  id: number
+  id: number | string
 ): AxiosPromise<BusinessService> => {
   return APIClient.get(`${BUSINESS_SERVICES}/${id}`);
 };
@@ -161,7 +162,7 @@ export const getStakeholders = (
         field = "jobFunction.role";
         break;
       case StakeholderSortBy.STAKEHOLDER_GROUPS:
-        field = "stakeholderGroups.size";
+        field = "stakeholderGroups.size()";
         break;
       default:
         throw new Error("Could not define SortBy field name");
@@ -182,6 +183,22 @@ export const getStakeholders = (
 
   const query: string[] = buildQuery(params);
   return APIClient.get(`${STAKEHOLDERS}?${query.join("&")}`, { headers });
+};
+
+export const createJobFunction = (
+  obj: JobFunction
+): AxiosPromise<JobFunction> => {
+  return APIClient.post(`${JOB_FUNCTIONS}`, obj);
+};
+
+export const updateJobFunction = (
+  obj: JobFunction
+): AxiosPromise<JobFunction> => {
+  return APIClient.put(`${JOB_FUNCTIONS}/${obj.id}`, obj);
+};
+
+export const deleteJobFunction = (id: number): AxiosPromise => {
+  return APIClient.delete(`${JOB_FUNCTIONS}/${id}`);
 };
 
 export const deleteStakeholder = (id: number): AxiosPromise => {
@@ -228,7 +245,7 @@ export const getStakeholderGroups = (
         field = "name";
         break;
       case StakeholderGroupSortBy.STAKEHOLDERS:
-        field = "stakeholders.size";
+        field = "stakeholders.size()";
         break;
       default:
         throw new Error("Could not define SortBy field name");
@@ -277,7 +294,9 @@ export interface JobFunctionSortByQuery {
 }
 
 export const getJobFunctions = (
-  filters: {},
+  filters: {
+    role?: string[];
+  },
   pagination: PageQuery,
   sortBy?: JobFunctionSortByQuery
 ): AxiosPromise<JobFunctionPage> => {
@@ -298,6 +317,8 @@ export const getJobFunctions = (
     page: pagination.page - 1,
     size: pagination.perPage,
     sort: sortByQuery,
+
+    role: filters.role,
   };
 
   const query: string[] = buildQuery(params);
@@ -317,6 +338,8 @@ export interface ApplicationSortByQuery {
 export const getApplications = (
   filters: {
     name?: string[];
+    description?: string[];
+    businessService?: string[];
   },
   pagination: PageQuery,
   sortBy?: ApplicationSortByQuery
@@ -340,6 +363,8 @@ export const getApplications = (
     sort: sortByQuery,
 
     name: filters.name,
+    description: filters.description,
+    businessService: filters.businessService,
   };
 
   const query: string[] = buildQuery(params);
