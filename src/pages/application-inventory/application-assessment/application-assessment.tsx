@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { FormikHelpers, FormikProvider, useFormik } from "formik";
+import { AxiosError } from "axios";
 
 import {
   Bullseye,
@@ -20,20 +21,29 @@ import {
   PageHeader,
   AppPlaceholder,
 } from "shared/components";
-import { useFetchStakeholderGroups, useFetchStakeholders } from "shared/hooks";
+import { useFetch } from "shared/hooks";
 
 import { AssessmentRoute, Paths } from "Paths";
 import {
   Application,
   Assessment,
+  PageRepresentation,
   Stakeholder,
   StakeholderGroup,
+  StakeholderGroupPage,
+  StakeholderPage,
 } from "api/models";
 import { getApplicationById, getAssessmentById } from "api/rest";
 
 import { CustomWizardFooter } from "./components/custom-wizard-footer";
 import { StakeholdersForm } from "./components/stakeholders-form";
-import { AxiosError } from "axios";
+
+import {
+  getAllStakeholderGroups,
+  getAllStakeholders,
+  stakeholderGroupPageMapper,
+  stakeholderPageMapper,
+} from "api/apiUtils";
 
 enum StepId {
   Stakeholders = 1,
@@ -110,11 +120,15 @@ export const ApplicationAssessment: React.FC = () => {
   // Fetch stakeholders
 
   const {
-    stakeholders,
+    data: stakeholders,
     isFetching: isFetchingStakeholders,
     fetchError: fetchErrorStakeholders,
-    fetchAllStakeholders,
-  } = useFetchStakeholders();
+    requestFetch: fetchAllStakeholders,
+  } = useFetch<StakeholderPage, PageRepresentation<Stakeholder>>({
+    defaultIsFetching: true,
+    onFetch: getAllStakeholders,
+    mapper: stakeholderPageMapper,
+  });
 
   useEffect(() => {
     fetchAllStakeholders();
@@ -123,11 +137,15 @@ export const ApplicationAssessment: React.FC = () => {
   // Fetch stakeholder groups
 
   const {
-    stakeholderGroups,
+    data: stakeholderGroups,
     isFetching: isFetchingStakeholderGroups,
     fetchError: fetchErrorStakeholderGroups,
-    fetchAllStakeholderGroups,
-  } = useFetchStakeholderGroups();
+    requestFetch: fetchAllStakeholderGroups,
+  } = useFetch<StakeholderGroupPage, PageRepresentation<StakeholderGroup>>({
+    defaultIsFetching: true,
+    onFetch: getAllStakeholderGroups,
+    mapper: stakeholderGroupPageMapper,
+  });
 
   useEffect(() => {
     fetchAllStakeholderGroups();
