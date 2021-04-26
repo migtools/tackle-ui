@@ -2,7 +2,11 @@ import { useCallback, useReducer } from "react";
 import { AxiosError } from "axios";
 import { ActionType, createAsyncAction, getType } from "typesafe-actions";
 
-import { getApplications, ApplicationSortByQuery } from "api/rest";
+import {
+  getApplications,
+  ApplicationSortByQuery,
+  ApplicationSortBy,
+} from "api/rest";
 import { PageRepresentation, Application, PageQuery } from "api/models";
 
 export const {
@@ -125,7 +129,11 @@ export const useFetchApplications = (
   const fetchAllApplications = useCallback(() => {
     dispatch(fetchRequest());
 
-    getApplications({}, { page: 1, perPage: 1000 })
+    getApplications(
+      {},
+      { page: 1, perPage: 1000 },
+      { field: ApplicationSortBy.NAME }
+    )
       .then(({ data }) => {
         const list = data._embedded.application;
         const total = data.total_count;
