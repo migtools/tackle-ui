@@ -41,6 +41,9 @@ const businesServiceToOption = (
 const tagToOption = (value: Tag): OptionWithValue<Tag> => ({
   value,
   toString: () => value.name,
+  props: {
+    description: value.tagType?.name,
+  },
 });
 
 export interface FormValues {

@@ -31,6 +31,9 @@ const tagToOption = (value: Tag): OptionWithValue<Tag> => ({
       );
     }
   },
+  props: {
+    description: value.tagType?.name,
+  },
 });
 
 export interface SelectTagFilterProps {
