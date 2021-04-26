@@ -43,15 +43,23 @@ import {
   ConditionalRender,
   NoDataEmptyState,
 } from "shared/components";
-import {
-  useDeleteApplication,
-  useTableControls,
-  useFetchApplications,
-} from "shared/hooks";
+
+import { useDeleteApplication, useTableControls, useFetch } from "shared/hooks";
 
 import { formatPath, Paths } from "Paths";
-import { Application, Assessment, SortByQuery } from "api/models";
-import { ApplicationSortBy, ApplicationSortByQuery } from "api/rest";
+import {
+  Application,
+  ApplicationPage,
+  Assessment,
+  PageRepresentation,
+  SortByQuery,
+} from "api/models";
+import {
+  ApplicationSortBy,
+  ApplicationSortByQuery,
+  getApplications,
+} from "api/rest";
+import { applicationPageMapper } from "api/apiUtils";
 import { getAxiosErrorMessage } from "utils/utils";
 
 import { NewApplicationModal } from "./components/new-application-modal";
@@ -131,13 +139,6 @@ export const ApplicationList: React.FC = () => {
   } = useAssessApplication();
 
   const {
-    applications,
-    isFetching,
-    fetchError,
-    fetchApplications,
-  } = useFetchApplications(true);
-
-  const {
     paginationQuery,
     sortByQuery,
     handlePaginationChange,
@@ -146,8 +147,8 @@ export const ApplicationList: React.FC = () => {
     sortByQuery: { direction: "asc", index: 2 },
   });
 
-  const refreshTable = useCallback(() => {
-    fetchApplications(
+  const fetchApplications = useCallback(() => {
+    return getApplications(
       {
         name: filtersValue.get(FilterKey.NAME)?.map((f) => f.key),
         description: filtersValue.get(FilterKey.DESCRIPTION)?.map((f) => f.key),
@@ -158,21 +159,22 @@ export const ApplicationList: React.FC = () => {
       paginationQuery,
       toSortByQuery(sortByQuery)
     );
-  }, [filtersValue, paginationQuery, sortByQuery, fetchApplications]);
+  }, [filtersValue, paginationQuery, sortByQuery]);
+
+  const {
+    data: applications,
+    isFetching,
+    fetchError,
+    requestFetch: refreshTable,
+  } = useFetch<ApplicationPage, PageRepresentation<Application>>({
+    defaultIsFetching: true,
+    onFetch: fetchApplications,
+    mapper: applicationPageMapper,
+  });
 
   useEffect(() => {
-    fetchApplications(
-      {
-        name: filtersValue.get(FilterKey.NAME)?.map((f) => f.key),
-        description: filtersValue.get(FilterKey.DESCRIPTION)?.map((f) => f.key),
-        businessService: filtersValue
-          .get(FilterKey.BUSINESS_SERVICE)
-          ?.map((f) => f.key),
-      },
-      paginationQuery,
-      toSortByQuery(sortByQuery)
-    );
-  }, [filtersValue, paginationQuery, sortByQuery, fetchApplications]);
+    refreshTable();
+  }, [filtersValue, paginationQuery, sortByQuery, refreshTable]);
 
   // Expansion and selection of rows
 
