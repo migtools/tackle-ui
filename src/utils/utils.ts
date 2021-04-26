@@ -23,16 +23,3 @@ export const getValidatedFromErrorTouched = (
 ): "success" | "warning" | "error" | "default" => {
   return error && touched ? "error" : "default";
 };
-
-const a = [...Array(2)]
-  .map((_, i) => [
-    {
-      name: `tag-a-${(i + 10).toString(36)}`,
-      tagType: "tagTypes[i]",
-    },
-    {
-      name: `tag-b-${(i + 10).toString(36)}`,
-      tagType: "tagTypes[i]",
-    },
-  ])
-  .flatMap((a) => a);
