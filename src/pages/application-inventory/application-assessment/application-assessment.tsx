@@ -34,6 +34,7 @@ import { getApplicationById, getAssessmentById } from "api/rest";
 import { CustomWizardFooter } from "./components/custom-wizard-footer";
 import { StakeholdersForm } from "./components/stakeholders-form";
 import { AxiosError } from "axios";
+import { WizardQuestionnaireStep } from "./components/wizard-questionnaire-step";
 
 enum StepId {
   Stakeholders = 1,
@@ -73,11 +74,11 @@ export const ApplicationAssessment: React.FC = () => {
 
   // Assessment
   const [assessment, setAssessment] = useState<Assessment>();
+  const [isFetchingAssessment, setIsFetchingAssessment] = useState(true);
   const [
     fetchAssessmentError,
     setFetchAssessmentError,
   ] = useState<AxiosError>();
-  const [isFetchingAssessment, setIsFetchingAssessment] = useState(true);
 
   useEffect(() => {
     if (assessmentId) {
@@ -133,7 +134,7 @@ export const ApplicationAssessment: React.FC = () => {
     fetchAllStakeholderGroups();
   }, [fetchAllStakeholderGroups]);
 
-  //
+  // Formik initial values
 
   const stakeholdersInitialValue = useMemo(() => {
     if (
@@ -232,6 +233,17 @@ export const ApplicationAssessment: React.FC = () => {
       enableNext: areFieldsValid(["stakeholders", "stakeholderGroups"]),
     },
   ];
+
+  if (assessment) {
+    assessment.questionnaire.categories.forEach((section) => {
+      wizardSteps.push({
+        id: section.id,
+        name: section.title,
+        component: <WizardQuestionnaireStep section={section} />,
+        enableNext: true,
+      });
+    });
+  }
 
   const wizardFooter = (
     <CustomWizardFooter

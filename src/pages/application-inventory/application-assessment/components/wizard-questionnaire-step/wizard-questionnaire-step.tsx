@@ -63,7 +63,7 @@ export const WizardQuestionnaireStep: React.FC<WizardQuestionnaireStepProps> = (
         <Question>
           <QuestionHeader>Additional notes or comments</QuestionHeader>
           <QuestionBody>
-            <TextArea />
+            <TextArea rows={4} />
           </QuestionBody>
         </Question>
       </StackItem>
