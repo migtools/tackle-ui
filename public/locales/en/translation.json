@@ -1,16 +1,21 @@
 {
     "actions": {
+        "assess": "Assess",
+        "back": "Back",
         "cancel": "Cancel",
         "create": "Create",
         "createNew": "Create new",
         "delete": "Delete",
         "edit": "Edit",
+        "next": "Next",
         "save": "Save"
     },
     "composed": {
+        "applicationAssessment": "Application assessment",
         "applicationInventory": "Application inventory",
         "noDataStateBody": "Create a new {{what}} to start seeing data here",
         "noDataStateTitle": "No {{what}} available",
+        "selectMany": "Select {{what}}",
         "selectOne": "Select a {{what}}"
     },
     "dialog": {
@@ -30,6 +35,10 @@
             "updateStakeholder": "Update stakeholder",
             "updateStakeholderGroup": "Update stakeholder group"
         }
+    },
+    "message": {
+        "couldNotFetchBody": "Resource doesn't exists or you don't have access to it",
+        "couldNotFetchTitle": "Not available"
     },
     "sidebar": {
         "applicationInventory": "Application inventory",
@@ -60,7 +69,9 @@
         "notStarted": "Not started",
         "owner": "Owner",
         "stakeholder": "Stakeholder",
+        "stakeholder(s)": "Stakeholder(s)",
         "stakeholderGroup": "Stakeholder group",
+        "stakeholderGroup(s)": "Stakeholder group(s)",
         "stakeholderGroups": "Stakeholder groups",
         "stakeholders": "Stakeholders",
         "tags": "Tags",
