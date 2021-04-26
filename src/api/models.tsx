@@ -64,14 +64,14 @@ export interface Assessment {
 }
 
 export interface Questionnaire {
-  categories: QuestionnaireSection[];
+  categories: QuestionnaireCategory[];
 }
 
-export interface QuestionnaireSection {
+export interface QuestionnaireCategory {
   id: number;
   order: number;
-  title: string;
-  comments: string;
+  title?: string;
+  comment: string;
   questions: Question[];
 }
 

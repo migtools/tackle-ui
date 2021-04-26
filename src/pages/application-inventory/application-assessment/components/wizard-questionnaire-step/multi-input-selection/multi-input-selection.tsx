@@ -1,29 +1,40 @@
 import React from "react";
+import { useFormikContext } from "formik";
 import { Radio, Stack, StackItem } from "@patternfly/react-core";
 
-import { QuestionOption } from "api/models";
+import { Question, QuestionnaireCategory } from "api/models";
+import { getCategoryQuestionField } from "../../../assessment-utils";
 
 export interface MultiInputSelectionProps {
-  options: QuestionOption[];
+  category: QuestionnaireCategory;
+  question: Question;
 }
 
 export const MultiInputSelection: React.FC<MultiInputSelectionProps> = ({
-  options,
+  category,
+  question,
 }) => {
+  const formik = useFormikContext<any>();
+  const questionField = getCategoryQuestionField(category, question);
+
   return (
     <Stack>
-      {options.map((option) => (
-        <StackItem className="pf-u-pb-xs">
-          <Radio
-            id={`${option.id}`}
-            name={`${option.id}`}
-            isChecked={false}
-            onChange={() => {}}
-            label={option.option}
-            // value="check1"
-          />
-        </StackItem>
-      ))}
+      {(question.options || [])
+        .sort((a, b) => a.order - b.order)
+        .map((option, i) => (
+          <StackItem className="pf-u-pb-xs" key={option.id}>
+            <Radio
+              id={`${option.id}`}
+              name={`option-${i}`}
+              isChecked={formik.values[questionField] === option.id}
+              onChange={() => {
+                formik.setFieldValue(questionField, option.id);
+              }}
+              label={option.option}
+              value={option.id}
+            />
+          </StackItem>
+        ))}
     </Stack>
   );
 };

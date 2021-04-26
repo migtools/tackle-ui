@@ -35,6 +35,10 @@ import { CustomWizardFooter } from "./components/custom-wizard-footer";
 import { StakeholdersForm } from "./components/stakeholders-form";
 import { AxiosError } from "axios";
 import { WizardQuestionnaireStep } from "./components/wizard-questionnaire-step";
+import {
+  getCategoryCommentField,
+  getCategoryQuestionField,
+} from "./assessment-utils";
 
 enum StepId {
   Stakeholders = 1,
@@ -69,12 +73,14 @@ const toSelectOptionStakeholderGroup = (
 
 export const ApplicationAssessment: React.FC = () => {
   const { t } = useTranslation();
-  const { assessmentId } = useParams<AssessmentRoute>();
+
   const history = useHistory();
+  const { assessmentId } = useParams<AssessmentRoute>();
 
   // Assessment
+
   const [assessment, setAssessment] = useState<Assessment>();
-  const [isFetchingAssessment, setIsFetchingAssessment] = useState(true);
+  const [isFetchingAssessment, setIsFetchingAssessment] = useState(false);
   const [
     fetchAssessmentError,
     setFetchAssessmentError,
@@ -86,12 +92,12 @@ export const ApplicationAssessment: React.FC = () => {
 
       getAssessmentById(assessmentId)
         .then(({ data }) => {
-          setAssessment(data);
           setIsFetchingAssessment(false);
+          setAssessment(data);
         })
         .catch((error) => {
-          setFetchAssessmentError(error);
           setIsFetchingAssessment(false);
+          setFetchAssessmentError(error);
         });
     }
   }, [assessmentId]);
@@ -161,7 +167,7 @@ export const ApplicationAssessment: React.FC = () => {
     return [];
   }, [assessment, stakeholders, t]);
 
-  const groupsInitialValue = useMemo(() => {
+  const stakeholderGroupsInitialValue = useMemo(() => {
     if (
       assessment &&
       assessment.stakeholderGroups &&
@@ -186,18 +192,84 @@ export const ApplicationAssessment: React.FC = () => {
     return [];
   }, [assessment, stakeholderGroups, t]);
 
+  // Questionnaire initial values
+
+  const questionnaireFields = useMemo(() => {
+    const result: any = {};
+
+    if (assessment) {
+      assessment.questionnaire.categories.forEach((category) => {
+        const categoryFieldName = getCategoryCommentField(category);
+        result[categoryFieldName] = category.comment;
+
+        category.questions.forEach((question) => {
+          const questionFieldName = getCategoryQuestionField(
+            category,
+            question
+          );
+          result[questionFieldName] = (question.options || []).find(
+            (f) => f.checked === true
+          );
+        });
+      });
+    }
+
+    return result;
+  }, [assessment]);
+
   // Formik
 
   const initialValues: IFormValues = {
     stakeholders: stakeholdersInitialValue,
-    stakeholderGroups: groupsInitialValue,
+    stakeholderGroups: stakeholderGroupsInitialValue,
+    ...questionnaireFields,
   };
 
   const onSubmit = (
     formValues: IFormValues,
     formikHelpers: FormikHelpers<IFormValues>
   ) => {
-    console.log(formValues);
+    if (!assessment) {
+      console.log("An assessment must exist before saving a new one");
+      formikHelpers.setSubmitting(false);
+      return;
+    }
+
+    const {
+      stakeholders: formStakeholders,
+      stakeholderGroups: formStakeholderGroups,
+      ...restFormValues
+    } = formValues;
+
+    //
+
+    const newStakeholders = formStakeholders.map((f) => f.entity.id!);
+    const newStakeholderGroups = formStakeholderGroups.map((f) => f.entity.id!);
+
+    //
+
+    const newCategories = assessment.questionnaire.categories.map(
+      (category) => {
+        return {
+          ...category,
+        };
+      }
+    );
+
+    //
+
+    const payload: Assessment = {
+      ...assessment,
+      stakeholders: newStakeholders,
+      stakeholderGroups: newStakeholderGroups,
+      questionnaire: {
+        categories: newCategories,
+      },
+    };
+
+    console.log(payload);
+
+    // patchAssessment();
   };
 
   const formik = useFormik({
@@ -216,8 +288,8 @@ export const ApplicationAssessment: React.FC = () => {
   const wizardSteps: WizardStep[] = [
     {
       id: StepId.Stakeholders,
+      // t('terms.stakeholders')
       name: t("composed.selectMany", {
-        // t('terms.stakeholders')
         what: t("terms.stakeholders").toLowerCase(),
       }),
       component: (
@@ -235,14 +307,18 @@ export const ApplicationAssessment: React.FC = () => {
   ];
 
   if (assessment) {
-    assessment.questionnaire.categories.forEach((section) => {
-      wizardSteps.push({
-        id: section.id,
-        name: section.title,
-        component: <WizardQuestionnaireStep section={section} />,
-        enableNext: true,
+    assessment.questionnaire.categories
+      .sort((a, b) => a.order - b.order)
+      .forEach((section) => {
+        wizardSteps.push({
+          id: section.id,
+          name: section.title,
+          component: (
+            <WizardQuestionnaireStep key={section.id} category={section} />
+          ),
+          enableNext: true,
+        });
       });
-    });
   }
 
   const wizardFooter = (
@@ -276,6 +352,9 @@ export const ApplicationAssessment: React.FC = () => {
           ]}
           menuActions={[]}
         />
+        <button type="button" onClick={() => formik.submitForm()}>
+          Submit
+        </button>
       </PageSection>
       <PageSection variant="light" type={PageSectionTypes.wizard}>
         <ConditionalRender

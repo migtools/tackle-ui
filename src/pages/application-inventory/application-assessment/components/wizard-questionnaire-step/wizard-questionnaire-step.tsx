@@ -12,58 +12,76 @@ import {
 } from "@patternfly/react-core";
 import { HelpIcon } from "@patternfly/react-icons";
 
-import { QuestionnaireSection } from "api/models";
+import { QuestionnaireCategory } from "api/models";
 import { MultiInputSelection } from "./multi-input-selection";
 
 import { Question, QuestionHeader, QuestionBody } from "./question";
+import { useFormikContext } from "formik";
+import { getValidatedFromError } from "utils/utils";
+import { getCategoryCommentField } from "../../assessment-utils";
 
 export interface WizardQuestionnaireStepProps {
-  section: QuestionnaireSection;
+  category: QuestionnaireCategory;
 }
 
 export const WizardQuestionnaireStep: React.FC<WizardQuestionnaireStepProps> = ({
-  section,
+  category,
 }) => {
+  const formik = useFormikContext<any>();
+
   return (
     <Stack hasGutter>
       <StackItem>
         <TextContent>
-          <Text component="h1">{section.title}</Text>
+          <Text component="h1">{category.title}</Text>
         </TextContent>
       </StackItem>
-      {section.questions.map((question) => (
-        <StackItem>
-          <Question>
-            <QuestionHeader>
-              <Split hasGutter>
-                <SplitItem>{question.question}</SplitItem>
-                <SplitItem>
-                  <Popover bodyContent={<div>{question.description}</div>}>
-                    <button
-                      type="button"
-                      aria-label="More info"
-                      onClick={(e) => e.preventDefault()}
-                      className="pf-c-form__group-label-help"
-                    >
-                      <HelpIcon />
-                    </button>
-                  </Popover>
-                </SplitItem>
-              </Split>
-            </QuestionHeader>
-            <QuestionBody>
-              {question.options && (
-                <MultiInputSelection options={question.options} />
-              )}
-            </QuestionBody>
-          </Question>
-        </StackItem>
-      ))}
+      {category.questions
+        .sort((a, b) => a.order - b.order)
+        .map((question) => (
+          <StackItem key={question.id}>
+            <Question>
+              <QuestionHeader>
+                <Split hasGutter>
+                  <SplitItem>{question.question}</SplitItem>
+                  <SplitItem>
+                    <Popover bodyContent={<div>{question.description}</div>}>
+                      <button
+                        type="button"
+                        aria-label="More info"
+                        onClick={(e) => e.preventDefault()}
+                        className="pf-c-form__group-label-help"
+                      >
+                        <HelpIcon />
+                      </button>
+                    </Popover>
+                  </SplitItem>
+                </Split>
+              </QuestionHeader>
+              <QuestionBody>
+                <MultiInputSelection category={category} question={question} />
+              </QuestionBody>
+            </Question>
+          </StackItem>
+        ))}
       <StackItem>
         <Question>
           <QuestionHeader>Additional notes or comments</QuestionHeader>
           <QuestionBody>
-            <TextArea rows={4} />
+            <TextArea
+              rows={4}
+              type="text"
+              name={getCategoryCommentField(category)}
+              aria-label="comments"
+              aria-describedby="comments"
+              isRequired={false}
+              onChange={(_, event) => formik.handleChange(event)}
+              onBlur={formik.handleBlur}
+              value={formik.values[getCategoryCommentField(category)]}
+              validated={getValidatedFromError(
+                formik.errors[getCategoryCommentField(category)]
+              )}
+            />
           </QuestionBody>
         </Question>
       </StackItem>
