@@ -1,5 +1,9 @@
 import { AxiosError } from "axios";
-import { getAxiosErrorMessage } from "./utils";
+import {
+  getAxiosErrorMessage,
+  getValidatedFromError,
+  getValidatedFromErrorTouched,
+} from "./utils";
 
 describe("utils", () => {
   it("getAxiosErrorMessage should pick AxiosError message", () => {
@@ -37,5 +41,55 @@ describe("utils", () => {
 
     const errorMessage = getAxiosErrorMessage(mockAxiosError);
     expect(errorMessage).toBe(errorMsg);
+  });
+
+  it("getAxiosErrorMessage should pick AxiosError body message using toString()", () => {
+    const responseBody = 123;
+
+    const mockAxiosError: AxiosError = {
+      isAxiosError: true,
+      name: "error",
+      message: "Network error",
+      config: {},
+      response: {
+        data: responseBody,
+        status: 400,
+        statusText: "",
+        headers: {},
+        config: {},
+      },
+      toJSON: () => ({}),
+    };
+
+    const errorMessage = getAxiosErrorMessage(mockAxiosError);
+    expect(errorMessage).toBe(`${responseBody}`);
+  });
+
+  it("getValidatedFromError: given value should return 'error'", () => {
+    const error = "Any value";
+
+    const status = getValidatedFromError(error);
+    expect(status).toBe("error");
+  });
+
+  it("getValidatedFromError: given no value should return 'default'", () => {
+    const status = getValidatedFromError(undefined);
+    expect(status).toBe("default");
+  });
+
+  it("getValidatedFromErrorTouched: given 'error' and 'touched' return 'error'", () => {
+    const error = "Any value";
+    const touched = true;
+
+    const status = getValidatedFromErrorTouched(error, touched);
+    expect(status).toBe("error");
+  });
+
+  it("getValidatedFromErrorTouched: given 'error' but not 'touched' return 'default'", () => {
+    const error = "Any value";
+    const touched = false;
+
+    const status = getValidatedFromErrorTouched(error, touched);
+    expect(status).toBe("default");
   });
 });

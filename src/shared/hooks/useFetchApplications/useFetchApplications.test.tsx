@@ -79,4 +79,47 @@ describe("useFetchApplications", () => {
     });
     expect(result.current.fetchError).toBeUndefined();
   });
+
+  it("Fetch all", async () => {
+    // Mock REST API
+    const data: ApplicationPage = {
+      _embedded: {
+        application: [],
+      },
+      total_count: 0,
+    };
+
+    new MockAdapter(axios)
+      .onGet(`${APPLICATIONS}?page=0&size=1000`)
+      .reply(200, data);
+
+    // Use hook
+    const { result, waitForNextUpdate } = renderHook(() =>
+      useFetchApplications()
+    );
+
+    const {
+      applications: items,
+      isFetching,
+      fetchError,
+      fetchAllApplications: fetchAll,
+    } = result.current;
+
+    expect(isFetching).toBe(false);
+    expect(items).toBeUndefined();
+    expect(fetchError).toBeUndefined();
+
+    // Init fetch
+    act(() => fetchAll());
+    expect(result.current.isFetching).toBe(true);
+
+    // Fetch finished
+    await waitForNextUpdate();
+    expect(result.current.isFetching).toBe(false);
+    expect(result.current.applications).toMatchObject({
+      data: [],
+      meta: { count: 0 },
+    });
+    expect(result.current.fetchError).toBeUndefined();
+  });
 });
