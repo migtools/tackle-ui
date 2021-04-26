@@ -10,6 +10,7 @@ export { NoDataEmptyState } from "./no-data-empty-state";
 export { PageHeader } from "./page-header";
 export { SearchFilter } from "./search-filter";
 export { SearchInput } from "./search-input";
+export { SimpleEmptyState } from "./simple-empty-state";
 export * from "./simple-select";
 export { SimpleFilterDropdown } from "./simple-filter-dropdown";
 export * from "./status-icon-assessment";

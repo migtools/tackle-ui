@@ -1,16 +1,21 @@
 {
     "actions": {
+        "assess": "Evaluar",
+        "back": "Atrás",
         "cancel": "Cancelar",
         "create": "Crear",
         "createNew": "Crear nuevo",
         "delete": "Eliminar",
         "edit": "Editar",
+        "next": "Siguiente",
         "save": "Guardar"
     },
     "composed": {
+        "applicationAssessment": "Evaluación de la aplicación",
         "applicationInventory": "Inventario de aplicaciones",
         "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
         "noDataStateTitle": "No existen {{what}} disponibles",
+        "selectMany": "Seleccione {{what}}",
         "selectOne": "Seleccione un(a) {{what}}"
     },
     "dialog": {
@@ -30,6 +35,10 @@
             "updateStakeholder": "Actualizar interesado",
             "updateStakeholderGroup": "Actualizar grupo de interesados"
         }
+    },
+    "message": {
+        "couldNotFetchBody": "El recurso no existe o no tienes permiso para acceder al mismo",
+        "couldNotFetchTitle": "No disponible"
     },
     "sidebar": {
         "applicationInventory": "Inventario de aplicaciones",
@@ -60,7 +69,9 @@
         "notStarted": "No empezado",
         "owner": "Propietario",
         "stakeholder": "Interesado",
+        "stakeholder(s)": "Interesado(s)",
         "stakeholderGroup": "Grupo interesado",
+        "stakeholderGroup(s)": "Grupo(s) de interesados",
         "stakeholderGroups": "Grupos de interesados",
         "stakeholders": "Interesados",
         "tags": "Etiquetas",
