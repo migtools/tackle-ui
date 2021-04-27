@@ -3,10 +3,15 @@ import { AxiosError } from "axios";
 // Axios error
 
 export const getAxiosErrorMessage = (axiosError: AxiosError) => {
-  if (axiosError.response?.data.message) {
-    return axiosError.response?.data.message;
+  if (
+    axiosError.response &&
+    axiosError.response.data &&
+    axiosError.response.data.errorMessage
+  ) {
+    return axiosError.response.data.errorMessage;
+  } else {
+    return axiosError.message;
   }
-  return axiosError.message;
 };
 
 // Formik
