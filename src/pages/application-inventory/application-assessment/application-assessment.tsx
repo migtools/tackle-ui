@@ -243,10 +243,13 @@ export const ApplicationAssessment: React.FC = () => {
                 steps={wizardSteps}
                 footer={wizardFooter}
                 onNext={() => {
-                  console.log("carlos");
+                  setCurrentStep((current) => current + 1);
                 }}
                 onClose={() => {
                   console.log("closee");
+                }}
+                onGoToStep={(step) => {
+                  setCurrentStep(step.id as number);
                 }}
               />
             </FormikProvider>
