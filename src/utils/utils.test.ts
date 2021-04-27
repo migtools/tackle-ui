@@ -6,7 +6,7 @@ import {
 } from "./utils";
 
 describe("utils", () => {
-  it("getAxiosErrorMessage should pick AxiosError message", () => {
+  it("getAxiosErrorMessage: should pick axios message", () => {
     const errorMsg = "Network error";
 
     const mockAxiosError: AxiosError = {
@@ -21,7 +21,7 @@ describe("utils", () => {
     expect(errorMessage).toBe(errorMsg);
   });
 
-  it("getAxiosErrorMessage should pick AxiosError body message", () => {
+  it("getAxiosErrorMessage: should pick body message", () => {
     const errorMsg = "Internal server error";
 
     const mockAxiosError: AxiosError = {
@@ -30,7 +30,9 @@ describe("utils", () => {
       message: "Network error",
       config: {},
       response: {
-        data: errorMsg,
+        data: {
+          errorMessage: errorMsg,
+        },
         status: 400,
         statusText: "",
         headers: {},
@@ -41,28 +43,6 @@ describe("utils", () => {
 
     const errorMessage = getAxiosErrorMessage(mockAxiosError);
     expect(errorMessage).toBe(errorMsg);
-  });
-
-  it("getAxiosErrorMessage should pick AxiosError body message using toString()", () => {
-    const responseBody = 123;
-
-    const mockAxiosError: AxiosError = {
-      isAxiosError: true,
-      name: "error",
-      message: "Network error",
-      config: {},
-      response: {
-        data: responseBody,
-        status: 400,
-        statusText: "",
-        headers: {},
-        config: {},
-      },
-      toJSON: () => ({}),
-    };
-
-    const errorMessage = getAxiosErrorMessage(mockAxiosError);
-    expect(errorMessage).toBe(`${responseBody}`);
   });
 
   it("getValidatedFromError: given value should return 'error'", () => {
