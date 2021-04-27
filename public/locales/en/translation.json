@@ -3,12 +3,14 @@
         "assess": "Assess",
         "back": "Back",
         "cancel": "Cancel",
+        "close": "Close",
         "create": "Create",
         "createNew": "Create new",
         "createTag": "Create tag",
         "createTagType": "Create tag type",
         "delete": "Delete",
         "edit": "Edit",
+        "manageDependencies": "Manage dependencies",
         "next": "Next",
         "save": "Save"
     },
@@ -21,8 +23,10 @@
         "red": "Red"
     },
     "composed": {
+        "add": "Add {{what}}",
         "applicationAssessment": "Application assessment",
         "applicationInventory": "Application inventory",
+        "manageDependenciesFor": "Manage dependencies for {{what}}",
         "noDataStateBody": "Create a new {{what}} to start seeing data here",
         "noDataStateTitle": "No {{what}} available",
         "selectMany": "Select {{what}}",
@@ -52,7 +56,8 @@
     },
     "message": {
         "couldNotFetchBody": "Resource doesn't exists or you don't have access to it",
-        "couldNotFetchTitle": "Not available"
+        "couldNotFetchTitle": "Not available",
+        "savingSelection": "Saving selection"
     },
     "sidebar": {
         "applicationInventory": "Application inventory",
@@ -80,9 +85,11 @@
         "member": "Member",
         "member(s)": "Member(s)",
         "name": "Name",
+        "northboundDependencies": "Northbound dependencies",
         "notAvailable": "Not available",
         "notStarted": "Not started",
         "owner": "Owner",
+        "southboundDependencies": "Southbound dependencies",
         "rank": "Rank",
         "stakeholder": "Stakeholder",
         "stakeholder(s)": "Stakeholder(s)",
@@ -90,6 +97,7 @@
         "stakeholderGroup(s)": "Stakeholder group(s)",
         "stakeholderGroups": "Stakeholder groups",
         "stakeholders": "Stakeholders",
+        "tag": "Tag",
         "tag(s)": "Tag(s)",
         "tagName": "Tag name",
         "tags": "Tags",

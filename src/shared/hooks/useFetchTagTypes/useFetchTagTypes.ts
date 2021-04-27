@@ -80,7 +80,7 @@ export interface IState {
     page: PageQuery,
     sortBy?: TagTypeSortByQuery
   ) => void;
-  fetchAllTagTypes: () => void;
+  fetchAllTagTypes: (sortBy?: TagTypeSortByQuery) => void;
 }
 
 export const useFetchTagTypes = (
@@ -120,10 +120,14 @@ export const useFetchTagTypes = (
     []
   );
 
-  const fetchAllTagTypes = useCallback(() => {
+  const fetchAllTagTypes = useCallback((sortBy?: TagTypeSortByQuery) => {
     dispatch(fetchRequest());
 
-    getTagTypes({}, { page: 1, perPage: 1000 }, { field: TagTypeSortBy.NAME })
+    getTagTypes(
+      {},
+      { page: 1, perPage: 1000 },
+      sortBy || { field: TagTypeSortBy.NAME }
+    )
       .then(({ data }) => {
         const list = data._embedded["tag-type"];
         const total = data.total_count;

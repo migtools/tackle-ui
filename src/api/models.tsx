@@ -68,6 +68,13 @@ export interface Application {
   description?: string;
   comments?: string;
   businessService?: string;
+  tags?: string[];
+}
+
+export interface ApplicationDependency {
+  id?: number;
+  from: Application;
+  to: Application;
 }
 
 // Pathfinder
@@ -117,9 +124,23 @@ export interface TagTypePage {
   total_count: number;
 }
 
+export interface TagTypePage {
+  _embedded: {
+    "tag-type": TagType[];
+  };
+  total_count: number;
+}
+
 export interface ApplicationPage {
   _embedded: {
     application: Application[];
+  };
+  total_count: number;
+}
+
+export interface ApplicationDependencyPage {
+  _embedded: {
+    "applications-dependency": ApplicationDependency[];
   };
   total_count: number;
 }

@@ -17,13 +17,14 @@ import {
 
 import {
   SingleSelectFetchFormikField,
+  MultiSelectFetchFormikField,
   OptionWithValue,
 } from "shared/components";
-import { useFetchBusinessServices } from "shared/hooks";
+import { useFetchBusinessServices, useFetchTagTypes } from "shared/hooks";
 
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
-import { createApplication, updateApplication } from "api/rest";
-import { Application, BusinessService } from "api/models";
+import { createApplication, TagTypeSortBy, updateApplication } from "api/rest";
+import { Application, BusinessService, Tag } from "api/models";
 import {
   getAxiosErrorMessage,
   getValidatedFromError,
@@ -37,11 +38,20 @@ const businesServiceToOption = (
   toString: () => value.name,
 });
 
+const tagToOption = (value: Tag): OptionWithValue<Tag> => ({
+  value,
+  toString: () => value.name,
+  props: {
+    description: value.tagType?.name,
+  },
+});
+
 export interface FormValues {
   name: string;
   description?: string;
   comments?: string;
   businessService?: OptionWithValue<BusinessService>;
+  tags?: OptionWithValue<Tag>[];
 }
 
 export interface ApplicationFormProps {
@@ -59,6 +69,8 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
   const [error, setError] = useState<AxiosError>();
 
+  // Business services
+
   const {
     businessServices,
     isFetching: isFetchingBusinessServices,
@@ -69,6 +81,31 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
   useEffect(() => {
     fetchAllBusinessServices();
   }, [fetchAllBusinessServices]);
+
+  // TagTypes
+
+  const {
+    tagTypes,
+    isFetching: isFetchingTagTypes,
+    fetchError: fetchErrorTagTypes,
+    fetchAllTagTypes,
+  } = useFetchTagTypes();
+
+  useEffect(() => {
+    fetchAllTagTypes({ field: TagTypeSortBy.RANK });
+  }, [fetchAllTagTypes]);
+
+  // Tags
+
+  const [tags, setTags] = useState<Tag[]>();
+
+  useEffect(() => {
+    if (tagTypes) {
+      setTags(tagTypes.data.flatMap((f) => f.tags || []));
+    }
+  }, [tagTypes]);
+
+  // Formik
 
   const businessServiceInitialValue = useMemo(() => {
     let result: OptionWithValue<BusinessService> | undefined = undefined;
@@ -92,11 +129,28 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
     return result;
   }, [application, businessServices, t]);
 
+  const tagsInitialValue = useMemo(() => {
+    let result: OptionWithValue<Tag>[] | undefined = undefined;
+
+    const notAvailable = t("terms.notAvailable");
+    if (application && application.tags && tags) {
+      result = application.tags.map((t) => {
+        const exists = tags.find((f) => `${f.id}` === t);
+        return exists
+          ? tagToOption(exists)
+          : tagToOption({ id: Number(t), name: notAvailable });
+      });
+    }
+
+    return result;
+  }, [application, tags, t]);
+
   const initialValues: FormValues = {
     name: application?.name || "",
     description: application?.description || "",
     comments: application?.comments || "",
     businessService: businessServiceInitialValue,
+    tags: tagsInitialValue,
   };
 
   const validationSchema = object().shape({
@@ -123,6 +177,9 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
       comments: formValues.comments,
       businessService: formValues.businessService
         ? `${formValues.businessService.value.id}`
+        : undefined,
+      tags: formValues.tags
+        ? formValues.tags.map((f) => `${f.value.id}`)
         : undefined,
     };
 
@@ -227,8 +284,9 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
               variant: "typeahead",
               "aria-label": "business-service",
               "aria-describedby": "business-service",
+              // t("terms.businessService")
               placeholderText: t("composed.selectOne", {
-                what: t("terms.businessService"),
+                what: t("terms.businessService").toLowerCase(),
               }),
               menuAppendTo: () => document.body,
               maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
@@ -237,6 +295,38 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
               ),
               isFetching: isFetchingBusinessServices,
               fetchError: fetchErrorBusinessServices,
+            }}
+          />
+        </FormGroup>
+        <FormGroup
+          label={t("terms.tags")}
+          fieldId="tags"
+          isRequired={false}
+          validated={getValidatedFromError(formik.errors.tags)}
+          helperTextInvalid={formik.errors.tags}
+        >
+          <MultiSelectFetchFormikField
+            fieldConfig={{
+              name: "tags",
+            }}
+            selectConfig={{
+              variant: "typeaheadmulti",
+              "aria-label": "tags",
+              "aria-describedby": "tags",
+              // t("terms.tag(s)")
+              placeholderText: t("composed.selectOne", {
+                what: t("terms.tag(s)").toLowerCase(),
+              }),
+              menuAppendTo: () => document.body,
+              maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
+              options: (tags || []).map(tagToOption),
+              isFetching: isFetchingTagTypes,
+              fetchError: fetchErrorTagTypes,
+            }}
+            isEqual={(a: any, b: any) => {
+              const option1 = a as OptionWithValue<Tag>;
+              const option2 = b as OptionWithValue<Tag>;
+              return option1.value.id === option2.value.id;
             }}
           />
         </FormGroup>
