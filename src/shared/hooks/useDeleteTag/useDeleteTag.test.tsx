@@ -3,7 +3,7 @@ import MockAdapter from "axios-mock-adapter";
 import { renderHook, act } from "@testing-library/react-hooks";
 import { useDeleteTag } from "./useDeleteTag";
 import { Tag } from "api/models";
-import { TAG } from "api/rest";
+import { TAGS } from "api/rest";
 
 describe("useDeleteTag", () => {
   it("Valid initial status", () => {
@@ -25,7 +25,7 @@ describe("useDeleteTag", () => {
     const onErrorMock = jest.fn();
 
     // Mock REST API
-    new MockAdapter(axios).onDelete(`${TAG}/${version.id}`).networkError();
+    new MockAdapter(axios).onDelete(`${TAGS}/${version.id}`).networkError();
 
     // Use hook
     const { result, waitForNextUpdate } = renderHook(() => useDeleteTag());
@@ -51,7 +51,7 @@ describe("useDeleteTag", () => {
     const onErrorMock = jest.fn();
 
     // Mock REST API
-    new MockAdapter(axios).onDelete(`${TAG}/${version.id}`).reply(201);
+    new MockAdapter(axios).onDelete(`${TAGS}/${version.id}`).reply(201);
 
     // Use hook
     const { result, waitForNextUpdate } = renderHook(() => useDeleteTag());
