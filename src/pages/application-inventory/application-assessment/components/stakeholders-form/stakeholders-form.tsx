@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useFormikContext } from "formik";
 import { AxiosError } from "axios";
@@ -16,6 +16,7 @@ import {
   OptionWithValue,
   MultiSelectFetchFormikField,
 } from "shared/components";
+import { useFetchStakeholderGroups, useFetchStakeholders } from "shared/hooks";
 
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 import { getValidatedFromError } from "utils/utils";
@@ -37,27 +38,34 @@ const stakeholderGroupToOption = (
   toString: () => value.name,
 });
 
-export interface StakeholdersFormProps {
-  stakeholders?: Stakeholder[];
-  isFetchingStakeholders: boolean;
-  fetchErrorStakeholders?: AxiosError;
+export interface StakeholdersFormProps {}
 
-  stakeholderGroups?: StakeholderGroup[];
-  isFetchingStakeholderGroups: boolean;
-  fetchErrorStakeholderGroups?: AxiosError;
-}
-
-export const StakeholdersForm: React.FC<StakeholdersFormProps> = ({
-  stakeholders,
-  isFetchingStakeholders,
-  fetchErrorStakeholders,
-
-  stakeholderGroups,
-  isFetchingStakeholderGroups,
-  fetchErrorStakeholderGroups,
-}) => {
+export const StakeholdersForm: React.FC<StakeholdersFormProps> = () => {
   const { t } = useTranslation();
+
   const formik = useFormikContext<IFormValues>();
+
+  const {
+    stakeholderGroups,
+    isFetching: isFetchingStakeholderGroups,
+    fetchError: fetchErrorStakeholderGroups,
+    fetchAllStakeholderGroups,
+  } = useFetchStakeholderGroups();
+
+  useEffect(() => {
+    fetchAllStakeholderGroups();
+  }, [fetchAllStakeholderGroups]);
+
+  const {
+    stakeholders,
+    isFetching: isFetchingStakeholders,
+    fetchError: fetchErrorStakeholders,
+    fetchAllStakeholders,
+  } = useFetchStakeholders();
+
+  useEffect(() => {
+    fetchAllStakeholders();
+  }, [fetchAllStakeholders]);
 
   return (
     <div className="pf-c-form">
@@ -94,7 +102,7 @@ export const StakeholdersForm: React.FC<StakeholdersFormProps> = ({
                     what: t("terms.stakeholder(s)").toLowerCase(),
                   }),
                   maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
-                  options: (stakeholders || []).map(stakeholderToOption),
+                  options: (stakeholders?.data || []).map(stakeholderToOption),
                   isFetching: isFetchingStakeholders,
                   fetchError: fetchErrorStakeholders,
                 }}
@@ -125,7 +133,7 @@ export const StakeholdersForm: React.FC<StakeholdersFormProps> = ({
                     what: t("terms.stakeholderGroup(s)").toLowerCase(),
                   }),
                   maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
-                  options: (stakeholderGroups || []).map(
+                  options: (stakeholderGroups?.data || []).map(
                     stakeholderGroupToOption
                   ),
                   isFetching: isFetchingStakeholderGroups,

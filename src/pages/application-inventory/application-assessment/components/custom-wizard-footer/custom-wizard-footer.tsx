@@ -11,25 +11,19 @@ export interface CustomWizardFooterProps {
   isFirstStep: boolean;
   isDisabled?: boolean;
   isNextDisabled?: boolean;
-  onBack: () => void;
-  onNext: () => void;
-  onCancel: () => void;
 }
 
 export const CustomWizardFooter: React.FC<CustomWizardFooterProps> = ({
   isFirstStep,
   isDisabled,
   isNextDisabled,
-  onBack,
-  onNext,
-  onCancel,
 }) => {
   const { t } = useTranslation();
 
   return (
     <WizardFooter>
       <WizardContextConsumer>
-        {() => {
+        {({ onNext, onBack, onClose }) => {
           return (
             <>
               <Button
@@ -47,7 +41,7 @@ export const CustomWizardFooter: React.FC<CustomWizardFooterProps> = ({
               >
                 {t("actions.back")}
               </Button>
-              <Button variant="link" onClick={onCancel} isDisabled={isDisabled}>
+              <Button variant="link" onClick={onClose} isDisabled={isDisabled}>
                 {t("actions.cancel")}
               </Button>
             </>
