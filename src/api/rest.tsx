@@ -418,7 +418,7 @@ export const updateTag = (obj: Tag): AxiosPromise<Tag> => {
   return APIClient.put(`${TAGS}/${obj.id}`, obj);
 };
 
-export const getTagById = (id: number): AxiosPromise<Tag> => {
+export const getTagById = (id: number | string): AxiosPromise<Tag> => {
   return APIClient.get(`${TAGS}/${id}`);
 };
 
