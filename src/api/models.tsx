@@ -67,6 +67,12 @@ export interface Application {
   tags?: string[];
 }
 
+export interface ApplicationDependency {
+  id?: number;
+  from: Application;
+  to: Application;
+}
+
 //
 
 export interface Assessment {
@@ -115,6 +121,13 @@ export interface TagTypePage {
 export interface ApplicationPage {
   _embedded: {
     application: Application[];
+  };
+  total_count: number;
+}
+
+export interface ApplicationDependencyPage {
+  _embedded: {
+    "applications-dependency": ApplicationDependency[];
   };
   total_count: number;
 }

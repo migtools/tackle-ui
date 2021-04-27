@@ -3,6 +3,7 @@ export { useDeleteBusinessService } from "./useDeleteBusinessService";
 export { useDeleteJobFunction } from "./useDeleteJobFunction";
 export { useDeleteStakeholder } from "./useDeleteStakeholder";
 export { useDeleteStakeholderGroup } from "./useDeleteStakeholderGroup";
+export { useFetchApplicationDependencies } from "./useFetchApplicationDependencies";
 export { useFetchApplications } from "./useFetchApplications";
 export { useFetchBusinessServices } from "./useFetchBusinessServices";
 export { useFetchJobFunctions } from "./useFetchJobFunctions";

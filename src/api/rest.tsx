@@ -14,6 +14,8 @@ import {
   Application,
   Assessment,
   JobFunction,
+  ApplicationDependencyPage,
+  ApplicationDependency,
   TagTypePage,
   Tag,
 } from "./models";
@@ -30,6 +32,8 @@ export const TAG_TYPES = CONTROLS_BASE_URL + "/tag-type";
 export const TAGS = CONTROLS_BASE_URL + "/tag";
 
 export const APPLICATIONS = APP_INVENTORY_BASE_URL + "/application";
+export const APPLICATION_DEPENDENCY =
+  APP_INVENTORY_BASE_URL + "/applications-dependency";
 
 export const ASSESSMENTS = PATHFINDER_BASE_URL + "/assessments";
 
@@ -463,6 +467,39 @@ export const getApplicationById = (
   id: number | string
 ): AxiosPromise<Application> => {
   return APIClient.get(`${APPLICATIONS}/${id}`);
+};
+
+//
+
+export const getApplicationDependencies = (
+  filters: {
+    from?: string[];
+    to?: string[];
+  },
+  pagination: PageQuery
+): AxiosPromise<ApplicationDependencyPage> => {
+  const params = {
+    page: pagination.page - 1,
+    size: pagination.perPage,
+
+    "from.id": filters.from,
+    "to.id": filters.to,
+  };
+
+  const query: string[] = buildQuery(params);
+  return APIClient.get(`${APPLICATION_DEPENDENCY}?${query.join("&")}`, {
+    headers,
+  });
+};
+
+export const createApplicationDependency = (
+  obj: ApplicationDependency
+): AxiosPromise<ApplicationDependency> => {
+  return APIClient.post(`${APPLICATION_DEPENDENCY}`, obj);
+};
+
+export const deleteApplicationDependency = (id: number): AxiosPromise => {
+  return APIClient.delete(`${APPLICATION_DEPENDENCY}/${id}`);
 };
 
 //

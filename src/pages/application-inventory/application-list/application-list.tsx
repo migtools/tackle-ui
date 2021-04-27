@@ -11,6 +11,7 @@ import {
   DescriptionListDescription,
   DescriptionListGroup,
   DescriptionListTerm,
+  Modal,
   PageSection,
   PageSectionVariants,
   Text,
@@ -65,6 +66,7 @@ import { ApplicationBusinessService } from "./components/application-business-se
 import { useAssessApplication } from "./hooks/useAssessApplication";
 import { ApplicationTags } from "./components/application-tags/application-tags";
 import { SelectTagFilter } from "./components/toolbar-search-filter/select-tag-filter";
+import ApplicationDependenciesForm from "./components/application-dependencies-form";
 
 enum FilterKey {
   NAME = "name",
@@ -133,6 +135,10 @@ export const ApplicationList: React.FC = () => {
 
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
   const [rowToUpdate, setRowToUpdate] = useState<Application>();
+  const [
+    rowToManageDependencies,
+    setRowToManageDependencies,
+  ] = useState<Application>();
 
   const { deleteApplication } = useDeleteApplication();
   const {
@@ -301,6 +307,17 @@ export const ApplicationList: React.FC = () => {
     }
 
     const actions: (IAction | ISeparator)[] = [
+      {
+        title: t("actions.manageDependencies"),
+        onClick: (
+          event: React.MouseEvent,
+          rowIndex: number,
+          rowData: IRowData
+        ) => {
+          const row: Application = getRow(rowData);
+          setRowToManageDependencies(row);
+        },
+      },
       {
         title: t("actions.delete"),
         onClick: (
@@ -640,6 +657,22 @@ export const ApplicationList: React.FC = () => {
         onSaved={handleOnUpdated}
         onCancel={handleOnUpdatedCancel}
       />
+
+      <Modal
+        isOpen={!!rowToManageDependencies}
+        variant="medium"
+        title={t("composed.manageDependenciesFor", {
+          what: rowToManageDependencies?.name,
+        })}
+        onClose={() => setRowToManageDependencies(undefined)}
+      >
+        {rowToManageDependencies && (
+          <ApplicationDependenciesForm
+            application={rowToManageDependencies}
+            onCancel={() => setRowToManageDependencies(undefined)}
+          />
+        )}
+      </Modal>
     </>
   );
 };

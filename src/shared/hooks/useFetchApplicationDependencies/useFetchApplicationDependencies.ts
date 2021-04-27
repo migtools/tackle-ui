@@ -2,33 +2,29 @@ import { useCallback, useReducer } from "react";
 import { AxiosError } from "axios";
 import { ActionType, createAsyncAction, getType } from "typesafe-actions";
 
-import {
-  getApplications,
-  ApplicationSortByQuery,
-  ApplicationSortBy,
-} from "api/rest";
-import { PageRepresentation, Application, PageQuery } from "api/models";
+import { getApplicationDependencies } from "api/rest";
+import { PageRepresentation, ApplicationDependency } from "api/models";
 
 export const {
   request: fetchRequest,
   success: fetchSuccess,
   failure: fetchFailure,
 } = createAsyncAction(
-  "useFetchApplications/fetch/request",
-  "useFetchApplications/fetch/success",
-  "useFetchApplications/fetch/failure"
-)<void, PageRepresentation<Application>, AxiosError>();
+  "useFetchApplicationDependencies/fetch/request",
+  "useFetchApplicationDependencies/fetch/success",
+  "useFetchApplicationDependencies/fetch/failure"
+)<void, PageRepresentation<ApplicationDependency>, AxiosError>();
 
 type State = Readonly<{
   isFetching: boolean;
-  applications?: PageRepresentation<Application>;
+  applicationDependencies?: PageRepresentation<ApplicationDependency>;
   fetchError?: AxiosError;
   fetchCount: number;
 }>;
 
 const defaultState: State = {
   isFetching: false,
-  applications: undefined,
+  applicationDependencies: undefined,
   fetchError: undefined,
   fetchCount: 0,
 };
@@ -56,7 +52,7 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         isFetching: false,
         fetchError: undefined,
-        applications: action.payload,
+        applicationDependencies: action.payload,
         fetchCount: state.fetchCount + 1,
       };
     case getType(fetchFailure):
@@ -72,44 +68,28 @@ const reducer = (state: State, action: Action): State => {
 };
 
 export interface IState {
-  applications?: PageRepresentation<Application>;
+  applicationDependencies?: PageRepresentation<ApplicationDependency>;
   isFetching: boolean;
   fetchError?: AxiosError;
   fetchCount: number;
-  fetchApplications: (
-    filters: {
-      name?: string[];
-      description?: string[];
-      businessService?: string[];
-      tag?: string[];
-    },
-    page: PageQuery,
-    sortBy?: ApplicationSortByQuery
-  ) => void;
-  fetchAllApplications: () => void;
+  fetchAllApplicationDependencies: (filters: {
+    from?: string[];
+    to?: string[];
+  }) => void;
 }
 
-export const useFetchApplications = (
+export const useFetchApplicationDependencies = (
   defaultIsFetching: boolean = false
 ): IState => {
   const [state, dispatch] = useReducer(reducer, defaultIsFetching, initReducer);
 
-  const fetchApplications = useCallback(
-    (
-      filters: {
-        name?: string[];
-        description?: string[];
-        businessService?: string[];
-        tag?: string[];
-      },
-      page: PageQuery,
-      sortBy?: ApplicationSortByQuery
-    ) => {
+  const fetchAllApplicationDependencies = useCallback(
+    (filters: { from?: string[]; to?: string[] }) => {
       dispatch(fetchRequest());
 
-      getApplications(filters, page, sortBy)
+      getApplicationDependencies(filters, { page: 1, perPage: 1000 })
         .then(({ data }) => {
-          const list = data._embedded.application;
+          const list = data._embedded["applications-dependency"];
           const total = data.total_count;
 
           dispatch(
@@ -128,40 +108,13 @@ export const useFetchApplications = (
     []
   );
 
-  const fetchAllApplications = useCallback(() => {
-    dispatch(fetchRequest());
-
-    getApplications(
-      {},
-      { page: 1, perPage: 1000 },
-      { field: ApplicationSortBy.NAME }
-    )
-      .then(({ data }) => {
-        const list = data._embedded.application;
-        const total = data.total_count;
-
-        dispatch(
-          fetchSuccess({
-            data: list,
-            meta: {
-              count: total,
-            },
-          })
-        );
-      })
-      .catch((error: AxiosError) => {
-        dispatch(fetchFailure(error));
-      });
-  }, []);
-
   return {
-    applications: state.applications,
+    applicationDependencies: state.applicationDependencies,
     isFetching: state.isFetching,
     fetchError: state.fetchError,
     fetchCount: state.fetchCount,
-    fetchApplications,
-    fetchAllApplications,
+    fetchAllApplicationDependencies,
   };
 };
 
-export default useFetchApplications;
+export default useFetchApplicationDependencies;

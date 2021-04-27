@@ -1,3 +1,13 @@
+// Chips
+
+Cypress.Commands.add(
+  "pf4_chip_group_chips",
+  { prevSubject: "element" },
+  (chipGroup) => {
+    return cy.wrap(chipGroup).find(".pf-c-chip-group__list-item");
+  }
+);
+
 // Pagination
 
 Cypress.Commands.add(
