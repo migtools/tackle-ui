@@ -4,16 +4,7 @@ import { useTranslation } from "react-i18next";
 import { FormikHelpers, FormikProvider, useFormik } from "formik";
 import { AxiosError } from "axios";
 
-import {
-  Alert,
-  Bullseye,
-  PageSection,
-  PageSectionTypes,
-  Text,
-  TextContent,
-  Wizard,
-  WizardStep,
-} from "@patternfly/react-core";
+import { Alert, Bullseye, Wizard, WizardStep } from "@patternfly/react-core";
 import { BanIcon } from "@patternfly/react-icons";
 
 import {
@@ -31,7 +22,6 @@ import {
 } from "api/models";
 import { getAssessmentById, patchAssessment } from "api/rest";
 
-import { ApplicationAssessmentHeader } from "./application-assessment-header";
 import { CustomWizardFooter } from "./components/custom-wizard-footer";
 
 import { StakeholdersForm } from "./components/stakeholders-form";
@@ -45,8 +35,10 @@ import {
   QUESTIONS_KEY,
   SAVE_ACTION_KEY,
   SAVE_ACTION_VALUE,
-} from "./formik-utils";
+} from "./form-utils";
 import { getAxiosErrorMessage } from "utils/utils";
+import { ApplicationAssessmentWrapper } from "./application-assessment-wrapper";
+import { WizardStepNavDescription } from "./components/wizard-step-nav-description";
 
 export const ApplicationAssessment: React.FC = () => {
   const { t } = useTranslation();
@@ -261,13 +253,7 @@ export const ApplicationAssessment: React.FC = () => {
         id: stepIndex,
         name: category.title,
         stepNavItemProps: {
-          children: (
-            <TextContent>
-              <Text component="small">
-                {t("composed.Nquestions", { n: category.questions.length })}
-              </Text>
-            </TextContent>
-          ),
+          children: <WizardStepNavDescription category={category} />,
         },
         component: <QuestionnaireForm key={category.id} category={category} />,
         canJumpTo:
@@ -297,60 +283,47 @@ export const ApplicationAssessment: React.FC = () => {
 
   if (fetchAssessmentError) {
     return (
-      <>
-        <PageSection variant="light">
-          <ApplicationAssessmentHeader assessment={assessment} />
-        </PageSection>
-        <PageSection variant="light" type={PageSectionTypes.wizard}>
-          <Bullseye>
-            <SimpleEmptyState
-              icon={BanIcon}
-              title={t("message.couldNotFetchTitle")}
-              description={t("message.couldNotFetchBody") + "."}
-            />
-          </Bullseye>
-        </PageSection>
-      </>
+      <ApplicationAssessmentWrapper assessment={assessment}>
+        <Bullseye>
+          <SimpleEmptyState
+            icon={BanIcon}
+            title={t("message.couldNotFetchTitle")}
+            description={t("message.couldNotFetchBody") + "."}
+          />
+        </Bullseye>
+      </ApplicationAssessmentWrapper>
     );
   }
 
   return (
-    <>
-      <PageSection variant="light">
-        <ApplicationAssessmentHeader assessment={assessment} />
-      </PageSection>
-      <PageSection variant="light" type={PageSectionTypes.wizard}>
-        {saveError && (
-          <Alert
-            variant="danger"
-            isInline
-            title={getAxiosErrorMessage(saveError)}
+    <ApplicationAssessmentWrapper assessment={assessment}>
+      {saveError && (
+        <Alert
+          variant="danger"
+          isInline
+          title={getAxiosErrorMessage(saveError)}
+        />
+      )}
+      <ConditionalRender when={isFetchingAssessment} then={<AppPlaceholder />}>
+        <FormikProvider value={formik}>
+          <Wizard
+            navAriaLabel="assessment-wizard"
+            mainAriaLabel="assesment-wizard"
+            steps={wizardSteps}
+            footer={wizardFooter}
+            onNext={() => {
+              setCurrentStep((current) => current + 1);
+            }}
+            onBack={() => {
+              setCurrentStep((current) => current - 1);
+            }}
+            onClose={redirectToApplicationList}
+            onGoToStep={(step) => {
+              setCurrentStep(step.id as number);
+            }}
           />
-        )}
-        <ConditionalRender
-          when={isFetchingAssessment}
-          then={<AppPlaceholder />}
-        >
-          <FormikProvider value={formik}>
-            <Wizard
-              navAriaLabel="assessment-wizard"
-              mainAriaLabel="assesment-wizard"
-              steps={wizardSteps}
-              footer={wizardFooter}
-              onNext={() => {
-                setCurrentStep((current) => current + 1);
-              }}
-              onBack={() => {
-                setCurrentStep((current) => current - 1);
-              }}
-              onClose={redirectToApplicationList}
-              onGoToStep={(step) => {
-                setCurrentStep(step.id as number);
-              }}
-            />
-          </FormikProvider>
-        </ConditionalRender>
-      </PageSection>
-    </>
+        </FormikProvider>
+      </ConditionalRender>
+    </ApplicationAssessmentWrapper>
   );
 };

@@ -3,7 +3,7 @@ import { Field } from "formik";
 import { Radio, Stack, StackItem } from "@patternfly/react-core";
 
 import { Question } from "api/models";
-import { getQuestionFieldName } from "../../../formik-utils";
+import { getQuestionFieldName } from "../../../form-utils";
 
 export interface MultiInputSelectionProps {
   question: Question;

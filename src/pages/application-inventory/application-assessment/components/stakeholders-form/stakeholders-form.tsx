@@ -16,7 +16,7 @@ import { useFetchStakeholderGroups, useFetchStakeholders } from "shared/hooks";
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 import { getValidatedFromError } from "utils/utils";
 
-import { IFormValues } from "../../formik-utils";
+import { IFormValues } from "../../form-utils";
 
 import { StakeholderSelect } from "./stakeholder-select";
 import { StakeholderGroupSelect } from "./stakeholder-group-select";

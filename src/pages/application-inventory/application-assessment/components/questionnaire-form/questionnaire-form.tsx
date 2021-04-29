@@ -20,7 +20,7 @@ import { getValidatedFromError } from "utils/utils";
 import { MultiInputSelection } from "./multi-input-selection";
 import { Question, QuestionHeader, QuestionBody } from "./question";
 
-import { getCommentFieldName } from "../../formik-utils";
+import { getCommentFieldName } from "../../form-utils";
 
 export interface QuestionnaireFormProps {
   category: QuestionnaireCategory;
