@@ -18,8 +18,8 @@
         "add": "Agregar {{what}}",
         "applicationAssessment": "Evaluación de la aplicación",
         "applicationInventory": "Inventario de aplicaciones",
-        "manageDependenciesFor": "Administrar dependencias para {{what}}",
         "editQuestion": "¿Editart {{what}}?",
+        "manageDependenciesFor": "Administrar dependencias para {{what}}",
         "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
         "noDataStateTitle": "No existen {{what}} disponibles",
         "Nquestions": "{{n}} preguntas",
@@ -47,8 +47,8 @@
     "message": {
         "couldNotFetchBody": "El recurso no existe o no tienes permiso para acceder al mismo",
         "couldNotFetchTitle": "No disponible",
-        "savingSelection": "Guardando selección",
-        "overrideAssessmentConfirmation": "Esta aplicación ya fue evaluada ¿Deseas continuar?"
+        "overrideAssessmentConfirmation": "Esta aplicación ya fue evaluada ¿Deseas continuar?",
+        "savingSelection": "Guardando selección"
     },
     "sidebar": {
         "applicationInventory": "Inventario de aplicaciones",

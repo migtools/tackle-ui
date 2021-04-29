@@ -18,8 +18,8 @@
         "add": "Add {{what}}",
         "applicationAssessment": "Application assessment",
         "applicationInventory": "Application inventory",
-        "manageDependenciesFor": "Manage dependencies for {{what}}",
         "editQuestion": "Edit {{what}}?",
+        "manageDependenciesFor": "Manage dependencies for {{what}}",
         "noDataStateBody": "Create a new {{what}} to start seeing data here",
         "noDataStateTitle": "No {{what}} available",
         "Nquestions": "{{n}} questions",
@@ -47,8 +47,8 @@
     "message": {
         "couldNotFetchBody": "Resource doesn't exists or you don't have access to it",
         "couldNotFetchTitle": "Not available",
-        "savingSelection": "Saving selection",
-        "overrideAssessmentConfirmation": "This application has already been assessed. Do you want to continue?"
+        "overrideAssessmentConfirmation": "This application has already been assessed. Do you want to continue?",
+        "savingSelection": "Saving selection"
     },
     "sidebar": {
         "applicationInventory": "Application inventory",
