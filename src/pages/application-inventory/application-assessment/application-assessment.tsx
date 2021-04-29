@@ -37,26 +37,16 @@ import { CustomWizardFooter } from "./components/custom-wizard-footer";
 import { StakeholdersForm } from "./components/stakeholders-form";
 import { QuestionnaireForm } from "./components/questionnaire-form";
 
-import { getCommentFieldName, getQuestionFieldName } from "./formik-utils";
+import {
+  COMMENTS_KEY,
+  getCommentFieldName,
+  getQuestionFieldName,
+  IFormValues,
+  QUESTIONS_KEY,
+  SAVE_ACTION_KEY,
+  SAVE_ACTION_VALUE,
+} from "./formik-utils";
 import { getAxiosErrorMessage } from "utils/utils";
-
-const SAVE_ACTION_KEY = "saveAction";
-enum SAVE_ACTION_VALUE {
-  SAVE,
-  SAVE_AS_DRAFT,
-}
-
-export interface IFormValues {
-  stakeholders: number[];
-  stakeholderGroups: number[];
-  comments: {
-    [key: string]: string; // <categoryId, commentValue>
-  };
-  questions: {
-    [key: string]: number | undefined; // <questionId, optionId>
-  };
-  [SAVE_ACTION_KEY]: SAVE_ACTION_VALUE;
-}
 
 export const ApplicationAssessment: React.FC = () => {
   const { t } = useTranslation();
@@ -111,7 +101,7 @@ export const ApplicationAssessment: React.FC = () => {
     let comments: { [key: string]: string } = {};
     if (assessment) {
       assessment.questionnaire.categories.forEach((category) => {
-        comments[getCommentFieldName(category)] = category.comment || "";
+        comments[getCommentFieldName(category, false)] = category.comment || "";
       });
     }
     return comments;
@@ -123,9 +113,9 @@ export const ApplicationAssessment: React.FC = () => {
       assessment.questionnaire.categories
         .flatMap((f) => f.questions)
         .forEach((question) => {
-          questions[getQuestionFieldName(question)] = question.options.find(
-            (f) => f.checked === true
-          )?.id;
+          questions[
+            getQuestionFieldName(question, false)
+          ] = question.options.find((f) => f.checked === true)?.id;
         });
     }
     return questions;
@@ -150,19 +140,29 @@ export const ApplicationAssessment: React.FC = () => {
       stakeholders: formValues.stakeholders,
       stakeholderGroups: formValues.stakeholderGroups,
       questionnaire: {
-        categories: assessment.questionnaire.categories.map((category) => ({
-          ...category,
-          comment: formValues.comments[getCommentFieldName(category)],
-          questions: category.questions.map((question) => ({
-            ...question,
-            options: question.options.map((option) => ({
-              ...option,
-              checked:
-                formValues.questions[getQuestionFieldName(question)] ===
-                option.id,
+        categories: assessment.questionnaire.categories.map((category) => {
+          const commentValues = formValues[COMMENTS_KEY];
+
+          const fieldName = getCommentFieldName(category, false);
+          const commentValue = commentValues[fieldName];
+          return {
+            ...category,
+            comment: commentValue,
+            questions: category.questions.map((question) => ({
+              ...question,
+              options: question.options.map((option) => {
+                const questionValues = formValues[QUESTIONS_KEY];
+
+                const fieldName = getQuestionFieldName(question, false);
+                const questionValue = questionValues[fieldName];
+                return {
+                  ...option,
+                  checked: questionValue === option.id,
+                };
+              }),
             })),
-          })),
-        })),
+          };
+        }),
       },
       status: assessmentStatus,
     };
@@ -200,23 +200,23 @@ export const ApplicationAssessment: React.FC = () => {
 
   const isQuestionValid = (question: Question): boolean => {
     const questionErrors = formik.errors.questions || {};
-    return !questionErrors[getQuestionFieldName(question)];
+    return !questionErrors[getQuestionFieldName(question, false)];
   };
 
   const isCommentValid = (category: QuestionnaireCategory): boolean => {
     const commentErrors = formik.errors.comments || {};
-    return !commentErrors[getCommentFieldName(category)];
+    return !commentErrors[getCommentFieldName(category, false)];
   };
 
   const questionHasValue = (question: Question): boolean => {
     const questionValues = formik.values.questions || {};
-    const value = questionValues[getQuestionFieldName(question)];
+    const value = questionValues[getQuestionFieldName(question, false)];
     return value !== null && value !== undefined;
   };
 
   const commentMinLenghtIs1 = (category: QuestionnaireCategory): boolean => {
     const categoryComments = formik.values.comments || {};
-    const value = categoryComments[getCommentFieldName(category)];
+    const value = categoryComments[getCommentFieldName(category, false)];
     return value !== null && value !== undefined && value.length > 0;
   };
 

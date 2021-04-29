@@ -16,7 +16,7 @@ export const MultiInputSelection: React.FC<MultiInputSelectionProps> = ({
     return (question.options || []).sort((a, b) => a.order - b.order);
   }, [question]);
 
-  const questionFieldName = `questions.${getQuestionFieldName(question)}`;
+  const questionFieldName = getQuestionFieldName(question, true);
 
   return (
     <Field name={questionFieldName}>

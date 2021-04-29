@@ -37,7 +37,7 @@ export const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({
 
   // Comments
 
-  const commentFieldName = `comments.${getCommentFieldName(category)}`;
+  const commentFieldName = getCommentFieldName(category, true);
 
   const validateComment = (val: string) => {
     const maxLength = 1_000;
