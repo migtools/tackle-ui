@@ -430,11 +430,35 @@ export const ApplicationList: React.FC = () => {
     assessApplication(
       row,
       (assessment: Assessment) => {
-        history.push(
-          formatPath(Paths.applicationInventory_assessment, {
-            assessmentId: assessment.id,
-          })
-        );
+        const redirectToAssessment = () => {
+          history.push(
+            formatPath(Paths.applicationInventory_assessment, {
+              assessmentId: assessment.id,
+            })
+          );
+        };
+
+        if (assessment.status === "COMPLETE") {
+          dispatch(
+            confirmDialogActions.openDialog({
+              // t("terms.assessment")
+              title: t("composed.editQuestion", {
+                what: t("terms.assessment").toLowerCase(),
+              }),
+              titleIconVariant: "warning",
+              message: t("message.overrideAssessmentConfirmation"),
+              variant: ButtonVariant.primary,
+              confirmBtnLabel: t("actions.continue"),
+              cancelBtnLabel: t("actions.cancel"),
+              onConfirm: () => {
+                dispatch(confirmDialogActions.closeDialog());
+                redirectToAssessment();
+              },
+            })
+          );
+        } else {
+          redirectToAssessment();
+        }
       },
       (error) => {
         dispatch(alertActions.addDanger(getAxiosErrorMessage(error)));

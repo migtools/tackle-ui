@@ -3,6 +3,7 @@
         "assess": "Evaluar",
         "back": "Atrás",
         "cancel": "Cancelar",
+        "continue": "Continuar",
         "create": "Crear",
         "createNew": "Crear nuevo",
         "delete": "Eliminar",
@@ -14,6 +15,7 @@
     "composed": {
         "applicationAssessment": "Evaluación de la aplicación",
         "applicationInventory": "Inventario de aplicaciones",
+        "editQuestion": "¿Editart {{what}}?",
         "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
         "noDataStateTitle": "No existen {{what}} disponibles",
         "Nquestions": "{{n}} preguntas",
@@ -40,7 +42,8 @@
     },
     "message": {
         "couldNotFetchBody": "El recurso no existe o no tienes permiso para acceder al mismo",
-        "couldNotFetchTitle": "No disponible"
+        "couldNotFetchTitle": "No disponible",
+        "overrideAssessmentConfirmation": "Esta aplicación ya fue evaluada ¿Deseas continuar?"
     },
     "sidebar": {
         "applicationInventory": "Inventario de aplicaciones",

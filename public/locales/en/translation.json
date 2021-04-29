@@ -3,6 +3,7 @@
         "assess": "Assess",
         "back": "Back",
         "cancel": "Cancel",
+        "continue": "Continue",
         "create": "Create",
         "createNew": "Create new",
         "delete": "Delete",
@@ -14,6 +15,7 @@
     "composed": {
         "applicationAssessment": "Application assessment",
         "applicationInventory": "Application inventory",
+        "editQuestion": "Edit {{what}}?",
         "noDataStateBody": "Create a new {{what}} to start seeing data here",
         "noDataStateTitle": "No {{what}} available",
         "Nquestions": "{{n}} questions",
@@ -40,7 +42,8 @@
     },
     "message": {
         "couldNotFetchBody": "Resource doesn't exists or you don't have access to it",
-        "couldNotFetchTitle": "Not available"
+        "couldNotFetchTitle": "Not available",
+        "overrideAssessmentConfirmation": "This application has already been assessed. Do you want to continue?"
     },
     "sidebar": {
         "applicationInventory": "Application inventory",
