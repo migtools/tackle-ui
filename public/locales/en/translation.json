@@ -8,13 +8,15 @@
         "delete": "Delete",
         "edit": "Edit",
         "next": "Next",
-        "save": "Save"
+        "save": "Save",
+        "saveAsDraft": "Save as draft"
     },
     "composed": {
         "applicationAssessment": "Application assessment",
         "applicationInventory": "Application inventory",
         "noDataStateBody": "Create a new {{what}} to start seeing data here",
         "noDataStateTitle": "No {{what}} available",
+        "Nquestions": "{{n}} questions",
         "selectMany": "Select {{what}}",
         "selectOne": "Select a {{what}}"
     },

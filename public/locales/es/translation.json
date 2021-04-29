@@ -8,13 +8,15 @@
         "delete": "Eliminar",
         "edit": "Editar",
         "next": "Siguiente",
-        "save": "Guardar"
+        "save": "Guardar",
+        "saveAsDraft": "Guardar como borrador"
     },
     "composed": {
         "applicationAssessment": "Evaluación de la aplicación",
         "applicationInventory": "Inventario de aplicaciones",
         "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
         "noDataStateTitle": "No existen {{what}} disponibles",
+        "Nquestions": "{{n}} preguntas",
         "selectMany": "Seleccione {{what}}",
         "selectOne": "Seleccione un(a) {{what}}"
     },

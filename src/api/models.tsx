@@ -35,7 +35,7 @@ export interface Stakeholder {
 export interface StakeholderGroup {
   id?: number;
   name: string;
-  description: string;
+  description?: string;
   stakeholders?: Stakeholder[];
 }
 
@@ -54,10 +54,12 @@ export interface Application {
 
 //
 
+export type AssessmentStatus = "EMPTY" | "STARTED" | "COMPLETE";
+
 export interface Assessment {
   id?: number;
   applicationId: number;
-  status: "EMPTY" | "STARTED" | "COMPLETE";
+  status: AssessmentStatus;
   stakeholders?: number[];
   stakeholderGroups?: number[];
   questionnaire: Questionnaire;
@@ -71,7 +73,7 @@ export interface QuestionnaireCategory {
   id: number;
   order: number;
   title?: string;
-  comment: string;
+  comment?: string;
   questions: Question[];
 }
 
@@ -80,8 +82,7 @@ export interface Question {
   order: number;
   question: string;
   description: string;
-  // variant: "checkbox" | "radioButton" | "inputText";
-  options?: QuestionOption[];
+  options: QuestionOption[];
 }
 
 export interface QuestionOption {
