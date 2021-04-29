@@ -296,20 +296,22 @@ export const ApplicationAssessment: React.FC = () => {
   );
 
   if (fetchAssessmentError) {
-    <>
-      <PageSection variant="light">
-        <ApplicationAssessmentHeader assessment={assessment} />
-      </PageSection>
-      <PageSection variant="light" type={PageSectionTypes.wizard}>
-        <Bullseye>
-          <SimpleEmptyState
-            icon={BanIcon}
-            title={t("message.couldNotFetchTitle")}
-            description={t("message.couldNotFetchBody") + "."}
-          />
-        </Bullseye>
-      </PageSection>
-    </>;
+    return (
+      <>
+        <PageSection variant="light">
+          <ApplicationAssessmentHeader assessment={assessment} />
+        </PageSection>
+        <PageSection variant="light" type={PageSectionTypes.wizard}>
+          <Bullseye>
+            <SimpleEmptyState
+              icon={BanIcon}
+              title={t("message.couldNotFetchTitle")}
+              description={t("message.couldNotFetchBody") + "."}
+            />
+          </Bullseye>
+        </PageSection>
+      </>
+    );
   }
 
   return (
