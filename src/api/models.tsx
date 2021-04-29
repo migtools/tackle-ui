@@ -44,12 +44,33 @@ export interface JobFunction {
   role: string;
 }
 
+export interface TagType {
+  id?: number;
+  name: string;
+  rank?: number;
+  colour?: string;
+  tags?: Tag[];
+}
+
+export interface Tag {
+  id?: number;
+  name: string;
+  tagType?: TagType;
+}
+
 export interface Application {
   id?: number;
   name: string;
   description?: string;
   comments?: string;
   businessService?: string;
+  tags?: string[];
+}
+
+export interface ApplicationDependency {
+  id?: number;
+  from: Application;
+  to: Application;
 }
 
 //
@@ -120,9 +141,23 @@ export interface JobFunctionPage {
   total_count: number;
 }
 
+export interface TagTypePage {
+  _embedded: {
+    "tag-type": TagType[];
+  };
+  total_count: number;
+}
+
 export interface ApplicationPage {
   _embedded: {
     application: Application[];
+  };
+  total_count: number;
+}
+
+export interface ApplicationDependencyPage {
+  _embedded: {
+    "applications-dependency": ApplicationDependency[];
   };
   total_count: number;
 }

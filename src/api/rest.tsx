@@ -14,6 +14,10 @@ import {
   Application,
   Assessment,
   JobFunction,
+  ApplicationDependencyPage,
+  ApplicationDependency,
+  TagTypePage,
+  Tag,
 } from "./models";
 
 export const CONTROLS_BASE_URL = "controls";
@@ -24,8 +28,12 @@ export const BUSINESS_SERVICES = CONTROLS_BASE_URL + "/business-service";
 export const STAKEHOLDERS = CONTROLS_BASE_URL + "/stakeholder";
 export const STAKEHOLDER_GROUPS = CONTROLS_BASE_URL + "/stakeholder-group";
 export const JOB_FUNCTIONS = CONTROLS_BASE_URL + "/job-function";
+export const TAG_TYPES = CONTROLS_BASE_URL + "/tag-type";
+export const TAGS = CONTROLS_BASE_URL + "/tag";
 
 export const APPLICATIONS = APP_INVENTORY_BASE_URL + "/application";
+export const APPLICATION_DEPENDENCY =
+  APP_INVENTORY_BASE_URL + "/applications-dependency";
 
 export const ASSESSMENTS = PATHFINDER_BASE_URL + "/assessments";
 
@@ -325,10 +333,71 @@ export const getJobFunctions = (
   return APIClient.get(`${JOB_FUNCTIONS}?${query.join("&")}`, { headers });
 };
 
+// Tag types
+
+export enum TagTypeSortBy {
+  NAME,
+  RANK,
+  COLOR,
+  TAGS,
+}
+export interface TagTypeSortByQuery {
+  field: TagTypeSortBy;
+  direction?: Direction;
+}
+
+export const getTagTypes = (
+  filters: {
+    tagTypes?: string[];
+    tags?: string[];
+  },
+  pagination: PageQuery,
+  sortBy?: TagTypeSortByQuery
+): AxiosPromise<TagTypePage> => {
+  let sortByQuery: string | undefined = undefined;
+  if (sortBy) {
+    let field;
+    switch (sortBy.field) {
+      case TagTypeSortBy.NAME:
+        field = "name";
+        break;
+      case TagTypeSortBy.RANK:
+        field = "rank";
+        break;
+      case TagTypeSortBy.COLOR:
+        field = "rank";
+        break;
+      case TagTypeSortBy.TAGS:
+        field = "tags.size()";
+        break;
+      default:
+        throw new Error("Could not define SortBy field name");
+    }
+    sortByQuery = `${sortBy.direction === "desc" ? "-" : ""}${field}`;
+  }
+
+  const params = {
+    page: pagination.page - 1,
+    size: pagination.perPage,
+    sort: sortByQuery,
+
+    name: filters.tagTypes,
+    "tags.name": filters.tags,
+  };
+
+  const query: string[] = buildQuery(params);
+  return APIClient.get(`${TAG_TYPES}?${query.join("&")}`, { headers });
+};
+
+export const getTagById = (id: number | string): AxiosPromise<Tag> => {
+  return APIClient.get(`${TAGS}/${id}`);
+};
+
 // App inventory
 
 export enum ApplicationSortBy {
   NAME,
+  TAGS,
 }
 export interface ApplicationSortByQuery {
   field: ApplicationSortBy;
@@ -340,6 +409,7 @@ export const getApplications = (
     name?: string[];
     description?: string[];
     businessService?: string[];
+    tag?: string[];
   },
   pagination: PageQuery,
   sortBy?: ApplicationSortByQuery
@@ -350,6 +420,9 @@ export const getApplications = (
     switch (sortBy.field) {
       case ApplicationSortBy.NAME:
         field = "name";
+        break;
+      case ApplicationSortBy.TAGS:
+        field = "tags.size()";
         break;
       default:
         throw new Error("Could not define SortBy field name");
@@ -365,6 +438,7 @@ export const getApplications = (
     name: filters.name,
     description: filters.description,
     businessService: filters.businessService,
+    "tags.tag": filters.tag,
   };
 
   const query: string[] = buildQuery(params);
@@ -393,6 +467,39 @@ export const getApplicationById = (
   id: number | string
 ): AxiosPromise<Application> => {
   return APIClient.get(`${APPLICATIONS}/${id}`);
+};
+
+//
+
+export const getApplicationDependencies = (
+  filters: {
+    from?: string[];
+    to?: string[];
+  },
+  pagination: PageQuery
+): AxiosPromise<ApplicationDependencyPage> => {
+  const params = {
+    page: pagination.page - 1,
+    size: pagination.perPage,
+
+    "from.id": filters.from,
+    "to.id": filters.to,
+  };
+
+  const query: string[] = buildQuery(params);
+  return APIClient.get(`${APPLICATION_DEPENDENCY}?${query.join("&")}`, {
+    headers,
+  });
+};
+
+export const createApplicationDependency = (
+  obj: ApplicationDependency
+): AxiosPromise<ApplicationDependency> => {
+  return APIClient.post(`${APPLICATION_DEPENDENCY}`, obj);
+};
+
+export const deleteApplicationDependency = (id: number): AxiosPromise => {
+  return APIClient.delete(`${APPLICATION_DEPENDENCY}/${id}`);
 };
 
 //

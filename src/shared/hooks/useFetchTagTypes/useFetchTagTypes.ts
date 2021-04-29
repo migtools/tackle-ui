@@ -2,33 +2,29 @@ import { useCallback, useReducer } from "react";
 import { AxiosError } from "axios";
 import { ActionType, createAsyncAction, getType } from "typesafe-actions";
 
-import {
-  getApplications,
-  ApplicationSortByQuery,
-  ApplicationSortBy,
-} from "api/rest";
-import { PageRepresentation, Application, PageQuery } from "api/models";
+import { getTagTypes, TagTypeSortBy, TagTypeSortByQuery } from "api/rest";
+import { PageRepresentation, PageQuery, TagType } from "api/models";
 
 export const {
   request: fetchRequest,
   success: fetchSuccess,
   failure: fetchFailure,
 } = createAsyncAction(
-  "useFetchApplications/fetch/request",
-  "useFetchApplications/fetch/success",
-  "useFetchApplications/fetch/failure"
-)<void, PageRepresentation<Application>, AxiosError>();
+  "useFetchTagTypes/fetch/request",
+  "useFetchTagTypes/fetch/success",
+  "useFetchTagTypes/fetch/failure"
+)<void, PageRepresentation<TagType>, AxiosError>();
 
 type State = Readonly<{
   isFetching: boolean;
-  applications?: PageRepresentation<Application>;
+  tagTypes?: PageRepresentation<TagType>;
   fetchError?: AxiosError;
   fetchCount: number;
 }>;
 
 const defaultState: State = {
   isFetching: false,
-  applications: undefined,
+  tagTypes: undefined,
   fetchError: undefined,
   fetchCount: 0,
 };
@@ -56,7 +52,7 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         isFetching: false,
         fetchError: undefined,
-        applications: action.payload,
+        tagTypes: action.payload,
         fetchCount: state.fetchCount + 1,
       };
     case getType(fetchFailure):
@@ -72,44 +68,40 @@ const reducer = (state: State, action: Action): State => {
 };
 
 export interface IState {
-  applications?: PageRepresentation<Application>;
+  tagTypes?: PageRepresentation<TagType>;
   isFetching: boolean;
   fetchError?: AxiosError;
   fetchCount: number;
-  fetchApplications: (
+  fetchTagTypes: (
     filters: {
-      name?: string[];
-      description?: string[];
-      businessService?: string[];
-      tag?: string[];
+      tagTypes?: string[];
+      tags?: string[];
     },
     page: PageQuery,
-    sortBy?: ApplicationSortByQuery
+    sortBy?: TagTypeSortByQuery
   ) => void;
-  fetchAllApplications: () => void;
+  fetchAllTagTypes: (sortBy?: TagTypeSortByQuery) => void;
 }
 
-export const useFetchApplications = (
+export const useFetchTagTypes = (
   defaultIsFetching: boolean = false
 ): IState => {
   const [state, dispatch] = useReducer(reducer, defaultIsFetching, initReducer);
 
-  const fetchApplications = useCallback(
+  const fetchTagTypes = useCallback(
     (
       filters: {
         name?: string[];
-        description?: string[];
-        businessService?: string[];
-        tag?: string[];
+        tagTypes?: string[];
       },
       page: PageQuery,
-      sortBy?: ApplicationSortByQuery
+      sortBy?: TagTypeSortByQuery
     ) => {
       dispatch(fetchRequest());
 
-      getApplications(filters, page, sortBy)
+      getTagTypes(filters, page, sortBy)
         .then(({ data }) => {
-          const list = data._embedded.application;
+          const list = data._embedded["tag-type"];
           const total = data.total_count;
 
           dispatch(
@@ -128,16 +120,16 @@ export const useFetchApplications = (
     []
   );
 
-  const fetchAllApplications = useCallback(() => {
+  const fetchAllTagTypes = useCallback((sortBy?: TagTypeSortByQuery) => {
     dispatch(fetchRequest());
 
-    getApplications(
+    getTagTypes(
       {},
       { page: 1, perPage: 1000 },
-      { field: ApplicationSortBy.NAME }
+      sortBy || { field: TagTypeSortBy.NAME }
     )
       .then(({ data }) => {
-        const list = data._embedded.application;
+        const list = data._embedded["tag-type"];
         const total = data.total_count;
 
         dispatch(
@@ -155,13 +147,13 @@ export const useFetchApplications = (
   }, []);
 
   return {
-    applications: state.applications,
+    tagTypes: state.tagTypes,
     isFetching: state.isFetching,
     fetchError: state.fetchError,
     fetchCount: state.fetchCount,
-    fetchApplications,
-    fetchAllApplications,
+    fetchTagTypes,
+    fetchAllTagTypes,
   };
 };
 
-export default useFetchApplications;
+export default useFetchTagTypes;

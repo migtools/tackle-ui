@@ -1,25 +1,23 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { renderHook, act } from "@testing-library/react-hooks";
-import { useFetchApplications } from "./useFetchApplications";
-import { ApplicationPage } from "api/models";
-import { APPLICATIONS } from "api/rest";
+import { useFetchTagTypes } from "./useFetchTagTypes";
+import { TagTypePage } from "api/models";
+import { TAG_TYPES } from "api/rest";
 
-describe("useFetchApplications", () => {
+describe("useFetchTagTypes", () => {
   it("Fetch error due to no REST API found", async () => {
     // Mock REST API
-    new MockAdapter(axios).onGet(APPLICATIONS).networkError();
+    new MockAdapter(axios).onGet(TAG_TYPES).networkError();
 
     // Use hook
-    const { result, waitForNextUpdate } = renderHook(() =>
-      useFetchApplications()
-    );
+    const { result, waitForNextUpdate } = renderHook(() => useFetchTagTypes());
 
     const {
-      applications: items,
+      tagTypes: items,
       isFetching,
       fetchError,
-      fetchApplications: fetchPage,
+      fetchTagTypes: fetchEntities,
     } = result.current;
 
     expect(isFetching).toBe(false);
@@ -27,53 +25,51 @@ describe("useFetchApplications", () => {
     expect(fetchError).toBeUndefined();
 
     // Init fetch
-    act(() => fetchPage({}, { page: 2, perPage: 50 }));
+    act(() => fetchEntities({}, { page: 2, perPage: 50 }));
     expect(result.current.isFetching).toBe(true);
 
     // Fetch finished
     await waitForNextUpdate();
     expect(result.current.isFetching).toBe(false);
-    expect(result.current.applications).toBeUndefined();
+    expect(result.current.tagTypes).toBeUndefined();
     expect(result.current.fetchError).not.toBeUndefined();
   });
 
   it("Fetch success", async () => {
     // Mock REST API
-    const data: ApplicationPage = {
+    const data: TagTypePage = {
       _embedded: {
-        application: [],
+        "tag-type": [],
       },
       total_count: 0,
     };
 
     new MockAdapter(axios)
-      .onGet(`${APPLICATIONS}?page=0&size=10`)
+      .onGet(`${TAG_TYPES}?page=0&size=10`)
       .reply(200, data);
 
     // Use hook
-    const { result, waitForNextUpdate } = renderHook(() =>
-      useFetchApplications()
-    );
+    const { result, waitForNextUpdate } = renderHook(() => useFetchTagTypes());
 
     const {
-      applications: items,
+      tagTypes: stakeholders,
       isFetching,
       fetchError,
-      fetchApplications: fetchPage,
+      fetchTagTypes: fetchStakeholders,
     } = result.current;
 
     expect(isFetching).toBe(false);
-    expect(items).toBeUndefined();
+    expect(stakeholders).toBeUndefined();
     expect(fetchError).toBeUndefined();
 
     // Init fetch
-    act(() => fetchPage({}, { page: 1, perPage: 10 }));
+    act(() => fetchStakeholders({}, { page: 1, perPage: 10 }));
     expect(result.current.isFetching).toBe(true);
 
     // Fetch finished
     await waitForNextUpdate();
     expect(result.current.isFetching).toBe(false);
-    expect(result.current.applications).toMatchObject({
+    expect(result.current.tagTypes).toMatchObject({
       data: [],
       meta: { count: 0 },
     });
@@ -82,27 +78,25 @@ describe("useFetchApplications", () => {
 
   it("Fetch all", async () => {
     // Mock REST API
-    const data: ApplicationPage = {
+    const data: TagTypePage = {
       _embedded: {
-        application: [],
+        "tag-type": [],
       },
       total_count: 0,
     };
 
     new MockAdapter(axios)
-      .onGet(`${APPLICATIONS}?page=0&size=1000&sort=name`)
+      .onGet(`${TAG_TYPES}?page=0&size=1000&sort=name`)
       .reply(200, data);
 
     // Use hook
-    const { result, waitForNextUpdate } = renderHook(() =>
-      useFetchApplications()
-    );
+    const { result, waitForNextUpdate } = renderHook(() => useFetchTagTypes());
 
     const {
-      applications: items,
+      tagTypes: items,
       isFetching,
       fetchError,
-      fetchAllApplications: fetchAll,
+      fetchAllTagTypes: fetchAll,
     } = result.current;
 
     expect(isFetching).toBe(false);
@@ -116,7 +110,7 @@ describe("useFetchApplications", () => {
     // Fetch finished
     await waitForNextUpdate();
     expect(result.current.isFetching).toBe(false);
-    expect(result.current.applications).toMatchObject({
+    expect(result.current.tagTypes).toMatchObject({
       data: [],
       meta: { count: 0 },
     });
