@@ -17,6 +17,8 @@ export interface Meta {
   count: number;
 }
 
+// Controls
+
 export interface BusinessService {
   id?: number;
   name: string;
@@ -58,6 +60,8 @@ export interface Tag {
   tagType?: TagType;
 }
 
+// Application inventory
+
 export interface Application {
   id?: number;
   name: string;
@@ -73,7 +77,7 @@ export interface ApplicationDependency {
   to: Application;
 }
 
-//
+// Pathfinder
 
 export interface Assessment {
   id?: number;
@@ -82,6 +86,8 @@ export interface Assessment {
   stakeholders?: number[];
   stakeholderGroups?: number[];
 }
+
+// Pagination
 
 export interface BusinessServicePage {
   _embedded: {
@@ -107,6 +113,13 @@ export interface StakeholderGroupPage {
 export interface JobFunctionPage {
   _embedded: {
     "job-function": JobFunction[];
+  };
+  total_count: number;
+}
+
+export interface TagTypePage {
+  _embedded: {
+    "tag-type": TagType[];
   };
   total_count: number;
 }
