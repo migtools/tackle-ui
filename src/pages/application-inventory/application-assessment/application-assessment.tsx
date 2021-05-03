@@ -43,7 +43,8 @@ import {
   SAVE_ACTION_VALUE,
 } from "./form-utils";
 import { getAxiosErrorMessage } from "utils/utils";
-import { ApplicationAssessmentWrapper } from "./application-assessment-wrapper";
+
+import { ApplicationAssessmentPage } from "./components/application-assessment-page";
 import { WizardStepNavDescription } from "./components/wizard-step-nav-description";
 
 export const ApplicationAssessment: React.FC = () => {
@@ -289,7 +290,7 @@ export const ApplicationAssessment: React.FC = () => {
 
   if (fetchAssessmentError) {
     return (
-      <ApplicationAssessmentWrapper assessment={assessment}>
+      <ApplicationAssessmentPage assessment={assessment}>
         <Bullseye>
           <SimpleEmptyState
             icon={BanIcon}
@@ -297,12 +298,12 @@ export const ApplicationAssessment: React.FC = () => {
             description={t("message.couldNotFetchBody") + "."}
           />
         </Bullseye>
-      </ApplicationAssessmentWrapper>
+      </ApplicationAssessmentPage>
     );
   }
 
   return (
-    <ApplicationAssessmentWrapper assessment={assessment}>
+    <ApplicationAssessmentPage assessment={assessment}>
       {saveError && (
         <Alert
           variant="danger"
@@ -333,6 +334,6 @@ export const ApplicationAssessment: React.FC = () => {
           />
         </FormikProvider>
       </ConditionalRender>
-    </ApplicationAssessmentWrapper>
+    </ApplicationAssessmentPage>
   );
 };

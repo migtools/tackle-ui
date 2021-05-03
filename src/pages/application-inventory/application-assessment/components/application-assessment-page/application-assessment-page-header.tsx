@@ -9,11 +9,11 @@ import { Paths } from "Paths";
 import { Application, Assessment } from "api/models";
 import { getApplicationById } from "api/rest";
 
-export interface ApplicationAssessmentHeaderProps {
+export interface IApplicationAssessmentPageHeaderProps {
   assessment?: Assessment;
 }
 
-export const ApplicationAssessmentHeader: React.FC<ApplicationAssessmentHeaderProps> = ({
+export const ApplicationAssessmentPageHeader: React.FC<IApplicationAssessmentPageHeaderProps> = ({
   assessment,
 }) => {
   const { t } = useTranslation();
