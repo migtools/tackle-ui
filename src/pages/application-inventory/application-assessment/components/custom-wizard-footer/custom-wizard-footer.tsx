@@ -30,15 +30,19 @@ export const CustomWizardFooter: React.FC<CustomWizardFooterProps> = ({
     <WizardFooter>
       <WizardContextConsumer>
         {({ onNext, onBack, onClose, activeStep }) => {
+          const enableNext =
+            activeStep && activeStep.enableNext !== undefined
+              ? activeStep.enableNext
+              : true;
+
           return (
             <>
               {isLastStep ? (
                 <Button
                   variant="primary"
                   onClick={onSave}
-                  isDisabled={
-                    !activeStep.enableNext || isDisabled || isFormInvalid
-                  }
+                  isDisabled={!enableNext || isDisabled || isFormInvalid}
+                  cy-data="next"
                 >
                   {t("actions.save")}
                 </Button>
@@ -46,9 +50,8 @@ export const CustomWizardFooter: React.FC<CustomWizardFooterProps> = ({
                 <Button
                   variant="primary"
                   onClick={onNext}
-                  isDisabled={
-                    !activeStep.enableNext || isDisabled || isFormInvalid
-                  }
+                  isDisabled={!enableNext || isDisabled || isFormInvalid}
+                  cy-data="next"
                 >
                   {t("actions.next")}
                 </Button>
@@ -57,16 +60,23 @@ export const CustomWizardFooter: React.FC<CustomWizardFooterProps> = ({
                 variant="secondary"
                 onClick={onBack}
                 isDisabled={isFirstStep || isDisabled || isFormInvalid}
+                cy-data="back"
               >
                 {t("actions.back")}
               </Button>
-              <Button variant="link" onClick={onClose} isDisabled={isDisabled}>
+              <Button
+                variant="link"
+                onClick={onClose}
+                isDisabled={isDisabled}
+                cy-data="cancel"
+              >
                 {t("actions.cancel")}
               </Button>
               <Button
                 variant="link"
                 onClick={onSaveAsDraft}
                 isDisabled={isDisabled || isFormInvalid}
+                cy-data="save-as-draft"
               >
                 {t("actions.saveAsDraft")}
               </Button>
