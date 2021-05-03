@@ -4,7 +4,13 @@ import { useTranslation } from "react-i18next";
 import { FormikHelpers, FormikProvider, useFormik } from "formik";
 import { AxiosError } from "axios";
 
-import { Alert, Bullseye, Wizard, WizardStep } from "@patternfly/react-core";
+import {
+  Alert,
+  AlertActionCloseButton,
+  Bullseye,
+  Wizard,
+  WizardStep,
+} from "@patternfly/react-core";
 import { BanIcon } from "@patternfly/react-icons";
 
 import {
@@ -302,6 +308,9 @@ export const ApplicationAssessment: React.FC = () => {
           variant="danger"
           isInline
           title={getAxiosErrorMessage(saveError)}
+          actionClose={
+            <AlertActionCloseButton onClose={() => setSaveError(undefined)} />
+          }
         />
       )}
       <ConditionalRender when={isFetchingAssessment} then={<AppPlaceholder />}>
