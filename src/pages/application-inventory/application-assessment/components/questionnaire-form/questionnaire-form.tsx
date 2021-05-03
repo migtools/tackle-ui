@@ -58,7 +58,7 @@ export const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({
       </StackItem>
       {sortedQuestions.map((question) => (
         <StackItem key={question.id}>
-          <Question>
+          <Question cy-data="question">
             <QuestionHeader>
               <Split hasGutter>
                 <SplitItem>{question.question}</SplitItem>

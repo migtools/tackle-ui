@@ -7,6 +7,7 @@ export interface RadioButtonQuestionProps {
 
 export const Question: React.FC<RadioButtonQuestionProps> = ({
   children = null,
+  ...rest
 }) => {
-  return <Stack>{children}</Stack>;
+  return <Stack {...rest}>{children}</Stack>;
 };
