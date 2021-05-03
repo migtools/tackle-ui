@@ -17,6 +17,7 @@ import {
   ApplicationDependencyPage,
   ApplicationDependency,
   TagTypePage,
+  TagType,
   Tag,
 } from "./models";
 
@@ -387,6 +388,34 @@ export const getTagTypes = (
 
   const query: string[] = buildQuery(params);
   return APIClient.get(`${TAG_TYPES}?${query.join("&")}`, { headers });
+};
+
+export const deleteTagType = (id: number): AxiosPromise => {
+  return APIClient.delete(`${TAG_TYPES}/${id}`);
+};
+
+export const createTagType = (obj: TagType): AxiosPromise<TagType> => {
+  return APIClient.post(`${TAG_TYPES}`, obj);
+};
+
+export const updateTagType = (obj: TagType): AxiosPromise<TagType> => {
+  return APIClient.put(`${TAG_TYPES}/${obj.id}`, obj);
+};
+
+export const getTagTypeById = (id: number): AxiosPromise<TagType> => {
+  return APIClient.get(`${TAG_TYPES}/${id}`);
+};
+
+export const deleteTag = (id: number): AxiosPromise => {
+  return APIClient.delete(`${TAGS}/${id}`);
+};
+
+export const createTag = (obj: Tag): AxiosPromise<Tag> => {
+  return APIClient.post(`${TAGS}`, obj);
+};
+
+export const updateTag = (obj: Tag): AxiosPromise<Tag> => {
+  return APIClient.put(`${TAGS}/${obj.id}`, obj);
 };
 
 export const getTagById = (id: number | string): AxiosPromise<Tag> => {

@@ -7,12 +7,22 @@
         "continue": "Continuar",
         "create": "Crear",
         "createNew": "Crear nuevo",
+        "createTag": "Crear etiqueta",
+        "createTagType": "Crear typo de etiqueta",
         "delete": "Eliminar",
         "edit": "Editar",
         "manageDependencies": "Administrar dependencias",
         "next": "Siguiente",
         "save": "Guardar",
         "saveAsDraft": "Guardar como borrador"
+    },
+    "colors": {
+        "blue": "Azul",
+        "cyan": "Cian",
+        "green": "Verde",
+        "orange": "Anaranjado",
+        "purple": "Morado",
+        "red": "Rojo"
     },
     "composed": {
         "add": "Agregar {{what}}",
@@ -37,11 +47,15 @@
             "newJobFunction": "Nueva función laboral",
             "newStakeholder": "Nuevo interesado",
             "newStakeholderGroup": "Nuevo grupo de interesados",
+            "newTag": "Nueva etiqueta",
+            "newTagType": "Nuevo tipo de etiqueta",
             "updateApplication": "Actualizar aplicación",
             "updateBusinessService": "Actualizar servicio de negocio",
             "updateJobFunction": "Actualizar función laboral",
             "updateStakeholder": "Actualizar interesado",
-            "updateStakeholderGroup": "Actualizar grupo de interesados"
+            "updateStakeholderGroup": "Actualizar grupo de interesados",
+            "updateTag": "Actualizar etiqueta",
+            "updateTagType": "Actualizar tipo de etiqueta"
         }
     },
     "message": {
@@ -61,6 +75,7 @@
         "assessment": "Evaluación",
         "businessService": "Servicio de negocio",
         "businessServices": "Servicios de negocio",
+        "color": "Color",
         "comments": "Comentarios",
         "completed": "Completado",
         "controls": "Controles",
@@ -79,6 +94,7 @@
         "notAvailable": "No disponible",
         "notStarted": "No empezado",
         "owner": "Propietario",
+        "rank": "Rango",
         "southboundDependencies": "Dependencias del sur",
         "stakeholder": "Interesado",
         "stakeholder(s)": "Interesado(s)",
@@ -88,7 +104,10 @@
         "stakeholders": "Interesados",
         "tag": "Etiqueta",
         "tag(s)": "Etiqueta(s)",
+        "tagName": "Nombde de etiqueta",
         "tags": "Etiquetas",
+        "tagType": "Tipo de etiqueta",
+        "tagTypes": "Tipos de etiqueta",
         "unknown": "Desconocido"
     },
     "toastr": {
@@ -99,6 +118,7 @@
     "validation": {
         "email": "Este campo requiere un email válido.",
         "maxLength": "Este campo debe de tener menos de {{length}} caracteres.",
+        "min": "Este campo debe de ser mayor a {{value}}.",
         "minLength": "Este campo debe de tener al menos {{length}} caracteres.",
         "onlyCharactersAndUnderscore": "Este campo debe de contener solo caracteres alfanuméricos incluyendo el subguión.",
         "required": "Este campo es requerido."

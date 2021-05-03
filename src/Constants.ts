@@ -3,9 +3,6 @@ import {
   global_palette_green_300 as green,
   global_palette_cyan_300 as cyan,
   global_palette_purple_300 as purple,
-  global_palette_light_blue_300 as lightBlue,
-  global_palette_gold_300 as gold,
-  global_palette_light_green_300 as lightGreen,
   global_palette_orange_300 as orange,
   global_palette_red_300 as red,
 } from "@patternfly/react-tokens";
@@ -19,6 +16,15 @@ export const DEFAULT_PAGINATION: PageQuery = {
 
 export const DEFAULT_SELECT_MAX_HEIGHT = 200;
 
+// Colors
+
+// t('colors.blue')
+// t('colors.cyan')
+// t('colors.green')
+// t('colors.orange')
+// t('colors.purple')
+// t('colors.red')
+
 export const DEFAULT_COLOR_LABELS: Map<string, string> = new Map([
   [blue.value, "blue"],
   [cyan.value, "cyan"],
@@ -26,8 +32,13 @@ export const DEFAULT_COLOR_LABELS: Map<string, string> = new Map([
   [orange.value, "orange"],
   [purple.value, "purple"],
   [red.value, "red"],
-
-  [lightBlue.value, "lightBlue"],
-  [gold.value, "gold"],
-  [lightGreen.value, "lightGreen"],
 ]);
+
+export const DEFAULT_COLOR_PALETE = [
+  blue.value,
+  cyan.value,
+  green.value,
+  orange.value,
+  purple.value,
+  red.value,
+];

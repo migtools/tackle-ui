@@ -4,6 +4,8 @@ export { useDeleteJobFunction } from "./useDeleteJobFunction";
 export { useDeleteStakeholder } from "./useDeleteStakeholder";
 export { useDeleteStakeholderGroup } from "./useDeleteStakeholderGroup";
 export { useFetchApplicationDependencies } from "./useFetchApplicationDependencies";
+export { useDeleteTag } from "./useDeleteTag";
+export { useDeleteTagType } from "./useDeleteTagType";
 export { useFetchApplications } from "./useFetchApplications";
 export { useFetchBusinessServices } from "./useFetchBusinessServices";
 export { useFetchJobFunctions } from "./useFetchJobFunctions";
