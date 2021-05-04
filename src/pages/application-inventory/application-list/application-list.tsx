@@ -43,6 +43,7 @@ import {
   AppTableWithControls,
   ConditionalRender,
   NoDataEmptyState,
+  StatusIconAssessment,
 } from "shared/components";
 import {
   useDeleteApplication,
@@ -222,6 +223,7 @@ export const ApplicationList: React.FC = () => {
     { title: t("terms.description"), transforms: [] },
     { title: t("terms.businessService"), transforms: [] },
     { title: t("terms.assessment"), transforms: [cellWidth(10)] },
+    { title: t("terms.review"), transforms: [cellWidth(10)] },
     { title: t("terms.tags"), transforms: [sortable, cellWidth(10)] },
     {
       title: "",
@@ -252,6 +254,13 @@ export const ApplicationList: React.FC = () => {
         },
         {
           title: <ApplicationAssessment application={item} />,
+        },
+        {
+          title: item.review ? (
+            <StatusIconAssessment status="Completed" />
+          ) : (
+            <StatusIconAssessment status="NotStarted" />
+          ),
         },
         {
           title: (
@@ -499,6 +508,28 @@ export const ApplicationList: React.FC = () => {
     startApplicationAssessment(row);
   };
 
+  const startApplicationReview = (row: Application) => {
+    history.push(
+      formatPath(Paths.applicationInventory_review, {
+        applicationId: row.id,
+      })
+    );
+  };
+
+  const handleOnReviewSelectedRow = () => {
+    if (selectedRows.length !== 1) {
+      dispatch(
+        alertActions.addDanger(
+          "The number of applications to be reviewed must be 1"
+        )
+      );
+      return;
+    }
+
+    const row = selectedRows[0];
+    startApplicationReview(row);
+  };
+
   return (
     <>
       <PageSection variant={PageSectionVariants.light}>
@@ -624,6 +655,17 @@ export const ApplicationList: React.FC = () => {
                       isLoading={isApplicationAssessInProgress}
                     >
                       {t("actions.assess")}
+                    </Button>
+                  </ToolbarItem>
+                  <ToolbarItem>
+                    <Button
+                      type="button"
+                      aria-label="review-application"
+                      variant={ButtonVariant.primary}
+                      onClick={handleOnReviewSelectedRow}
+                      isDisabled={selectedRows.length !== 1}
+                    >
+                      {t("actions.review")}
                     </Button>
                   </ToolbarItem>
                 </ToolbarGroup>

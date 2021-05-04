@@ -12,6 +12,7 @@
         "edit": "Edit",
         "manageDependencies": "Manage dependencies",
         "next": "Next",
+        "review": "Review",
         "save": "Save"
     },
     "colors": {
@@ -90,6 +91,7 @@
         "notStarted": "Not started",
         "owner": "Owner",
         "rank": "Rank",
+        "review": "Review",
         "southboundDependencies": "Southbound dependencies",
         "stakeholder": "Stakeholder",
         "stakeholder(s)": "Stakeholder(s)",

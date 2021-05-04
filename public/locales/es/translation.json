@@ -12,6 +12,7 @@
         "edit": "Editar",
         "manageDependencies": "Administrar dependencias",
         "next": "Siguiente",
+        "review": "Revisar",
         "save": "Guardar"
     },
     "colors": {
@@ -90,6 +91,7 @@
         "notStarted": "No empezado",
         "owner": "Propietario",
         "rank": "Rango",
+        "review": "Revisar",
         "southboundDependencies": "Dependencias del sur",
         "stakeholder": "Interesado",
         "stakeholder(s)": "Interesado(s)",
