@@ -111,11 +111,11 @@ export const StakeholderGroups: React.FC = () => {
   );
 
   const {
-    isOpen: isCreateUpdateModalOpen,
-    entity: rowToUpdate,
-    create: openCreateModal,
-    update: openUpdateModal,
-    close: closeCreateUpdateModal,
+    isOpen: isStakeholderGroupModalOpen,
+    entity: stakeholderGroupToUpdate,
+    create: openCreateStakeholderGroupModal,
+    update: openUpdateStakeholderGroupModal,
+    close: closeStakeholderGroupModal,
   } = useEntityModal<StakeholderGroup>();
 
   const { deleteStakeholderGroup } = useDeleteStakeholderGroup();
@@ -250,7 +250,7 @@ export const StakeholderGroups: React.FC = () => {
   };
 
   const editRow = (row: StakeholderGroup) => {
-    openUpdateModal(row);
+    openUpdateStakeholderGroupModal(row);
   };
 
   const deleteRow = (row: StakeholderGroup) => {
@@ -313,10 +313,10 @@ export const StakeholderGroups: React.FC = () => {
 
   // Create/update Modal
 
-  const handleOnCreateUpdateModalSaved = (
+  const handleOnStakeholderGroupFormSaved = (
     response: AxiosResponse<StakeholderGroup>
   ) => {
-    if (!rowToUpdate) {
+    if (!stakeholderGroupToUpdate) {
       dispatch(
         alertActions.addSuccess(
           // t('terms.stakeholderGroup')
@@ -328,7 +328,7 @@ export const StakeholderGroups: React.FC = () => {
       );
     }
 
-    closeCreateUpdateModal();
+    closeStakeholderGroupModal();
     refreshTable();
   };
 
@@ -377,7 +377,7 @@ export const StakeholderGroups: React.FC = () => {
                   type="button"
                   aria-label="create-stakeholder-group"
                   variant={ButtonVariant.primary}
-                  onClick={openCreateModal}
+                  onClick={openCreateStakeholderGroupModal}
                 >
                   {t("actions.createNew")}
                 </Button>
@@ -404,17 +404,21 @@ export const StakeholderGroups: React.FC = () => {
       <Modal
         // t('dialog.title.update')
         // t('dialog.title.new')
-        title={t(`dialog.title.${rowToUpdate ? "update" : "new"}`, {
-          what: t("terms.stakeholderGroup").toLowerCase(),
-        })}
+        // t('terms.stakeholderGroup')
+        title={t(
+          `dialog.title.${stakeholderGroupToUpdate ? "update" : "new"}`,
+          {
+            what: t("terms.stakeholderGroup").toLowerCase(),
+          }
+        )}
         variant={ModalVariant.medium}
-        isOpen={isCreateUpdateModalOpen}
-        onClose={closeCreateUpdateModal}
+        isOpen={isStakeholderGroupModalOpen}
+        onClose={closeStakeholderGroupModal}
       >
         <StakeholderGroupForm
-          stakeholderGroup={rowToUpdate}
-          onSaved={handleOnCreateUpdateModalSaved}
-          onCancel={closeCreateUpdateModal}
+          stakeholderGroup={stakeholderGroupToUpdate}
+          onSaved={handleOnStakeholderGroupFormSaved}
+          onCancel={closeStakeholderGroupModal}
         />
       </Modal>
     </>

@@ -38,20 +38,6 @@
         },
         "title": {
             "delete": "Eliminar '{{what}}'",
-            "newApplication": "Nueva aplicación",
-            "newBusinessService": "Nuevo servicio de negocio",
-            "newJobFunction": "Nueva función laboral",
-            "newStakeholder": "Nuevo interesado",
-            "newStakeholderGroup": "Nuevo grupo de interesados",
-            "newTag": "Nueva etiqueta",
-            "newTagType": "Nuevo tipo de etiqueta",
-            "updateApplication": "Actualizar aplicación",
-            "updateBusinessService": "Actualizar servicio de negocio",
-            "updateJobFunction": "Actualizar función laboral",
-            "updateStakeholder": "Actualizar interesado",
-            "updateStakeholderGroup": "Actualizar grupo de interesados",
-            "updateTag": "Actualizar etiqueta",
-            "updateTagType": "Actualizar tipo de etiqueta",
             "new": "Nuevo(a) {{what}}",
             "update": "Actualizar {{what}}"
         }

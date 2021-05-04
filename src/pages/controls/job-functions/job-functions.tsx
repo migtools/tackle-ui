@@ -82,11 +82,11 @@ export const JobFunctions: React.FC = () => {
   );
 
   const {
-    isOpen: isCreateUpdateModalOpen,
-    entity: rowToUpdate,
-    create: openCreateModal,
-    update: openUpdateModal,
-    close: closeCreateUpdateModal,
+    isOpen: isJobFunctionModalOpen,
+    entity: jobFunctionToUpdate,
+    create: openCreateJobFunctionModal,
+    update: openUpdateJobFunctionModal,
+    close: closeJobFunctionModal,
   } = useEntityModal<JobFunction>();
 
   const { deleteJobFunction } = useDeleteJobFunction();
@@ -166,7 +166,7 @@ export const JobFunctions: React.FC = () => {
   // Rows
 
   const editRow = (row: JobFunction) => {
-    openUpdateModal(row);
+    openUpdateJobFunctionModal(row);
   };
 
   const deleteRow = (row: JobFunction) => {
@@ -229,10 +229,10 @@ export const JobFunctions: React.FC = () => {
 
   // Create/update Modal
 
-  const handleOnCreateUpdateModalSaved = (
+  const handleOnJobFunctionFormSaved = (
     response: AxiosResponse<JobFunction>
   ) => {
-    if (!rowToUpdate) {
+    if (!jobFunctionToUpdate) {
       dispatch(
         alertActions.addSuccess(
           // t('terms.jobFunction')
@@ -244,7 +244,7 @@ export const JobFunctions: React.FC = () => {
       );
     }
 
-    closeCreateUpdateModal();
+    closeJobFunctionModal();
     refreshTable();
   };
 
@@ -291,7 +291,7 @@ export const JobFunctions: React.FC = () => {
                   type="button"
                   aria-label="create-job-function"
                   variant={ButtonVariant.primary}
-                  onClick={openCreateModal}
+                  onClick={openCreateJobFunctionModal}
                 >
                   {t("actions.createNew")}
                 </Button>
@@ -319,17 +319,17 @@ export const JobFunctions: React.FC = () => {
         // t('dialog.title.update')
         // t('dialog.title.new')
         // t('terms.jobFunction')
-        title={t(`dialog.title.${rowToUpdate ? "update" : "new"}`, {
+        title={t(`dialog.title.${jobFunctionToUpdate ? "update" : "new"}`, {
           what: t("terms.jobFunction").toLowerCase(),
         })}
         variant={ModalVariant.medium}
-        isOpen={isCreateUpdateModalOpen}
-        onClose={closeCreateUpdateModal}
+        isOpen={isJobFunctionModalOpen}
+        onClose={closeJobFunctionModal}
       >
         <JobFunctionForm
-          jobFunction={rowToUpdate}
-          onSaved={handleOnCreateUpdateModalSaved}
-          onCancel={closeCreateUpdateModal}
+          jobFunction={jobFunctionToUpdate}
+          onSaved={handleOnJobFunctionFormSaved}
+          onCancel={closeJobFunctionModal}
         />
       </Modal>
     </>

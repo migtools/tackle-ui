@@ -122,11 +122,11 @@ export const Stakeholders: React.FC = () => {
   );
 
   const {
-    isOpen: isCreateUpdateModalOpen,
-    entity: rowToUpdate,
-    create: openCreateModal,
-    update: openUpdateModal,
-    close: closeCreateUpdateModal,
+    isOpen: isStakeholderModalOpen,
+    entity: stakeholderToUpdate,
+    create: openCreateStakeholderModal,
+    update: openUpdateStakeholderModal,
+    close: closeStakeholderModal,
   } = useEntityModal<Stakeholder>();
 
   const { deleteStakeholder } = useDeleteStakeholder();
@@ -265,7 +265,7 @@ export const Stakeholders: React.FC = () => {
   };
 
   const editRow = (row: Stakeholder) => {
-    openUpdateModal(row);
+    openUpdateStakeholderModal(row);
   };
 
   const deleteRow = (row: Stakeholder) => {
@@ -328,10 +328,10 @@ export const Stakeholders: React.FC = () => {
 
   // Create/update Modal
 
-  const handleOnCreateUpdateModalSaved = (
+  const handleOnStakeholderFormSaved = (
     response: AxiosResponse<Stakeholder>
   ) => {
-    if (!rowToUpdate) {
+    if (!stakeholderToUpdate) {
       dispatch(
         alertActions.addSuccess(
           // t('terms.stakeholder')
@@ -343,7 +343,7 @@ export const Stakeholders: React.FC = () => {
       );
     }
 
-    closeCreateUpdateModal();
+    closeStakeholderModal();
     refreshTable();
   };
 
@@ -392,7 +392,7 @@ export const Stakeholders: React.FC = () => {
                   type="button"
                   aria-label="create-stakeholder"
                   variant={ButtonVariant.primary}
-                  onClick={openCreateModal}
+                  onClick={openCreateStakeholderModal}
                 >
                   {t("actions.createNew")}
                 </Button>
@@ -419,17 +419,18 @@ export const Stakeholders: React.FC = () => {
       <Modal
         // t('dialog.title.update')
         // t('dialog.title.new')
-        title={t(`dialog.title.${rowToUpdate ? "update" : "new"}`, {
+        // t('terms.stakeholder')
+        title={t(`dialog.title.${stakeholderToUpdate ? "update" : "new"}`, {
           what: t("terms.stakeholder").toLowerCase(),
         })}
         variant={ModalVariant.medium}
-        isOpen={isCreateUpdateModalOpen}
-        onClose={closeCreateUpdateModal}
+        isOpen={isStakeholderModalOpen}
+        onClose={closeStakeholderModal}
       >
         <StakeholderForm
-          stakeholder={rowToUpdate}
-          onSaved={handleOnCreateUpdateModalSaved}
-          onCancel={closeCreateUpdateModal}
+          stakeholder={stakeholderToUpdate}
+          onSaved={handleOnStakeholderFormSaved}
+          onCancel={closeStakeholderModal}
         />
       </Modal>
     </>

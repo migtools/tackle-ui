@@ -135,17 +135,19 @@ export const ApplicationList: React.FC = () => {
   >(new Map([]));
 
   const {
-    isOpen: isCreateUpdateModalOpen,
-    entity: rowToUpdate,
-    create: openCreateModal,
-    update: openUpdateModal,
-    close: closeCreateUpdateModal,
+    isOpen: isApplicationModalOpen,
+    entity: applicationToUpdate,
+    create: openCreateApplicationModal,
+    update: openUpdateApplicationModal,
+    close: closeApplicationModal,
   } = useEntityModal<Application>();
 
-  const [
-    rowToManageDependencies,
-    setRowToManageDependencies,
-  ] = useState<Application>();
+  const {
+    isOpen: isApplicationDependenciesModalOpen,
+    entity: applicationDependenciesToUpdate,
+    update: openUpdateApplicationDependenciesModal,
+    close: closeApplicationDependenciesModal,
+  } = useEntityModal<Application>();
 
   const { deleteApplication } = useDeleteApplication();
   const {
@@ -322,7 +324,7 @@ export const ApplicationList: React.FC = () => {
           rowData: IRowData
         ) => {
           const row: Application = getRow(rowData);
-          setRowToManageDependencies(row);
+          openUpdateApplicationDependenciesModal(row);
         },
       },
       {
@@ -370,7 +372,7 @@ export const ApplicationList: React.FC = () => {
   };
 
   const editRow = (row: Application) => {
-    openUpdateModal(row);
+    openUpdateApplicationModal(row);
   };
 
   const deleteRow = (row: Application) => {
@@ -441,10 +443,10 @@ export const ApplicationList: React.FC = () => {
 
   // Create/update Modal
 
-  const handleOnCreateUpdateModalSaved = (
+  const handleOnApplicationFormSaved = (
     response: AxiosResponse<Application>
   ) => {
-    if (!rowToUpdate) {
+    if (!applicationToUpdate) {
       dispatch(
         alertActions.addSuccess(
           // t('terms.application')
@@ -456,7 +458,7 @@ export const ApplicationList: React.FC = () => {
       );
     }
 
-    closeCreateUpdateModal();
+    closeApplicationModal();
     refreshTable();
   };
 
@@ -599,7 +601,7 @@ export const ApplicationList: React.FC = () => {
                       type="button"
                       aria-label="create-application"
                       variant={ButtonVariant.primary}
-                      onClick={openCreateModal}
+                      onClick={openCreateApplicationModal}
                     >
                       {t("actions.createNew")}
                     </Button>
@@ -643,32 +645,33 @@ export const ApplicationList: React.FC = () => {
       <Modal
         // t('dialog.title.update')
         // t('dialog.title.new')
-        title={t(`dialog.title.${rowToUpdate ? "update" : "new"}`, {
+        // t('terms.application')
+        title={t(`dialog.title.${applicationToUpdate ? "update" : "new"}`, {
           what: t("terms.application").toLowerCase(),
         })}
         variant={ModalVariant.medium}
-        isOpen={isCreateUpdateModalOpen}
-        onClose={closeCreateUpdateModal}
+        isOpen={isApplicationModalOpen}
+        onClose={closeApplicationModal}
       >
         <ApplicationForm
-          application={rowToUpdate}
-          onSaved={handleOnCreateUpdateModalSaved}
-          onCancel={closeCreateUpdateModal}
+          application={applicationToUpdate}
+          onSaved={handleOnApplicationFormSaved}
+          onCancel={closeApplicationModal}
         />
       </Modal>
 
       <Modal
-        isOpen={!!rowToManageDependencies}
-        variant="medium"
+        isOpen={isApplicationDependenciesModalOpen}
+        variant={ModalVariant.medium}
         title={t("composed.manageDependenciesFor", {
-          what: rowToManageDependencies?.name,
+          what: applicationDependenciesToUpdate?.name,
         })}
-        onClose={() => setRowToManageDependencies(undefined)}
+        onClose={closeApplicationDependenciesModal}
       >
-        {rowToManageDependencies && (
+        {applicationDependenciesToUpdate && (
           <ApplicationDependenciesForm
-            application={rowToManageDependencies}
-            onCancel={() => setRowToManageDependencies(undefined)}
+            application={applicationDependenciesToUpdate}
+            onCancel={closeApplicationDependenciesModal}
           />
         )}
       </Modal>

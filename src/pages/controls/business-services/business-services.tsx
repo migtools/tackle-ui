@@ -105,11 +105,11 @@ export const BusinessServices: React.FC = () => {
   );
 
   const {
-    isOpen: isCreateUpdateModalOpen,
-    entity: rowToUpdate,
-    create: openCreateModal,
-    update: openUpdateModal,
-    close: closeCreateUpdateModal,
+    isOpen: isBusinessServiceModalOpen,
+    entity: businessServiceToUpdate,
+    create: openCreateBusinessServiceModal,
+    update: openUpdateBusinessServiceModal,
+    close: closeBusinessServiceModal,
   } = useEntityModal<BusinessService>();
 
   const { deleteBusinessService } = useDeleteBusinessService();
@@ -222,7 +222,7 @@ export const BusinessServices: React.FC = () => {
   // ];
 
   const editRow = (row: BusinessService) => {
-    openUpdateModal(row);
+    openUpdateBusinessServiceModal(row);
   };
 
   const deleteRow = (row: BusinessService) => {
@@ -285,10 +285,10 @@ export const BusinessServices: React.FC = () => {
 
   // Create/update Modal
 
-  const handleOnCreateUpdateModalSaved = (
+  const handleOnBusinessServiceFormSaved = (
     response: AxiosResponse<BusinessService>
   ) => {
-    if (!rowToUpdate) {
+    if (!businessServiceToUpdate) {
       dispatch(
         alertActions.addSuccess(
           // t('terms.businessService')
@@ -300,7 +300,7 @@ export const BusinessServices: React.FC = () => {
       );
     }
 
-    closeCreateUpdateModal();
+    closeBusinessServiceModal();
     refreshTable();
   };
 
@@ -348,7 +348,7 @@ export const BusinessServices: React.FC = () => {
                   type="button"
                   aria-label="create-business-service"
                   variant={ButtonVariant.primary}
-                  onClick={openCreateModal}
+                  onClick={openCreateBusinessServiceModal}
                 >
                   {t("actions.createNew")}
                 </Button>
@@ -375,17 +375,18 @@ export const BusinessServices: React.FC = () => {
       <Modal
         // t('dialog.title.update')
         // t('dialog.title.new')
-        title={t(`dialog.title.${rowToUpdate ? "update" : "new"}`, {
+        // t('terms.businessService')
+        title={t(`dialog.title.${businessServiceToUpdate ? "update" : "new"}`, {
           what: t("terms.businessService").toLowerCase(),
         })}
         variant={ModalVariant.medium}
-        isOpen={isCreateUpdateModalOpen}
-        onClose={closeCreateUpdateModal}
+        isOpen={isBusinessServiceModalOpen}
+        onClose={closeBusinessServiceModal}
       >
         <BusinessServiceForm
-          businessService={rowToUpdate}
-          onSaved={handleOnCreateUpdateModalSaved}
-          onCancel={closeCreateUpdateModal}
+          businessService={businessServiceToUpdate}
+          onSaved={handleOnBusinessServiceFormSaved}
+          onCancel={closeBusinessServiceModal}
         />
       </Modal>
     </>

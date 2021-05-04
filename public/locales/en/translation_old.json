@@ -1,0 +1,20 @@
+{
+    "dialog": {
+        "title": {
+            "newApplication": "New application",
+            "newBusinessService": "New business service",
+            "newJobFunction": "New job function",
+            "newStakeholder": "New stakeholder",
+            "newStakeholderGroup": "New stakeholder group",
+            "updateApplication": "Update application",
+            "updateBusinessService": "Update business service",
+            "updateJobFunction": "Update job function",
+            "updateStakeholder": "Update stakeholder",
+            "updateStakeholderGroup": "Update stakeholder group",
+            "newTag": "New Tag",
+            "newTagType": "New tag type",
+            "updateTag": "Update tag",
+            "updateTagType": "Update tag type"
+        }
+    }
+}
