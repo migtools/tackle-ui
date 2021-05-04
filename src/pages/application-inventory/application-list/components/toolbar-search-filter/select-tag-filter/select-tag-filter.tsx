@@ -4,11 +4,16 @@ import { useTranslation } from "react-i18next";
 import { SelectVariant, ToolbarChip } from "@patternfly/react-core";
 
 import { SimpleSelectFetch, OptionWithValue } from "shared/components";
-import { useFetchTagTypes } from "shared/hooks";
+import { useFetch } from "shared/hooks";
 
-import { Tag } from "api/models";
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
+import { PageRepresentation, Tag, TagType, TagTypePage } from "api/models";
+import { getAllTagTypes, tagTypePageMapper } from "api/apiUtils";
 import { TagTypeSortBy } from "api/rest";
+
+export const getAllTagTypesSortedByRank = () => {
+  return getAllTagTypes({ field: TagTypeSortBy.RANK });
+};
 
 const tagToToolbarChip = (value: Tag): ToolbarChip => ({
   key: `${value.id}`,
@@ -50,14 +55,18 @@ export const SelectTagFilter: React.FC<SelectTagFilterProps> = ({
   // Tag types
 
   const {
-    tagTypes,
+    data: tagTypes,
     isFetching: isFetchingTagTypes,
     fetchError: fetchErrorTagTypes,
-    fetchAllTagTypes,
-  } = useFetchTagTypes();
+    requestFetch: fetchAllTagTypes,
+  } = useFetch<TagTypePage, PageRepresentation<TagType>>({
+    defaultIsFetching: true,
+    onFetch: getAllTagTypesSortedByRank,
+    mapper: tagTypePageMapper,
+  });
 
   useEffect(() => {
-    fetchAllTagTypes({ field: TagTypeSortBy.RANK });
+    fetchAllTagTypes();
   }, [fetchAllTagTypes]);
 
   // Tags

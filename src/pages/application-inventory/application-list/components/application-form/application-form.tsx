@@ -24,13 +24,14 @@ import { useFetch } from "shared/hooks";
 
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 import { createApplication, TagTypeSortBy, updateApplication } from "api/rest";
-import { Application, BusinessService, Tag } from "api/models";
-import { createApplication, updateApplication } from "api/rest";
 import {
   Application,
   BusinessService,
   BusinessServicePage,
   PageRepresentation,
+  Tag,
+  TagType,
+  TagTypePage,
 } from "api/models";
 import {
   getAxiosErrorMessage,
@@ -40,7 +41,13 @@ import {
 import {
   bussinessServicePageMapper,
   getAllBusinessServices,
+  getAllTagTypes,
+  tagTypePageMapper,
 } from "api/apiUtils";
+
+export const getAllTagTypesSortedByRank = () => {
+  return getAllTagTypes({ field: TagTypeSortBy.RANK });
+};
 
 const businesServiceToOption = (
   value: BusinessService
@@ -100,14 +107,18 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
   // TagTypes
 
   const {
-    tagTypes,
+    data: tagTypes,
     isFetching: isFetchingTagTypes,
     fetchError: fetchErrorTagTypes,
-    fetchAllTagTypes,
-  } = useFetchTagTypes();
+    requestFetch: fetchAllTagTypes,
+  } = useFetch<TagTypePage, PageRepresentation<TagType>>({
+    defaultIsFetching: true,
+    onFetch: getAllTagTypesSortedByRank,
+    mapper: tagTypePageMapper,
+  });
 
   useEffect(() => {
-    fetchAllTagTypes({ field: TagTypeSortBy.RANK });
+    fetchAllTagTypes();
   }, [fetchAllTagTypes]);
 
   // Tags

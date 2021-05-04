@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -15,16 +15,26 @@ import {
 } from "@patternfly/react-core";
 
 import { OptionWithValue } from "shared/components";
-import {
-  useFetchApplicationDependencies,
-  useFetchApplications,
-} from "shared/hooks";
+import { useFetch } from "shared/hooks";
 
-import { Application, ApplicationDependency } from "api/models";
+import {
+  Application,
+  ApplicationDependency,
+  ApplicationDependencyPage,
+  ApplicationPage,
+  PageRepresentation,
+} from "api/models";
+
+import {
+  applicationDependencyPageMapper,
+  applicationPageMapper,
+  getAllApplicationDependencies,
+  getAllApplications,
+} from "api/apiUtils";
+import { getAxiosErrorMessage } from "utils/utils";
 
 import { FormContext } from "./form-context";
 import { SelectDependency } from "./select-dependency";
-import { getAxiosErrorMessage } from "utils/utils";
 
 const northToStringFn = (value: ApplicationDependency) => value.from.name;
 const southToStringFn = (value: ApplicationDependency) => value.to.name;
@@ -68,40 +78,66 @@ export const ApplicationDependenciesForm: React.FC<ApplicationDependenciesFormPr
 
   // Dependencies
 
-  const {
-    applicationDependencies: northDependencies,
-    isFetching: isFetchingNorthDependencies,
-    fetchError: fetchErrorNorthDependencies,
-    fetchAllApplicationDependencies: fetchAllNorthDependencies,
-  } = useFetchApplicationDependencies();
-
-  const {
-    applicationDependencies: southDependencies,
-    isFetching: isFetchingSouthDependencies,
-    fetchError: fetchErrorSouthDependencies,
-    fetchAllApplicationDependencies: fetchAllSouthDependencies,
-  } = useFetchApplicationDependencies();
-
-  useEffect(() => {
-    fetchAllNorthDependencies({
+  const getAllNorthApplicationDependencies = useCallback(() => {
+    return getAllApplicationDependencies({
       to: [`${application.id}`],
     });
-  }, [application, fetchAllNorthDependencies]);
+  }, [application]);
 
-  useEffect(() => {
-    fetchAllSouthDependencies({
+  const getAllSouthApplicationDependencies = useCallback(() => {
+    return getAllApplicationDependencies({
       from: [`${application.id}`],
     });
-  }, [application, fetchAllSouthDependencies]);
+  }, [application]);
+
+  const {
+    data: northDependencies,
+    isFetching: isFetchingNorthDependencies,
+    fetchError: fetchErrorNorthDependencies,
+    requestFetch: fetchAllNorthDependencies,
+  } = useFetch<
+    ApplicationDependencyPage,
+    PageRepresentation<ApplicationDependency>
+  >({
+    defaultIsFetching: true,
+    onFetch: getAllNorthApplicationDependencies,
+    mapper: applicationDependencyPageMapper,
+  });
+
+  const {
+    data: southDependencies,
+    isFetching: isFetchingSouthDependencies,
+    fetchError: fetchErrorSouthDependencies,
+    requestFetch: fetchAllSouthDependencies,
+  } = useFetch<
+    ApplicationDependencyPage,
+    PageRepresentation<ApplicationDependency>
+  >({
+    defaultIsFetching: true,
+    onFetch: getAllSouthApplicationDependencies,
+    mapper: applicationDependencyPageMapper,
+  });
+
+  useEffect(() => {
+    fetchAllNorthDependencies();
+  }, [fetchAllNorthDependencies]);
+
+  useEffect(() => {
+    fetchAllSouthDependencies();
+  }, [fetchAllSouthDependencies]);
 
   // Applications
 
   const {
-    applications,
+    data: applications,
     isFetching: isFetchingApplications,
     fetchError: fetchErrorApplications,
-    fetchAllApplications,
-  } = useFetchApplications();
+    requestFetch: fetchAllApplications,
+  } = useFetch<ApplicationPage, PageRepresentation<Application>>({
+    defaultIsFetching: true,
+    onFetch: getAllApplications,
+    mapper: applicationPageMapper,
+  });
 
   useEffect(() => {
     fetchAllApplications();

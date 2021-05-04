@@ -36,13 +36,20 @@ import {
 import {
   useTableControls,
   useDeleteTagType,
-  useFetchTagTypes,
+  useFetch,
   useDeleteTag,
 } from "shared/hooks";
 
 import { getAxiosErrorMessage } from "utils/utils";
-import { TagTypeSortBy, TagTypeSortByQuery } from "api/rest";
-import { SortByQuery, Tag, TagType } from "api/models";
+import { getTagTypes, TagTypeSortBy, TagTypeSortByQuery } from "api/rest";
+import {
+  PageRepresentation,
+  SortByQuery,
+  Tag,
+  TagType,
+  TagTypePage,
+} from "api/models";
+import { tagTypePageMapper } from "api/apiUtils";
 
 import { NewTagTypeModal } from "./components/new-tag-type-modal";
 import { UpdateTagTypeModal } from "./components/update-tag-type-modal";
@@ -119,10 +126,6 @@ export const Tags: React.FC = () => {
   const { deleteTagType } = useDeleteTagType();
   const { deleteTag } = useDeleteTag();
 
-  const { tagTypes, isFetching, fetchError, fetchTagTypes } = useFetchTagTypes(
-    true
-  );
-
   const {
     paginationQuery,
     sortByQuery,
@@ -132,6 +135,32 @@ export const Tags: React.FC = () => {
     sortByQuery: { direction: "asc", index: 1 },
   });
 
+  const fetchTagTypes = useCallback(() => {
+    return getTagTypes(
+      {
+        tagTypes: filtersValue.get(FilterKey.TAG_TYPE),
+        tags: filtersValue.get(FilterKey.TAG),
+      },
+      paginationQuery,
+      toSortByQuery(sortByQuery)
+    );
+  }, [filtersValue, paginationQuery, sortByQuery]);
+
+  const {
+    data: tagTypes,
+    isFetching: isFetchingTagTypes,
+    fetchError: fetchErrorTagTypes,
+    requestFetch: refreshTable,
+  } = useFetch<TagTypePage, PageRepresentation<TagType>>({
+    defaultIsFetching: true,
+    onFetch: fetchTagTypes,
+    mapper: tagTypePageMapper,
+  });
+
+  useEffect(() => {
+    fetchTagTypes();
+  }, [filtersValue, paginationQuery, sortByQuery, fetchTagTypes]);
+
   const {
     isItemSelected: isItemExpanded,
     toggleItemSelected: toggleItemExpanded,
@@ -139,28 +168,6 @@ export const Tags: React.FC = () => {
     items: tagTypes?.data || [],
     isEqual: (a, b) => a.id === b.id,
   });
-
-  const refreshTable = useCallback(() => {
-    fetchTagTypes(
-      {
-        tagTypes: filtersValue.get(FilterKey.TAG_TYPE),
-        tags: filtersValue.get(FilterKey.TAG),
-      },
-      paginationQuery,
-      toSortByQuery(sortByQuery)
-    );
-  }, [filtersValue, paginationQuery, sortByQuery, fetchTagTypes]);
-
-  useEffect(() => {
-    fetchTagTypes(
-      {
-        tagTypes: filtersValue.get(FilterKey.TAG_TYPE),
-        tags: filtersValue.get(FilterKey.TAG),
-      },
-      paginationQuery,
-      toSortByQuery(sortByQuery)
-    );
-  }, [filtersValue, paginationQuery, sortByQuery, fetchTagTypes]);
 
   //
 
@@ -401,7 +408,7 @@ export const Tags: React.FC = () => {
   return (
     <>
       <ConditionalRender
-        when={isFetching && !(tagTypes || fetchError)}
+        when={isFetchingTagTypes && !(tagTypes || fetchErrorTagTypes)}
         then={<AppPlaceholder />}
       >
         <AppTableWithControls
@@ -414,9 +421,9 @@ export const Tags: React.FC = () => {
           columns={columns}
           rows={rows}
           // actions={actions}
-          isLoading={isFetching}
+          isLoading={isFetchingTagTypes}
           loadingVariant="skeleton"
-          fetchError={fetchError}
+          fetchError={fetchErrorTagTypes}
           clearAllFilters={handleOnClearAllFilters}
           filtersApplied={
             Array.from(filtersValue.values()).reduce(

@@ -1,5 +1,7 @@
 import {
   Application,
+  ApplicationDependency,
+  ApplicationDependencyPage,
   ApplicationPage,
   BusinessService,
   BusinessServicePage,
@@ -10,16 +12,24 @@ import {
   StakeholderGroup,
   StakeholderGroupPage,
   StakeholderPage,
+  TagType,
+  TagTypePage,
 } from "./models";
 import {
+  ApplicationSortBy,
   BusinessServiceSortBy,
+  getApplicationDependencies,
+  getApplications,
   getBusinessServices,
   getJobFunctions,
   getStakeholderGroups,
   getStakeholders,
+  getTagTypes,
   JobFunctionSortBy,
   StakeholderGroupSortBy,
   StakeholderSortBy,
+  TagTypeSortBy,
+  TagTypeSortByQuery,
 } from "./rest";
 
 export const getAllBusinessServices = () => {
@@ -54,6 +64,27 @@ export const getAllJobFunctions = () => {
   );
 };
 
+export const getAllTagTypes = (
+  sortBy: TagTypeSortByQuery = { field: TagTypeSortBy.NAME }
+) => {
+  return getTagTypes({}, { page: 1, perPage: 1000 }, sortBy);
+};
+
+export const getAllApplications = () => {
+  return getApplications(
+    {},
+    { page: 1, perPage: 1000 },
+    { field: ApplicationSortBy.NAME }
+  );
+};
+
+export const getAllApplicationDependencies = (filters: {
+  from?: string[];
+  to?: string[];
+}) => {
+  return getApplicationDependencies(filters, { page: 1, perPage: 1000 });
+};
+
 //
 
 export const stakeholderPageMapper = (
@@ -84,6 +115,13 @@ export const jobFunctionPageMapper = (
   data: page._embedded["job-function"],
 });
 
+export const tagTypePageMapper = (
+  page: TagTypePage
+): PageRepresentation<TagType> => ({
+  meta: { count: page.total_count },
+  data: page._embedded["tag-type"],
+});
+
 //
 
 export const applicationPageMapper = (
@@ -91,4 +129,11 @@ export const applicationPageMapper = (
 ): PageRepresentation<Application> => ({
   meta: { count: page.total_count },
   data: page._embedded.application,
+});
+
+export const applicationDependencyPageMapper = (
+  page: ApplicationDependencyPage
+): PageRepresentation<ApplicationDependency> => ({
+  meta: { count: page.total_count },
+  data: page._embedded["applications-dependency"],
 });

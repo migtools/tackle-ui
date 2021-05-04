@@ -18,16 +18,17 @@ import {
   SingleSelectFetchFormikField,
   OptionWithValue,
 } from "shared/components";
-import { useFetchTagTypes } from "shared/hooks";
+import { useFetch } from "shared/hooks";
 
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 import { createTag, updateTag } from "api/rest";
-import { Tag, TagType } from "api/models";
+import { PageRepresentation, Tag, TagType, TagTypePage } from "api/models";
 import {
   getAxiosErrorMessage,
   getValidatedFromError,
   getValidatedFromErrorTouched,
 } from "utils/utils";
+import { getAllTagTypes, tagTypePageMapper } from "api/apiUtils";
 
 const tagTypeToOption = (value: TagType): OptionWithValue<TagType> => ({
   value,
@@ -50,11 +51,15 @@ export const TagForm: React.FC<TagFormProps> = ({ tag, onSaved, onCancel }) => {
   const [error, setError] = useState<AxiosError>();
 
   const {
-    tagTypes,
+    data: tagTypes,
     isFetching: isFetchingTagTypes,
     fetchError: fetchErrorTagTypes,
-    fetchAllTagTypes,
-  } = useFetchTagTypes();
+    requestFetch: fetchAllTagTypes,
+  } = useFetch<TagTypePage, PageRepresentation<TagType>>({
+    defaultIsFetching: true,
+    onFetch: getAllTagTypes,
+    mapper: tagTypePageMapper,
+  });
 
   useEffect(() => {
     fetchAllTagTypes();
