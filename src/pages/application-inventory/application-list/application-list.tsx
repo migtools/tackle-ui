@@ -11,6 +11,7 @@ import {
   DescriptionListDescription,
   DescriptionListGroup,
   DescriptionListTerm,
+  Modal,
   PageSection,
   PageSectionVariants,
   Text,
@@ -30,7 +31,7 @@ import {
   ISeparator,
   sortable,
 } from "@patternfly/react-table";
-import { PencilAltIcon } from "@patternfly/react-icons";
+import { PencilAltIcon, TagIcon } from "@patternfly/react-icons";
 
 import { useDispatch } from "react-redux";
 import { alertActions } from "store/alert";
@@ -71,11 +72,15 @@ import { ApplicationAssessment } from "./components/application-assessment";
 import { ApplicationBusinessService } from "./components/application-business-service";
 
 import { useAssessApplication } from "./hooks/useAssessApplication";
+import { ApplicationTags } from "./components/application-tags/application-tags";
+import { SelectTagFilter } from "./components/toolbar-search-filter/select-tag-filter";
+import ApplicationDependenciesForm from "./components/application-dependencies-form";
 
 enum FilterKey {
   NAME = "name",
   DESCRIPTION = "description",
   BUSINESS_SERVICE = "businessService",
+  TAG = "tag",
 }
 
 const toSortByQuery = (
@@ -89,6 +94,9 @@ const toSortByQuery = (
   switch (sortBy.index) {
     case 2:
       field = ApplicationSortBy.NAME;
+      break;
+    case 6:
+      field = ApplicationSortBy.TAGS;
       break;
     default:
       throw new Error("Invalid column index=" + sortBy.index);
@@ -124,6 +132,10 @@ export const ApplicationList: React.FC = () => {
       key: FilterKey.BUSINESS_SERVICE,
       name: t("terms.businessService"),
     },
+    {
+      key: FilterKey.TAG,
+      name: t("terms.tag"),
+    },
   ];
   const [filtersValue, setFiltersValue] = useState<
     Map<FilterKey, ToolbarChip[]>
@@ -131,6 +143,10 @@ export const ApplicationList: React.FC = () => {
 
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
   const [rowToUpdate, setRowToUpdate] = useState<Application>();
+  const [
+    rowToManageDependencies,
+    setRowToManageDependencies,
+  ] = useState<Application>();
 
   const { deleteApplication } = useDeleteApplication();
   const {
@@ -155,6 +171,7 @@ export const ApplicationList: React.FC = () => {
         businessService: filtersValue
           .get(FilterKey.BUSINESS_SERVICE)
           ?.map((f) => f.key),
+        tag: filtersValue.get(FilterKey.TAG)?.map((f) => f.key),
       },
       paginationQuery,
       toSortByQuery(sortByQuery)
@@ -206,6 +223,7 @@ export const ApplicationList: React.FC = () => {
     { title: t("terms.description"), transforms: [] },
     { title: t("terms.businessService"), transforms: [] },
     { title: t("terms.assessment"), transforms: [cellWidth(10)] },
+    { title: t("terms.tags"), transforms: [sortable, cellWidth(10)] },
     {
       title: "",
       props: {
@@ -238,6 +256,13 @@ export const ApplicationList: React.FC = () => {
         },
         {
           title: (
+            <>
+              <TagIcon /> {item.tags ? item.tags.length : 0}
+            </>
+          ),
+        },
+        {
+          title: (
             <div className="pf-c-inline-edit__action pf-m-enable-editable">
               <Button
                 type="button"
@@ -259,6 +284,12 @@ export const ApplicationList: React.FC = () => {
         <div className="pf-c-table__expandable-row-content">
           <DescriptionList isHorizontal>
             <DescriptionListGroup>
+              <DescriptionListTerm>{t("terms.tags")}</DescriptionListTerm>
+              <DescriptionListDescription>
+                <ApplicationTags application={item} />
+              </DescriptionListDescription>
+            </DescriptionListGroup>
+            <DescriptionListGroup>
               <DescriptionListTerm>{t("terms.comments")}</DescriptionListTerm>
               <DescriptionListDescription>
                 {item.comments}
@@ -277,6 +308,17 @@ export const ApplicationList: React.FC = () => {
     }
 
     const actions: (IAction | ISeparator)[] = [
+      {
+        title: t("actions.manageDependencies"),
+        onClick: (
+          event: React.MouseEvent,
+          rowIndex: number,
+          rowData: IRowData
+        ) => {
+          const row: Application = getRow(rowData);
+          setRowToManageDependencies(row);
+        },
+      },
       {
         title: t("actions.delete"),
         onClick: (
@@ -542,6 +584,17 @@ export const ApplicationList: React.FC = () => {
                         />
                       ),
                     },
+                    {
+                      key: FilterKey.TAG,
+                      input: (
+                        <SelectTagFilter
+                          value={filtersValue.get(FilterKey.TAG)}
+                          onApplyFilter={(values) =>
+                            handleOnAddFilter(FilterKey.TAG, values)
+                          }
+                        />
+                      ),
+                    },
                   ]}
                 />
               </AppTableToolbarToggleGroup>
@@ -605,6 +658,22 @@ export const ApplicationList: React.FC = () => {
         onSaved={handleOnUpdated}
         onCancel={handleOnUpdatedCancel}
       />
+
+      <Modal
+        isOpen={!!rowToManageDependencies}
+        variant="medium"
+        title={t("composed.manageDependenciesFor", {
+          what: rowToManageDependencies?.name,
+        })}
+        onClose={() => setRowToManageDependencies(undefined)}
+      >
+        {rowToManageDependencies && (
+          <ApplicationDependenciesForm
+            application={rowToManageDependencies}
+            onCancel={() => setRowToManageDependencies(undefined)}
+          />
+        )}
+      </Modal>
     </>
   );
 };

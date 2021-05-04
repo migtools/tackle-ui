@@ -1,0 +1,1 @@
+export { useDeleteTag } from "./useDeleteTag";
