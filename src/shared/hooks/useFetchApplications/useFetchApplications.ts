@@ -2,7 +2,11 @@ import { useCallback, useReducer } from "react";
 import { AxiosError } from "axios";
 import { ActionType, createAsyncAction, getType } from "typesafe-actions";
 
-import { getApplications, ApplicationSortByQuery } from "api/rest";
+import {
+  getApplications,
+  ApplicationSortByQuery,
+  ApplicationSortBy,
+} from "api/rest";
 import { PageRepresentation, Application, PageQuery } from "api/models";
 
 export const {
@@ -77,10 +81,12 @@ export interface IState {
       name?: string[];
       description?: string[];
       businessService?: string[];
+      tag?: string[];
     },
     page: PageQuery,
     sortBy?: ApplicationSortByQuery
   ) => void;
+  fetchAllApplications: () => void;
 }
 
 export const useFetchApplications = (
@@ -94,6 +100,7 @@ export const useFetchApplications = (
         name?: string[];
         description?: string[];
         businessService?: string[];
+        tag?: string[];
       },
       page: PageQuery,
       sortBy?: ApplicationSortByQuery
@@ -121,12 +128,39 @@ export const useFetchApplications = (
     []
   );
 
+  const fetchAllApplications = useCallback(() => {
+    dispatch(fetchRequest());
+
+    getApplications(
+      {},
+      { page: 1, perPage: 1000 },
+      { field: ApplicationSortBy.NAME }
+    )
+      .then(({ data }) => {
+        const list = data._embedded.application;
+        const total = data.total_count;
+
+        dispatch(
+          fetchSuccess({
+            data: list,
+            meta: {
+              count: total,
+            },
+          })
+        );
+      })
+      .catch((error: AxiosError) => {
+        dispatch(fetchFailure(error));
+      });
+  }, []);
+
   return {
     applications: state.applications,
     isFetching: state.isFetching,
     fetchError: state.fetchError,
     fetchCount: state.fetchCount,
     fetchApplications,
+    fetchAllApplications,
   };
 };
 

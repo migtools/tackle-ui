@@ -1,13 +1,14 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* 
+* Override select's border due to PostCSS changing it during 'yarn build'
+* https://github.com/patternfly/patternfly-react/issues/5650#issuecomment-818259040
+*/
+.pf-c-select__toggle:before {
+  border-top: var(--pf-c-select__toggle--before--BorderTopWidth) solid
+    var(--pf-c-select__toggle--before--BorderTopColor);
+  border-right: var(--pf-c-select__toggle--before--BorderRightWidth) solid
+    var(--pf-c-select__toggle--before--BorderRightColor);
+  border-bottom: var(--pf-c-select__toggle--before--BorderBottomWidth) solid
+    var(--pf-c-select__toggle--before--BorderBottomColor);
+  border-left: var(--pf-c-select__toggle--before--BorderLeftWidth) solid
+    var(--pf-c-select__toggle--before--BorderLeftColor);
 }
