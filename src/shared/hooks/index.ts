@@ -1,11 +1,4 @@
-export { useDeleteApplication } from "./useDeleteApplication";
-export { useDeleteBusinessService } from "./useDeleteBusinessService";
-export { useDeleteJobFunction } from "./useDeleteJobFunction";
-export { useDeleteStakeholder } from "./useDeleteStakeholder";
-export { useDeleteStakeholderGroup } from "./useDeleteStakeholderGroup";
 export { useFetchApplicationDependencies } from "./useFetchApplicationDependencies";
-export { useDeleteTag } from "./useDeleteTag";
-export { useDeleteTagType } from "./useDeleteTagType";
 export { useDelete } from "./useDelete";
 export { useFetchApplications } from "./useFetchApplications";
 export { useFetchBusinessServices } from "./useFetchBusinessServices";
