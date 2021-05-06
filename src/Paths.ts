@@ -14,8 +14,8 @@ export enum Paths {
 
   applicationInventory = "/application-inventory",
   applicationInventory_applicationList = "/application-inventory/application-list",
-  applicationInventory_assessment = "/application-inventory/assessment/:assessmentId",
-  applicationInventory_review = "/application-inventory/review/:applicationId",
+  applicationInventory_assessment = "/application-inventory/application/:assessmentId/assessment",
+  applicationInventory_review = "/application-inventory/application/:applicationId/review",
 
   reports = "/reports",
 

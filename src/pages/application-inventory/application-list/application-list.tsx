@@ -49,6 +49,7 @@ import {
   useDeleteApplication,
   useTableControls,
   useFetchApplications,
+  useAssessApplication,
 } from "shared/hooks";
 
 import { formatPath, Paths } from "Paths";
@@ -64,7 +65,6 @@ import { SelectBusinessServiceFilter } from "./components/toolbar-search-filter/
 import { ApplicationAssessment } from "./components/application-assessment";
 import { ApplicationBusinessService } from "./components/application-business-service";
 
-import { useAssessApplication } from "./hooks/useAssessApplication";
 import { ApplicationTags } from "./components/application-tags/application-tags";
 import { SelectTagFilter } from "./components/toolbar-search-filter/select-tag-filter";
 import ApplicationDependenciesForm from "./components/application-dependencies-form";
@@ -482,11 +482,35 @@ export const ApplicationList: React.FC = () => {
     assessApplication(
       row,
       (assessment: Assessment) => {
-        history.push(
-          formatPath(Paths.applicationInventory_assessment, {
-            assessmentId: assessment.id,
-          })
-        );
+        const redirectToAssessment = () => {
+          history.push(
+            formatPath(Paths.applicationInventory_assessment, {
+              assessmentId: assessment.id,
+            })
+          );
+        };
+
+        if (assessment.status === "COMPLETE") {
+          dispatch(
+            confirmDialogActions.openDialog({
+              // t("terms.assessment")
+              title: t("composed.editQuestion", {
+                what: t("terms.assessment").toLowerCase(),
+              }),
+              // titleIconVariant: "warning",
+              message: t("message.overrideAssessmentConfirmation"),
+              variant: ButtonVariant.primary,
+              confirmBtnLabel: t("actions.continue"),
+              cancelBtnLabel: t("actions.cancel"),
+              onConfirm: () => {
+                dispatch(confirmDialogActions.closeDialog());
+                redirectToAssessment();
+              },
+            })
+          );
+        } else {
+          redirectToAssessment();
+        }
       },
       (error) => {
         dispatch(alertActions.addDanger(getAxiosErrorMessage(error)));

@@ -1,3 +1,4 @@
+export { useAssessApplication } from "./useAssessApplication";
 export { useDeleteApplication } from "./useDeleteApplication";
 export { useDeleteBusinessService } from "./useDeleteBusinessService";
 export { useDeleteJobFunction } from "./useDeleteJobFunction";

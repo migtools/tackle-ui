@@ -59,6 +59,8 @@
         }
     },
     "message": {
+        "appNotAssesedTitle": "Assessment has not been completed",
+        "appNotAssessedBody": "In order to review an application it must be assessed first. Please assess the application",
         "couldNotFetchBody": "Resource doesn't exists or you don't have access to it",
         "couldNotFetchTitle": "Not available",
         "savingSelection": "Saving selection"

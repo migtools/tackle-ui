@@ -3,16 +3,26 @@ import { useHistory, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
 
-import { Bullseye, FormSection, Grid, GridItem } from "@patternfly/react-core";
-import { BanIcon } from "@patternfly/react-icons";
+import { useDispatch } from "react-redux";
+import { alertActions } from "store/alert";
+
+import {
+  Bullseye,
+  Button,
+  FormSection,
+  Grid,
+  GridItem,
+} from "@patternfly/react-core";
+import { BanIcon, InfoCircleIcon } from "@patternfly/react-icons";
 
 import {
   AppPlaceholder,
   ConditionalRender,
   SimpleEmptyState,
 } from "shared/components";
+import { useAssessApplication } from "shared/hooks";
 
-import { Paths, ReviewRoute } from "Paths";
+import { formatPath, Paths, ReviewRoute } from "Paths";
 
 import {
   getApplicationById,
@@ -21,6 +31,7 @@ import {
   getReviewId,
 } from "api/rest";
 import { Application, Assessment, Review } from "api/models";
+import { getAxiosErrorMessage } from "utils/utils";
 
 import { ReviewForm } from "./components/review-form";
 import { ApplicationDetails } from "./components/application-details";
@@ -30,62 +41,61 @@ import { ApplicationReviewPage } from "./components/application-review-page";
 export const ApplicationReview: React.FC = () => {
   const { t } = useTranslation();
 
+  const dispatch = useDispatch();
+
   const history = useHistory();
   const { applicationId } = useParams<ReviewRoute>();
 
+  const {
+    assessApplication,
+    inProgress: isApplicationAssessInProgress,
+  } = useAssessApplication();
+
   // Application and review
 
-  const [
-    isApplicationAndReviewFetching,
-    setIsFetchingApplicationAndReview,
-  ] = useState(true);
-  const [
-    fetchErrorApplicationAndReview,
-    setFetchErrorApplicationAndReview,
-  ] = useState<AxiosError>();
+  const [isFetching, setIsFetching] = useState(true);
+  const [fetchError, setFetchError] = useState<AxiosError>();
 
   const [application, setApplication] = useState<Application>();
   const [review, setReview] = useState<Review>();
-
-  // Assessment
   const [assessment, setAssessment] = useState<Assessment>();
 
   // Start fetch
 
   useEffect(() => {
     if (applicationId) {
-      setIsFetchingApplicationAndReview(true);
+      setIsFetching(true);
 
-      getApplicationById(applicationId)
-        .then(({ data }) => {
-          setApplication(data);
-          return data.review ? getReviewId(data.review.id!) : undefined;
-        })
-        .then((response) => {
-          if (response) {
-            setReview(response.data);
-          }
+      Promise.all([
+        getAssessments({ applicationId: applicationId }),
+        getApplicationById(applicationId),
+      ])
+        .then(([{ data: assessmentData }, { data: applicationData }]) => {
+          setApplication(applicationData);
 
-          setIsFetchingApplicationAndReview(false);
-          setFetchErrorApplicationAndReview(undefined);
-        })
-        .catch((error) => {
-          setIsFetchingApplicationAndReview(false);
-          setFetchErrorApplicationAndReview(error);
-        });
-    }
-  }, [applicationId]);
+          const assessment = assessmentData[0]
+            ? getAssessmentById(assessmentData[0].id!)
+            : undefined;
+          const review = applicationData.review
+            ? getReviewId(applicationData.review.id!)
+            : undefined;
 
-  useEffect(() => {
-    if (applicationId) {
-      getAssessments({ applicationId: applicationId })
-        .then(({ data }) => {
-          return data[0] ? getAssessmentById(data[0].id!) : undefined;
+          return Promise.all([assessment, review]);
         })
-        .then((assessmentResponse) => {
+        .then(([assessmentResponse, reviewResponse]) => {
           if (assessmentResponse) {
             setAssessment(assessmentResponse.data);
           }
+          if (reviewResponse) {
+            setReview(reviewResponse.data);
+          }
+
+          setIsFetching(false);
+          setFetchError(undefined);
+        })
+        .catch((error) => {
+          setIsFetching(false);
+          setFetchError(error);
         });
     }
   }, [applicationId]);
@@ -94,7 +104,28 @@ export const ApplicationReview: React.FC = () => {
     history.push(Paths.applicationInventory_applicationList);
   };
 
-  if (fetchErrorApplicationAndReview) {
+  const startApplicationAssessment = () => {
+    if (!application) {
+      console.log("Can not assess without an application");
+      return;
+    }
+
+    assessApplication(
+      application,
+      (assessment: Assessment) => {
+        history.push(
+          formatPath(Paths.applicationInventory_assessment, {
+            assessmentId: assessment.id,
+          })
+        );
+      },
+      (error) => {
+        dispatch(alertActions.addDanger(getAxiosErrorMessage(error)));
+      }
+    );
+  };
+
+  if (fetchError) {
     return (
       <ApplicationReviewPage>
         <Bullseye>
@@ -108,12 +139,40 @@ export const ApplicationReview: React.FC = () => {
     );
   }
 
+  if (
+    !isFetching &&
+    (!assessment || (assessment && assessment.status !== "COMPLETE"))
+  ) {
+    return (
+      <ApplicationReviewPage>
+        <Bullseye>
+          <SimpleEmptyState
+            icon={InfoCircleIcon}
+            title={t("message.appNotAssesedTitle")}
+            description={t("message.appNotAssessedBody") + "."}
+            primaryAction={
+              <>
+                {application && (
+                  <Button
+                    variant="primary"
+                    isDisabled={isApplicationAssessInProgress}
+                    isLoading={isApplicationAssessInProgress}
+                    onClick={startApplicationAssessment}
+                  >
+                    {t("actions.assess")}
+                  </Button>
+                )}
+              </>
+            }
+          />
+        </Bullseye>
+      </ApplicationReviewPage>
+    );
+  }
+
   return (
     <ApplicationReviewPage>
-      <ConditionalRender
-        when={isApplicationAndReviewFetching}
-        then={<AppPlaceholder />}
-      >
+      <ConditionalRender when={isFetching} then={<AppPlaceholder />}>
         <Grid hasGutter>
           {application && (
             <GridItem md={5}>

@@ -59,6 +59,8 @@
         }
     },
     "message": {
+        "appNotAssesedTitle": "",
+        "appNotAssessedBody": "",
         "couldNotFetchBody": "El recurso no existe o no tienes permiso para acceder al mismo",
         "couldNotFetchTitle": "No disponible",
         "savingSelection": "Guardando selección"
