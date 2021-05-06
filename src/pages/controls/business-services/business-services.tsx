@@ -221,7 +221,7 @@ export const BusinessServices: React.FC = () => {
   const deleteRow = (row: BusinessService) => {
     dispatch(
       confirmDialogActions.openDialog({
-        // t("terms.bussinessService")
+        // t("terms.businessService")
         title: t("dialog.title.delete", {
           what: t("terms.businessService").toLowerCase(),
         }),
