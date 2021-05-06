@@ -19,6 +19,7 @@ import {
   TagTypePage,
   TagType,
   Tag,
+  Review,
 } from "./models";
 
 export const CONTROLS_BASE_URL = "controls";
@@ -35,6 +36,7 @@ export const TAGS = CONTROLS_BASE_URL + "/tag";
 export const APPLICATIONS = APP_INVENTORY_BASE_URL + "/application";
 export const APPLICATION_DEPENDENCY =
   APP_INVENTORY_BASE_URL + "/applications-dependency";
+export const REVIEW = APP_INVENTORY_BASE_URL + "/review";
 
 export const ASSESSMENTS = PATHFINDER_BASE_URL + "/assessments";
 
@@ -533,8 +535,22 @@ export const deleteApplicationDependency = (id: number): AxiosPromise => {
 
 //
 
+export const getReviewId = (id: number | string): AxiosPromise<Review> => {
+  return APIClient.get(`${REVIEW}/${id}`);
+};
+
+export const createReview = (obj: Review): AxiosPromise<Review> => {
+  return APIClient.post(`${REVIEW}`, obj);
+};
+
+export const updateReview = (obj: Review): AxiosPromise<Review> => {
+  return APIClient.put(`${REVIEW}/${obj.id}`, obj);
+};
+
+//
+
 export const getAssessments = (filters: {
-  applicationId?: number;
+  applicationId?: number | string;
 }): AxiosPromise<Assessment[]> => {
   const params = {
     applicationId: filters.applicationId,

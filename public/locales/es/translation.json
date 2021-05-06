@@ -13,7 +13,8 @@
         "manageDependencies": "Administrar dependencias",
         "next": "Siguiente",
         "review": "Revisar",
-        "save": "Guardar"
+        "save": "Guardar",
+        "submitReview": "Enviar revisión"
     },
     "colors": {
         "blue": "Azul",
@@ -27,11 +28,13 @@
         "add": "Agregar {{what}}",
         "applicationAssessment": "Evaluación de la aplicación",
         "applicationInventory": "Inventario de aplicaciones",
+        "businessCriticality": "Business criticality (1=bajo, 10=alto)",
         "manageDependenciesFor": "Administrar dependencias para {{what}}",
         "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
         "noDataStateTitle": "No existen {{what}} disponibles",
         "selectMany": "Seleccione {{what}}",
-        "selectOne": "Seleccione un(a) {{what}}"
+        "selectOne": "Seleccione un(a) {{what}}",
+        "workPriority": "Work priority (1=bajo, 10=alto)"
     },
     "dialog": {
         "message": {
@@ -77,6 +80,7 @@
         "controls": "Controles",
         "description": "Descripción",
         "displayName": "Nombre a mostrar",
+        "effortEstimation": "Esfuerzo estimado",
         "email": "Email",
         "group": "Grupo",
         "group(s)": "Grupo(s)",
@@ -90,8 +94,10 @@
         "notAvailable": "No disponible",
         "notStarted": "No empezado",
         "owner": "Propietario",
+        "proposedAction": "Acción propuesta",
         "rank": "Rango",
         "review": "Revisar",
+        "select": "Seleccione",
         "southboundDependencies": "Dependencias del sur",
         "stakeholder": "Interesado",
         "stakeholder(s)": "Interesado(s)",
@@ -114,6 +120,7 @@
     },
     "validation": {
         "email": "Este campo requiere un email válido.",
+        "max": "Este campo debe de ser menor a {{value}}.",
         "maxLength": "Este campo debe de tener menos de {{length}} caracteres.",
         "min": "Este campo debe de ser mayor a {{value}}.",
         "minLength": "Este campo debe de tener al menos {{length}} caracteres.",

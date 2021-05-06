@@ -1,109 +1,321 @@
-import React, { useState } from "react";
-import { AxiosError } from "axios";
+import React, { useMemo } from "react";
+import { AxiosPromise, AxiosResponse } from "axios";
 import { useTranslation } from "react-i18next";
-import { useFormik, FormikProvider } from "formik";
+import { useFormik, FormikProvider, FormikHelpers } from "formik";
+import { object, string, mixed } from "yup";
 
 import {
   ActionGroup,
-  Alert,
   Button,
   ButtonVariant,
   Form,
   FormGroup,
-  TextInput,
+  NumberInput,
+  TextArea,
 } from "@patternfly/react-core";
 
-import { getAxiosErrorMessage } from "utils/utils";
+import { OptionWithValue, SingleSelectFormikField } from "shared/components";
 
-export const ReviewForm: React.FC = () => {
+import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
+import {
+  getValidatedFromError,
+  getValidatedFromErrorTouched,
+} from "utils/utils";
+import { number } from "yup";
+import { Application, Review } from "api/models";
+import { createReview, updateReview } from "api/rest";
+
+const actionOptions: SimpleOption[] = [
+  {
+    key: "regost",
+    name: "Rehost",
+  },
+  {
+    key: "replatform",
+    name: "Replatform",
+  },
+  {
+    key: "refactor",
+    name: "Refactor",
+  },
+  {
+    key: "repurchase",
+    name: "Repurchase",
+  },
+  {
+    key: "retire",
+    name: "Retire",
+  },
+  {
+    key: "retain",
+    name: "Retain",
+  },
+];
+
+const effortOptions: SimpleOption[] = [
+  {
+    key: "small",
+    name: "Small",
+  },
+  {
+    key: "medium",
+    name: "Medium",
+  },
+  {
+    key: "large",
+    name: "Large",
+  },
+  {
+    key: "extra_large",
+    name: "Extra large",
+  },
+];
+
+interface SimpleOption {
+  key: string;
+  name: string;
+}
+
+const toOptionWithValue = (
+  value: SimpleOption
+): OptionWithValue<SimpleOption> => ({
+  value,
+  toString: () => value.name,
+});
+
+export interface FormValues {
+  action?: OptionWithValue<SimpleOption>;
+  effort?: OptionWithValue<SimpleOption>;
+  criticality?: number;
+  priority?: number;
+  comments?: string;
+}
+
+export interface IReviewFormProps {
+  application: Application;
+  review?: Review;
+  onSaved: (response: AxiosResponse<Review>) => void;
+  onCancel: () => void;
+}
+
+export const ReviewForm: React.FC<IReviewFormProps> = ({
+  application,
+  review,
+  onSaved,
+  onCancel,
+}) => {
   const { t } = useTranslation();
 
-  const [error] = useState<AxiosError>();
+  // Formik
 
-  const formik = useFormik({
+  const validationSchema = object().shape({
+    action: mixed().required(t("validation.required")),
+    effort: mixed().required(t("validation.required")),
+    criticality: number()
+      .required(t("validation.required"))
+      .min(1, t("validation.min", { value: 1 }))
+      .max(10, t("validation.max", { value: 10 })),
+    priority: number()
+      .required(t("validation.required"))
+      .min(1, t("validation.min", { value: 1 }))
+      .max(10, t("validation.max", { value: 10 })),
+    comments: string()
+      .trim()
+      .max(1024, t("validation.maxLength", { length: 1024 })),
+  });
+
+  const onSubmit = (
+    formValues: FormValues,
+    formikHelpers: FormikHelpers<FormValues>
+  ) => {
+    const payload: Review = {
+      ...review,
+      proposedAction: formValues.action ? formValues.action.value.key : "",
+      effortEstimate: formValues.effort ? formValues.effort.value.key : "",
+      businessCriticality: formValues.criticality || 0,
+      workPriority: formValues.priority || 0,
+      comments: formValues.comments,
+      application: application,
+    };
+
+    let promise: AxiosPromise<Review>;
+    if (review) {
+      promise = updateReview({
+        ...review,
+        ...payload,
+      });
+    } else {
+      promise = createReview(payload);
+    }
+
+    promise
+      .then((response) => {
+        formikHelpers.setSubmitting(false);
+        onSaved(response);
+      })
+      .catch((error) => {
+        formikHelpers.setSubmitting(false);
+        // onError(error);
+      });
+  };
+
+  const actionInitialValue:
+    | OptionWithValue<SimpleOption>
+    | undefined = useMemo(() => {
+    let result: OptionWithValue<SimpleOption> | undefined;
+    if (review) {
+      const exists = actionOptions.find((f) => f.key === review.proposedAction);
+      result = toOptionWithValue(
+        exists || { key: review.proposedAction, name: t("terms.unknown") }
+      );
+    }
+    return result;
+  }, [review, t]);
+
+  const effortInitialValue:
+    | OptionWithValue<SimpleOption>
+    | undefined = useMemo(() => {
+    let result: OptionWithValue<SimpleOption> | undefined;
+    if (review) {
+      const exists = effortOptions.find((f) => f.key === review.effortEstimate);
+      result = toOptionWithValue(
+        exists || { key: review.effortEstimate, name: t("terms.unknown") }
+      );
+    }
+    return result;
+  }, [review, t]);
+
+  const formik = useFormik<FormValues>({
     enableReinitialize: true,
-    initialValues: {},
-    // validationSchema: validationSchema,
-    onSubmit: () => {},
+    initialValues: {
+      action: actionInitialValue,
+      effort: effortInitialValue,
+      criticality: review?.businessCriticality || 1,
+      priority: review?.workPriority || 1,
+      comments: review?.comments || "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: onSubmit,
   });
 
   return (
     <FormikProvider value={formik}>
       <Form onSubmit={formik.handleSubmit}>
-        {error && (
-          <Alert
-            variant="danger"
-            isInline
-            title={getAxiosErrorMessage(error)}
-          />
-        )}
         <FormGroup
-          label={t("terms.email")}
-          fieldId="email"
+          label={t("terms.proposedAction")}
+          fieldId="action"
           isRequired={true}
-          // validated={getValidatedFromError(formik.errors.email)}
-          // helperTextInvalid={formik.errors.email}
+          validated={getValidatedFromError(formik.errors.action)}
+          helperTextInvalid={formik.errors.action}
         >
-          <TextInput
-            type="text"
-            name="email"
-            aria-label="email"
-            aria-describedby="email"
-            isRequired={true}
-            // onChange={onChangeField}
-            // onBlur={formik.handleBlur}
-            // value={formik.values.email}
-            // validated={getValidatedFromErrorTouched(
-            //   formik.errors.email,
-            //   formik.touched.email
-            // )}
-          />
-        </FormGroup>
-        <FormGroup
-          label={t("terms.displayName")}
-          fieldId="displayName"
-          isRequired={true}
-          // validated={getValidatedFromError(formik.errors.displayName)}
-          // helperTextInvalid={formik.errors.displayName}
-        >
-          <TextInput
-            type="text"
-            name="displayName"
-            aria-label="displayName"
-            aria-describedby="displayName"
-            isRequired={true}
-            // onChange={onChangeField}
-            // onBlur={formik.handleBlur}
-            // value={formik.values.displayName}
-            // validated={getValidatedFromErrorTouched(
-            //   formik.errors.displayName,
-            //   formik.touched.displayName
-            // )}
-          />
-        </FormGroup>
-        <FormGroup
-          label={t("terms.jobFunction")}
-          fieldId="jobFunction"
-          isRequired={false}
-          // validated={getValidatedFromError(formik.errors.jobFunction)}
-          // helperTextInvalid={formik.errors.jobFunction}
-        >
-          {/* <SingleSelectFetchFormikField
-            fieldConfig={{ name: "jobFunction" }}
+          <SingleSelectFormikField
+            fieldConfig={{ name: "action" }}
             selectConfig={{
               variant: "typeahead",
-              "aria-label": "job-function",
-              "aria-describedby": "job-function",
-              placeholderText: t("composed.selectOne", {
-                what: t("terms.jobFunction").toLowerCase(),
-              }),
-              menuAppendTo: () => document.body,
+              "aria-label": "action",
+              "aria-describedby": "action",
+              placeholderText: t("terms.select"),
               maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
-              options: (jobFunctions?.data || []).map(jobFunctionToOption),
-              isFetching: isFetchingJobFunctions,
-              fetchError: fetchErrorJobFunctions,
+              options: actionOptions.map(toOptionWithValue),
             }}
-          /> */}
+          />
+        </FormGroup>
+        <FormGroup
+          label={t("terms.effortEstimation")}
+          fieldId="effort"
+          isRequired={true}
+          validated={getValidatedFromError(formik.errors.effort)}
+          helperTextInvalid={formik.errors.effort}
+        >
+          <SingleSelectFormikField
+            fieldConfig={{ name: "effort" }}
+            selectConfig={{
+              variant: "typeahead",
+              "aria-label": "effort",
+              "aria-describedby": "effort",
+              placeholderText: t("terms.select"),
+              maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
+              options: effortOptions.map(toOptionWithValue),
+            }}
+          />
+        </FormGroup>
+        <FormGroup
+          label={t("composed.businessCriticality")}
+          fieldId="criticality"
+          isRequired={true}
+          validated={getValidatedFromError(formik.errors.criticality)}
+          helperTextInvalid={formik.errors.criticality}
+        >
+          <NumberInput
+            inputName="criticality"
+            inputAriaLabel="criticality"
+            minusBtnAriaLabel="minus"
+            plusBtnAriaLabel="plus"
+            value={formik.values.criticality}
+            onMinus={() => {
+              formik.setFieldValue(
+                "criticality",
+                (formik.values.criticality || 0) - 1
+              );
+            }}
+            onChange={formik.handleChange}
+            onPlus={() => {
+              formik.setFieldValue(
+                "criticality",
+                (formik.values.criticality || 0) + 1
+              );
+            }}
+          />
+        </FormGroup>
+        <FormGroup
+          label={t("composed.workPriority")}
+          fieldId="priority"
+          isRequired={true}
+          validated={getValidatedFromError(formik.errors.priority)}
+          helperTextInvalid={formik.errors.priority}
+        >
+          <NumberInput
+            inputName="priority"
+            inputAriaLabel="priority"
+            minusBtnAriaLabel="minus"
+            plusBtnAriaLabel="plus"
+            value={formik.values.priority}
+            onMinus={() => {
+              formik.setFieldValue(
+                "priority",
+                (formik.values.priority || 0) - 1
+              );
+            }}
+            onChange={formik.handleChange}
+            onPlus={() => {
+              formik.setFieldValue(
+                "priority",
+                (formik.values.priority || 0) + 1
+              );
+            }}
+          />
+        </FormGroup>
+        <FormGroup
+          label={t("terms.comments")}
+          fieldId="comments"
+          isRequired={false}
+          validated={getValidatedFromError(formik.errors.comments)}
+          helperTextInvalid={formik.errors.comments}
+        >
+          <TextArea
+            type="text"
+            name="comments"
+            aria-label="comments"
+            aria-describedby="comments"
+            isRequired={false}
+            onChange={(_, event) => formik.handleChange(event)}
+            onBlur={formik.handleBlur}
+            value={formik.values.comments}
+            validated={getValidatedFromErrorTouched(
+              formik.errors.comments,
+              formik.touched.comments
+            )}
+          />
         </FormGroup>
 
         <ActionGroup>
@@ -118,14 +330,14 @@ export const ReviewForm: React.FC = () => {
               formik.isValidating
             }
           >
-            {t("actions.create")}
+            {t("actions.submitReview")}
           </Button>
           <Button
             type="button"
             aria-label="cancel"
             variant={ButtonVariant.link}
             isDisabled={formik.isSubmitting || formik.isValidating}
-            onClick={() => {}}
+            onClick={onCancel}
           >
             {t("actions.cancel")}
           </Button>

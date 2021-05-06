@@ -74,6 +74,12 @@ export interface Application {
 
 export interface Review {
   id?: number;
+  proposedAction: string;
+  effortEstimate: string;
+  businessCriticality: number;
+  workPriority: number;
+  comments?: string;
+  application?: Application;
 }
 
 export interface ApplicationDependency {

@@ -10,7 +10,7 @@ import {
 import { Application, Assessment } from "api/models";
 
 export interface IApplicationDetailsProps {
-  application?: Application;
+  application: Application;
   assessment?: Assessment;
 }
 
@@ -23,13 +23,13 @@ export const ApplicationDetails: React.FC<IApplicationDetailsProps> = ({
       <DescriptionListGroup>
         <DescriptionListTerm>Application name</DescriptionListTerm>
         <DescriptionListDescription>
-          {application?.name}
+          {application.name}
         </DescriptionListDescription>
       </DescriptionListGroup>
       <DescriptionListGroup>
         <DescriptionListTerm>Description</DescriptionListTerm>
         <DescriptionListDescription>
-          {application?.description}
+          {application.description}
         </DescriptionListDescription>
       </DescriptionListGroup>
       <DescriptionListGroup>
@@ -37,6 +37,7 @@ export const ApplicationDetails: React.FC<IApplicationDetailsProps> = ({
         <DescriptionListDescription>
           {assessment?.questionnaire.categories
             .map((f) => f.comment)
+            .filter((f) => f !== undefined && f.length > 0)
             .join(". ")}
         </DescriptionListDescription>
       </DescriptionListGroup>
