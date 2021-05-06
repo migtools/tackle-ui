@@ -2283,10 +2283,10 @@
     "@react-keycloak/core" "^3.2.0"
     hoist-non-react-statics "^3.3.2"
 
-"@redhat-cloud-services/frontend-components-notifications@3.0.3":
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/@redhat-cloud-services/frontend-components-notifications/-/frontend-components-notifications-3.0.3.tgz#b83ef396d2a7d65889d5554a3346039683d90516"
-  integrity sha512-H3wLzn05GA5ntLDAxGGneAEtsjcFQoaG+WUz3RPQBEZBnFrd3bcDU42ucXEqH9GaDy/zZf1l0SXbVK/efpLJtQ==
+"@redhat-cloud-services/frontend-components-notifications@3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@redhat-cloud-services/frontend-components-notifications/-/frontend-components-notifications-3.1.0.tgz#d0d7ec32e8d88b75a1aef0b2ebb1e12eecf93632"
+  integrity sha512-gHN424/3TJ1kPtk5Dos+aScUL+QjkmKhKhyiSDNN2o7LzhN+J+d2xA0bCx2mfEBspqHG+1nTiHpZbgQ3l0kntw==
   dependencies:
     "@redhat-cloud-services/frontend-components-utilities" "*"
 
