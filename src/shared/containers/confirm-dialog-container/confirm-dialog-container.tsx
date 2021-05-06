@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "store/rootReducer";
@@ -19,20 +19,8 @@ export const ConfirmDialogContainer: React.FC = () => {
     confirmDialogSelectors.isProcessing(state)
   );
 
-  const title = useSelector((state: RootState) =>
-    confirmDialogSelectors.title(state)
-  );
-  const message = useSelector((state: RootState) =>
-    confirmDialogSelectors.message(state)
-  );
-  const confirmBtnLabel = useSelector((state: RootState) =>
-    confirmDialogSelectors.confirmBtnLabel(state)
-  );
-  const cancelBtnLabel = useSelector((state: RootState) =>
-    confirmDialogSelectors.cancelBtnLabel(state)
-  );
-  const variant = useSelector((state: RootState) =>
-    confirmDialogSelectors.variant(state)
+  const modal = useSelector((state: RootState) =>
+    confirmDialogSelectors.modal(state)
   );
 
   const onConfirm = useSelector((state: RootState) =>
@@ -43,18 +31,22 @@ export const ConfirmDialogContainer: React.FC = () => {
     dispatch(confirmDialogActions.closeDialog());
   };
 
+  useEffect(() => {
+    console.log(modal);
+  });
   return (
     <ConfirmDialog
       isOpen={isOpen}
-      title={title}
-      message={message}
+      title={modal.title}
+      titleIconVariant={modal.titleIconVariant}
+      message={modal.message}
       inProgress={isProcessing}
       onClose={onCancel}
       onConfirm={onConfirm}
       onCancel={onCancel}
-      confirmBtnLabel={confirmBtnLabel}
-      cancelBtnLabel={cancelBtnLabel}
-      variant={variant}
+      confirmBtnLabel={modal.confirmBtnLabel}
+      cancelBtnLabel={modal.cancelBtnLabel}
+      variant={modal.variant}
     />
   );
 };

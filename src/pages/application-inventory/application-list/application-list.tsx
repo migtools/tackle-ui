@@ -369,8 +369,12 @@ export const ApplicationList: React.FC = () => {
   const deleteRow = (row: Application) => {
     dispatch(
       confirmDialogActions.openDialog({
-        title: t("dialog.title.delete", { what: row.name }),
-        message: t("dialog.message.delete", { what: row.name }),
+        // t("terms.application")
+        title: t("dialog.title.delete", {
+          what: t("terms.application").toLowerCase(),
+        }),
+        titleIconVariant: "warning",
+        message: t("dialog.message.delete"),
         variant: ButtonVariant.danger,
         confirmBtnLabel: t("actions.delete"),
         cancelBtnLabel: t("actions.cancel"),
