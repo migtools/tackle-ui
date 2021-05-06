@@ -10,7 +10,7 @@ The UI web console for the tackle project.
 git clone https://github.com/konveyor/tackle-ui
 ```
 
-## Start dependent services
+## Start application's service dependencies
 
 Tackle UI requires the following services in order to work properly:
 
@@ -19,9 +19,7 @@ Tackle UI requires the following services in order to work properly:
 - [tackle-pathfinder](https://github.com/konveyor/tackle-pathfinder)
 - [keycloak](https://www.keycloak.org/)
 
-### Start dependent services with docker-compose
-
-Start all services using `docker-compose.yml`:
+You can start all services using `docker-compose.yml`:
 
 ```shell
 docker-compose up
@@ -43,11 +41,11 @@ yarn start
 
 You should be able to open http://localhost:3000 and start working on the UI.
 
-# Start the UI and use a custom dependent service
+# Start the UI and use a custom application's service dependency
 
-As described in the section [Start the UI](#start-the-ui) it is possible to start all dependent services, but what if you want the UI use your custom version of [tackle-controls](https://github.com/konveyor/tackle-controls), [tackle-application-inventory](https://github.com/konveyor/tackle-application-inventory), or [tackle-pathfinder](https://github.com/konveyor/tackle-pathfinder)? You can start your custom dependent service and let the UI point to your service using `src/setupProxy.js`.
+As described in the section [Start the UI](#start-the-ui) it is possible to start all application's service dependencies, but what if you want the UI use your custom version of [tackle-controls](https://github.com/konveyor/tackle-controls), [tackle-application-inventory](https://github.com/konveyor/tackle-application-inventory), or [tackle-pathfinder](https://github.com/konveyor/tackle-pathfinder)? You can start your custom application's service dependency and let the UI point to your service using `src/setupProxy.js`.
 
-The process for using a custom dependent service is the same for all of them. The following section has an example of a custom [tackle-controls](https://github.com/konveyor/tackle-controls) that you can replicate for the rest of services.
+The process for using a custom application's service dependency is the same for all of them. The following section has an example of a custom [tackle-controls](https://github.com/konveyor/tackle-controls) that you can replicate for the rest of services.
 
 ## Custom tackle-controls
 
@@ -103,9 +101,9 @@ module.exports = function (app) {
 };
 ```
 
-### Start other dependencies
+### Start application's service dependencies
 
-Start all services using `docker-compose.yml`:
+You can start all services using `docker-compose.yml`:
 
 ```shell
 docker-compose up
