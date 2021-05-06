@@ -4,6 +4,7 @@
         "back": "Back",
         "cancel": "Cancel",
         "close": "Close",
+        "continue": "",
         "create": "Create",
         "createNew": "Create new",
         "createTag": "Create tag",
@@ -29,6 +30,7 @@
         "applicationAssessment": "Application assessment",
         "applicationInventory": "Application inventory",
         "businessCriticality": "Business criticality (1=low, 10=high)",
+        "editQuestion": "",
         "manageDependenciesFor": "Manage dependencies for {{what}}",
         "noDataStateBody": "Create a new {{what}} to start seeing data here",
         "noDataStateTitle": "No {{what}} available",
@@ -63,6 +65,7 @@
         "appNotAssessedBody": "In order to review an application it must be assessed first. Please assess the application",
         "couldNotFetchBody": "Resource doesn't exists or you don't have access to it",
         "couldNotFetchTitle": "Not available",
+        "overrideAssessmentConfirmation": "",
         "savingSelection": "Saving selection"
     },
     "sidebar": {

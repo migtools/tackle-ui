@@ -4,6 +4,7 @@
         "back": "Atrás",
         "cancel": "Cancelar",
         "close": "Cerrar",
+        "continue": "",
         "create": "Crear",
         "createNew": "Crear nuevo",
         "createTag": "Crear etiqueta",
@@ -29,6 +30,7 @@
         "applicationAssessment": "Evaluación de la aplicación",
         "applicationInventory": "Inventario de aplicaciones",
         "businessCriticality": "Business criticality (1=bajo, 10=alto)",
+        "editQuestion": "",
         "manageDependenciesFor": "Administrar dependencias para {{what}}",
         "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
         "noDataStateTitle": "No existen {{what}} disponibles",
@@ -63,6 +65,7 @@
         "appNotAssessedBody": "",
         "couldNotFetchBody": "El recurso no existe o no tienes permiso para acceder al mismo",
         "couldNotFetchTitle": "No disponible",
+        "overrideAssessmentConfirmation": "",
         "savingSelection": "Guardando selección"
     },
     "sidebar": {
