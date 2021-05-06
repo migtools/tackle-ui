@@ -2,84 +2,32 @@
 
 The UI web console for the tackle project.
 
-# Development
+# Starting the UI
 
-Follow the set of instructions below to start the UI in development mode.
-
-# Clone repository
+## Clone repository
 
 ```shell
 git clone https://github.com/konveyor/tackle-ui
 ```
 
-# Start dependencies
+## Start dependent services
 
-This project depends on other resources:
+Tackle UI requires the following services in order to work properly:
 
-- Keycloak
-- Controls
+- [tackle-controls](https://github.com/konveyor/tackle-controls)
+- [tackle-application-inventory](https://github.com/konveyor/tackle-application-inventory)
+- [tackle-pathfinder](https://github.com/konveyor/tackle-pathfinder)
+- [keycloak](https://www.keycloak.org/)
 
-## Start dependencies with docker-compose
+### Start dependent services with docker-compose
 
-Start the dependencies using `docker-compose.yml`:
+Start all services using `docker-compose.yml`:
 
 ```shell
 docker-compose up
 ```
 
-## Start dependencies with Docker
-
-### Create a docker network
-
-```shell
-docker network create konveyor
-```
-
-### Start keycloak
-
-```shell
-docker run -d \
---network konveyor --network-alias keycloak \
--p 8180:8080 \
--e KEYCLOAK_USER=admin \
--e KEYCLOAK_PASSWORD=admin \
--e KEYCLOAK_IMPORT=/tmp/konveyor-realm.json \
--e DB_VENDOR=h2 \
--v $(pwd)/konveyor-realm.json:/tmp/konveyor-realm.json:z \
-quay.io/keycloak/keycloak:12.0.2
-```
-
-### Start controls
-
-Start the controls' database:
-
-```shell
-docker run -d \
---network konveyor --network-alias controls-db \
--p 5433:5432 \
--e POSTGRES_USER=user \
--e POSTGRES_PASSWORD=password \
--e POSTGRES_DB=controls_db \
-postgres:13.1
-```
-
-Start the controls:
-
-```shell
-docker run -d \
---network konveyor --network-alias controls \
--p 8081:8080 \
--e QUARKUS_HTTP_PORT=8080 \
--e QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://controls-db:5432/controls_db \
--e QUARKUS_DATASOURCE_USERNAME=user \
--e QUARKUS_DATASOURCE_PASSWORD=password \
--e QUARKUS_OIDC_AUTH_SERVER_URL=http://keycloak:8080/auth/realms/konveyor \
--e QUARKUS_OIDC_CLIENT_ID=controls-api \
--e QUARKUS_OIDC_CREDENTIALS_SECRET=secret \
-quay.io/konveyor/tackle-controls:latest-native
-```
-
-# Start the UI
+## Start the UI
 
 Install the npm dependencies:
 
@@ -95,15 +43,23 @@ yarn start
 
 You should be able to open http://localhost:3000 and start working on the UI.
 
-# Use tackle-controls in dev mode
+# Start the UI and use a custom dependent service
 
-Fork/clone the `tackle-controls` repository:
+As described in the section [Start the UI](#start-the-ui) it is possible to start all dependent services, but what if you want the UI use your custom version of [tackle-controls](https://github.com/konveyor/tackle-controls), [tackle-application-inventory](https://github.com/konveyor/tackle-application-inventory), or [tackle-pathfinder](https://github.com/konveyor/tackle-pathfinder)? You can start your custom dependent service and let the UI point to your service using `src/setupProxy.js`.
+
+The process for using a custom dependent service is the same for all of them. The following section has an example of a custom [tackle-controls](https://github.com/konveyor/tackle-controls) that you can replicate for the rest of services.
+
+## Custom tackle-controls
+
+Fork/clone [tackle-controls](https://github.com/konveyor/tackle-controls):
 
 ```shell
 git clone https://github.com/konveyor/tackle-controls
 ```
 
-Start a database which will be used by the `tackle-controls` project:
+### Start tackle-controls database
+
+Start a database which will be used by `tackle-controls`:
 
 ```shell
 docker run -d -p 5432:5432 \
@@ -113,7 +69,9 @@ docker run -d -p 5432:5432 \
 postgres:13.1
 ```
 
-Move your terminal to the `tackle-controls` repository you cloned and then:
+### Start tackle-controls
+
+Move your terminal to where you cloned `tackle-controls` and then:
 
 ```shell
 ./mvnw quarkus:dev \
@@ -125,6 +83,8 @@ Move your terminal to the `tackle-controls` repository you cloned and then:
 -Dquarkus.oidc.credentials.secret=secret \
 -Dquarkus.oidc.auth-server-url=http://localhost:8180/auth/realms/konveyor
 ```
+
+### Edit src/setupProxy.js
 
 Finally, open `src/setupProxy.js` and change the port (from 8081 to 8080) of the `/api/controls` endpoint. It should look like:
 
@@ -143,8 +103,20 @@ module.exports = function (app) {
 };
 ```
 
-You need to restart the local ui server. Stop the ui server and then execute:
+### Start other dependencies
+
+Start all services using `docker-compose.yml`:
+
+```shell
+docker-compose up
+```
+
+### Start the UI
+
+You can start the UI using:
 
 ```shell
 yarn start
 ```
+
+You should be able to open http://localhost:3000 and start working on the UI; notice that this time the UI will point to the custom `tackle-controls` service you started rather than the service comming from `docker-compose.yml`.
