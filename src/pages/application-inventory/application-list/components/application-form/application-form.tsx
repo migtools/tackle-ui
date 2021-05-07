@@ -23,7 +23,12 @@ import {
 import { useFetchBusinessServices, useFetchTagTypes } from "shared/hooks";
 
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
-import { createApplication, TagTypeSortBy, updateApplication } from "api/rest";
+import {
+  createApplication,
+  getApplications,
+  TagTypeSortBy,
+  updateApplication,
+} from "api/rest";
 import { Application, BusinessService, Tag } from "api/models";
 import {
   getAxiosErrorMessage,
@@ -158,7 +163,17 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
       .trim()
       .required(t("validation.required"))
       .min(3, t("validation.minLength", { length: 3 }))
-      .max(120, t("validation.maxLength", { length: 120 })),
+      .max(120, t("validation.maxLength", { length: 120 }))
+      .test("duplicate", t("validation.duplicate"), async (value) => {
+        return await getApplications(
+          { name: [value || ""] },
+          { page: 1, perPage: 2 }
+        ).then(({ data }) => {
+          return (
+            !value || !data._embedded.application.some((f) => f.name === value)
+          );
+        });
+      }),
     description: string()
       .trim()
       .max(250, t("validation.maxLength", { length: 250 })),
