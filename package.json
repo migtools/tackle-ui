@@ -70,6 +70,8 @@
   "devDependencies": {
     "@cypress/code-coverage": "^3.9.5",
     "@cypress/instrument-cra": "^1.4.0",
+    "@cypress/react": "^5.5.0",
+    "@cypress/webpack-dev-server": "^1.1.6",
     "@storybook/addon-actions": "^6.1.14",
     "@storybook/addon-essentials": "^6.1.14",
     "@storybook/addon-links": "^6.1.14",
