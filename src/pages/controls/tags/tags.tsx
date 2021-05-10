@@ -158,8 +158,8 @@ export const Tags: React.FC = () => {
   });
 
   useEffect(() => {
-    fetchTagTypes();
-  }, [filtersValue, paginationQuery, sortByQuery, fetchTagTypes]);
+    refreshTable();
+  }, [filtersValue, paginationQuery, sortByQuery, refreshTable]);
 
   const {
     isItemSelected: isItemExpanded,
