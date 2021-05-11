@@ -105,7 +105,8 @@
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
       "!<rootDir>/node_modules/",
-      "!src/**/*.stories.*"
+      "!src/**/*.stories.*",
+      "!src/**/*.cypress.*"
     ]
   },
   "husky": {
