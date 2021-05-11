@@ -18,7 +18,7 @@
   "nodeVersion": "system",
   "component": {
     "componentFolder": "src",
-    "testFiles": "**/__tests__/*spec.tsx",
+    "testFiles": "**/cypress/*.cypress.tsx",
     "viewportHeight": 500,
     "viewportWidth": 700
   }
