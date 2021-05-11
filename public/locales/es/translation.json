@@ -13,9 +13,9 @@
         "edit": "Editar",
         "manageDependencies": "Administrar dependencias",
         "next": "Siguiente",
-        "save": "Guardar",
-        "saveAsDraft": "Guardar como borrador"
         "review": "Revisar",
+        "save": "Guardar",
+        "saveAsDraft": "Guardar como borrador",
         "submitReview": "Enviar revisión"
     },
     "colors": {
@@ -30,8 +30,8 @@
         "add": "Agregar {{what}}",
         "applicationAssessment": "Evaluación de la aplicación",
         "applicationInventory": "Inventario de aplicaciones",
-        "editQuestion": "¿Editart {{what}}?",
         "businessCriticality": "Business criticality (1=bajo, 10=alto)",
+        "editQuestion": "¿Editart {{what}}?",
         "manageDependenciesFor": "Administrar dependencias para {{what}}",
         "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
         "noDataStateTitle": "No existen {{what}} disponibles",
