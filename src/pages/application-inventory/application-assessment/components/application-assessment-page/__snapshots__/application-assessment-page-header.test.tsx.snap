@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ApplicationAssessmentPageHeader Renders without crashing 1`] = `
+<PageHeader
+  breadcrumbs={
+    Array [
+      Object {
+        "path": "/application-inventory/application-list",
+        "title": "terms.applications",
+      },
+      Object {
+        "path": "/application-inventory/assessment/:assessmentId",
+        "title": "terms.assessment",
+      },
+    ]
+  }
+  description={
+    <Text
+      component="p"
+    />
+  }
+  menuActions={Array []}
+  title="composed.applicationAssessment"
+/>
+`;

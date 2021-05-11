@@ -497,7 +497,7 @@ export const ApplicationList: React.FC = () => {
               title: t("composed.editQuestion", {
                 what: t("terms.assessment").toLowerCase(),
               }),
-              // titleIconVariant: "warning",
+              titleIconVariant: "warning",
               message: t("message.overrideAssessmentConfirmation"),
               variant: ButtonVariant.primary,
               confirmBtnLabel: t("actions.continue"),

@@ -564,6 +564,10 @@ export const createAssessment = (obj: Assessment): AxiosPromise<Assessment> => {
   return APIClient.post(`${ASSESSMENTS}`, obj);
 };
 
+export const patchAssessment = (obj: Assessment): AxiosPromise<Assessment> => {
+  return APIClient.patch(`${ASSESSMENTS}/${obj.id}`, obj);
+};
+
 export const getAssessmentById = (
   id: number | string
 ): AxiosPromise<Assessment> => {
