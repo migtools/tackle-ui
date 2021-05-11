@@ -88,8 +88,7 @@ export const BusinessServiceForm: React.FC<BusinessServiceFormProps> = ({
       .trim()
       .required(t("validation.required"))
       .min(3, t("validation.minLength", { length: 3 }))
-      .max(120, t("validation.maxLength", { length: 120 }))
-      .matches(/^[- \w]+$/, t("validation.onlyCharactersAndUnderscore")),
+      .max(120, t("validation.maxLength", { length: 120 })),
     description: string()
       .trim()
       .max(250, t("validation.maxLength", { length: 250 })),

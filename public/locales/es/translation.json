@@ -129,7 +129,6 @@
         "maxLength": "Este campo debe de tener menos de {{length}} caracteres.",
         "min": "Este campo debe de ser mayor a {{value}}.",
         "minLength": "Este campo debe de tener al menos {{length}} caracteres.",
-        "onlyCharactersAndUnderscore": "Este campo debe de contener solo caracteres alfanuméricos incluyendo el subguión.",
         "required": "Este campo es requerido."
     }
 }
