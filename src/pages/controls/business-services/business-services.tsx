@@ -323,9 +323,9 @@ export const BusinessServices: React.FC = () => {
           count={businessServices ? businessServices.meta.count : 0}
           pagination={paginationQuery}
           sortBy={sortByQuery}
-          handlePaginationChange={handlePaginationChange}
-          handleSortChange={handleSortChange}
-          columns={columns}
+          onPaginationChange={handlePaginationChange}
+          onSort={handleSortChange}
+          cells={columns}
           rows={rows}
           // actions={actions}
           isLoading={isFetching}

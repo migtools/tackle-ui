@@ -91,6 +91,7 @@ export interface ApplicationDependency {
 // Pathfinder
 
 export type AssessmentStatus = "EMPTY" | "STARTED" | "COMPLETE";
+export type AssessmentAnswerRisk = "GREEN" | "AMBER" | "RED" | "UNKNOWN";
 
 export interface Assessment {
   id?: number;
@@ -126,6 +127,7 @@ export interface QuestionOption {
   order: number;
   option: string;
   checked: boolean;
+  risk: AssessmentAnswerRisk;
 }
 
 export interface Assessment {

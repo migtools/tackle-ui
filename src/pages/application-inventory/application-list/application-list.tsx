@@ -142,9 +142,14 @@ export const ApplicationList: React.FC = () => {
   ] = useState<Application>();
 
   const { deleteApplication } = useDeleteApplication();
+
   const {
     assessApplication,
     inProgress: isApplicationAssessInProgress,
+  } = useAssessApplication();
+  const {
+    getCurrentAssessment,
+    inProgress: isApplicationReviewInProgress,
   } = useAssessApplication();
 
   const {
@@ -533,11 +538,33 @@ export const ApplicationList: React.FC = () => {
   };
 
   const startApplicationReview = (row: Application) => {
-    history.push(
-      formatPath(Paths.applicationInventory_review, {
-        applicationId: row.id,
-      })
+    getCurrentAssessment(
+      row,
+      (assessment?: Assessment) => {
+        if (!assessment || (assessment && assessment.status !== "COMPLETE")) {
+          dispatch(
+            alertActions.addDanger(
+              "You must assess the application before reviewing it"
+            )
+          );
+        } else {
+          history.push(
+            formatPath(Paths.applicationInventory_review, {
+              applicationId: row.id,
+            })
+          );
+        }
+      },
+      (error) => {
+        dispatch(alertActions.addDanger(getAxiosErrorMessage(error)));
+      }
     );
+
+    // history.push(
+    //   formatPath(Paths.applicationInventory_review, {
+    //     applicationId: row.id,
+    //   })
+    // );
   };
 
   const handleOnReviewSelectedRow = () => {
@@ -570,12 +597,12 @@ export const ApplicationList: React.FC = () => {
             count={applications ? applications.meta.count : 0}
             pagination={paginationQuery}
             sortBy={sortByQuery}
-            handlePaginationChange={handlePaginationChange}
-            handleSortChange={handleSortChange}
+            onPaginationChange={handlePaginationChange}
+            onSort={handleSortChange}
             onCollapse={collapseRow}
             onSelect={selectRow}
             canSelectAll={false}
-            columns={columns}
+            cells={columns}
             rows={rows}
             actionResolver={actionResolver}
             areActionsDisabled={areActionsDisabled}
@@ -687,7 +714,11 @@ export const ApplicationList: React.FC = () => {
                       aria-label="review-application"
                       variant={ButtonVariant.primary}
                       onClick={handleOnReviewSelectedRow}
-                      isDisabled={selectedRows.length !== 1}
+                      isDisabled={
+                        selectedRows.length !== 1 ||
+                        isApplicationReviewInProgress
+                      }
+                      isLoading={isApplicationReviewInProgress}
                     >
                       {t("actions.review")}
                     </Button>

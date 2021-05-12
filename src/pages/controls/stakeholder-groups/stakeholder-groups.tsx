@@ -349,10 +349,10 @@ export const StakeholderGroups: React.FC = () => {
           count={stakeholderGroups ? stakeholderGroups.meta.count : 0}
           pagination={paginationQuery}
           sortBy={sortByQuery}
-          handlePaginationChange={handlePaginationChange}
-          handleSortChange={handleSortChange}
+          onPaginationChange={handlePaginationChange}
+          onSort={handleSortChange}
           onCollapse={collapseRow}
-          columns={columns}
+          cells={columns}
           rows={rows}
           // actions={actions}
           isLoading={isFetching}

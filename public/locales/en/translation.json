@@ -76,6 +76,7 @@
         "reports": "Reports"
     },
     "terms": {
+        "answer": "Answer",
         "application": "Application",
         "applications": "Applications",
         "assessment": "Assessment",
@@ -102,8 +103,10 @@
         "notStarted": "Not started",
         "owner": "Owner",
         "proposedAction": "Proposed action",
+        "question": "Question",
         "rank": "Rank",
         "review": "Review",
+        "risk": "Risk",
         "select": "Select",
         "southboundDependencies": "Southbound dependencies",
         "stakeholder": "Stakeholder",

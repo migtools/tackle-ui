@@ -9,9 +9,14 @@ import { alertActions } from "store/alert";
 import {
   Bullseye,
   Button,
+  Card,
+  CardHeader,
   FormSection,
   Grid,
   GridItem,
+  PageSection,
+  Text,
+  TextContent,
 } from "@patternfly/react-core";
 import { BanIcon, InfoCircleIcon } from "@patternfly/react-icons";
 
@@ -33,10 +38,11 @@ import {
 import { Application, Assessment, Review } from "api/models";
 import { getAxiosErrorMessage } from "utils/utils";
 
-import { ReviewForm } from "./components/review-form";
-import { ApplicationDetails } from "./components/application-details";
-import { ApplicationAssessmentDonutChart } from "./components/application-assessment-donut-chart";
 import { ApplicationReviewPage } from "./components/application-review-page";
+import { ApplicationDetails } from "./components/application-details";
+import { ReviewForm } from "./components/review-form";
+import { ApplicationAssessmentDonutChart } from "./components/application-assessment-donut-chart";
+import { ApplicationAssessmentSummaryTable } from "./components/application-assessment-summary-table";
 
 export const ApplicationReview: React.FC = () => {
   const { t } = useTranslation();
@@ -171,37 +177,51 @@ export const ApplicationReview: React.FC = () => {
   }
 
   return (
-    <ApplicationReviewPage>
-      <ConditionalRender when={isFetching} then={<AppPlaceholder />}>
-        <Grid hasGutter>
-          {application && (
-            <GridItem md={5}>
-              <div className="pf-c-form">
-                <FormSection>
-                  <ApplicationDetails
-                    application={application}
-                    assessment={assessment}
-                  />
-                </FormSection>
-                <FormSection>
-                  <ReviewForm
-                    application={application}
-                    review={review}
-                    onSaved={redirectToApplicationList}
-                    onCancel={redirectToApplicationList}
-                  />
-                </FormSection>
-              </div>
-            </GridItem>
-          )}
-          <GridItem md={1}></GridItem>
-          {assessment && (
-            <GridItem md={6}>
-              <ApplicationAssessmentDonutChart assessment={assessment} />
-            </GridItem>
-          )}
-        </Grid>
-      </ConditionalRender>
-    </ApplicationReviewPage>
+    <>
+      <ApplicationReviewPage>
+        <ConditionalRender when={isFetching} then={<AppPlaceholder />}>
+          <Grid hasGutter>
+            {application && (
+              <GridItem md={5}>
+                <div className="pf-c-form">
+                  <FormSection>
+                    <ApplicationDetails
+                      application={application}
+                      assessment={assessment}
+                    />
+                  </FormSection>
+                  <FormSection>
+                    <ReviewForm
+                      application={application}
+                      review={review}
+                      onSaved={redirectToApplicationList}
+                      onCancel={redirectToApplicationList}
+                    />
+                  </FormSection>
+                </div>
+              </GridItem>
+            )}
+            <GridItem md={1}></GridItem>
+            {assessment && (
+              <GridItem md={6}>
+                <ApplicationAssessmentDonutChart assessment={assessment} />
+              </GridItem>
+            )}
+          </Grid>
+        </ConditionalRender>
+      </ApplicationReviewPage>
+      {assessment && (
+        <PageSection>
+          <Card>
+            <CardHeader>
+              <TextContent>
+                <Text component="h3">Assessment summary</Text>
+              </TextContent>
+            </CardHeader>
+            <ApplicationAssessmentSummaryTable assessment={assessment} />
+          </Card>
+        </PageSection>
+      )}
+    </>
   );
 };

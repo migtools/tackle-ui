@@ -76,6 +76,7 @@
         "reports": "Reportes"
     },
     "terms": {
+        "answer": "Respuesta",
         "application": "Applicación",
         "applications": "Applicaciones",
         "assessment": "Evaluación",
@@ -102,8 +103,10 @@
         "notStarted": "No empezado",
         "owner": "Propietario",
         "proposedAction": "Acción propuesta",
+        "question": "Pregunta",
         "rank": "Rango",
         "review": "Revisar",
+        "risk": "Riesgo",
         "select": "Seleccione",
         "southboundDependencies": "Dependencias del sur",
         "stakeholder": "Interesado",
