@@ -130,42 +130,6 @@ export interface QuestionOption {
   risk: Risk;
 }
 
-export interface Assessment {
-  id?: number;
-  applicationId: number;
-  status: AssessmentStatus;
-  stakeholders?: number[];
-  stakeholderGroups?: number[];
-  questionnaire: Questionnaire;
-}
-
-export interface Questionnaire {
-  categories: QuestionnaireCategory[];
-}
-
-export interface QuestionnaireCategory {
-  id: number;
-  order: number;
-  title?: string;
-  comment?: string;
-  questions: Question[];
-}
-
-export interface Question {
-  id: number;
-  order: number;
-  question: string;
-  description: string;
-  options: QuestionOption[];
-}
-
-export interface QuestionOption {
-  id: number;
-  order: number;
-  option: string;
-  checked: boolean;
-}
-
 // Pagination
 
 export interface BusinessServicePage {

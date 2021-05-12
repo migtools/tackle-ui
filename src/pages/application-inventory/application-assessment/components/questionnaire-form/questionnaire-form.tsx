@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Field } from "formik";
 import { useTranslation } from "react-i18next";
 
@@ -30,6 +30,16 @@ export const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({
   category,
 }) => {
   const { t } = useTranslation();
+
+  // Force the wizard parent to reset the scroll
+  useEffect(() => {
+    const parentWizardBody = document.getElementsByClassName(
+      "pf-c-wizard__main-body"
+    );
+    if (parentWizardBody && parentWizardBody[0]) {
+      parentWizardBody[0].scrollIntoView();
+    }
+  }, []);
 
   const sortedQuestions = useMemo(() => {
     return category.questions.sort((a, b) => a.order - b.order);

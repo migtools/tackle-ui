@@ -31,7 +31,7 @@
         "applicationAssessment": "Evaluación de la aplicación",
         "applicationInventory": "Inventario de aplicaciones",
         "businessCriticality": "Business criticality (1=bajo, 10=alto)",
-        "editQuestion": "¿Editart {{what}}?",
+        "editQuestion": "Editar {{what}}?",
         "manageDependenciesFor": "Administrar dependencias para {{what}}",
         "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
         "noDataStateTitle": "No existen {{what}} disponibles",
