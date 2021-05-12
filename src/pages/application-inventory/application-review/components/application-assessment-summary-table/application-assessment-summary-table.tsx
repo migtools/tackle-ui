@@ -14,7 +14,11 @@ import {
   AppTableToolbarToggleGroup,
   AppTableWithControls,
 } from "shared/components";
-import { useFilter, useTableControls, useTableFilter } from "shared/hooks";
+import {
+  useToolbarFilter,
+  useTableControls,
+  useTableFilter,
+} from "shared/hooks";
 
 import { Assessment, Risk } from "api/models";
 
@@ -51,11 +55,11 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
 
   const {
     filters: filtersValue,
-    filtersApplied,
+    isPresent: areFiltersPresent,
     setFilter,
     removeFilter,
     clearAllFilters,
-  } = useFilter<ToolbarChip>();
+  } = useToolbarFilter<ToolbarChip>();
 
   // Table
 
@@ -175,7 +179,7 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
       cells={columns}
       rows={rows}
       isLoading={false}
-      filtersApplied={filtersApplied}
+      filtersApplied={areFiltersPresent}
       toolbarClearAllFilters={clearAllFilters}
       toolbarToggle={
         <AppTableToolbarToggleGroup

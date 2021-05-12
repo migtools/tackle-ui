@@ -4,21 +4,23 @@ import { getToolbarChipKey } from "utils/utils";
 
 // Hook
 
-type FilterValue = string | ToolbarChip;
+type FilterType = string | ToolbarChip;
 
 interface HookState<T> {
   filters: Map<string, T[]>;
-  filtersApplied: boolean;
+  isPresent: boolean;
   addFilter: (key: string, value: T) => void;
   setFilter: (key: string, value: T[]) => void;
-  removeFilter: (key: string, value: FilterValue | FilterValue[]) => void;
+  removeFilter: (key: string, value: FilterType | FilterType[]) => void;
   clearAllFilters: () => void;
 }
 
-export const useFilter = <T extends FilterValue>(): HookState<T> => {
-  const [filters, setFilters] = useState<Map<string, T[]>>(new Map([]));
+export const useToolbarFilter = <T extends FilterType>(
+  initialValue: Map<string, T[]> = new Map()
+): HookState<T> => {
+  const [filters, setFilters] = useState<Map<string, T[]>>(initialValue);
 
-  const filtersApplied =
+  const isPresent =
     Array.from(filters.values()).reduce(
       (previous, current) => [...previous, ...current],
       []
@@ -35,9 +37,9 @@ export const useFilter = <T extends FilterValue>(): HookState<T> => {
     setFilters((current) => new Map(current).set(key, value));
   };
 
-  const removeFilter = (key: string, value: FilterValue | FilterValue[]) => {
+  const removeFilter = (key: string, value: FilterType | FilterType[]) => {
     setFilters((current) => {
-      let elementsToBeRemoved: FilterValue[];
+      let elementsToBeRemoved: FilterType[];
       if (Array.isArray(value)) {
         elementsToBeRemoved = [...value];
       } else {
@@ -46,7 +48,7 @@ export const useFilter = <T extends FilterValue>(): HookState<T> => {
 
       const newValue = (current.get(key) || []).filter((f) => {
         const fkey = getToolbarChipKey(f);
-        return elementsToBeRemoved.some((r) => {
+        return !elementsToBeRemoved.some((r) => {
           const rKey = getToolbarChipKey(r);
           return fkey === rKey;
         });
@@ -68,7 +70,7 @@ export const useFilter = <T extends FilterValue>(): HookState<T> => {
 
   return {
     filters,
-    filtersApplied,
+    isPresent,
     addFilter,
     setFilter,
     removeFilter,

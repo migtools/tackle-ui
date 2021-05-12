@@ -2,6 +2,7 @@
 
 exports[`AppTable Renders without crashing 1`] = `
 <Table
+  aria-label="main-table"
   borders={true}
   canSelectAll={true}
   canSortFavorites={true}

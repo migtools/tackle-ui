@@ -42,7 +42,7 @@ exports[`AppTableWithControls Renders adding toolbar 1`] = `
     </ToolbarContent>
   </Toolbar>
   <AppTable
-    columns={
+    cells={
       Array [
         Object {
           "title": "Col1",
@@ -116,7 +116,7 @@ exports[`AppTableWithControls Renders without crashing 1`] = `
     </ToolbarContent>
   </Toolbar>
   <AppTable
-    columns={
+    cells={
       Array [
         Object {
           "title": "Col1",
