@@ -1,7 +1,7 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Label } from "@patternfly/react-core";
+import { Label, ToolbarChip } from "@patternfly/react-core";
 import {
   cellWidth,
   ICell,
@@ -10,10 +10,19 @@ import {
   TableText,
 } from "@patternfly/react-table";
 
-import { AppTableWithControls } from "shared/components";
-import { useTableControls, useTableFilter } from "shared/hooks";
+import {
+  AppTableToolbarToggleGroup,
+  AppTableWithControls,
+} from "shared/components";
+import { useFilter, useTableControls, useTableFilter } from "shared/hooks";
 
 import { Assessment, Risk } from "api/models";
+import { ToolbarSearchFilter } from "pages/application-inventory/application-list/components/toolbar-search-filter";
+import { SelectRiskFilter } from "./components/select-risk-filter";
+
+enum FilterKey {
+  RISK = "risk",
+}
 
 interface ITableItem {
   questionValue: string;
@@ -29,6 +38,26 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
   assessment,
 }) => {
   const { t } = useTranslation();
+
+  // Filters
+
+  const filters = [
+    {
+      key: FilterKey.RISK,
+      name: t("terms.risk"),
+    },
+  ];
+
+  const {
+    filters: filtersValue,
+    filtersApplied,
+    addFilter,
+    setFilter,
+    removeFilter,
+    clearAllFilters,
+  } = useFilter();
+
+  // Table
 
   const tableItems: ITableItem[] = useMemo(() => {
     return assessment.questionnaire.categories
@@ -122,6 +151,8 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
     });
   });
 
+  //
+
   return (
     <AppTableWithControls
       count={filteredItems.length}
@@ -132,8 +163,30 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
       cells={columns}
       rows={rows}
       isLoading={false}
-      filtersApplied={false}
-      clearAllFilters={() => {}}
+      filtersApplied={filtersApplied}
+      toolbarClearAllFilters={clearAllFilters}
+      toolbarToggle={
+        <AppTableToolbarToggleGroup
+          options={filters}
+          filtersValue={filtersValue}
+          onDeleteFilter={removeFilter}
+        >
+          <ToolbarSearchFilter
+            options={filters}
+            filterInputs={[
+              {
+                key: FilterKey.RISK,
+                input: (
+                  <SelectRiskFilter
+                    value={filtersValue.get(FilterKey.RISK)}
+                    onChange={(values) => setFilter(FilterKey.RISK, values)}
+                  />
+                ),
+              },
+            ]}
+          />
+        </AppTableToolbarToggleGroup>
+      }
     />
   );
 };

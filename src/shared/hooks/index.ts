@@ -13,5 +13,6 @@ export { useFetchJobFunctions } from "./useFetchJobFunctions";
 export { useFetchStakeholderGroups } from "./useFetchStakeholderGroups";
 export { useFetchStakeholders } from "./useFetchStakeholders";
 export { useFetchTagTypes } from "./useFetchTagTypes";
+export { useFilter } from "./useFilter";
 export { useTableControls } from "./useTableControls";
 export { useTableFilter } from "./useTableFilter";

@@ -358,7 +358,7 @@ export const StakeholderGroups: React.FC = () => {
           isLoading={isFetching}
           loadingVariant="skeleton"
           fetchError={fetchError}
-          clearAllFilters={handleOnClearAllFilters}
+          toolbarClearAllFilters={handleOnClearAllFilters}
           filtersApplied={
             Array.from(filtersValue.values()).reduce(
               (previous, current) => [...previous, ...current],

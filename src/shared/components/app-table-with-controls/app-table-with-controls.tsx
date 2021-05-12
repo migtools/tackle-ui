@@ -29,7 +29,7 @@ export interface IAppTableWithControlsProps extends IAppTableProps {
 
   toolbar?: any;
   toolbarToggle?: any;
-  clearAllFilters?: () => void;
+  toolbarClearAllFilters?: () => void;
 }
 
 export const AppTableWithControls: React.FC<IAppTableWithControlsProps> = ({
@@ -39,7 +39,7 @@ export const AppTableWithControls: React.FC<IAppTableWithControlsProps> = ({
 
   toolbar,
   toolbarToggle,
-  clearAllFilters,
+  toolbarClearAllFilters,
 
   ...rest
 }) => {
@@ -48,7 +48,7 @@ export const AppTableWithControls: React.FC<IAppTableWithControlsProps> = ({
       <Toolbar
         className="pf-m-toggle-group-container"
         collapseListedFiltersBreakpoint="xl"
-        clearAllFilters={clearAllFilters}
+        clearAllFilters={toolbarClearAllFilters}
       >
         <ToolbarContent>
           {toolbarToggle && (
