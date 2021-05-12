@@ -125,7 +125,7 @@ export const ApplicationAssessment: React.FC = () => {
     formikHelpers: FormikHelpers<IFormValues>
   ) => {
     if (!assessment) {
-      console.log("An assessment must exist before saving a new one");
+      console.log("An assessment must exist in order to save the form");
       formikHelpers.setSubmitting(false);
       return;
     }

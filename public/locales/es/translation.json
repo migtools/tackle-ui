@@ -28,7 +28,7 @@
         "add": "Agregar {{what}}",
         "applicationAssessment": "Evaluación de la aplicación",
         "applicationInventory": "Inventario de aplicaciones",
-        "editQuestion": "¿Editart {{what}}?",
+        "editQuestion": "Editar {{what}}?",
         "manageDependenciesFor": "Administrar dependencias para {{what}}",
         "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
         "noDataStateTitle": "No existen {{what}} disponibles",
