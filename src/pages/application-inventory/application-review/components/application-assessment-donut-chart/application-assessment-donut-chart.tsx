@@ -53,7 +53,7 @@ export const ApplicationAssessmentDonutChart: React.FC<IApplicationAssessmentDon
     <div style={{ height: "230px", width: "230px" }}>
       <ChartDonut
         ariaDesc="Number of question with risk"
-        ariaTitle="Risk"
+        // ariaTitle="Risk"
         constrainToVisibleArea={true}
         data={[
           { x: "Green", y: charData.green },

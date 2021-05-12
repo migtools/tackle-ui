@@ -26,7 +26,7 @@ export interface IAppTableProps extends TableProps {
 export const AppTable: React.FC<IAppTableProps> = ({
   cells,
   rows,
-  "aria-label": ariaLabel,
+  "aria-label": ariaLabel = "main-table",
 
   isLoading,
   fetchError,

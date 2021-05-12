@@ -35,8 +35,7 @@ export interface IAppTableWithControlsProps extends IAppTableProps {
 export const AppTableWithControls: React.FC<IAppTableWithControlsProps> = ({
   count,
   pagination,
-  onPaginationChange: handlePaginationChange,
-  onSort: handleSortChange,
+  onPaginationChange,
 
   toolbar,
   toolbarToggle,
@@ -65,17 +64,17 @@ export const AppTableWithControls: React.FC<IAppTableWithControlsProps> = ({
             <SimplePagination
               count={count}
               params={pagination}
-              onChange={handlePaginationChange}
+              onChange={onPaginationChange}
               isTop={true}
             />
           </ToolbarItem>
         </ToolbarContent>
       </Toolbar>
-      <AppTable onSort={handleSortChange} {...rest} />
+      <AppTable {...rest} />
       <SimplePagination
         count={count}
         params={pagination}
-        onChange={handlePaginationChange}
+        onChange={onPaginationChange}
       />
     </div>
   );

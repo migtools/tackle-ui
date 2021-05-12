@@ -1,1 +1,1 @@
-export { useTableControls } from "./useTableControls";
+export { useTableFilter } from "./useTableFilter";

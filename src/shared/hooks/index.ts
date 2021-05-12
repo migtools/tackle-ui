@@ -14,3 +14,4 @@ export { useFetchStakeholderGroups } from "./useFetchStakeholderGroups";
 export { useFetchStakeholders } from "./useFetchStakeholders";
 export { useFetchTagTypes } from "./useFetchTagTypes";
 export { useTableControls } from "./useTableControls";
+export { useTableFilter } from "./useTableFilter";
