@@ -60,7 +60,7 @@ export const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({
   };
 
   return (
-    <Stack hasGutter className="feria">
+    <Stack hasGutter>
       <StackItem>
         <TextContent>
           <Text component="h1">{category.title}</Text>
