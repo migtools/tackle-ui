@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Label, ToolbarChip } from "@patternfly/react-core";
@@ -17,8 +17,9 @@ import {
 import { useFilter, useTableControls, useTableFilter } from "shared/hooks";
 
 import { Assessment, Risk } from "api/models";
-import { ToolbarSearchFilter } from "pages/application-inventory/application-list/components/toolbar-search-filter";
+
 import { SelectRiskFilter } from "./components/select-risk-filter";
+import { DEFAULT_RISK_LABELS } from "Constants";
 
 enum FilterKey {
   RISK = "risk",
@@ -51,11 +52,10 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
   const {
     filters: filtersValue,
     filtersApplied,
-    addFilter,
     setFilter,
     removeFilter,
     clearAllFilters,
-  } = useFilter();
+  } = useFilter<ToolbarChip>();
 
   // Table
 
@@ -78,9 +78,12 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
     b: ITableItem,
     columnIndex?: number
   ) => {
+    const aData = DEFAULT_RISK_LABELS.get(a.riskValue);
+    const bData = DEFAULT_RISK_LABELS.get(b.riskValue);
+
     switch (columnIndex) {
       case 2: // Risk
-        return a.riskValue.localeCompare(b.riskValue);
+        return (aData?.order || 0) - (bData?.order || 0);
       default:
         return 0;
     }
@@ -98,7 +101,16 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
     sortBy,
     compareToByColumn,
     pagination,
-    filterItem: () => true,
+    filterItem: (item) => {
+      let result: boolean = true;
+
+      const risks = filtersValue.get(FilterKey.RISK)?.map((f) => f.key);
+      if (risks && risks.length > 0) {
+        result = risks.some((f) => f === item.riskValue);
+      }
+
+      return result;
+    },
   });
 
   const columns: ICell[] = [
@@ -171,19 +183,9 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
           filtersValue={filtersValue}
           onDeleteFilter={removeFilter}
         >
-          <ToolbarSearchFilter
-            options={filters}
-            filterInputs={[
-              {
-                key: FilterKey.RISK,
-                input: (
-                  <SelectRiskFilter
-                    value={filtersValue.get(FilterKey.RISK)}
-                    onChange={(values) => setFilter(FilterKey.RISK, values)}
-                  />
-                ),
-              },
-            ]}
+          <SelectRiskFilter
+            value={filtersValue.get(FilterKey.RISK)}
+            onChange={(values) => setFilter(FilterKey.RISK, values)}
           />
         </AppTableToolbarToggleGroup>
       }

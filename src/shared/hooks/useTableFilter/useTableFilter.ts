@@ -22,7 +22,7 @@ export const useTableFilter = <T>({
   items,
   sortBy,
   pagination,
-  filterItem: filter,
+  filterItem,
   compareToByColumn: compareTo,
 }: HookArgs<T>): HookState<T> => {
   //  Sort
@@ -35,7 +35,7 @@ export const useTableFilter = <T>({
   }
 
   // Filter
-  const filteredItems = sortedItems.filter(filter);
+  const filteredItems = sortedItems.filter(filterItem);
 
   // Paginate
   const pageItems = filteredItems.slice(

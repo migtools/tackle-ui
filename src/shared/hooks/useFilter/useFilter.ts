@@ -1,27 +1,22 @@
 import { useState } from "react";
 import { ToolbarChip } from "@patternfly/react-core";
+import { getToolbarChipKey } from "utils/utils";
 
 // Hook
 
 type FilterValue = string | ToolbarChip;
 
-const getFilterValueKey = (value: FilterValue) => {
-  return typeof value === "string" ? value : value.key;
-};
-
-interface HookState {
-  filters: Map<string, FilterValue[]>;
+interface HookState<T> {
+  filters: Map<string, T[]>;
   filtersApplied: boolean;
-  addFilter: (key: string, value: FilterValue) => void;
-  setFilter: (key: string, value: FilterValue[]) => void;
+  addFilter: (key: string, value: T) => void;
+  setFilter: (key: string, value: T[]) => void;
   removeFilter: (key: string, value: FilterValue | FilterValue[]) => void;
   clearAllFilters: () => void;
 }
 
-export const useFilter = (): HookState => {
-  const [filters, setFilters] = useState<Map<string, FilterValue[]>>(
-    new Map([])
-  );
+export const useFilter = <T extends FilterValue>(): HookState<T> => {
+  const [filters, setFilters] = useState<Map<string, T[]>>(new Map([]));
 
   const filtersApplied =
     Array.from(filters.values()).reduce(
@@ -29,14 +24,14 @@ export const useFilter = (): HookState => {
       []
     ).length > 0;
 
-  const addFilter = (key: string, value: FilterValue) => {
+  const addFilter = (key: string, value: T) => {
     setFilters((current) => {
       const currentChips = current.get(key) || [];
       return new Map(current).set(key, [...currentChips, value]);
     });
   };
 
-  const setFilter = (key: string, value: FilterValue[]) => {
+  const setFilter = (key: string, value: T[]) => {
     setFilters((current) => new Map(current).set(key, value));
   };
 
@@ -50,9 +45,9 @@ export const useFilter = (): HookState => {
       }
 
       const newValue = (current.get(key) || []).filter((f) => {
-        const fkey = getFilterValueKey(f);
-        return !elementsToBeRemoved.some((r) => {
-          const rKey = getFilterValueKey(r);
+        const fkey = getToolbarChipKey(f);
+        return elementsToBeRemoved.some((r) => {
+          const rKey = getToolbarChipKey(r);
           return fkey === rKey;
         });
       });
