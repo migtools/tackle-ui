@@ -22,6 +22,9 @@ export const ConfirmDialogContainer: React.FC = () => {
   const title = useSelector((state: RootState) =>
     confirmDialogSelectors.title(state)
   );
+  const titleIconVariant = useSelector((state: RootState) =>
+    confirmDialogSelectors.titleIconVariant(state)
+  );
   const message = useSelector((state: RootState) =>
     confirmDialogSelectors.message(state)
   );
@@ -47,6 +50,7 @@ export const ConfirmDialogContainer: React.FC = () => {
     <ConfirmDialog
       isOpen={isOpen}
       title={title}
+      titleIconVariant={titleIconVariant}
       message={message}
       inProgress={isProcessing}
       onClose={onCancel}
