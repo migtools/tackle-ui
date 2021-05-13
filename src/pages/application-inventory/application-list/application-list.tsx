@@ -88,7 +88,7 @@ const toSortByQuery = (
     case 2:
       field = ApplicationSortBy.NAME;
       break;
-    case 6:
+    case 7:
       field = ApplicationSortBy.TAGS;
       break;
     default:
