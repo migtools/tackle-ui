@@ -51,7 +51,7 @@ export const CustomWizardFooter: React.FC<CustomWizardFooterProps> = ({
                     variant="primary"
                     onClick={() => onSave(true)}
                     isDisabled={!enableNext || isDisabled || isFormInvalid}
-                    cy-data="next"
+                    cy-data="save-and-review"
                   >
                     {t("actions.saveAndReview")}
                   </Button>
