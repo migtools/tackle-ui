@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AppTable Renders without crashing 1`] = `
+<div
+  style={
+    Object {
+      "height": "230px",
+      "width": "230px",
+    }
+  }
+>
+  <ChartDonut
+    ariaDesc="risk-donut-chart"
+    colorScale={
+      Array [
+        "#68b240",
+        "#f0ab0b",
+        "#cb440d",
+        "#b8bbbe",
+      ]
+    }
+    constrainToVisibleArea={true}
+    data={
+      Array [
+        Object {
+          "x": Object {
+            "label": "Green",
+            "order": 1,
+          },
+          "y": 1,
+        },
+        Object {
+          "x": Object {
+            "label": "Amber",
+            "order": 2,
+          },
+          "y": 1,
+        },
+        Object {
+          "x": Object {
+            "label": "Red",
+            "order": 3,
+          },
+          "y": 1,
+        },
+        Object {
+          "x": Object {
+            "label": "Unknown",
+            "order": 4,
+          },
+          "y": 2,
+        },
+      ]
+    }
+    innerRadius={50}
+    labels={[Function]}
+  />
+</div>
+`;

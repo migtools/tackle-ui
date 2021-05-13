@@ -3,14 +3,51 @@ import { ChartDonut } from "@patternfly/react-charts";
 
 import { global_palette_black_400 as black } from "@patternfly/react-tokens";
 
-import { Assessment } from "api/models";
+import { DEFAULT_RISK_LABELS } from "Constants";
+import { Assessment, QuestionnaireCategory } from "api/models";
 
-interface ChartData {
+export interface ChartData {
   red: number;
   amber: number;
   green: number;
   unknown: number;
 }
+
+export const getChartDataFromCategories = (
+  categories: QuestionnaireCategory[]
+): ChartData => {
+  let green = 0;
+  let amber = 0;
+  let red = 0;
+  let unknown = 0;
+
+  categories
+    .flatMap((f) => f.questions)
+    .flatMap((f) => f.options)
+    .filter((f) => f.checked === true)
+    .forEach((f) => {
+      switch (f.risk) {
+        case "GREEN":
+          green++;
+          break;
+        case "AMBER":
+          amber++;
+          break;
+        case "RED":
+          red++;
+          break;
+        default:
+          unknown++;
+      }
+    });
+
+  return {
+    red,
+    amber,
+    green,
+    unknown,
+  } as ChartData;
+};
 
 export interface IApplicationAssessmentDonutChartProps {
   assessment: Assessment;
@@ -20,46 +57,19 @@ export const ApplicationAssessmentDonutChart: React.FC<IApplicationAssessmentDon
   assessment,
 }) => {
   const charData: ChartData = useMemo(() => {
-    let green = 0;
-    let amber = 0;
-    let red = 0;
-    let unknown = 0;
-
-    assessment.questionnaire.categories
-      .flatMap((f) => f.questions)
-      .flatMap((f) => f.options)
-      .filter((f) => f.checked === true)
-      .forEach((f) => {
-        if (f.risk === "GREEN") {
-          green++;
-        } else if (f.risk === "AMBER") {
-          amber++;
-        } else if (f.risk === "RED") {
-          red++;
-        } else {
-          unknown++;
-        }
-      });
-
-    return {
-      red,
-      amber,
-      green,
-      unknown,
-    };
+    return getChartDataFromCategories(assessment.questionnaire.categories);
   }, [assessment]);
 
   return (
     <div style={{ height: "230px", width: "230px" }}>
       <ChartDonut
-        ariaDesc="Number of question with risk"
-        // ariaTitle="Risk"
+        ariaDesc="risk-donut-chart"
         constrainToVisibleArea={true}
         data={[
-          { x: "Green", y: charData.green },
-          { x: "Amber", y: charData.amber },
-          { x: "Red", y: charData.red },
-          { x: "Unknown", y: charData.unknown },
+          { x: DEFAULT_RISK_LABELS.get("GREEN")?.label, y: charData.green },
+          { x: DEFAULT_RISK_LABELS.get("AMBER")?.label, y: charData.amber },
+          { x: DEFAULT_RISK_LABELS.get("RED")?.label, y: charData.red },
+          { x: DEFAULT_RISK_LABELS.get("UNKNOWN")?.label, y: charData.unknown },
         ]}
         labels={({ datum }) => `${datum.x}: ${datum.y}`}
         colorScale={["#68b240", "#f0ab0b", "#cb440d", black.value]}

@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Label, ToolbarChip } from "@patternfly/react-core";
+import { ToolbarChip } from "@patternfly/react-core";
 import {
   cellWidth,
   ICell,
@@ -13,6 +13,7 @@ import {
 import {
   AppTableToolbarToggleGroup,
   AppTableWithControls,
+  RiskLabel,
 } from "shared/components";
 import {
   useToolbarFilter,
@@ -137,17 +138,6 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
 
   const rows: IRow[] = [];
   pageItems.forEach((item) => {
-    let riskLabel = <Label color="green">Green</Label>;
-    if (item.riskValue === "GREEN") {
-      riskLabel = <Label color="green">Green</Label>;
-    } else if (item.riskValue === "AMBER") {
-      riskLabel = <Label color="orange">Amber</Label>;
-    } else if (item.riskValue === "RED") {
-      riskLabel = <Label color="red">Red</Label>;
-    } else {
-      riskLabel = <Label color="grey">Unknown</Label>;
-    }
-
     rows.push({
       cells: [
         {
@@ -161,13 +151,11 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
           ),
         },
         {
-          title: riskLabel,
+          title: <RiskLabel risk={item.riskValue} />,
         },
       ],
     });
   });
-
-  //
 
   return (
     <AppTableWithControls
