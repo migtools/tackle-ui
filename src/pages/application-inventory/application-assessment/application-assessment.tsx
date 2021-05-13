@@ -6,7 +6,6 @@ import { AxiosError } from "axios";
 
 import { useDispatch } from "react-redux";
 import { alertActions } from "store/alert";
-import { confirmDialogActions } from "store/confirmDialog";
 
 import {
   Alert,
