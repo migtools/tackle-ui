@@ -28,7 +28,8 @@ export const useAssessApplication = (): IState => {
       onError: (error: AxiosError) => void
     ) => {
       if (!application.id) {
-        throw new Error("Entity must have 'id' to execute this operation");
+        console.log("Entity must have 'id' to execute this operationn");
+        return;
       }
 
       setInProgress(true);
@@ -56,7 +57,8 @@ export const useAssessApplication = (): IState => {
       onError: (error: AxiosError) => void
     ) => {
       if (!application.id) {
-        throw new Error("Entity must have 'id' to execute this operation");
+        console.log("Entity must have 'id' to execute this operation");
+        return;
       }
 
       setInProgress(true);
