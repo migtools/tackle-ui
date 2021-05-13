@@ -559,12 +559,6 @@ export const ApplicationList: React.FC = () => {
         dispatch(alertActions.addDanger(getAxiosErrorMessage(error)));
       }
     );
-
-    // history.push(
-    //   formatPath(Paths.applicationInventory_review, {
-    //     applicationId: row.id,
-    //   })
-    // );
   };
 
   const handleOnReviewSelectedRow = () => {
