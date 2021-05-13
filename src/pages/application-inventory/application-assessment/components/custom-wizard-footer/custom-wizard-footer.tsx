@@ -12,7 +12,7 @@ export interface CustomWizardFooterProps {
   isLastStep: boolean;
   isDisabled: boolean;
   isFormInvalid: boolean;
-  onSave: () => void;
+  onSave: (review: boolean) => void;
   onSaveAsDraft: () => void;
 }
 
@@ -38,14 +38,24 @@ export const CustomWizardFooter: React.FC<CustomWizardFooterProps> = ({
           return (
             <>
               {isLastStep ? (
-                <Button
-                  variant="primary"
-                  onClick={onSave}
-                  isDisabled={!enableNext || isDisabled || isFormInvalid}
-                  cy-data="next"
-                >
-                  {t("actions.save")}
-                </Button>
+                <>
+                  <Button
+                    variant="primary"
+                    onClick={() => onSave(false)}
+                    isDisabled={!enableNext || isDisabled || isFormInvalid}
+                    cy-data="next"
+                  >
+                    {t("actions.save")}
+                  </Button>
+                  <Button
+                    variant="primary"
+                    onClick={() => onSave(true)}
+                    isDisabled={!enableNext || isDisabled || isFormInvalid}
+                    cy-data="next"
+                  >
+                    {t("actions.saveAndReview")}
+                  </Button>
+                </>
               ) : (
                 <Button
                   variant="primary"

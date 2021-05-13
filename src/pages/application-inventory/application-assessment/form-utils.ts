@@ -6,6 +6,7 @@ export const SAVE_ACTION_KEY = "saveAction";
 
 export enum SAVE_ACTION_VALUE {
   SAVE,
+  SAVE_AND_REVIEW,
   SAVE_AS_DRAFT,
 }
 
