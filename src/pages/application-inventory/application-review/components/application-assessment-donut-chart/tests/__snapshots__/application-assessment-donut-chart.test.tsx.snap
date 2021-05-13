@@ -23,31 +23,19 @@ exports[`AppTable Renders without crashing 1`] = `
     data={
       Array [
         Object {
-          "x": Object {
-            "label": "Green",
-            "order": 1,
-          },
+          "x": "Green",
           "y": 1,
         },
         Object {
-          "x": Object {
-            "label": "Amber",
-            "order": 2,
-          },
+          "x": "Amber",
           "y": 1,
         },
         Object {
-          "x": Object {
-            "label": "Red",
-            "order": 3,
-          },
+          "x": "Red",
           "y": 1,
         },
         Object {
-          "x": Object {
-            "label": "Unknown",
-            "order": 4,
-          },
+          "x": "Unknown",
           "y": 2,
         },
       ]
