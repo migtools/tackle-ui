@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "store/rootReducer";
@@ -31,9 +31,6 @@ export const ConfirmDialogContainer: React.FC = () => {
     dispatch(confirmDialogActions.closeDialog());
   };
 
-  useEffect(() => {
-    console.log(modal);
-  });
   return (
     <ConfirmDialog
       isOpen={isOpen}
