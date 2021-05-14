@@ -11,10 +11,24 @@ import {
   TextContent,
 } from "@patternfly/react-core";
 
-import { useFetchStakeholderGroups, useFetchStakeholders } from "shared/hooks";
+import { useFetch } from "shared/hooks";
 
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 import { getValidatedFromError } from "utils/utils";
+
+import {
+  PageRepresentation,
+  Stakeholder,
+  StakeholderGroup,
+  StakeholderGroupPage,
+  StakeholderPage,
+} from "api/models";
+import {
+  getAllStakeholderGroups,
+  getAllStakeholders,
+  stakeholderGroupPageMapper,
+  stakeholderPageMapper,
+} from "api/apiUtils";
 
 import { IFormValues } from "../../form-utils";
 
@@ -27,23 +41,35 @@ export const StakeholdersForm: React.FC<StakeholdersFormProps> = () => {
   const { t } = useTranslation();
   const formik = useFormikContext<IFormValues>();
 
+  // Fetch stakeholders
+
   const {
-    stakeholders,
+    data: stakeholders,
     isFetching: isFetchingStakeholders,
     fetchError: fetchErrorStakeholders,
-    fetchAllStakeholders,
-  } = useFetchStakeholders();
+    requestFetch: fetchAllStakeholders,
+  } = useFetch<StakeholderPage, PageRepresentation<Stakeholder>>({
+    defaultIsFetching: true,
+    onFetch: getAllStakeholders,
+    mapper: stakeholderPageMapper,
+  });
 
   useEffect(() => {
     fetchAllStakeholders();
   }, [fetchAllStakeholders]);
 
+  // Fetch stakeholder groups
+
   const {
-    stakeholderGroups,
+    data: stakeholderGroups,
     isFetching: isFetchingStakeholderGroups,
     fetchError: fetchErrorStakeholderGroups,
-    fetchAllStakeholderGroups,
-  } = useFetchStakeholderGroups();
+    requestFetch: fetchAllStakeholderGroups,
+  } = useFetch<StakeholderGroupPage, PageRepresentation<StakeholderGroup>>({
+    defaultIsFetching: true,
+    onFetch: getAllStakeholderGroups,
+    mapper: stakeholderGroupPageMapper,
+  });
 
   useEffect(() => {
     fetchAllStakeholderGroups();
