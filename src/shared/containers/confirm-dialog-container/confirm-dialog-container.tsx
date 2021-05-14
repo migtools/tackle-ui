@@ -43,7 +43,7 @@ export const ConfirmDialogContainer: React.FC = () => {
       onCancel={onCancel}
       confirmBtnLabel={modal.confirmBtnLabel}
       cancelBtnLabel={modal.cancelBtnLabel}
-      variant={modal.confirmBtnVariant}
+      confirmBtnVariant={modal.confirmBtnVariant}
     />
   );
 };

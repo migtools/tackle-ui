@@ -50,11 +50,18 @@ import {
   useTableControls,
   useFetchApplications,
   useAssessApplication,
+  useMultipleFetch,
 } from "shared/hooks";
 
 import { formatPath, Paths } from "Paths";
 import { Application, Assessment, SortByQuery } from "api/models";
-import { ApplicationSortBy, ApplicationSortByQuery } from "api/rest";
+import {
+  ApplicationSortBy,
+  ApplicationSortByQuery,
+  deleteAssessment,
+  deleteReview,
+  getAssessments,
+} from "api/rest";
 import { getAxiosErrorMessage } from "utils/utils";
 
 import { NewApplicationModal } from "./components/new-application-modal";
@@ -105,6 +112,13 @@ const ENTITY_FIELD = "entity";
 
 const getRow = (rowData: IRowData): Application => {
   return rowData[ENTITY_FIELD];
+};
+
+const searchAppAssessment = (id: number) => {
+  const result = getAssessments({ applicationId: id }).then(({ data }) =>
+    data[0] ? data[0] : undefined
+  );
+  return result;
 };
 
 export const ApplicationList: React.FC = () => {
@@ -198,6 +212,23 @@ export const ApplicationList: React.FC = () => {
     );
   }, [filtersValue, paginationQuery, sortByQuery, fetchApplications]);
 
+  //
+
+  const {
+    getData: getApplicationAssessment,
+    isFetching: isFetchingApplicationAssessment,
+    fetchError: fetchErrorApplicationAssessment,
+    fetchCount: fetchCountApplicationAssessment,
+    triggerFetch: fetchApplicationsAssessment,
+  } = useMultipleFetch<number, Assessment | undefined>(searchAppAssessment);
+
+  useEffect(() => {
+    if (applications) {
+      fetchApplicationsAssessment(applications.data.map((f) => f.id!));
+      console.log(fetchApplicationsAssessment);
+    }
+  }, [applications, fetchApplicationsAssessment]);
+
   // Expansion and selection of rows
 
   const {
@@ -258,7 +289,14 @@ export const ApplicationList: React.FC = () => {
           title: <ApplicationBusinessService application={item} />,
         },
         {
-          title: <ApplicationAssessment application={item} />,
+          title: (
+            <ApplicationAssessment
+              assessment={getApplicationAssessment(item.id!)}
+              isFetching={isFetchingApplicationAssessment(item.id!)}
+              fetchError={fetchErrorApplicationAssessment(item.id!)}
+              fetchCount={fetchCountApplicationAssessment(item.id!)}
+            />
+          ),
         },
         {
           title: item.review ? (
@@ -322,7 +360,7 @@ export const ApplicationList: React.FC = () => {
 
     const actions: (IAction | ISeparator)[] = [];
 
-    if (row.review) {
+    if (getApplicationAssessment(row.id!)) {
       actions.push({
         title: t("actions.discardAssessment"),
         onClick: (
@@ -347,19 +385,26 @@ export const ApplicationList: React.FC = () => {
               cancelBtnLabel: t("actions.cancel"),
               onConfirm: () => {
                 dispatch(confirmDialogActions.processing());
-                // deleteBusinessService(
-                //   row,
-                //   () => {
-                //     dispatch(confirmDialogActions.closeDialog());
-                //     refreshTable();
-                //   },
-                //   (error) => {
-                //     dispatch(confirmDialogActions.closeDialog());
-                //     dispatch(
-                //       alertActions.addDanger(getAxiosErrorMessage(error))
-                //     );
-                //   }
-                // );
+
+                Promise.all([
+                  row.review ? deleteReview(row.review.id!) : undefined,
+                ])
+                  .then(() => {
+                    const assessment = getApplicationAssessment(row.id!);
+                    return Promise.all([
+                      assessment ? deleteAssessment(assessment.id!) : undefined,
+                    ]);
+                  })
+                  .then(() => {
+                    dispatch(confirmDialogActions.closeDialog());
+                    refreshTable();
+                  })
+                  .catch((error) => {
+                    dispatch(confirmDialogActions.closeDialog());
+                    dispatch(
+                      alertActions.addDanger(getAxiosErrorMessage(error))
+                    );
+                  });
               },
             })
           );
