@@ -223,7 +223,7 @@ export const BusinessServices: React.FC = () => {
       confirmDialogActions.openDialog({
         title: t("dialog.title.delete", { what: row.name }),
         message: t("dialog.message.delete", { what: row.name }),
-        variant: ButtonVariant.danger,
+        confirmBtnVariant: ButtonVariant.danger,
         confirmBtnLabel: t("actions.delete"),
         cancelBtnLabel: t("actions.cancel"),
         onConfirm: () => {

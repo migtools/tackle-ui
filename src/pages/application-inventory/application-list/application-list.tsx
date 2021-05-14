@@ -320,7 +320,54 @@ export const ApplicationList: React.FC = () => {
       return [];
     }
 
-    const actions: (IAction | ISeparator)[] = [
+    const actions: (IAction | ISeparator)[] = [];
+
+    if (row.review) {
+      actions.push({
+        title: t("actions.discardAssessment"),
+        onClick: (
+          event: React.MouseEvent,
+          rowIndex: number,
+          rowData: IRowData
+        ) => {
+          const row: Application = getRow(rowData);
+          dispatch(
+            confirmDialogActions.openDialog({
+              title: "Discard assessment?",
+              titleIconVariant: "warning",
+              message: (
+                <span>
+                  The assessment for <strong>{row.name}</strong> will be
+                  discarded, as well as the review result. Do you wish to
+                  continue?
+                </span>
+              ),
+              confirmBtnVariant: ButtonVariant.primary,
+              confirmBtnLabel: t("actions.continue"),
+              cancelBtnLabel: t("actions.cancel"),
+              onConfirm: () => {
+                dispatch(confirmDialogActions.processing());
+                // deleteBusinessService(
+                //   row,
+                //   () => {
+                //     dispatch(confirmDialogActions.closeDialog());
+                //     refreshTable();
+                //   },
+                //   (error) => {
+                //     dispatch(confirmDialogActions.closeDialog());
+                //     dispatch(
+                //       alertActions.addDanger(getAxiosErrorMessage(error))
+                //     );
+                //   }
+                // );
+              },
+            })
+          );
+        },
+      });
+    }
+
+    actions.push(
       {
         title: t("actions.manageDependencies"),
         onClick: (
@@ -342,8 +389,8 @@ export const ApplicationList: React.FC = () => {
           const row: Application = getRow(rowData);
           deleteRow(row);
         },
-      },
-    ];
+      }
+    );
 
     return actions;
   };
@@ -385,7 +432,7 @@ export const ApplicationList: React.FC = () => {
       confirmDialogActions.openDialog({
         title: t("dialog.title.delete", { what: row.name }),
         message: t("dialog.message.delete", { what: row.name }),
-        variant: ButtonVariant.danger,
+        confirmBtnVariant: ButtonVariant.danger,
         confirmBtnLabel: t("actions.delete"),
         cancelBtnLabel: t("actions.cancel"),
         onConfirm: () => {
@@ -504,7 +551,7 @@ export const ApplicationList: React.FC = () => {
               }),
               titleIconVariant: "warning",
               message: t("message.overrideAssessmentConfirmation"),
-              variant: ButtonVariant.primary,
+              confirmBtnVariant: ButtonVariant.primary,
               confirmBtnLabel: t("actions.continue"),
               cancelBtnLabel: t("actions.cancel"),
               onConfirm: () => {

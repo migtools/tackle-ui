@@ -10,6 +10,7 @@
         "createTag": "Create tag",
         "createTagType": "Create tag type",
         "delete": "Delete",
+        "discardAssessment": "Discard assessment",
         "edit": "Edit",
         "manageDependencies": "Manage dependencies",
         "next": "Next",

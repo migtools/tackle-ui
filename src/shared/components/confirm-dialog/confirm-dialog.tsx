@@ -17,7 +17,7 @@ export interface ConfirmDialogProps {
     | "info"
     | "default"
     | React.ComponentType<any>;
-  message: string;
+  message: string | React.ReactNode;
 
   confirmBtnLabel: string;
   cancelBtnLabel: string;

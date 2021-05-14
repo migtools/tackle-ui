@@ -266,7 +266,7 @@ export const Stakeholders: React.FC = () => {
       confirmDialogActions.openDialog({
         title: t("dialog.title.delete", { what: row.displayName }),
         message: t("dialog.message.delete", { what: row.displayName }),
-        variant: ButtonVariant.danger,
+        confirmBtnVariant: ButtonVariant.danger,
         confirmBtnLabel: t("actions.delete"),
         cancelBtnLabel: t("actions.cancel"),
         onConfirm: () => {
