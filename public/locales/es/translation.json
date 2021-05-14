@@ -4,6 +4,7 @@
         "back": "Atrás",
         "cancel": "Cancelar",
         "close": "Cerrar",
+        "continue": "Continuar",
         "create": "Crear",
         "createNew": "Crear nuevo",
         "createTag": "Crear etiqueta",
@@ -12,7 +13,8 @@
         "edit": "Editar",
         "manageDependencies": "Administrar dependencias",
         "next": "Siguiente",
-        "save": "Guardar"
+        "save": "Guardar",
+        "saveAsDraft": "Guardar como borrador"
     },
     "colors": {
         "blue": "Azul",
@@ -26,9 +28,11 @@
         "add": "Agregar {{what}}",
         "applicationAssessment": "Evaluación de la aplicación",
         "applicationInventory": "Inventario de aplicaciones",
+        "editQuestion": "Editar {{what}}?",
         "manageDependenciesFor": "Administrar dependencias para {{what}}",
         "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
         "noDataStateTitle": "No existen {{what}} disponibles",
+        "Nquestions": "{{n}} preguntas",
         "selectMany": "Seleccione {{what}}",
         "selectOne": "Seleccione un(a) {{what}}"
     },
@@ -57,6 +61,7 @@
     "message": {
         "couldNotFetchBody": "El recurso no existe o no tienes permiso para acceder al mismo",
         "couldNotFetchTitle": "No disponible",
+        "overrideAssessmentConfirmation": "Esta aplicación ya fue evaluada ¿Deseas continuar?",
         "savingSelection": "Guardando selección"
     },
     "sidebar": {

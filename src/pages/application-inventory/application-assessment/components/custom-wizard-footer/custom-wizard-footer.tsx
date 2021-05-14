@@ -9,46 +9,76 @@ import {
 
 export interface CustomWizardFooterProps {
   isFirstStep: boolean;
-  isDisabled?: boolean;
-  isNextDisabled?: boolean;
-  onBack: () => void;
-  onNext: () => void;
-  onCancel: () => void;
+  isLastStep: boolean;
+  isDisabled: boolean;
+  isFormInvalid: boolean;
+  onSave: () => void;
+  onSaveAsDraft: () => void;
 }
 
 export const CustomWizardFooter: React.FC<CustomWizardFooterProps> = ({
   isFirstStep,
+  isLastStep,
   isDisabled,
-  isNextDisabled,
-  onBack,
-  onNext,
-  onCancel,
+  isFormInvalid,
+  onSave,
+  onSaveAsDraft,
 }) => {
   const { t } = useTranslation();
 
   return (
     <WizardFooter>
       <WizardContextConsumer>
-        {() => {
+        {({ onNext, onBack, onClose, activeStep }) => {
+          const enableNext =
+            activeStep && activeStep.enableNext !== undefined
+              ? activeStep.enableNext
+              : true;
+
           return (
             <>
-              <Button
-                variant="primary"
-                onClick={onNext}
-                isDisabled={isDisabled ? isDisabled : isNextDisabled}
-              >
-                {t("actions.next")}
-              </Button>
+              {isLastStep ? (
+                <Button
+                  variant="primary"
+                  onClick={onSave}
+                  isDisabled={!enableNext || isDisabled || isFormInvalid}
+                  cy-data="next"
+                >
+                  {t("actions.save")}
+                </Button>
+              ) : (
+                <Button
+                  variant="primary"
+                  onClick={onNext}
+                  isDisabled={!enableNext || isDisabled || isFormInvalid}
+                  cy-data="next"
+                >
+                  {t("actions.next")}
+                </Button>
+              )}
               <Button
                 variant="secondary"
                 onClick={onBack}
-                isDisabled={isDisabled}
-                className={isFirstStep ? "pf-m-disabled" : ""}
+                isDisabled={isFirstStep || isDisabled || isFormInvalid}
+                cy-data="back"
               >
                 {t("actions.back")}
               </Button>
-              <Button variant="link" onClick={onCancel} isDisabled={isDisabled}>
+              <Button
+                variant="link"
+                onClick={onClose}
+                isDisabled={isDisabled}
+                cy-data="cancel"
+              >
                 {t("actions.cancel")}
+              </Button>
+              <Button
+                variant="link"
+                onClick={onSaveAsDraft}
+                isDisabled={isDisabled || isFormInvalid}
+                cy-data="save-as-draft"
+              >
+                {t("actions.saveAsDraft")}
               </Button>
             </>
           );

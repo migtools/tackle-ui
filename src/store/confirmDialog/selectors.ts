@@ -9,6 +9,8 @@ export const isProcessing = (state: RootState) =>
 export const isOpen = (state: RootState) => confirmDialogState(state).isOpen;
 
 export const title = (state: RootState) => confirmDialogState(state).title;
+export const titleIconVariant = (state: RootState) =>
+  confirmDialogState(state).titleIconVariant;
 export const message = (state: RootState) => confirmDialogState(state).message;
 export const confirmBtnLabel = (state: RootState) =>
   confirmDialogState(state).confirmBtnLabel;
