@@ -39,6 +39,8 @@
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
+    "cypress:open-ct": "cypress open-ct",
+    "cypress:run-ct": "cypress run-ct",
     "extract": "i18next --config i18next-parser.config.js",
     "start": "react-scripts -r @cypress/instrument-cra start",
     "build": "react-scripts build",
