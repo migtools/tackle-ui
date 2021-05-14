@@ -171,7 +171,7 @@ export const Tags: React.FC = () => {
         title: t("dialog.title.delete", { what: t("terms.tag").toLowerCase() }),
         titleIconVariant: "warning",
         message: t("dialog.message.delete"),
-        variant: ButtonVariant.danger,
+        confirmBtnVariant: ButtonVariant.danger,
         confirmBtnLabel: t("actions.delete"),
         cancelBtnLabel: t("actions.cancel"),
         onConfirm: () => {
@@ -291,7 +291,7 @@ export const Tags: React.FC = () => {
         }),
         titleIconVariant: "warning",
         message: t("dialog.message.delete"),
-        variant: ButtonVariant.danger,
+        confirmBtnVariant: ButtonVariant.danger,
         confirmBtnLabel: t("actions.delete"),
         cancelBtnLabel: t("actions.cancel"),
         onConfirm: () => {

@@ -14,7 +14,7 @@ export const modal = (state: RootState) => ({
   message: confirmDialogState(state).message,
   confirmBtnLabel: confirmDialogState(state).confirmBtnLabel,
   cancelBtnLabel: confirmDialogState(state).cancelBtnLabel,
-  variant: confirmDialogState(state).variant,
+  confirmBtnVariant: confirmDialogState(state).confirmBtnVariant,
 });
 
 export const onConfirm = (state: RootState) =>

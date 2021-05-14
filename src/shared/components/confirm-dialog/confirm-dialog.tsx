@@ -23,7 +23,7 @@ export interface ConfirmDialogProps {
   cancelBtnLabel: string;
 
   inProgress?: boolean;
-  variant: ButtonVariant;
+  confirmBtnVariant: ButtonVariant;
 
   onClose: () => void;
   onConfirm: () => void;
@@ -38,7 +38,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   confirmBtnLabel,
   cancelBtnLabel,
   inProgress,
-  variant,
+  confirmBtnVariant,
   onClose,
   onConfirm,
   onCancel,
@@ -47,7 +47,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     <Button
       key="confirm"
       aria-label="confirm"
-      variant={variant}
+      variant={confirmBtnVariant}
       isDisabled={inProgress}
       onClick={onConfirm}
     >

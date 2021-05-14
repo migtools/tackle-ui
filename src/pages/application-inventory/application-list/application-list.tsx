@@ -375,7 +375,7 @@ export const ApplicationList: React.FC = () => {
         }),
         titleIconVariant: "warning",
         message: t("dialog.message.delete"),
-        variant: ButtonVariant.danger,
+        confirmBtnVariant: ButtonVariant.danger,
         confirmBtnLabel: t("actions.delete"),
         cancelBtnLabel: t("actions.cancel"),
         onConfirm: () => {
@@ -494,7 +494,7 @@ export const ApplicationList: React.FC = () => {
               }),
               titleIconVariant: "warning",
               message: t("message.overrideAssessmentConfirmation"),
-              variant: ButtonVariant.primary,
+              confirmBtnVariant: ButtonVariant.primary,
               confirmBtnLabel: t("actions.continue"),
               cancelBtnLabel: t("actions.cancel"),
               onConfirm: () => {

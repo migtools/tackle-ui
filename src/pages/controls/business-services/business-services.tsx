@@ -227,7 +227,7 @@ export const BusinessServices: React.FC = () => {
         }),
         titleIconVariant: "warning",
         message: t("dialog.message.delete"),
-        variant: ButtonVariant.danger,
+        confirmBtnVariant: ButtonVariant.danger,
         confirmBtnLabel: t("actions.delete"),
         cancelBtnLabel: t("actions.cancel"),
         onConfirm: () => {
