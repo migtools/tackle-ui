@@ -4,6 +4,7 @@
         "back": "Back",
         "cancel": "Cancel",
         "close": "Close",
+        "continue": "Continue",
         "create": "Create",
         "createNew": "Create new",
         "createTag": "Create tag",
@@ -12,7 +13,8 @@
         "edit": "Edit",
         "manageDependencies": "Manage dependencies",
         "next": "Next",
-        "save": "Save"
+        "save": "Save",
+        "saveAsDraft": "Save as draft"
     },
     "colors": {
         "blue": "Blue",
@@ -26,9 +28,11 @@
         "add": "Add {{what}}",
         "applicationAssessment": "Application assessment",
         "applicationInventory": "Application inventory",
+        "editQuestion": "Edit {{what}}?",
         "manageDependenciesFor": "Manage dependencies for {{what}}",
         "noDataStateBody": "Create a new {{what}} to start seeing data here",
         "noDataStateTitle": "No {{what}} available",
+        "Nquestions": "{{n}} questions",
         "selectMany": "Select {{what}}",
         "selectOne": "Select a {{what}}"
     },
@@ -45,6 +49,7 @@
     "message": {
         "couldNotFetchBody": "Resource doesn't exists or you don't have access to it",
         "couldNotFetchTitle": "Not available",
+        "overrideAssessmentConfirmation": "This application has already been assessed. Do you want to continue?",
         "savingSelection": "Saving selection"
     },
     "sidebar": {
@@ -103,7 +108,6 @@
         "maxLength": "This field must contain fewer than {{length}} characters.",
         "min": "This field must be greater than {{value}}.",
         "minLength": "This field must contain at least {{length}} characters.",
-        "onlyCharactersAndUnderscore": "This field must contain only alphanumeric characters including underscore.",
         "required": "This field is required."
     }
 }
