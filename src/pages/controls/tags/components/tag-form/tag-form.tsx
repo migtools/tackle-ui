@@ -75,9 +75,8 @@ export const TagForm: React.FC<TagFormProps> = ({ tag, onSaved, onCancel }) => {
     name: string()
       .trim()
       .required(t("validation.required"))
-      .min(3, t("validation.minLength", { length: 3 }))
-      .max(120, t("validation.maxLength", { length: 120 }))
-      .matches(/^[- \w]+$/, t("validation.onlyCharactersAndUnderscore")),
+      .min(1, t("validation.minLength", { length: 1 }))
+      .max(120, t("validation.maxLength", { length: 120 })),
     tagType: mixed().required(t("validation.required")),
   });
 
