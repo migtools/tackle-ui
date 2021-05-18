@@ -23,13 +23,15 @@ describe("Edit business service", () => {
           displayName: `stakeholder-${(i + 10).toString(36)}`,
         }))
         .forEach((payload) => {
-          cy.api_crud(tokens, "Stakeholder", payload).then((responseData) => {
-            stakeholders.push(responseData);
-          });
+          cy.api_crud(tokens, "Stakeholder", "POST", payload).then(
+            (responseData) => {
+              stakeholders.push(responseData);
+            }
+          );
         });
 
       // Business service to edit
-      cy.api_crud(tokens, "BusinessService", {
+      cy.api_crud(tokens, "BusinessService", "POST", {
         name: "service-a",
         owner: stakeholders[0],
       });

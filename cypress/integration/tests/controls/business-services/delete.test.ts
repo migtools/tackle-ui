@@ -12,7 +12,7 @@ describe("Delete business service", () => {
 
     cy.get<KcTokens>("@tokens").then((tokens) => {
       cy.api_clean(tokens, "BusinessService");
-      cy.api_crud(tokens, "BusinessService", {
+      cy.api_crud(tokens, "BusinessService", "POST", {
         name: "service-a",
       });
     });

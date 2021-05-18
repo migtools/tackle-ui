@@ -25,7 +25,7 @@ describe("Edit stakeholder group", () => {
               displayName: `stakeholder-${(i + 10).toString(36)}`,
             }))
             .forEach((payload) => {
-              cy.api_crud(tokens, "Stakeholder", payload).then(
+              cy.api_crud(tokens, "Stakeholder", "POST", payload).then(
                 (responseData) => {
                   stakeholders.push(responseData);
                 }
@@ -34,7 +34,7 @@ describe("Edit stakeholder group", () => {
         })
         .then(() => {
           // Stakeholder group to edit
-          return cy.api_crud(tokens, "StakeholderGroup", {
+          return cy.api_crud(tokens, "StakeholderGroup", "POST", {
             name: "group-a",
             stakeholders: stakeholders.slice(0, 1),
           });

@@ -142,8 +142,8 @@ declare global {
       api_crud(
         tokens: KcTokens,
         resource: ResourceType,
-        payload: any,
-        method?: "POST" | "PUT" | "PATCH" | "DELETE"
+        method: "POST" | "PUT" | "PATCH" | "DELETE",
+        payload: any
       ): Chainable<any>;
       api_clean(tokens: KcTokens, resource?: ResourceType): void;
     }
@@ -155,8 +155,8 @@ Cypress.Commands.add(
   (
     tokens: KcTokens,
     resource: ResourceType,
-    payload: any,
-    method: "POST" | "PUT" | "PATCH" | "DELETE" = "POST"
+    method: "POST" | "PUT" | "PATCH" | "DELETE",
+    payload: any
   ) => {
     const headers = getHeadersFromResourceType(resource, tokens);
     const type = resourceTypeList[resource];

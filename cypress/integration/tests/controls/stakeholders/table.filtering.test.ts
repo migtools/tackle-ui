@@ -27,9 +27,12 @@ describe("Filter business services", () => {
               name: `group-${(i + 10).toString(36)}`,
             }))
             .forEach((payload) => {
-              cy.api_crud(tokens, "StakeholderGroup", payload).then((data) =>
-                stakeholderGroups.push(data)
-              );
+              cy.api_crud(
+                tokens,
+                "StakeholderGroup",
+                "POST",
+                payload
+              ).then((data) => stakeholderGroups.push(data));
             });
         })
         .then(() => {
@@ -39,7 +42,7 @@ describe("Filter business services", () => {
               role: `function-${(i + 10).toString(36)}`,
             }))
             .forEach((payload) => {
-              cy.api_crud(tokens, "JobFunction", payload).then((data) =>
+              cy.api_crud(tokens, "JobFunction", "POST", payload).then((data) =>
                 jobFunctions.push(data)
               );
             });

@@ -29,6 +29,7 @@ describe("Edit business service", () => {
               cy.api_crud(
                 tokens,
                 "BusinessService",
+                "POST",
                 payload
               ).then((responseData) => businessServices.push(responseData));
             });
@@ -40,7 +41,7 @@ describe("Edit business service", () => {
               name: `tagType-${(i + 10).toString(36)}`,
             }))
             .forEach((payload) => {
-              cy.api_crud(tokens, "TagType", payload).then((data) => {
+              cy.api_crud(tokens, "TagType", "POST", payload).then((data) => {
                 tagTypes.push(data);
               });
             });
@@ -62,7 +63,7 @@ describe("Edit business service", () => {
             })
             .flatMap((a) => a)
             .forEach((payload) => {
-              cy.api_crud(tokens, "Tag", payload).then((responseData) =>
+              cy.api_crud(tokens, "Tag", "POST", payload).then((responseData) =>
                 tags.push(responseData)
               );
             });
@@ -79,7 +80,7 @@ describe("Edit business service", () => {
 
       cy.log("").then(() => {
         // Create application to edit
-        return cy.api_crud(tokens, "Application", {
+        return cy.api_crud(tokens, "Application", "POST", {
           name: "application-a",
         });
       });

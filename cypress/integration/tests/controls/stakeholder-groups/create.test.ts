@@ -20,7 +20,7 @@ describe("Create stakeholder group", () => {
           displayName: `stakeholder-${(i + 10).toString(36)}`,
         }))
         .forEach((payload) => {
-          cy.api_crud(tokens, "Stakeholder", payload);
+          cy.api_crud(tokens, "Stakeholder", "POST", payload);
         });
     });
   });

@@ -24,7 +24,7 @@ describe("Create new business service", () => {
               name: `service-${(i + 10).toString(36)}`,
             }))
             .forEach((payload) => {
-              cy.api_crud(tokens, "BusinessService", payload);
+              cy.api_crud(tokens, "BusinessService", "POST", payload);
             });
         })
         .then(() => {
@@ -34,7 +34,7 @@ describe("Create new business service", () => {
               name: `tagType-${(i + 10).toString(36)}`,
             }))
             .forEach((payload) => {
-              cy.api_crud(tokens, "TagType", payload).then((data) => {
+              cy.api_crud(tokens, "TagType", "POST", payload).then((data) => {
                 tagTypes.push(data);
               });
             });
@@ -56,7 +56,7 @@ describe("Create new business service", () => {
             })
             .flatMap((a) => a)
             .forEach((payload) => {
-              cy.api_crud(tokens, "Tag", payload);
+              cy.api_crud(tokens, "Tag", "POST", payload);
             });
         });
     });

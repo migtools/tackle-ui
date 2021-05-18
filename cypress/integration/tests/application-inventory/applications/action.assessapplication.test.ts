@@ -22,21 +22,24 @@ describe("Assess an application", () => {
               name: `application-${(i + 10).toString(36)}`,
             }))
             .forEach((payload) => {
-              cy.api_crud(tokens, "Application", payload).then((responseData) =>
-                applications.push(responseData)
-              );
+              cy.api_crud(
+                tokens,
+                "Application",
+                "POST",
+                payload
+              ).then((responseData) => applications.push(responseData));
             });
         })
         .then(() => {
           // Create assessment 'InProgress'
-          return cy.api_crud(tokens, "Assessment", {
+          return cy.api_crud(tokens, "Assessment", "POST", {
             applicationId: applications[1].id,
           });
         })
         .then(() => {
           // Create assessment 'Completed'
           return cy
-            .api_crud(tokens, "Assessment", {
+            .api_crud(tokens, "Assessment", "POST", {
               applicationId: applications[2].id,
             })
             .then((responseData) =>

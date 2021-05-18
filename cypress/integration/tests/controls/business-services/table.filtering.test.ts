@@ -26,9 +26,11 @@ describe("Filter business services", () => {
               displayName: `stakeholder-${(i + 10).toString(36)}`,
             }))
             .forEach((payload) => {
-              cy.api_crud(tokens, "Stakeholder", payload).then((data) => {
-                stakeholders.push(data);
-              });
+              cy.api_crud(tokens, "Stakeholder", "POST", payload).then(
+                (data) => {
+                  stakeholders.push(data);
+                }
+              );
             });
         })
         .then(() => {
@@ -40,7 +42,7 @@ describe("Filter business services", () => {
               owner: stakeholders[i],
             }))
             .forEach((payload) => {
-              cy.api_crud(tokens, "BusinessService", payload);
+              cy.api_crud(tokens, "BusinessService", "POST", payload);
             });
         });
     });

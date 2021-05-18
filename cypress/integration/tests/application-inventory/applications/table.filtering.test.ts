@@ -32,8 +32,8 @@ describe("Filter applications", () => {
               cy.api_crud(
                 tokens,
                 "BusinessService",
-                payload,
-                "POST"
+                "POST",
+                payload
               ).then((responseData) => businessServices.push(responseData));
             });
         })
@@ -47,8 +47,8 @@ describe("Filter applications", () => {
               cy.api_crud(
                 tokens,
                 "TagType",
-                payload,
-                "POST"
+                "POST",
+                payload
               ).then((responseData) => tagTypes.push(responseData));
             });
         })
@@ -67,7 +67,7 @@ describe("Filter applications", () => {
             ])
             .flatMap((e) => e)
             .forEach((payload) => {
-              cy.api_crud(tokens, "Tag", payload, "POST").then((responseData) =>
+              cy.api_crud(tokens, "Tag", "POST", payload).then((responseData) =>
                 tags.push(responseData)
               );
             });
@@ -82,7 +82,7 @@ describe("Filter applications", () => {
               tags: [tags[i].id],
             }))
             .forEach((payload) => {
-              cy.api_crud(tokens, "Application", payload, "POST");
+              cy.api_crud(tokens, "Application", "POST", payload);
             });
         });
     });

@@ -12,7 +12,7 @@ describe("Delete application", () => {
 
     cy.get<KcTokens>("@tokens").then((tokens) => {
       cy.api_clean(tokens, "Application");
-      cy.api_crud(tokens, "Application", {
+      cy.api_crud(tokens, "Application", "POST", {
         name: "application-a",
       });
     });

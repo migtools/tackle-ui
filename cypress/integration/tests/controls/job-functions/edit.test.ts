@@ -12,7 +12,7 @@ describe("Edit job function", () => {
 
     cy.get<KcTokens>("@tokens").then((tokens) => {
       cy.api_clean(tokens, "JobFunction");
-      cy.api_crud(tokens, "JobFunction", {
+      cy.api_crud(tokens, "JobFunction", "POST", {
         role: "function-a",
       });
     });

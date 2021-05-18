@@ -26,7 +26,7 @@ describe("Filter business services", () => {
               name: `type-${(i + 10).toString(36)}`,
             }))
             .forEach((payload) => {
-              cy.api_crud(tokens, "TagType", payload).then((data) => {
+              cy.api_crud(tokens, "TagType", "POST", payload).then((data) => {
                 tagTypes.push(data);
               });
             });
@@ -39,7 +39,7 @@ describe("Filter business services", () => {
               tagType: tagTypes[i],
             }))
             .forEach((payload) => {
-              cy.api_crud(tokens, "Tag", payload);
+              cy.api_crud(tokens, "Tag", "POST", payload);
             });
         });
     });

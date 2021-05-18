@@ -27,7 +27,7 @@ describe("Sort business services", () => {
               rank: i,
             }))
             .forEach((payload) => {
-              cy.api_crud(tokens, "TagType", payload).then((data) => {
+              cy.api_crud(tokens, "TagType", "POST", payload).then((data) => {
                 tagTypes.push(data);
               });
             });
@@ -40,7 +40,7 @@ describe("Sort business services", () => {
               tagType: tagTypes[i],
             }))
             .forEach((payload) => {
-              cy.api_crud(tokens, "Tag", payload);
+              cy.api_crud(tokens, "Tag", "POST", payload);
             });
         });
     });

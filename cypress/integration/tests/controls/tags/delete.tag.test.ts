@@ -19,7 +19,7 @@ describe("Delete tag", () => {
         .then(() => {
           // Create tagType
           return cy
-            .api_crud(tokens, "TagType", { name: "type-a" })
+            .api_crud(tokens, "TagType", "POST", { name: "type-a" })
             .then((responseData) => (tagType = responseData));
         })
         .then(() => {
@@ -30,7 +30,7 @@ describe("Delete tag", () => {
               tagType: tagType,
             }))
             .forEach((payload) => {
-              cy.api_crud(tokens, "Tag", payload);
+              cy.api_crud(tokens, "Tag", "POST", payload);
             });
         });
     });

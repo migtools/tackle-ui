@@ -30,8 +30,8 @@ describe("Sort applications", () => {
               cy.api_crud(
                 tokens,
                 "TagType",
-                payload,
-                "POST"
+                "POST",
+                payload
               ).then((responseData) => tagTypes.push(responseData));
             });
         })
@@ -50,7 +50,7 @@ describe("Sort applications", () => {
             ])
             .flatMap((e) => e)
             .forEach((payload) => {
-              cy.api_crud(tokens, "Tag", payload, "POST").then((responseData) =>
+              cy.api_crud(tokens, "Tag", "POST", payload).then((responseData) =>
                 tags.push(responseData)
               );
             });
@@ -64,7 +64,7 @@ describe("Sort applications", () => {
               tags: tags.slice(0, i).map((f) => f.id),
             }))
             .forEach((payload) => {
-              cy.api_crud(tokens, "Application", payload, "POST");
+              cy.api_crud(tokens, "Application", "POST", payload);
             });
         });
     });
