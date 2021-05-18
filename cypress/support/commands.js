@@ -26,9 +26,5 @@
 
 import "cypress-keycloak-commands";
 
-import "./controlsCommands.js";
-import "./appInventoryCommands.js";
-import "./pathfinderCommands.js";
-
 import "./commands/pf4";
 import "./commands/api";

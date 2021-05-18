@@ -27,7 +27,7 @@ const allResourceTypes: ResourceType[] = [
   "Tag",
   "Application",
   "ApplicationsDependency",
-  "Assessment",
+  // "Assessment",
 ];
 
 type ResourceTypeList = {

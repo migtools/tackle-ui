@@ -1,13 +1,13 @@
 /// <reference types="cypress" />
+/// <reference types="cypress-keycloak-commands" />
 
 context("Reset table after deletion", () => {
   beforeEach(() => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
 
-    cy.get("@tokens").then((tokens) => {
-      cy.tackleControlsClean(tokens);
-      cy.tackleAppInventoryClean(tokens);
+    cy.get<KcTokens>("@tokens").then((tokens) => {
+      cy.api_clean(tokens);
     });
   });
 
@@ -15,7 +15,7 @@ context("Reset table after deletion", () => {
     const totalRows = 11;
     const rowsPerpage = 10;
 
-    cy.get("@tokens").then((tokens) => {
+    cy.get<KcTokens>("@tokens").then((tokens) => {
       cy.log("Create table rows").then(() => {
         return [...Array(totalRows)]
           .map((_, i) => ({
@@ -23,7 +23,7 @@ context("Reset table after deletion", () => {
             displayName: `stakeholder${i + 1}`,
           }))
           .forEach((payload) => {
-            cy.createStakeholder(payload, tokens);
+            return cy.api_crud(tokens, "Stakeholder", "POST", payload);
           });
       });
     });
@@ -44,14 +44,14 @@ context("Reset table after deletion", () => {
     const totalRows = 11;
     const rowsPerpage = 10;
 
-    cy.get("@tokens").then((tokens) => {
+    cy.get<KcTokens>("@tokens").then((tokens) => {
       cy.log("Create table rows").then(() => {
         return [...Array(totalRows)]
           .map((_, i) => ({
             name: `group-${(i + 10).toString(36)}`,
           }))
           .forEach((payload) => {
-            cy.createStakeholderGroup(payload, tokens);
+            return cy.api_crud(tokens, "StakeholderGroup", "POST", payload);
           });
       });
     });
@@ -72,14 +72,14 @@ context("Reset table after deletion", () => {
     const totalRows = 11;
     const rowsPerpage = 10;
 
-    cy.get("@tokens").then((tokens) => {
+    cy.get<KcTokens>("@tokens").then((tokens) => {
       cy.log("Create table rows").then(() => {
         return [...Array(totalRows)]
           .map((_, i) => ({
             name: `service-${(i + 10).toString(36)}`,
           }))
           .forEach((payload) => {
-            cy.createBusinessService(payload, tokens);
+            return cy.api_crud(tokens, "BusinessService", "POST", payload);
           });
       });
     });
@@ -100,14 +100,14 @@ context("Reset table after deletion", () => {
     const totalRows = 11;
     const rowsPerpage = 10;
 
-    cy.get("@tokens").then((tokens) => {
+    cy.get<KcTokens>("@tokens").then((tokens) => {
       cy.log("Create table rows").then(() => {
         return [...Array(totalRows)]
           .map((_, i) => ({
             name: `application-${(i + 10).toString(36)}`,
           }))
           .forEach((payload) => {
-            cy.createApplication(payload, tokens);
+            return cy.api_crud(tokens, "Application", "POST", payload);
           });
       });
     });
@@ -126,11 +126,11 @@ context("Reset table after deletion", () => {
 });
 
 const verifyPagination = (
-  apiPath,
-  total,
-  perPage,
-  firstPageElements,
-  lastPageElements
+  apiPath: string,
+  total: number,
+  perPage: number,
+  firstPageElements: string[],
+  lastPageElements: string[]
 ) => {
   cy.intercept({
     method: "GET",
@@ -140,7 +140,7 @@ const verifyPagination = (
   cy.wait("@getTableDataApi");
 
   // Go to last page
-  const lastPage = parseInt((total + perPage) / perPage);
+  const lastPage = parseInt(`${(total + perPage) / perPage}`);
 
   cy.get(".pf-c-page__main-section").pf4_pagination_goToPage(lastPage);
   cy.wait("@getTableDataApi");
