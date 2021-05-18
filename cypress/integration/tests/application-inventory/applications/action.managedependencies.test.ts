@@ -115,7 +115,7 @@ describe("Application dependencies", () => {
       .should("not.contain", "application-d");
   });
 
-  it.only("Application circle dependency", () => {
+  it("Application circle dependency", () => {
     // Add north and south
     application.manageDependencies(2, {
       northToAdd: ["application-a"],

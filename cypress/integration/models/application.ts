@@ -2,6 +2,8 @@ import {
   applyFilterTextToolbar,
   submitForm,
   verifyInitialFormStatus,
+  selectFilterToolbar,
+  applyCheckboxFilterToolbar,
 } from "./commons";
 
 export interface IFormValue {
@@ -16,7 +18,7 @@ export class Application {
   openPage(): void {
     cy.visit("/application-inventory");
 
-    // Interceptors for table
+    // Interceptors for form and filters
     cy.intercept("GET", "/api/controls/business-service*").as(
       "getAllBusinessServicesDropdown"
     );
@@ -101,7 +103,34 @@ export class Application {
   }
 
   applyFilter(filterIndex: number, filterText: string): void {
-    applyFilterTextToolbar(filterIndex, filterText);
+    switch (filterIndex) {
+      case 0:
+      case 1:
+        applyFilterTextToolbar(filterIndex, filterText);
+        break;
+      case 2:
+        // Reset filter
+        selectFilterToolbar(0);
+
+        // Select filter
+        selectFilterToolbar(filterIndex);
+        cy.wait("@getAllBusinessServicesDropdown");
+
+        applyCheckboxFilterToolbar(filterText);
+        break;
+      case 3:
+        // Reset filter
+        selectFilterToolbar(0);
+
+        // Select filter
+        selectFilterToolbar(filterIndex);
+        cy.wait("@getAllTagTypesDropdown");
+
+        applyCheckboxFilterToolbar(filterText);
+        break;
+      default:
+        break;
+    }
   }
 
   manageDependencies(
@@ -165,6 +194,6 @@ export class Application {
     cy.get(".pf-c-table").pf4_table_row_check(rowIndex);
     cy.get(".pf-c-toolbar button[aria-label='assess-application']").click();
 
-    cy.wait("@getAssessmentsForApplication_assessment")
+    cy.wait("@getAssessmentsForApplication_assessment");
   }
 }
