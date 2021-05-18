@@ -26,7 +26,7 @@ describe("Sort stakeholder groups", () => {
               displayName: `stakeholder-${(i + 10).toString(36)}`,
             }))
             .forEach((payload) => {
-              cy.api_create(tokens, "Stakeholder", payload).then((data) => {
+              cy.api_crud(tokens, "Stakeholder", payload).then((data) => {
                 stakeholders.push(data);
               });
             });
@@ -39,7 +39,7 @@ describe("Sort stakeholder groups", () => {
               stakeholders: stakeholders.slice(0, i),
             }))
             .forEach((payload) => {
-              cy.api_create(tokens, "StakeholderGroup", payload);
+              cy.api_crud(tokens, "StakeholderGroup", payload);
             });
         });
     });

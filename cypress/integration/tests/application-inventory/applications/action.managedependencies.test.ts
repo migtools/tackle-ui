@@ -18,7 +18,7 @@ describe("Application dependencies", () => {
             name: `application-${(i + 10).toString(36)}`,
           }))
           .forEach((payload) => {
-            cy.api_create(tokens, "Application", payload);
+            cy.api_crud(tokens, "Application", payload);
           });
       });
     });

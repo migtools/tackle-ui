@@ -31,7 +31,7 @@ describe("Edit stakeholder", () => {
               role: "DBA",
             },
           ].forEach((payload) => {
-            cy.api_create(tokens, "JobFunction", payload);
+            cy.api_crud(tokens, "JobFunction", payload);
           });
         })
         .then(() => {
@@ -41,7 +41,7 @@ describe("Edit stakeholder", () => {
               name: `group-${(i + 10).toString(36)}`,
             }))
             .forEach((payload) => {
-              cy.api_create(
+              cy.api_crud(
                 tokens,
                 "StakeholderGroup",
                 payload
@@ -50,7 +50,7 @@ describe("Edit stakeholder", () => {
         })
         .then(() => {
           // Stakeholder to edit
-          cy.api_create(tokens, "Stakeholder", {
+          cy.api_crud(tokens, "Stakeholder", {
             email: "email-a@domain.com",
             displayName: "stakeholder-a",
             stakeholderGroups: stakeholderGroups.slice(0, 1),

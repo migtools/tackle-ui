@@ -1,10 +1,11 @@
 /// <reference types="cypress" />
 
-import { buildHeadersWithHAL_JSON } from "./utils";
+import { buildHeadersWithHAL_JSON, buildHeadersWithJSON } from "./utils";
 
 const sizeQueryParam = "size=1000";
 const controlsBaseUrl = "/api/controls";
 const applicationInventoryBaseUrl = "/api/application-inventory";
+const pathfinderBaseUrl = "/api/pathfinder";
 
 export type ResourceType =
   | "JobFunction"
@@ -14,7 +15,8 @@ export type ResourceType =
   | "TagType"
   | "Tag"
   | "Application"
-  | "ApplicationsDependency";
+  | "ApplicationsDependency"
+  | "Assessment";
 
 const allResourceTypes: ResourceType[] = [
   "JobFunction",
@@ -25,6 +27,7 @@ const allResourceTypes: ResourceType[] = [
   "Tag",
   "Application",
   "ApplicationsDependency",
+  "Assessment",
 ];
 
 type ResourceTypeList = {
@@ -67,6 +70,10 @@ const resourceTypeList: ResourceTypeList = {
     baseUrl: `${applicationInventoryBaseUrl}/applications-dependency`,
     _embeddedField: "applications-dependency",
   },
+  Assessment: {
+    baseUrl: `${pathfinderBaseUrl}/assessments`,
+    _embeddedField: undefined,
+  },
 };
 
 const create = (headers: any, url: string, payload: any) => {
@@ -78,13 +85,29 @@ const create = (headers: any, url: string, payload: any) => {
   }).its("body");
 };
 
+const singleRequest = (
+  headers: any,
+  url: string,
+  payload: any,
+  method: "PUT" | "PATCH" | "DELETE"
+) => {
+  cy.request({
+    method: method,
+    headers: headers,
+    body: payload,
+    url: `${url}/${payload.id}`,
+  }).its("body");
+};
+
 const deleteAll = (headers: any, url: string, embeddedField: string) => {
   cy.request({
     method: "GET",
     headers: headers,
     url: `${url}?${sizeQueryParam}`,
   })
-    .then((response) => response.body._embedded[embeddedField])
+    .then((response) =>
+      embeddedField ? response.body._embedded[embeddedField] : response.body
+    )
     .each((item: any) =>
       cy.request({
         method: "DELETE",
@@ -94,15 +117,33 @@ const deleteAll = (headers: any, url: string, embeddedField: string) => {
     );
 };
 
+// Utils
+
+const getHeadersFromResourceType = (
+  resourceType: ResourceType,
+  tokens: KcTokens
+) => {
+  let headers;
+  switch (resourceType) {
+    case "Assessment":
+      headers = buildHeadersWithJSON(tokens);
+      break;
+    default:
+      headers = buildHeadersWithHAL_JSON(tokens);
+      break;
+  }
+  return headers;
+};
 // Commands
 
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
-      api_create(
+      api_crud(
         tokens: KcTokens,
         resource: ResourceType,
-        payload: any
+        payload: any,
+        method?: "POST" | "PUT" | "PATCH" | "DELETE"
       ): Chainable<any>;
       api_clean(tokens: KcTokens, resource?: ResourceType): void;
     }
@@ -110,19 +151,33 @@ declare global {
 }
 
 Cypress.Commands.add(
-  "api_create",
-  (tokens: KcTokens, resource: ResourceType, payload: any) => {
-    const headers = buildHeadersWithHAL_JSON(tokens);
+  "api_crud",
+  (
+    tokens: KcTokens,
+    resource: ResourceType,
+    payload: any,
+    method: "POST" | "PUT" | "PATCH" | "DELETE" = "POST"
+  ) => {
+    const headers = getHeadersFromResourceType(resource, tokens);
     const type = resourceTypeList[resource];
 
-    create(headers, type.baseUrl, payload);
+    switch (method) {
+      case "POST":
+        create(headers, type.baseUrl, payload);
+        break;
+      case "PUT":
+      case "PATCH":
+      case "DELETE":
+        singleRequest(headers, type.baseUrl, payload, method);
+        break;
+    }
   }
 );
 
 Cypress.Commands.add(
   "api_clean",
   (tokens: KcTokens, resource?: ResourceType) => {
-    const headers = buildHeadersWithHAL_JSON(tokens);
+    const headers = getHeadersFromResourceType(resource, tokens);
 
     if (resource) {
       const type = resourceTypeList[resource];

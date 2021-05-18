@@ -12,7 +12,7 @@ describe("Delete tag type", () => {
 
     cy.get<KcTokens>("@tokens").then((tokens) => {
       cy.api_clean(tokens, "TagType");
-      cy.api_create(tokens, "TagType", {
+      cy.api_crud(tokens, "TagType", {
         name: "tagtype-a",
       });
     });

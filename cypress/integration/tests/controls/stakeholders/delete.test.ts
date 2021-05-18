@@ -12,7 +12,7 @@ describe("Delete stakeholder", () => {
 
     cy.get<KcTokens>("@tokens").then((tokens) => {
       cy.api_clean(tokens, "Stakeholder");
-      cy.api_create(tokens, "Stakeholder", {
+      cy.api_crud(tokens, "Stakeholder", {
         email: "email-a@domain.com",
         displayName: "stakeholder-a",
       });

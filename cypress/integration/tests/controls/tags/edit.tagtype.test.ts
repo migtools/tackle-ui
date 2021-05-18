@@ -14,7 +14,7 @@ describe("Edit tag type", () => {
       cy.api_clean(tokens, "TagType");
 
       // Tag type to edit
-      cy.api_create(tokens, "TagType", {
+      cy.api_crud(tokens, "TagType", {
         name: "aaa",
         rank: 111,
         colour: `#fff`,

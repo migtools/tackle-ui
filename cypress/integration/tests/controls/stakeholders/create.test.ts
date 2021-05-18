@@ -29,7 +29,7 @@ describe("Create new business service", () => {
               role: "DBA",
             },
           ].forEach((payload) => {
-            cy.api_create(tokens, "JobFunction", payload);
+            cy.api_crud(tokens, "JobFunction", payload);
           });
         })
         .then(() => {
@@ -39,7 +39,7 @@ describe("Create new business service", () => {
               name: `group-${(i + 10).toString(36)}`,
             }))
             .forEach((payload) => {
-              cy.api_create(tokens, "StakeholderGroup", payload);
+              cy.api_crud(tokens, "StakeholderGroup", payload);
             });
         });
     });

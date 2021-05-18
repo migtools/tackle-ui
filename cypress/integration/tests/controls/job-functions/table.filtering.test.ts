@@ -19,7 +19,7 @@ describe("Filter job functions", () => {
           role: `function-${(i + 10).toString(36)}`,
         }))
         .forEach((payload) => {
-          cy.api_create(tokens, "JobFunction", payload);
+          cy.api_crud(tokens, "JobFunction", payload);
         });
     });
   });

@@ -23,7 +23,7 @@ describe("Edit tag", () => {
               name: `type-${(i + 10).toString(36)}`,
             }))
             .forEach((payload) => {
-              cy.api_create(tokens, "TagType", payload).then((responseData) =>
+              cy.api_crud(tokens, "TagType", payload).then((responseData) =>
                 tagTypes.push(responseData)
               );
             });
@@ -36,7 +36,7 @@ describe("Edit tag", () => {
               tagType: tagTypes[i % 2],
             }))
             .forEach((payload) => {
-              cy.api_create(tokens, "Tag", payload);
+              cy.api_crud(tokens, "Tag", payload);
             });
         });
     });

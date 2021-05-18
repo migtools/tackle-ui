@@ -26,7 +26,7 @@ describe("Sort business services", () => {
               displayName: `stakeholder-${(i + 10).toString(36)}`,
             }))
             .forEach((payload) => {
-              cy.api_create(tokens, "Stakeholder", payload).then((data) => {
+              cy.api_crud(tokens, "Stakeholder", payload).then((data) => {
                 stakeholders.push(data);
               });
             });
@@ -40,7 +40,7 @@ describe("Sort business services", () => {
               owner: stakeholders[i],
             }))
             .forEach((payload) => {
-              cy.api_create(tokens, "BusinessService", payload);
+              cy.api_crud(tokens, "BusinessService", payload);
             });
         });
     });
