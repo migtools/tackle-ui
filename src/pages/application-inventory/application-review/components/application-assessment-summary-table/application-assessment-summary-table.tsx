@@ -101,7 +101,7 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
     const bData = DEFAULT_RISK_LABELS.get(b.riskValue);
 
     switch (columnIndex) {
-      case 2: // Risk
+      case 3: // Risk
         return (aData?.order || 0) - (bData?.order || 0);
       default:
         return 0;
@@ -134,19 +134,24 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
 
   useEffect(() => {
     onPaginationChange({ page: 1 });
-  }, [filtersValue]);
+  }, [filtersValue, onPaginationChange]);
 
   // Table
 
   const columns: ICell[] = [
     {
+      title: t("terms.category"),
+      transforms: [cellWidth(20)],
+      cellFormatters: [],
+    },
+    {
       title: t("terms.question"),
-      transforms: [cellWidth(45)],
+      transforms: [cellWidth(35)],
       cellFormatters: [],
     },
     {
       title: t("terms.answer"),
-      transforms: [cellWidth(45)],
+      transforms: [cellWidth(35)],
       cellFormatters: [],
     },
     {
@@ -160,6 +165,11 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
   pageItems.forEach((item) => {
     rows.push({
       cells: [
+        {
+          title: (
+            <TableText wrapModifier="truncate">{item.category.title}</TableText>
+          ),
+        },
         {
           title: (
             <TableText wrapModifier="truncate">
