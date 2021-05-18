@@ -59,12 +59,14 @@ describe("Assess an application", () => {
     application.assessApplication(0);
     cy.wait("@postAssessment");
 
+    cy.wait(1000);
     cy.url().should("match", new RegExp("/application-inventory/assessment/*"));
   });
 
   it("Assess application whose status is 'inProgress'", () => {
     application.assessApplication(1);
 
+    cy.wait(1000);
     cy.url().should("match", new RegExp("/application-inventory/assessment/*"));
   });
 
@@ -76,6 +78,7 @@ describe("Assess an application", () => {
     );
     cy.get("button[aria-label='confirm']").click();
 
+    cy.wait(1000);
     cy.url().should("match", new RegExp("/application-inventory/assessment/*"));
   });
 });
