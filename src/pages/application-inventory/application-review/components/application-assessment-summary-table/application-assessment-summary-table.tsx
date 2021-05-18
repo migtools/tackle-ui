@@ -21,7 +21,7 @@ import {
   useTableFilter,
 } from "shared/hooks";
 
-import { Assessment, Risk } from "api/models";
+import { Assessment, Question, QuestionnaireCategory, Risk } from "api/models";
 
 import { SelectRiskFilter } from "./components/select-risk-filter";
 import { DEFAULT_RISK_LABELS } from "Constants";
@@ -32,8 +32,10 @@ enum FilterKey {
 
 interface ITableItem {
   questionValue: string;
-  answerValue?: string;
+  answerValue: string;
   riskValue: Risk;
+  category: QuestionnaireCategory;
+  question: Question;
 }
 
 export interface IApplicationAssessmentSummaryTableProps {
@@ -67,14 +69,28 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
   const tableItems: ITableItem[] = useMemo(() => {
     return assessment.questionnaire.categories
       .slice(0)
-      .sort((a, b) => a.order - b.order)
-      .flatMap((f) => f.questions)
-      .map((f) => {
-        return {
-          questionValue: f.question,
-          answerValue: f.options.find((q) => q.checked === true)?.option,
-          riskValue: f.options.find((q) => q.checked === true)?.risk,
-        } as ITableItem;
+      .map((category) => {
+        const result: ITableItem[] = category.questions.map((question) => {
+          const checkedOption = question.options.find(
+            (q) => q.checked === true
+          );
+          return {
+            questionValue: question.question,
+            answerValue: checkedOption ? checkedOption.option : "",
+            riskValue: checkedOption ? checkedOption.risk : "UNKNOWN",
+            category,
+            question,
+          };
+        });
+        return result;
+      })
+      .flatMap((f) => f)
+      .sort((a, b) => {
+        if (a.category.order !== b.category.order) {
+          return a.category.order - b.category.order;
+        } else {
+          return a.question.order - b.question.order;
+        }
       });
   }, [assessment]);
 
