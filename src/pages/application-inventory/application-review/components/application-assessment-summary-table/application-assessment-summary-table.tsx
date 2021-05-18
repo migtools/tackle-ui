@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { ToolbarChip } from "@patternfly/react-core";
@@ -31,7 +31,6 @@ enum FilterKey {
 }
 
 interface ITableItem {
-  questionValue: string;
   answerValue: string;
   riskValue: Risk;
   category: QuestionnaireCategory;
@@ -60,7 +59,6 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
     filters: filtersValue,
     isPresent: areFiltersPresent,
     setFilter,
-    removeFilter,
     clearAllFilters,
   } = useToolbarFilter<ToolbarChip>();
 
@@ -74,13 +72,13 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
           const checkedOption = question.options.find(
             (q) => q.checked === true
           );
-          return {
-            questionValue: question.question,
+          const item: ITableItem = {
             answerValue: checkedOption ? checkedOption.option : "",
             riskValue: checkedOption ? checkedOption.risk : "UNKNOWN",
             category,
             question,
           };
+          return item;
         });
         return result;
       })
@@ -134,6 +132,12 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
     },
   });
 
+  useEffect(() => {
+    onPaginationChange({ page: 1 });
+  }, [filtersValue]);
+
+  // Table
+
   const columns: ICell[] = [
     {
       title: t("terms.question"),
@@ -158,7 +162,9 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
       cells: [
         {
           title: (
-            <TableText wrapModifier="truncate">{item.questionValue}</TableText>
+            <TableText wrapModifier="truncate">
+              {item.question.question}
+            </TableText>
           ),
         },
         {
@@ -189,7 +195,9 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
         <AppTableToolbarToggleGroup
           options={filters}
           filtersValue={filtersValue}
-          onDeleteFilter={removeFilter}
+          onDeleteFilter={(key, value) => {
+            setFilter(key, value as ToolbarChip[]);
+          }}
         >
           <SelectRiskFilter
             value={filtersValue.get(FilterKey.RISK)}
