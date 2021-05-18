@@ -43,12 +43,10 @@ describe("Assess an application", () => {
               applicationId: applications[2].id,
             })
             .then((responseData) =>
-              cy.api_crud(
-                tokens,
-                "Assessment",
-                { ...responseData, status: "COMPLETE" },
-                "PATCH"
-              )
+              cy.api_crud(tokens, "Assessment", "PATCH", {
+                ...responseData,
+                status: "COMPLETE",
+              })
             );
         });
     });

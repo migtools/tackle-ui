@@ -21,17 +21,12 @@ describe("Create new business service", () => {
       cy.log("").then(() => {
         // Create application with assessment
         return cy
-          .api_crud(tokens, "Application", { name: "application-1" }, "POST")
+          .api_crud(tokens, "Application", "POST", { name: "application-1" })
           .then((responseDataApp) =>
             cy
-              .api_crud(
-                tokens,
-                "Assessment",
-                {
-                  applicationId: responseDataApp.id,
-                },
-                "POST"
-              )
+              .api_crud(tokens, "Assessment", "POST", {
+                applicationId: responseDataApp.id,
+              })
               .then((responseDataAssessment) => {
                 assessmentToEdit = responseDataAssessment;
               })

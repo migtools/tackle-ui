@@ -57,7 +57,7 @@ describe("Filter business services", () => {
               jobFunction: jobFunctions[i],
             }))
             .forEach((payload) => {
-              cy.api_crud(tokens, "Stakeholder", payload);
+              cy.api_crud(tokens, "Stakeholder", "POST", payload);
             });
         });
     });
