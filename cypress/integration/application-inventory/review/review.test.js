@@ -143,13 +143,13 @@ describe("Review", () => {
 
     // Sort by risk Asc
     cy.get(".pf-c-table").pf4_table_column_toggle("Risk");
-    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("Green");
-    cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("Amber");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("Low");
+    cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("Medium");
 
     // Sort by risk Desc
     cy.get(".pf-c-table").pf4_table_column_toggle("Risk");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("Unknown");
-    cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("Red");
+    cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("High");
 
     // Filter by risk
     cy.get(
@@ -157,11 +157,11 @@ describe("Review", () => {
     ).click();
     cy.get(
       ".pf-c-toolbar .pf-c-select > .pf-c-select__menu > .pf-c-form__fieldset > .pf-c-select__menu-search > input"
-    ).type("Green");
+    ).type("Low");
     cy.get(
       ".pf-c-toolbar .pf-c-select > .pf-c-select__menu > .pf-c-form__fieldset > .pf-c-select__menu-item > input"
     ).check();
-    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("Green");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("Low");
 
     cy.get("button.pf-m-link")
       .contains("Clear all filters")
@@ -172,11 +172,11 @@ describe("Review", () => {
     ).click();
     cy.get(
       ".pf-c-toolbar .pf-c-select > .pf-c-select__menu > .pf-c-form__fieldset > .pf-c-select__menu-search > input"
-    ).type("Red");
+    ).type("High");
     cy.get(
       ".pf-c-toolbar .pf-c-select > .pf-c-select__menu > .pf-c-form__fieldset > .pf-c-select__menu-item > input"
     ).check();
-    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("Red");
+    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("High");
 
     /**
      * Test form
