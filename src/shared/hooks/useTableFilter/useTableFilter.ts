@@ -11,6 +11,12 @@ interface HookArgs<T> {
 
   pagination: PageQuery;
   filterItem: (value: T) => boolean;
+
+  /**
+   * Use this field if you want to verify the 'items' changed
+   * after sorting and if so then skip reversing 'items'.
+   */
+  isEqual?: (a: T, b: T) => boolean;
 }
 
 interface HookState<T> {
@@ -23,14 +29,33 @@ export const useTableFilter = <T>({
   sortBy,
   pagination,
   filterItem,
-  compareToByColumn: compareTo,
+  compareToByColumn,
+  isEqual,
 }: HookArgs<T>): HookState<T> => {
+  const unsortedItems = [...(items || [])];
+
   //  Sort
   let sortedItems: T[];
-  sortedItems = [...(items || [])].sort((a, b) =>
-    compareTo(a, b, sortBy?.index)
+  sortedItems = unsortedItems.sort((a, b) =>
+    compareToByColumn(a, b, sortBy?.index)
   );
-  if (sortBy?.direction === SortByDirection.desc) {
+
+  let orderChanged: boolean = false;
+  if (isEqual) {
+    for (let i = 0; i < unsortedItems.length; i++) {
+      const unsortedElement = unsortedItems[i];
+      const sortedElement = sortedItems[i];
+      if (!isEqual(unsortedElement, sortedElement)) {
+        orderChanged = true;
+        break;
+      }
+    }
+  }
+
+  const shouldReverse = isEqual
+    ? orderChanged
+    : sortBy?.direction === SortByDirection.desc;
+  if (shouldReverse) {
     sortedItems = sortedItems.reverse();
   }
 

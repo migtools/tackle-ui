@@ -31,6 +31,10 @@ enum FilterKey {
 }
 
 interface ITableItem {
+  /**
+   * Unique ID that will identify the row
+   */
+  id: number;
   answerValue: string;
   riskValue: Risk;
   category: QuestionnaireCategory;
@@ -73,6 +77,7 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
             (q) => q.checked === true
           );
           const item: ITableItem = {
+            id: checkedOption?.id || 0,
             answerValue: checkedOption ? checkedOption.option : "",
             riskValue: checkedOption ? checkedOption.risk : "UNKNOWN",
             category,
@@ -130,6 +135,7 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
 
       return result;
     },
+    isEqual: (a, b) => a.id === b.id,
   });
 
   useEffect(() => {
