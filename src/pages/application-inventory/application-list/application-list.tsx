@@ -46,11 +46,16 @@ import {
   useTableControls,
   useFetchApplications,
   useAssessApplication,
+  useMultipleFetch,
 } from "shared/hooks";
 
 import { formatPath, Paths } from "Paths";
 import { Application, Assessment, SortByQuery } from "api/models";
-import { ApplicationSortBy, ApplicationSortByQuery } from "api/rest";
+import {
+  ApplicationSortBy,
+  ApplicationSortByQuery,
+  getAssessments,
+} from "api/rest";
 import { getAxiosErrorMessage } from "utils/utils";
 
 import { NewApplicationModal } from "./components/new-application-modal";
@@ -103,6 +108,13 @@ const getRow = (rowData: IRowData): Application => {
   return rowData[ENTITY_FIELD];
 };
 
+const searchAppAssessment = (id: number) => {
+  const result = getAssessments({ applicationId: id }).then(({ data }) =>
+    data[0] ? data[0] : undefined
+  );
+  return result;
+};
+
 export const ApplicationList: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -142,10 +154,6 @@ export const ApplicationList: React.FC = () => {
   const {
     assessApplication,
     inProgress: isApplicationAssessInProgress,
-  } = useAssessApplication();
-  const {
-    getCurrentAssessment,
-    inProgress: isApplicationReviewInProgress,
   } = useAssessApplication();
 
   const {
@@ -193,6 +201,23 @@ export const ApplicationList: React.FC = () => {
       toSortByQuery(sortByQuery)
     );
   }, [filtersValue, paginationQuery, sortByQuery, fetchApplications]);
+
+  // Assessments
+
+  const {
+    getData: getApplicationAssessment,
+    isFetching: isFetchingApplicationAssessment,
+    fetchError: fetchErrorApplicationAssessment,
+    fetchCount: fetchCountApplicationAssessment,
+    triggerFetch: fetchApplicationsAssessment,
+  } = useMultipleFetch<number, Assessment | undefined>(searchAppAssessment);
+
+  useEffect(() => {
+    if (applications) {
+      fetchApplicationsAssessment(applications.data.map((f) => f.id!));
+      console.log(fetchApplicationsAssessment);
+    }
+  }, [applications, fetchApplicationsAssessment]);
 
   // Expansion and selection of rows
 
@@ -254,7 +279,14 @@ export const ApplicationList: React.FC = () => {
           title: <ApplicationBusinessService application={item} />,
         },
         {
-          title: <ApplicationAssessment application={item} />,
+          title: (
+            <ApplicationAssessment
+              assessment={getApplicationAssessment(item.id!)}
+              isFetching={isFetchingApplicationAssessment(item.id!)}
+              fetchError={fetchErrorApplicationAssessment(item.id!)}
+              fetchCount={fetchCountApplicationAssessment(item.id!)}
+            />
+          ),
         },
         {
           title: item.review ? (
@@ -525,26 +557,16 @@ export const ApplicationList: React.FC = () => {
   };
 
   const startApplicationReview = (row: Application) => {
-    getCurrentAssessment(
-      row,
-      (assessment?: Assessment) => {
-        if (!assessment || (assessment && assessment.status !== "COMPLETE")) {
-          dispatch(
-            alertActions.addDanger(
-              "You must assess the application before reviewing it"
-            )
-          );
-        } else {
-          history.push(
-            formatPath(Paths.applicationInventory_review, {
-              applicationId: row.id,
-            })
-          );
-        }
-      },
-      (error) => {
-        dispatch(alertActions.addDanger(getAxiosErrorMessage(error)));
-      }
+    const assessment = getApplicationAssessment(row.id!);
+    if (!assessment) {
+      console.log("You must assess the application before reviewing it");
+      return;
+    }
+
+    history.push(
+      formatPath(Paths.applicationInventory_review, {
+        applicationId: row.id,
+      })
     );
   };
 
@@ -560,6 +582,11 @@ export const ApplicationList: React.FC = () => {
 
     const row = selectedRows[0];
     startApplicationReview(row);
+  };
+
+  const isReviewBtnDisabled = (row: Application) => {
+    const assessment = getApplicationAssessment(row.id!);
+    return assessment === undefined || assessment.status !== "COMPLETE";
   };
 
   return (
@@ -697,9 +724,8 @@ export const ApplicationList: React.FC = () => {
                       onClick={handleOnReviewSelectedRow}
                       isDisabled={
                         selectedRows.length !== 1 ||
-                        isApplicationReviewInProgress
+                        isReviewBtnDisabled(selectedRows[0])
                       }
-                      isLoading={isApplicationReviewInProgress}
                     >
                       {t("actions.review")}
                     </Button>
