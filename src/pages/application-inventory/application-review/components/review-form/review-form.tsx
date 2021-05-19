@@ -16,7 +16,11 @@ import {
 
 import { OptionWithValue, SingleSelectFormikField } from "shared/components";
 
-import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
+import {
+  DEFAULT_SELECT_MAX_HEIGHT,
+  DEFAULT_PROPOSED_ACTIONS,
+  DEFAULT_EFFORTS,
+} from "Constants";
 import {
   getValidatedFromError,
   getValidatedFromErrorTouched,
@@ -25,51 +29,23 @@ import { number } from "yup";
 import { Application, Review } from "api/models";
 import { createReview, updateReview } from "api/rest";
 
-const actionOptions: SimpleOption[] = [
-  {
-    key: "regost",
-    name: "Rehost",
-  },
-  {
-    key: "replatform",
-    name: "Replatform",
-  },
-  {
-    key: "refactor",
-    name: "Refactor",
-  },
-  {
-    key: "repurchase",
-    name: "Repurchase",
-  },
-  {
-    key: "retire",
-    name: "Retire",
-  },
-  {
-    key: "retain",
-    name: "Retain",
-  },
-];
+const actionOptions: SimpleOption[] = Array.from(
+  DEFAULT_PROPOSED_ACTIONS.keys()
+).map((key) => {
+  return {
+    key,
+    name: DEFAULT_PROPOSED_ACTIONS.get(key)!,
+  };
+});
 
-const effortOptions: SimpleOption[] = [
-  {
-    key: "small",
-    name: "Small",
-  },
-  {
-    key: "medium",
-    name: "Medium",
-  },
-  {
-    key: "large",
-    name: "Large",
-  },
-  {
-    key: "extra_large",
-    name: "Extra large",
-  },
-];
+const effortOptions: SimpleOption[] = Array.from(DEFAULT_EFFORTS.keys()).map(
+  (key) => {
+    return {
+      key,
+      name: DEFAULT_EFFORTS.get(key)!,
+    };
+  }
+);
 
 interface SimpleOption {
   key: string;

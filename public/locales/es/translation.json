@@ -81,6 +81,7 @@
         "application": "Applicación",
         "applications": "Applicaciones",
         "assessment": "Evaluación",
+        "businessCriticality": "Criticidad de negocio",
         "businessService": "Servicio de negocio",
         "businessServices": "Servicios de negocio",
         "category": "Categoría",
@@ -103,11 +104,13 @@
         "northboundDependencies": "Dependencias del norte",
         "notAvailable": "No disponible",
         "notStarted": "No empezado",
+        "notYetReviewed": "No revisado todavía",
         "owner": "Propietario",
         "proposedAction": "Acción propuesta",
         "question": "Pregunta",
         "rank": "Rango",
         "review": "Revisar",
+        "reviewComments": "Comentarios de la revisión",
         "risk": "Riesgo",
         "select": "Seleccione",
         "southboundDependencies": "Dependencias del sur",
@@ -123,7 +126,8 @@
         "tags": "Etiquetas",
         "tagType": "Tipo de etiqueta",
         "tagTypes": "Tipos de etiqueta",
-        "unknown": "Desconocido"
+        "unknown": "Desconocido",
+        "workPriority": "Prioridad de trabajo"
     },
     "toastr": {
         "success": {

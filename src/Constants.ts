@@ -58,3 +58,21 @@ export const DEFAULT_RISK_LABELS: Map<Risk, RiskData> = new Map([
 ]);
 
 export const DEFAULT_RISK_LIST: Risk[] = ["GREEN", "AMBER", "RED", "UNKNOWN"];
+
+// Review
+
+export const DEFAULT_PROPOSED_ACTIONS: Map<string, string> = new Map([
+  ["rehost", "Rehost"],
+  ["replatform", "Replatform"],
+  ["refactor", "Refactor"],
+  ["repurchase", "Repurchase"],
+  ["retire", "Retire"],
+  ["retain", "Retain"],
+]);
+
+export const DEFAULT_EFFORTS: Map<string, string> = new Map([
+  ["small", "Small"],
+  ["medium", "Medium"],
+  ["large", "Large"],
+  ["extra_large", "Extra large"],
+]);

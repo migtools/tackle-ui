@@ -68,6 +68,7 @@ import { ApplicationBusinessService } from "./components/application-business-se
 import { ApplicationTags } from "./components/application-tags/application-tags";
 import { SelectTagFilter } from "./components/toolbar-search-filter/select-tag-filter";
 import ApplicationDependenciesForm from "./components/application-dependencies-form";
+import { ApplicationListExpandedArea } from "./components/application-list-expanded-area";
 
 enum FilterKey {
   NAME = "name",
@@ -295,20 +296,7 @@ export const ApplicationList: React.FC = () => {
       fullWidth: false,
       cells: [
         <div className="pf-c-table__expandable-row-content">
-          <DescriptionList isHorizontal>
-            <DescriptionListGroup>
-              <DescriptionListTerm>{t("terms.tags")}</DescriptionListTerm>
-              <DescriptionListDescription>
-                <ApplicationTags application={item} />
-              </DescriptionListDescription>
-            </DescriptionListGroup>
-            <DescriptionListGroup>
-              <DescriptionListTerm>{t("terms.comments")}</DescriptionListTerm>
-              <DescriptionListDescription>
-                {item.comments}
-              </DescriptionListDescription>
-            </DescriptionListGroup>
-          </DescriptionList>
+          <ApplicationListExpandedArea application={item} />
         </div>,
       ],
     });

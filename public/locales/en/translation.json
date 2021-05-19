@@ -81,6 +81,7 @@
         "application": "Application",
         "applications": "Applications",
         "assessment": "Assessment",
+        "businessCriticality": "Business criticality",
         "businessService": "Business service",
         "businessServices": "Business services",
         "category": "Category",
@@ -103,11 +104,13 @@
         "northboundDependencies": "Northbound dependencies",
         "notAvailable": "Not available",
         "notStarted": "Not started",
+        "notYetReviewed": "Not yet reviewed",
         "owner": "Owner",
         "proposedAction": "Proposed action",
         "question": "Question",
         "rank": "Rank",
         "review": "Review",
+        "reviewComments": "Review comments",
         "risk": "Risk",
         "select": "Select",
         "southboundDependencies": "Southbound dependencies",
@@ -123,7 +126,8 @@
         "tags": "Tags",
         "tagType": "Tag type",
         "tagTypes": "Tag types",
-        "unknown": "Unknown"
+        "unknown": "Unknown",
+        "workPriority": "Work priority"
     },
     "toastr": {
         "success": {
