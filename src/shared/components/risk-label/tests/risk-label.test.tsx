@@ -6,19 +6,25 @@ describe("RiskLabel", () => {
   it("Green", () => {
     const wrapper = mount(<RiskLabel risk="GREEN" />);
     expect(wrapper.find(".pf-m-green").length).toBe(1);
-    expect(wrapper.find(".pf-c-label__content").text()).toBe("Green");
+    expect(wrapper.find(".pf-c-label__content").text()).toBe("Low");
   });
 
   it("Amber", () => {
     const wrapper = mount(<RiskLabel risk="AMBER" />);
     expect(wrapper.find(".pf-m-orange").length).toBe(1);
-    expect(wrapper.find(".pf-c-label__content").text()).toBe("Amber");
+    expect(wrapper.find(".pf-c-label__content").text()).toBe("Medium");
   });
 
   it("Red", () => {
     const wrapper = mount(<RiskLabel risk="RED" />);
     expect(wrapper.find(".pf-m-red").length).toBe(1);
-    expect(wrapper.find(".pf-c-label__content").text()).toBe("Red");
+    expect(wrapper.find(".pf-c-label__content").text()).toBe("High");
+  });
+
+  it("Unknown", () => {
+    const wrapper = mount(<RiskLabel risk="UNKNOWN" />);
+    expect(wrapper.find(".pf-c-label").length).toBe(1);
+    expect(wrapper.find(".pf-c-label__content").text()).toBe("Unknown");
   });
 
   it("Not defined risk", () => {

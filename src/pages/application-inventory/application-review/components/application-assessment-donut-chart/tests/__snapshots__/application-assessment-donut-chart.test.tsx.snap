@@ -23,15 +23,15 @@ exports[`AppTable Renders without crashing 1`] = `
     data={
       Array [
         Object {
-          "x": "Green",
+          "x": "Low",
           "y": 1,
         },
         Object {
-          "x": "Amber",
+          "x": "Medium",
           "y": 1,
         },
         Object {
-          "x": "Red",
+          "x": "High",
           "y": 1,
         },
         Object {
