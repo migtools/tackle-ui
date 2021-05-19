@@ -7,10 +7,6 @@ import { useSelectionState } from "@konveyor/lib-ui";
 import {
   Button,
   ButtonVariant,
-  DescriptionList,
-  DescriptionListDescription,
-  DescriptionListGroup,
-  DescriptionListTerm,
   Modal,
   PageSection,
   PageSectionVariants,
@@ -65,7 +61,6 @@ import { SelectBusinessServiceFilter } from "./components/toolbar-search-filter/
 import { ApplicationAssessment } from "./components/application-assessment";
 import { ApplicationBusinessService } from "./components/application-business-service";
 
-import { ApplicationTags } from "./components/application-tags/application-tags";
 import { SelectTagFilter } from "./components/toolbar-search-filter/select-tag-filter";
 import ApplicationDependenciesForm from "./components/application-dependencies-form";
 import { ApplicationListExpandedArea } from "./components/application-list-expanded-area";
