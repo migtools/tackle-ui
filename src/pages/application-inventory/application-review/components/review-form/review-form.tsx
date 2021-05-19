@@ -319,6 +319,7 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
               formik.errors.comments,
               formik.touched.comments
             )}
+            resizeOrientation="vertical"
           />
         </FormGroup>
 
