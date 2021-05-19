@@ -4,8 +4,8 @@ exports[`AppTable Renders without crashing 1`] = `
 <div
   style={
     Object {
-      "height": "230px",
-      "width": "230px",
+      "height": "250px",
+      "width": "250px",
     }
   }
 >
