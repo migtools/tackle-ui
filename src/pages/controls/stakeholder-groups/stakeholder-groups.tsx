@@ -249,9 +249,13 @@ export const StakeholderGroups: React.FC = () => {
   const deleteRow = (row: StakeholderGroup) => {
     dispatch(
       confirmDialogActions.openDialog({
-        title: t("dialog.title.delete", { what: row.name }),
-        message: t("dialog.message.delete", { what: row.name }),
-        variant: ButtonVariant.danger,
+        // t("terms.stakeholderGroup")
+        title: t("dialog.title.delete", {
+          what: t("terms.stakeholderGroup").toLowerCase(),
+        }),
+        titleIconVariant: "warning",
+        message: t("dialog.message.delete"),
+        confirmBtnVariant: ButtonVariant.danger,
         confirmBtnLabel: t("actions.delete"),
         cancelBtnLabel: t("actions.cancel"),
         onConfirm: () => {

@@ -369,9 +369,13 @@ export const ApplicationList: React.FC = () => {
   const deleteRow = (row: Application) => {
     dispatch(
       confirmDialogActions.openDialog({
-        title: t("dialog.title.delete", { what: row.name }),
-        message: t("dialog.message.delete", { what: row.name }),
-        variant: ButtonVariant.danger,
+        // t("terms.application")
+        title: t("dialog.title.delete", {
+          what: t("terms.application").toLowerCase(),
+        }),
+        titleIconVariant: "warning",
+        message: t("dialog.message.delete"),
+        confirmBtnVariant: ButtonVariant.danger,
         confirmBtnLabel: t("actions.delete"),
         cancelBtnLabel: t("actions.cancel"),
         onConfirm: () => {
@@ -490,7 +494,7 @@ export const ApplicationList: React.FC = () => {
               }),
               titleIconVariant: "warning",
               message: t("message.overrideAssessmentConfirmation"),
-              variant: ButtonVariant.primary,
+              confirmBtnVariant: ButtonVariant.primary,
               confirmBtnLabel: t("actions.continue"),
               cancelBtnLabel: t("actions.cancel"),
               onConfirm: () => {

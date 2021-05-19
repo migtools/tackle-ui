@@ -19,7 +19,7 @@ export type ConfirmDialogState = Readonly<{
   message: string;
   confirmBtnLabel: string;
   cancelBtnLabel: string;
-  variant: ButtonVariant;
+  confirmBtnVariant: ButtonVariant;
 
   onConfirm: () => void;
 }>;
@@ -33,7 +33,7 @@ export const defaultState: ConfirmDialogState = {
   message: "",
   confirmBtnLabel: "Confirm",
   cancelBtnLabel: "Cancel",
-  variant: ButtonVariant.primary,
+  confirmBtnVariant: ButtonVariant.primary,
 
   onConfirm: () => {},
 };

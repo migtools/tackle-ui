@@ -22,7 +22,7 @@ Basic.args = {
   isOpen: true,
   title: "Delete project",
   message: "Are you sure you want to delete the project 'ABC'",
-  variant: ButtonVariant.primary,
+  confirmBtnVariant: ButtonVariant.primary,
   confirmBtnLabel: "Yes",
   cancelBtnLabel: "Cancel",
 };

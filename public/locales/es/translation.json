@@ -38,10 +38,10 @@
     },
     "dialog": {
         "message": {
-            "delete": "¿Estás seguro de querer eliminar '{{what}}'?. Esta acción eliminará todos los recursos asociados al mismo y no puede ser revertida. ¡Asegúrate de que esto es lo que realmente quieres!"
+            "delete": "Esta acción no puede ser revertida."
         },
         "title": {
-            "delete": "Eliminar '{{what}}'",
+            "delete": "¿Eliminar {{what}}?",
             "newApplication": "Nueva aplicación",
             "newBusinessService": "Nuevo servicio de negocio",
             "newJobFunction": "Nueva función laboral",
