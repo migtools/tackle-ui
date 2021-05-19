@@ -201,7 +201,6 @@ export const ApplicationReview: React.FC = () => {
                 </div>
               </GridItem>
             )}
-            <GridItem md={1}></GridItem>
             {assessment && (
               <GridItem md={6}>
                 <ApplicationAssessmentDonutChart assessment={assessment} />

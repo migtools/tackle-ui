@@ -252,6 +252,8 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
             minusBtnAriaLabel="minus"
             plusBtnAriaLabel="plus"
             value={formik.values.criticality}
+            min={1}
+            max={10}
             onMinus={() => {
               formik.setFieldValue(
                 "criticality",
@@ -280,6 +282,8 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
             minusBtnAriaLabel="minus"
             plusBtnAriaLabel="plus"
             value={formik.values.priority}
+            min={1}
+            max={10}
             onMinus={() => {
               formik.setFieldValue(
                 "priority",
