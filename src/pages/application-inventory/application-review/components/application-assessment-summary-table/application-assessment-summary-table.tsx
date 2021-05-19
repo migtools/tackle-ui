@@ -113,7 +113,7 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
     sortByQuery: sortBy,
     handlePaginationChange: onPaginationChange,
     handleSortChange: onSort,
-  } = useTableControls();
+  } = useTableControls({ paginationQuery: { page: 1, perPage: 50 } });
 
   const { pageItems, filteredItems } = useTableFilter<ITableItem>({
     items: tableItems,
