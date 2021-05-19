@@ -13,7 +13,7 @@ interface Item {
   message: string;
   confirmBtnLabel: string;
   cancelBtnLabel: string;
-  variant: ButtonVariant;
+  confirmBtnVariant: ButtonVariant;
   onConfirm: () => void;
 }
 
