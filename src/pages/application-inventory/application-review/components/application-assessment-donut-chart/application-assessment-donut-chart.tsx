@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { ChartDonut } from "@patternfly/react-charts";
+import { ChartDonut, ChartLegend } from "@patternfly/react-charts";
 
 import { global_palette_black_400 as black } from "@patternfly/react-tokens";
 
@@ -84,14 +84,31 @@ export const ApplicationAssessmentDonutChart: React.FC<IApplicationAssessmentDon
   ].filter((f) => f.y > 0);
 
   return (
-    <div style={{ height: "250px", width: "250px" }}>
+    <div style={{ height: "250px", width: "380px" }}>
       <ChartDonut
         ariaDesc="risk-donut-chart"
         constrainToVisibleArea={true}
         data={chartDefinition.map((elem) => ({ x: elem.x, y: elem.y }))}
         labels={({ datum }) => `${datum.x}: ${datum.y}`}
         colorScale={chartDefinition.map((elem) => elem.color)}
+        legendComponent={
+          <ChartLegend
+            data={chartDefinition.map((elem) => ({
+              name: `${elem.x}: ${elem.y}`,
+            }))}
+            colorScale={chartDefinition.map((elem) => elem.color)}
+          />
+        }
+        legendOrientation="vertical"
+        legendPosition="right"
+        padding={{
+          bottom: 20,
+          left: 20,
+          right: 140, // Adjusted to accommodate legend
+          top: 20,
+        }}
         innerRadius={50}
+        width={380}
       />
     </div>
   );
