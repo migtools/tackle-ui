@@ -215,7 +215,6 @@ export const ApplicationList: React.FC = () => {
   useEffect(() => {
     if (applications) {
       fetchApplicationsAssessment(applications.data.map((f) => f.id!));
-      console.log(fetchApplicationsAssessment);
     }
   }, [applications, fetchApplicationsAssessment]);
 
