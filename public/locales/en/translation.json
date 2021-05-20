@@ -91,7 +91,7 @@
         "controls": "Controls",
         "description": "Description",
         "displayName": "Display name",
-        "effortEstimation": "Effort estimation",
+        "effortEstimate": "Effort estimate",
         "email": "Email",
         "group": "Group",
         "group(s)": "Group(s)",

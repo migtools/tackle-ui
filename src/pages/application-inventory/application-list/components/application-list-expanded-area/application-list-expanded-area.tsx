@@ -69,8 +69,8 @@ export const ApplicationListExpandedArea: React.FC<IApplicationListExpandedAreaP
         </DescriptionListDescription>
       </DescriptionListGroup>
       <DescriptionListGroup>
-        <DescriptionListTerm>{t("terms.effortEstimation")}</DescriptionListTerm>
-        <DescriptionListDescription cy-data="effort-estimation">
+        <DescriptionListTerm>{t("terms.effortEstimate")}</DescriptionListTerm>
+        <DescriptionListDescription cy-data="effort-estimate">
           {reviewToShown.effortEstimate}
         </DescriptionListDescription>
       </DescriptionListGroup>
