@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-keycloak-commands" />
 
-import { BusinessService } from "../../../models/business-service";
+import { BusinessServicePage } from "../../../models/business-service";
 
 describe("Create new business service", () => {
-  const businessService = new BusinessService();
+  const businessServicePage = new BusinessServicePage();
 
   before(() => {
     cy.kcLogout();
@@ -14,14 +14,16 @@ describe("Create new business service", () => {
       cy.api_clean(tokens, "Stakeholder");
 
       // Stakeholders for dropdown
-      [...Array(3)]
-        .map((_, i) => ({
-          email: `email-${(i + 10).toString(36)}@domain.com`,
-          displayName: `stakeholder-${(i + 10).toString(36)}`,
-        }))
-        .forEach((payload) => {
-          cy.api_crud(tokens, "Stakeholder", "POST", payload);
-        });
+      cy.log("").then(() => {
+        return [...Array(3)]
+          .map((_, i) => ({
+            email: `email-${(i + 10).toString(36)}@domain.com`,
+            displayName: `stakeholder-${(i + 10).toString(36)}`,
+          }))
+          .forEach((payload) => {
+            cy.api_crud(tokens, "Stakeholder", "POST", payload);
+          });
+      });
     });
   });
 
@@ -32,24 +34,14 @@ describe("Create new business service", () => {
     cy.get<KcTokens>("@tokens").then((tokens) => {
       cy.api_clean(tokens, "BusinessService");
     });
-
-    // Interceptors
-    cy.intercept("GET", "/api/controls/business-service*").as(
-      "getBusinessServices"
-    );
-    cy.intercept("POST", "/api/controls/business-service*").as(
-      "postBusinessService"
-    );
   });
 
   it("With min data", () => {
-    businessService.create({
+    businessServicePage.create({
       name: "mybusinessservice",
     });
-    cy.wait("@postBusinessService");
 
     // Verify table
-    cy.wait("@getBusinessServices");
     cy.get(".pf-c-table")
       .pf4_table_rows()
       .eq(0)
@@ -57,14 +49,12 @@ describe("Create new business service", () => {
   });
 
   it("With description", () => {
-    businessService.create({
+    businessServicePage.create({
       name: "mybusinessservice",
       description: "mydescription",
     });
-    cy.wait("@postBusinessService");
 
     // Verify table
-    cy.wait("@getBusinessServices");
     cy.get(".pf-c-table")
       .pf4_table_rows()
       .eq(0)
@@ -73,14 +63,12 @@ describe("Create new business service", () => {
   });
 
   it("With owner", () => {
-    businessService.create({
+    businessServicePage.create({
       name: "mybusinessservice",
       owner: "stakeholder-a",
     });
-    cy.wait("@postBusinessService");
 
     // Verify table
-    cy.wait("@getBusinessServices");
     cy.get(".pf-c-table")
       .pf4_table_rows()
       .eq(0)

@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-keycloak-commands" />
 
-import { StakeholderGroup } from "../../../models/stakeholder-group";
+import { StakeholderGroupPage } from "../../../models/stakeholder-group";
 
 describe("Sort stakeholder groups", () => {
-  const stakeholderGroup = new StakeholderGroup();
+  const stakeholderGroupPage = new StakeholderGroupPage();
 
   before(() => {
     cy.kcLogout();
@@ -50,16 +50,11 @@ describe("Sort stakeholder groups", () => {
   beforeEach(() => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
-
-    // Inteceptors
-    cy.intercept("GET", "/api/controls/stakeholder-group*").as(
-      "getStakeholderGroups"
-    );
   });
 
   it("Sort by name", () => {
-    stakeholderGroup.openPage();
-    cy.wait("@getStakeholderGroups");
+    const columnName = "Name";
+    stakeholderGroupPage.openPage();
 
     // Asc is the default
     cy.get(".pf-c-table").pf4_table_column_isAsc("Name");
@@ -68,27 +63,24 @@ describe("Sort stakeholder groups", () => {
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("group-j");
 
     // Desc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Name");
-    cy.wait("@getStakeholderGroups");
+    stakeholderGroupPage.toggleSortBy(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("group-k");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("group-b");
   });
 
   it("Sort by members", () => {
-    stakeholderGroup.openPage();
-    cy.wait("@getStakeholderGroups");
+    const columnName = "Member(s)";
+    stakeholderGroupPage.openPage();
 
     // Asc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Member(s)");
-    cy.wait("@getStakeholderGroups");
+    stakeholderGroupPage.toggleSortBy(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("group-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("group-j");
 
     // Desc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Member(s)");
-    cy.wait("@getStakeholderGroups");
+    stakeholderGroupPage.toggleSortBy(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("group-k");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("group-b");

@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-keycloak-commands" />
 
-import { BusinessService } from "../../../models/business-service";
+import { BusinessServicePage } from "../../../models/business-service";
 
 describe("Sort business services", () => {
-  const businessService = new BusinessService();
+  const businessServicePage = new BusinessServicePage();
 
   before(() => {
     cy.kcLogout();
@@ -51,45 +51,37 @@ describe("Sort business services", () => {
   beforeEach(() => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
-
-    // Inteceptors
-    cy.intercept("GET", "/api/controls/business-service*").as(
-      "getBusinessServices"
-    );
   });
 
   it("Sort by name", () => {
-    businessService.openPage();
-    cy.wait("@getBusinessServices");
+    const columnName = "Name";
+    businessServicePage.openPage();
 
     // Asc is the default
-    cy.get(".pf-c-table").pf4_table_column_isAsc("Name");
+    cy.get(".pf-c-table").pf4_table_column_isAsc(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("service-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("service-j");
 
     // Desc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Name");
-    cy.wait("@getBusinessServices");
+    businessServicePage.toggleSortBy(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("service-k");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("service-b");
   });
 
   it("Sort by owner", () => {
-    businessService.openPage();
-    cy.wait("@getBusinessServices");
+    const columnName = "Owner";
+    businessServicePage.openPage();
 
     // Asc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Owner");
-    cy.wait("@getBusinessServices");
+    businessServicePage.toggleSortBy(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("stakeholder-j");
 
     // Desc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Owner");
-    cy.wait("@getBusinessServices");
+    businessServicePage.toggleSortBy(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-k");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("stakeholder-b");

@@ -10,14 +10,29 @@ export interface IFormValue {
   owner?: string;
 }
 
-export class BusinessService {
+export class BusinessServicePage {
   openPage(): void {
-    cy.visit("/controls/business-services");
-
     // Interceptors
+    cy.intercept("GET", "/api/controls/business-service*").as(
+      "getBusinessServices"
+    );
+    cy.intercept("POST", "/api/controls/business-service*").as(
+      "postBusinessService"
+    );
+    cy.intercept("PUT", "/api/controls/business-service/*").as(
+      "putBusinessService"
+    );
+    cy.intercept("DELETE", "/api/controls/business-service/*").as(
+      "deleteBusinessService"
+    );
+
     cy.intercept("GET", "/api/controls/stakeholder*").as(
       "getAllStakeholdersDropdown"
     );
+
+    // Open page
+    cy.visit("/controls/business-services");
+    cy.wait("@getBusinessServices");
   }
 
   protected fillForm(formValue: IFormValue): void {
@@ -32,6 +47,7 @@ export class BusinessService {
       cy.wait("@getAllStakeholdersDropdown");
       cy.get(".pf-c-form__group-control input.pf-c-select__toggle-typeahead")
         .eq(0)
+        .clear()
         .type(formValue.owner)
         .type("{enter}");
     }
@@ -45,6 +61,9 @@ export class BusinessService {
     verifyInitialFormStatus();
     this.fillForm(formValue);
     submitForm();
+
+    cy.wait("@postBusinessService");
+    cy.wait("@getBusinessServices");
   }
 
   edit(rowIndex: number, formValue: IFormValue): void {
@@ -59,6 +78,9 @@ export class BusinessService {
     verifyInitialFormStatus();
     this.fillForm(formValue);
     submitForm();
+
+    cy.wait("@putBusinessService");
+    cy.wait("@getBusinessServices");
   }
 
   delete(rowIndex: number): void {
@@ -70,9 +92,18 @@ export class BusinessService {
       .find("button[aria-label='delete']")
       .click();
     cy.get("button[aria-label='confirm']").click();
+
+    cy.wait("@deleteBusinessService");
+    cy.wait("@getBusinessServices");
   }
 
   applyFilter(filterIndex: number, filterText: string): void {
     applyFilterTextToolbar(filterIndex, filterText);
+    cy.wait("@getBusinessServices");
+  }
+
+  toggleSortBy(columnName: string): void {
+    cy.get(".pf-c-table").pf4_table_column_toggle(columnName);
+    cy.wait("@getBusinessServices");
   }
 }

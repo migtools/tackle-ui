@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-keycloak-commands" />
 
-import { StakeholderGroup } from "../../../models/stakeholder-group";
+import { StakeholderGroupPage } from "../../../models/stakeholder-group";
 
 describe("Create stakeholder group", () => {
-  const stakeholderGroup = new StakeholderGroup();
+  const stakeholderGroupPage = new StakeholderGroupPage();
 
   before(() => {
     cy.kcLogout();
@@ -13,15 +13,17 @@ describe("Create stakeholder group", () => {
     cy.get<KcTokens>("@tokens").then((tokens) => {
       cy.api_clean(tokens, "Stakeholder");
 
-      // Stakeholders for dropdown
-      [...Array(3)]
-        .map((_, i) => ({
-          email: `email-${(i + 10).toString(36)}@domain.com`,
-          displayName: `stakeholder-${(i + 10).toString(36)}`,
-        }))
-        .forEach((payload) => {
-          cy.api_crud(tokens, "Stakeholder", "POST", payload);
-        });
+      cy.log("").then(() => {
+        // Stakeholders for dropdown
+        return [...Array(3)]
+          .map((_, i) => ({
+            email: `email-${(i + 10).toString(36)}@domain.com`,
+            displayName: `stakeholder-${(i + 10).toString(36)}`,
+          }))
+          .forEach((payload) => {
+            cy.api_crud(tokens, "Stakeholder", "POST", payload);
+          });
+      });
     });
   });
 
@@ -32,24 +34,14 @@ describe("Create stakeholder group", () => {
     cy.get<KcTokens>("@tokens").then((tokens) => {
       cy.api_clean(tokens, "StakeholderGroup");
     });
-
-    // Interceptors
-    cy.intercept("GET", "/api/controls/stakeholder-group*").as(
-      "getStakeholderGroups"
-    );
-    cy.intercept("POST", "/api/controls/stakeholder-group*").as(
-      "postStakeholderGroup"
-    );
   });
 
   it("With min data", () => {
-    stakeholderGroup.create({
+    stakeholderGroupPage.create({
       name: "myStakeholderGroup",
     });
-    cy.wait("@postStakeholderGroup");
 
     // Verify table
-    cy.wait("@getStakeholderGroups");
     cy.get(".pf-c-table")
       .pf4_table_rows()
       .eq(0)
@@ -57,14 +49,12 @@ describe("Create stakeholder group", () => {
   });
 
   it("With description", () => {
-    stakeholderGroup.create({
+    stakeholderGroupPage.create({
       name: "myStakeholderGroup",
       description: "myDescription",
     });
-    cy.wait("@postStakeholderGroup");
 
     // Verify table
-    cy.wait("@getStakeholderGroups");
     cy.get(".pf-c-table")
       .pf4_table_rows()
       .eq(0)
@@ -73,14 +63,12 @@ describe("Create stakeholder group", () => {
   });
 
   it("With members", () => {
-    stakeholderGroup.create({
+    stakeholderGroupPage.create({
       name: "myStakeholderGroup",
       members: ["stakeholder-a", "stakeholder-b"],
     });
-    cy.wait("@postStakeholderGroup");
 
     // Verify table
-    cy.wait("@getStakeholderGroups");
     cy.get(".pf-c-table")
       .pf4_table_rows()
       .eq(0)

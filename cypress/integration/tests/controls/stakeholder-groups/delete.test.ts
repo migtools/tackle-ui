@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-keycloak-commands" />
 
-import { StakeholderGroup } from "../../../models/stakeholder-group";
+import { StakeholderGroupPage } from "../../../models/stakeholder-group";
 
 describe("Delete business service", () => {
-  const stakeholderGroup = new StakeholderGroup();
+  const stakeholderGroupPage = new StakeholderGroupPage();
 
   beforeEach(() => {
     cy.kcLogout();
@@ -16,22 +16,12 @@ describe("Delete business service", () => {
         name: "group-a",
       });
     });
-
-    // Interceptors
-    cy.intercept("DELETE", "/api/controls/stakeholder-group/*").as(
-      "deleteStakeholderGroup"
-    );
-    cy.intercept("GET", "/api/controls/stakeholder-group*").as(
-      "getStakeholderGroups"
-    );
   });
 
   it("Delete the only item available", () => {
-    stakeholderGroup.delete(0);
-    cy.wait("@deleteStakeholderGroup");
+    stakeholderGroupPage.delete(0);
 
     // Verify table
-    cy.wait("@getStakeholderGroups");
     cy.get(
       ".pf-c-empty-state > .pf-c-empty-state__content > .pf-c-title"
     ).contains("No stakeholder groups available");

@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-keycloak-commands" />
 
-import { JobFunctions } from "../../../models/job-function";
+import { JobFunctionsPage } from "../../../models/job-function";
 
 describe("Create job function", () => {
-  const jobFunctions = new JobFunctions();
+  const jobFunctionsPage = new JobFunctionsPage();
 
   beforeEach(() => {
     cy.kcLogout();
@@ -13,20 +13,14 @@ describe("Create job function", () => {
     cy.get<KcTokens>("@tokens").then((tokens) => {
       cy.api_clean(tokens, "JobFunction");
     });
-
-    // Interceptors
-    cy.intercept("POST", "/api/controls/job-function*").as("postJobFunction");
-    cy.intercept("GET", "/api/controls/job-function*").as("getJobFunctions");
   });
 
   it("With min data", () => {
-    jobFunctions.create({
+    jobFunctionsPage.create({
       name: "myJobFunction",
     });
-    cy.wait("@postJobFunction");
 
     // Verify table
-    cy.wait("@getJobFunctions");
     cy.get(".pf-c-table")
       .pf4_table_rows()
       .eq(0)

@@ -10,14 +10,29 @@ export interface IFormValue {
   members?: string[];
 }
 
-export class StakeholderGroup {
+export class StakeholderGroupPage {
   openPage(): void {
-    cy.visit("/controls/stakeholder-groups");
-
     // Interceptors
+    cy.intercept("GET", "/api/controls/stakeholder-group*").as(
+      "getStakeholderGroups"
+    );
+    cy.intercept("POST", "/api/controls/stakeholder-group*").as(
+      "postStakeholderGroup"
+    );
+    cy.intercept("PUT", "/api/controls/stakeholder-group/*").as(
+      "putStakeholderGroup"
+    );
+    cy.intercept("DELETE", "/api/controls/stakeholder-group/*").as(
+      "deleteStakeholderGroup"
+    );
+
     cy.intercept("GET", "/api/controls/stakeholder*").as(
       "getAllStakeholdersDropdown"
     );
+
+    // Open page
+    cy.visit("/controls/stakeholder-groups");
+    cy.wait("@getStakeholderGroups");
   }
 
   protected fillForm(formValue: IFormValue): void {
@@ -33,6 +48,7 @@ export class StakeholderGroup {
       formValue.members.forEach((e) => {
         cy.get(".pf-c-form__group-control input.pf-c-select__toggle-typeahead")
           .eq(0)
+          .clear()
           .type(e)
           .type("{enter}");
       });
@@ -47,6 +63,9 @@ export class StakeholderGroup {
     verifyInitialFormStatus();
     this.fillForm(formValue);
     submitForm();
+
+    cy.wait("@postStakeholderGroup");
+    cy.wait("@getStakeholderGroups");
   }
 
   edit(rowIndex: number, formValue: IFormValue): void {
@@ -61,6 +80,9 @@ export class StakeholderGroup {
     verifyInitialFormStatus();
     this.fillForm(formValue);
     submitForm();
+
+    cy.wait("@putStakeholderGroup");
+    cy.wait("@getStakeholderGroups");
   }
 
   delete(rowIndex: number): void {
@@ -72,9 +94,18 @@ export class StakeholderGroup {
       .find("button[aria-label='delete']")
       .click();
     cy.get("button[aria-label='confirm']").click();
+
+    cy.wait("@deleteStakeholderGroup");
+    cy.wait("@getStakeholderGroups");
   }
 
   applyFilter(filterIndex: number, filterText: string): void {
     applyFilterTextToolbar(filterIndex, filterText);
+    cy.wait("@getStakeholderGroups");
+  }
+
+  toggleSortBy(columnName: string): void {
+    cy.get(".pf-c-table").pf4_table_column_toggle(columnName);
+    cy.wait("@getStakeholderGroups");
   }
 }

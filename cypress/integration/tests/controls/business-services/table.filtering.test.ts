@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-keycloak-commands" />
 
-import { BusinessService } from "../../../models/business-service";
+import { BusinessServicePage } from "../../../models/business-service";
 
 describe("Filter business services", () => {
-  const bussinessService = new BusinessService();
+  const bussinessServicePage = new BusinessServicePage();
 
   before(() => {
     cy.kcLogout();
@@ -26,10 +26,8 @@ describe("Filter business services", () => {
               displayName: `stakeholder-${(i + 10).toString(36)}`,
             }))
             .forEach((payload) => {
-              cy.api_crud(tokens, "Stakeholder", "POST", payload).then(
-                (data) => {
-                  stakeholders.push(data);
-                }
+              cy.api_crud(tokens, "Stakeholder", "POST", payload).then((data) =>
+                stakeholders.push(data)
               );
             });
         })
@@ -51,57 +49,47 @@ describe("Filter business services", () => {
   beforeEach(() => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
-
-    // Inteceptors
-    cy.intercept("GET", "/api/controls/business-service*").as(
-      "getBusinessServices"
-    );
   });
 
   it("By name", () => {
-    bussinessService.openPage();
-    cy.wait("@getBusinessServices");
+    const filterIndex = 0;
+    bussinessServicePage.openPage();
 
     // First filter
-    bussinessService.applyFilter(0, "service-a");
+    bussinessServicePage.applyFilter(0, "service-a");
 
-    cy.wait("@getBusinessServices");
-    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("service-a");
+    cy.get(".pf-c-table")
+      .pf4_table_rows()
+      .eq(filterIndex)
+      .contains("service-a");
 
     // Second filter
-    bussinessService.applyFilter(0, "service-k");
+    bussinessServicePage.applyFilter(filterIndex, "service-k");
 
-    cy.wait("@getBusinessServices");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("service-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(1).contains("service-k");
   });
 
   it("By description", () => {
-    bussinessService.openPage();
-    cy.wait("@getBusinessServices");
+    const filterIndex = 1;
+    bussinessServicePage.openPage();
 
     // First filter
-    bussinessService.applyFilter(1, "description-a");
-
-    cy.wait("@getBusinessServices");
+    bussinessServicePage.applyFilter(filterIndex, "description-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("description-a");
 
     // Second filter
-    bussinessService.applyFilter(1, "description-k");
-
-    cy.wait("@getBusinessServices");
+    bussinessServicePage.applyFilter(filterIndex, "description-k");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("description-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(1).contains("description-k");
   });
 
   it("By owner", () => {
-    bussinessService.openPage();
-    cy.wait("@getBusinessServices");
+    const filterIndex = 2;
+    bussinessServicePage.openPage();
 
     // First filter
-    bussinessService.applyFilter(2, "stakeholder-j");
-
-    cy.wait("@getBusinessServices");
+    bussinessServicePage.applyFilter(filterIndex, "stakeholder-j");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-j");
   });
 });
