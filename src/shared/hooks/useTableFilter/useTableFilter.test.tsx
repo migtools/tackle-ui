@@ -107,4 +107,39 @@ describe("useTableFilter", () => {
 
     expect(resultDesc.current.pageItems).toEqual(expectedResult);
   });
+
+  it("SortBy when 'compareToByColumn' return always 0 and 'filter' is applied", () => {
+    const items = [...Array(25)].map((_, index) => index + 1);
+    let page: PageQuery = { page: 1, perPage: 10 };
+    const filterItem = (val: number) => val % 2 === 0;
+    const compareToByColumn = () => 0; // forcing comparison true
+
+    const expectedResult = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20];
+
+    // Verify asc
+    const { result: resultAsc } = renderHook(() =>
+      useTableFilter<number>({
+        items: items,
+        pagination: page,
+        filterItem: filterItem,
+        sortBy: { direction: "asc", index: 7 },
+        compareToByColumn: compareToByColumn,
+      })
+    );
+
+    expect(resultAsc.current.pageItems).toEqual(expectedResult);
+
+    // Verify desc
+    const { result: resultDesc } = renderHook(() =>
+      useTableFilter<number>({
+        items: items,
+        pagination: page,
+        filterItem: filterItem,
+        sortBy: { direction: "desc", index: 7 },
+        compareToByColumn: compareToByColumn,
+      })
+    );
+
+    expect(resultDesc.current.pageItems).toEqual(expectedResult);
+  });
 });

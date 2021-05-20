@@ -25,13 +25,16 @@ export const useTableFilter = <T>({
   filterItem,
   compareToByColumn,
 }: HookArgs<T>): HookState<T> => {
-  const unsortedItems = [...(items || [])];
+  const allItems = [...(items || [])];
 
-  let orderChanged = false;
+  // Filter
+  const filteredItems = allItems.filter(filterItem);
 
   //  Sort
+  let orderChanged = false;
+
   let sortedItems: T[];
-  sortedItems = [...unsortedItems].sort((a, b) => {
+  sortedItems = [...filteredItems].sort((a, b) => {
     const comparisonResult = compareToByColumn(a, b, sortBy?.index);
     if (comparisonResult !== 0) {
       orderChanged = true;
@@ -43,11 +46,8 @@ export const useTableFilter = <T>({
     sortedItems = sortedItems.reverse();
   }
 
-  // Filter
-  const filteredItems = sortedItems.filter(filterItem);
-
   // Paginate
-  const pageItems = filteredItems.slice(
+  const pageItems = sortedItems.slice(
     (pagination.page - 1) * pagination.perPage,
     pagination.page * pagination.perPage
   );
