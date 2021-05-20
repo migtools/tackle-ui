@@ -3,10 +3,17 @@ import { createAction } from "typesafe-actions";
 
 interface Item {
   title: string;
+  titleIconVariant?:
+    | "success"
+    | "danger"
+    | "warning"
+    | "info"
+    | "default"
+    | React.ComponentType<any>;
   message: string;
   confirmBtnLabel: string;
   cancelBtnLabel: string;
-  variant: ButtonVariant;
+  confirmBtnVariant: ButtonVariant;
   onConfirm: () => void;
 }
 

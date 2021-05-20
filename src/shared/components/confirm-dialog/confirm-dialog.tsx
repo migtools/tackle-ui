@@ -10,13 +10,20 @@ export interface ConfirmDialogProps {
   isOpen: boolean;
 
   title: string;
+  titleIconVariant?:
+    | "success"
+    | "danger"
+    | "warning"
+    | "info"
+    | "default"
+    | React.ComponentType<any>;
   message: string;
 
   confirmBtnLabel: string;
   cancelBtnLabel: string;
 
   inProgress?: boolean;
-  variant: ButtonVariant;
+  confirmBtnVariant: ButtonVariant;
 
   onClose: () => void;
   onConfirm: () => void;
@@ -26,11 +33,12 @@ export interface ConfirmDialogProps {
 export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   isOpen,
   title,
+  titleIconVariant,
   message,
   confirmBtnLabel,
   cancelBtnLabel,
   inProgress,
-  variant,
+  confirmBtnVariant,
   onClose,
   onConfirm,
   onCancel,
@@ -39,7 +47,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     <Button
       key="confirm"
       aria-label="confirm"
-      variant={variant}
+      variant={confirmBtnVariant}
       isDisabled={inProgress}
       onClick={onConfirm}
     >
@@ -63,6 +71,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     <Modal
       variant={ModalVariant.small}
       title={title}
+      titleIconVariant={titleIconVariant}
       isOpen={isOpen}
       onClose={onClose}
       aria-label="confirm-dialog"

@@ -17,6 +17,8 @@ export interface Meta {
   count: number;
 }
 
+// Controls
+
 export interface BusinessService {
   id?: number;
   name: string;
@@ -35,7 +37,7 @@ export interface Stakeholder {
 export interface StakeholderGroup {
   id?: number;
   name: string;
-  description: string;
+  description?: string;
   stakeholders?: Stakeholder[];
 }
 
@@ -44,23 +46,80 @@ export interface JobFunction {
   role: string;
 }
 
+export interface TagType {
+  id?: number;
+  name: string;
+  rank?: number;
+  colour?: string;
+  tags?: Tag[];
+}
+
+export interface Tag {
+  id?: number;
+  name: string;
+  tagType?: TagType;
+}
+
+// Application inventory
+
 export interface Application {
   id?: number;
   name: string;
   description?: string;
   comments?: string;
   businessService?: string;
+  tags?: string[];
 }
 
-//
+export interface ApplicationDependency {
+  id?: number;
+  from: Application;
+  to: Application;
+}
+
+// Pathfinder
+
+export type AssessmentStatus = "EMPTY" | "STARTED" | "COMPLETE";
+export type Risk = "GREEN" | "AMBER" | "RED" | "UNKNOWN";
 
 export interface Assessment {
   id?: number;
   applicationId: number;
-  status: "EMPTY" | "STARTED" | "COMPLETE";
+  status: AssessmentStatus;
   stakeholders?: number[];
   stakeholderGroups?: number[];
+  questionnaire: Questionnaire;
 }
+
+export interface Questionnaire {
+  categories: QuestionnaireCategory[];
+}
+
+export interface QuestionnaireCategory {
+  id: number;
+  order: number;
+  title?: string;
+  comment?: string;
+  questions: Question[];
+}
+
+export interface Question {
+  id: number;
+  order: number;
+  question: string;
+  description: string;
+  options: QuestionOption[];
+}
+
+export interface QuestionOption {
+  id: number;
+  order: number;
+  option: string;
+  checked: boolean;
+  risk: Risk;
+}
+
+// Pagination
 
 export interface BusinessServicePage {
   _embedded: {
@@ -90,9 +149,30 @@ export interface JobFunctionPage {
   total_count: number;
 }
 
+export interface TagTypePage {
+  _embedded: {
+    "tag-type": TagType[];
+  };
+  total_count: number;
+}
+
+export interface TagTypePage {
+  _embedded: {
+    "tag-type": TagType[];
+  };
+  total_count: number;
+}
+
 export interface ApplicationPage {
   _embedded: {
     application: Application[];
+  };
+  total_count: number;
+}
+
+export interface ApplicationDependencyPage {
+  _embedded: {
+    "applications-dependency": ApplicationDependency[];
   };
   total_count: number;
 }

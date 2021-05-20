@@ -1,3 +1,13 @@
+// Chips
+
+Cypress.Commands.add(
+  "pf4_chip_group_chips",
+  { prevSubject: "element" },
+  (chipGroup) => {
+    return cy.wrap(chipGroup).find(".pf-c-chip-group__list-item");
+  }
+);
+
 // Pagination
 
 Cypress.Commands.add(
@@ -78,7 +88,7 @@ Cypress.Commands.add(
   { prevSubject: "element" },
   (table, rowIndex, actionName) => {
     cy.wrap(table)
-      .find("tbody > tr > td.pf-c-table__action")
+      .find("tbody > tr > td.pf-c-table__action button.pf-c-dropdown__toggle")
       .eq(rowIndex)
       .click();
 

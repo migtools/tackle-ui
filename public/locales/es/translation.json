@@ -1,33 +1,68 @@
 {
     "actions": {
+        "assess": "Evaluar",
+        "back": "Atrás",
         "cancel": "Cancelar",
+        "close": "Cerrar",
+        "continue": "Continuar",
         "create": "Crear",
         "createNew": "Crear nuevo",
+        "createTag": "Crear etiqueta",
+        "createTagType": "Crear typo de etiqueta",
         "delete": "Eliminar",
         "edit": "Editar",
-        "save": "Guardar"
+        "manageDependencies": "Administrar dependencias",
+        "next": "Siguiente",
+        "save": "Guardar",
+        "saveAsDraft": "Guardar como borrador"
+    },
+    "colors": {
+        "blue": "Azul",
+        "cyan": "Cian",
+        "green": "Verde",
+        "orange": "Anaranjado",
+        "purple": "Morado",
+        "red": "Rojo"
     },
     "composed": {
+        "add": "Agregar {{what}}",
+        "applicationAssessment": "Evaluación de la aplicación",
         "applicationInventory": "Inventario de aplicaciones",
+        "editQuestion": "Editar {{what}}?",
+        "manageDependenciesFor": "Administrar dependencias para {{what}}",
         "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
         "noDataStateTitle": "No existen {{what}} disponibles",
+        "Nquestions": "{{n}} preguntas",
+        "selectMany": "Seleccione {{what}}",
         "selectOne": "Seleccione un(a) {{what}}"
     },
     "dialog": {
         "message": {
-            "delete": "¿Estás seguro de querer eliminar '{{what}}'?. Esta acción eliminará todos los recursos asociados al mismo y no puede ser revertida. ¡Asegúrate de que esto es lo que realmente quieres!"
+            "delete": "Esta acción no puede ser revertida."
         },
         "title": {
-            "delete": "Eliminar '{{what}}'",
+            "delete": "¿Eliminar {{what}}?",
             "newApplication": "Nueva aplicación",
             "newBusinessService": "Nuevo servicio de negocio",
+            "newJobFunction": "Nueva función laboral",
             "newStakeholder": "Nuevo interesado",
             "newStakeholderGroup": "Nuevo grupo de interesados",
+            "newTag": "Nueva etiqueta",
+            "newTagType": "Nuevo tipo de etiqueta",
             "updateApplication": "Actualizar aplicación",
             "updateBusinessService": "Actualizar servicio de negocio",
+            "updateJobFunction": "Actualizar función laboral",
             "updateStakeholder": "Actualizar interesado",
-            "updateStakeholderGroup": "Actualizar grupo de interesados"
+            "updateStakeholderGroup": "Actualizar grupo de interesados",
+            "updateTag": "Actualizar etiqueta",
+            "updateTagType": "Actualizar tipo de etiqueta"
         }
+    },
+    "message": {
+        "couldNotFetchBody": "El recurso no existe o no tienes permiso para acceder al mismo",
+        "couldNotFetchTitle": "No disponible",
+        "overrideAssessmentConfirmation": "Esta aplicación ya fue evaluada ¿Deseas continuar?",
+        "savingSelection": "Guardando selección"
     },
     "sidebar": {
         "applicationInventory": "Inventario de aplicaciones",
@@ -40,6 +75,7 @@
         "assessment": "Evaluación",
         "businessService": "Servicio de negocio",
         "businessServices": "Servicios de negocio",
+        "color": "Color",
         "comments": "Comentarios",
         "completed": "Completado",
         "controls": "Controles",
@@ -50,16 +86,28 @@
         "group(s)": "Grupo(s)",
         "inProgress": "En progreso",
         "jobFunction": "Función laboral",
+        "jobFunctions": "Funciones laborales",
         "member": "Miembro",
         "member(s)": "Miembro(s)",
         "name": "Nombre",
+        "northboundDependencies": "Dependencias del norte",
+        "notAvailable": "No disponible",
         "notStarted": "No empezado",
         "owner": "Propietario",
+        "rank": "Rango",
+        "southboundDependencies": "Dependencias del sur",
         "stakeholder": "Interesado",
+        "stakeholder(s)": "Interesado(s)",
         "stakeholderGroup": "Grupo interesado",
+        "stakeholderGroup(s)": "Grupo(s) de interesados",
         "stakeholderGroups": "Grupos de interesados",
         "stakeholders": "Interesados",
+        "tag": "Etiqueta",
+        "tag(s)": "Etiqueta(s)",
+        "tagName": "Nombde de etiqueta",
         "tags": "Etiquetas",
+        "tagType": "Tipo de etiqueta",
+        "tagTypes": "Tipos de etiqueta",
         "unknown": "Desconocido"
     },
     "toastr": {
@@ -70,8 +118,8 @@
     "validation": {
         "email": "Este campo requiere un email válido.",
         "maxLength": "Este campo debe de tener menos de {{length}} caracteres.",
+        "min": "Este campo debe de ser mayor a {{value}}.",
         "minLength": "Este campo debe de tener al menos {{length}} caracteres.",
-        "onlyCharactersAndUnderscore": "Este campo debe de contener solo caracteres alfanuméricos incluyendo el subguión.",
         "required": "Este campo es requerido."
     }
 }

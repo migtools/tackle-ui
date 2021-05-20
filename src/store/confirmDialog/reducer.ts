@@ -9,10 +9,17 @@ export type ConfirmDialogState = Readonly<{
   isProcessing: boolean;
 
   title: string;
+  titleIconVariant?:
+    | "success"
+    | "danger"
+    | "warning"
+    | "info"
+    | "default"
+    | React.ComponentType<any>;
   message: string;
   confirmBtnLabel: string;
   cancelBtnLabel: string;
-  variant: ButtonVariant;
+  confirmBtnVariant: ButtonVariant;
 
   onConfirm: () => void;
 }>;
@@ -22,10 +29,11 @@ export const defaultState: ConfirmDialogState = {
   isProcessing: false,
 
   title: "",
+  titleIconVariant: undefined,
   message: "",
   confirmBtnLabel: "Confirm",
   cancelBtnLabel: "Cancel",
-  variant: ButtonVariant.primary,
+  confirmBtnVariant: ButtonVariant.primary,
 
   onConfirm: () => {},
 };
