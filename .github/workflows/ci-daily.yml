@@ -75,7 +75,7 @@ jobs:
           echo "End point ready:" &&
           echo $external_ip;
           export endpoint=$external_ip;
-          echo "CYPRESS_BASE_URL=https://$external_ip" >>$GITHUB_ENV'
+          echo "CYPRESS_tackleUrl=https://$external_ip" >>$GITHUB_ENV'
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
@@ -86,3 +86,5 @@ jobs:
           browser: ${{ matrix.browser }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CYPRESS_user: admin
+          CYPRESS_pass: admin
