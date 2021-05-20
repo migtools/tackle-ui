@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { ToolbarChip } from "@patternfly/react-core";
@@ -21,7 +21,7 @@ import {
   useTableFilter,
 } from "shared/hooks";
 
-import { Assessment, Risk } from "api/models";
+import { Assessment, Question, QuestionnaireCategory, Risk } from "api/models";
 
 import { SelectRiskFilter } from "./components/select-risk-filter";
 import { DEFAULT_RISK_LABELS } from "Constants";
@@ -31,9 +31,10 @@ enum FilterKey {
 }
 
 interface ITableItem {
-  questionValue: string;
-  answerValue?: string;
+  answerValue: string;
   riskValue: Risk;
+  category: QuestionnaireCategory;
+  question: Question;
 }
 
 export interface IApplicationAssessmentSummaryTableProps {
@@ -58,7 +59,6 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
     filters: filtersValue,
     isPresent: areFiltersPresent,
     setFilter,
-    removeFilter,
     clearAllFilters,
   } = useToolbarFilter<ToolbarChip>();
 
@@ -67,14 +67,28 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
   const tableItems: ITableItem[] = useMemo(() => {
     return assessment.questionnaire.categories
       .slice(0)
-      .sort((a, b) => a.order - b.order)
-      .flatMap((f) => f.questions)
-      .map((f) => {
-        return {
-          questionValue: f.question,
-          answerValue: f.options.find((q) => q.checked === true)?.option,
-          riskValue: f.options.find((q) => q.checked === true)?.risk,
-        } as ITableItem;
+      .map((category) => {
+        const result: ITableItem[] = category.questions.map((question) => {
+          const checkedOption = question.options.find(
+            (q) => q.checked === true
+          );
+          const item: ITableItem = {
+            answerValue: checkedOption ? checkedOption.option : "",
+            riskValue: checkedOption ? checkedOption.risk : "UNKNOWN",
+            category,
+            question,
+          };
+          return item;
+        });
+        return result;
+      })
+      .flatMap((f) => f)
+      .sort((a, b) => {
+        if (a.category.order !== b.category.order) {
+          return a.category.order - b.category.order;
+        } else {
+          return a.question.order - b.question.order;
+        }
       });
   }, [assessment]);
 
@@ -87,7 +101,7 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
     const bData = DEFAULT_RISK_LABELS.get(b.riskValue);
 
     switch (columnIndex) {
-      case 2: // Risk
+      case 3: // Risk
         return (aData?.order || 0) - (bData?.order || 0);
       default:
         return 0;
@@ -99,7 +113,7 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
     sortByQuery: sortBy,
     handlePaginationChange: onPaginationChange,
     handleSortChange: onSort,
-  } = useTableControls();
+  } = useTableControls({ paginationQuery: { page: 1, perPage: 50 } });
 
   const { pageItems, filteredItems } = useTableFilter<ITableItem>({
     items: tableItems,
@@ -118,15 +132,26 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
     },
   });
 
+  useEffect(() => {
+    onPaginationChange({ page: 1 });
+  }, [filtersValue, onPaginationChange]);
+
+  // Table
+
   const columns: ICell[] = [
     {
+      title: t("terms.category"),
+      transforms: [cellWidth(20)],
+      cellFormatters: [],
+    },
+    {
       title: t("terms.question"),
-      transforms: [cellWidth(45)],
+      transforms: [cellWidth(35)],
       cellFormatters: [],
     },
     {
       title: t("terms.answer"),
-      transforms: [cellWidth(45)],
+      transforms: [cellWidth(35)],
       cellFormatters: [],
     },
     {
@@ -142,7 +167,14 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
       cells: [
         {
           title: (
-            <TableText wrapModifier="truncate">{item.questionValue}</TableText>
+            <TableText wrapModifier="truncate">{item.category.title}</TableText>
+          ),
+        },
+        {
+          title: (
+            <TableText wrapModifier="truncate">
+              {item.question.question}
+            </TableText>
           ),
         },
         {
@@ -173,7 +205,9 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
         <AppTableToolbarToggleGroup
           options={filters}
           filtersValue={filtersValue}
-          onDeleteFilter={removeFilter}
+          onDeleteFilter={(key, value) => {
+            setFilter(key, value as ToolbarChip[]);
+          }}
         >
           <SelectRiskFilter
             value={filtersValue.get(FilterKey.RISK)}

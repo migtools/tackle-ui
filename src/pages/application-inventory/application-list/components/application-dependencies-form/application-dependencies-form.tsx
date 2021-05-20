@@ -8,8 +8,6 @@ import {
   Form,
   FormGroup,
   Spinner,
-  Stack,
-  StackItem,
   Text,
   TextContent,
 } from "@patternfly/react-core";
@@ -135,88 +133,77 @@ export const ApplicationDependenciesForm: React.FC<ApplicationDependenciesFormPr
 
   return (
     <Form>
-      <Stack hasGutter>
-        <StackItem>
-          <TextContent>
-            <Text component="p">
-              Add northbound and southbound dependencies for the selected
-              application here. Note that any selections made will be saved
-              automatically. To undo any changes, you must manually delete the
-              applications from the dropdowns.
-            </Text>
-          </TextContent>
-        </StackItem>
-        <StackItem>
-          <FormGroup
-            // t("terms.northboundDependencies")
-            label={t("composed.add", {
-              what: t("terms.northboundDependencies").toLowerCase(),
-            })}
-            fieldId="northbound-dependencies"
-            isRequired={false}
-            validated={northSaveError ? "error" : "default"}
-            helperTextInvalid={
-              northSaveError ? getAxiosErrorMessage(northSaveError) : ""
-            }
-            helperText={isNorthBeingSaved ? savingMsg : ""}
-          >
-            <SelectDependency
-              fieldId="northbound-dependencies"
-              toStringFn={northToStringFn}
-              value={northboundDependencies}
-              setValue={setNorthboundDependencies}
-              options={(applications?.data || [])
-                .filter((f) => f.id !== application.id)
-                .map((f) =>
-                  dependencyToOption(
-                    { from: f, to: application },
-                    northToStringFn
-                  )
-                )}
-              isFetching={isFetchingApplications || isFetchingNorthDependencies}
-              fetchError={fetchErrorApplications || fetchErrorNorthDependencies}
-              isSaving={isNorthBeingSaved}
-              setIsSaving={setIsNorthBeingSaved}
-              saveError={northSaveError}
-              setSaveError={setNorthSaveError}
-            />
-          </FormGroup>
-          <FormGroup
-            // t("terms.southboundDependencies")
-            label={t("composed.add", {
-              what: t("terms.southboundDependencies").toLowerCase(),
-            })}
-            fieldId="southbound-dependencies"
-            isRequired={false}
-            validated={southSaveError ? "error" : "default"}
-            helperTextInvalid={
-              southSaveError ? getAxiosErrorMessage(southSaveError) : ""
-            }
-            helperText={isSouthBeingSaved ? savingMsg : ""}
-          >
-            <SelectDependency
-              fieldId="southbound-dependencies"
-              toStringFn={southToStringFn}
-              value={southboundDependencies}
-              setValue={setSouthboundDependencies}
-              options={(applications?.data || [])
-                .filter((f) => f.id !== application.id)
-                .map((f) =>
-                  dependencyToOption(
-                    { from: application, to: f },
-                    southToStringFn
-                  )
-                )}
-              isFetching={isFetchingApplications || isFetchingSouthDependencies}
-              fetchError={fetchErrorApplications || fetchErrorSouthDependencies}
-              isSaving={isSouthBeingSaved}
-              setIsSaving={setIsSouthBeingSaved}
-              saveError={southSaveError}
-              setSaveError={setSouthSaveError}
-            />
-          </FormGroup>
-        </StackItem>
-      </Stack>
+      <TextContent>
+        <Text component="p">
+          Add northbound and southbound dependencies for the selected
+          application here. Note that any selections made will be saved
+          automatically. To undo any changes, you must manually delete the
+          applications from the dropdowns.
+        </Text>
+      </TextContent>
+
+      <FormGroup
+        // t("terms.northboundDependencies")
+        label={t("composed.add", {
+          what: t("terms.northboundDependencies").toLowerCase(),
+        })}
+        fieldId="northbound-dependencies"
+        isRequired={false}
+        validated={northSaveError ? "error" : "default"}
+        helperTextInvalid={
+          northSaveError ? getAxiosErrorMessage(northSaveError) : ""
+        }
+        helperText={isNorthBeingSaved ? savingMsg : ""}
+      >
+        <SelectDependency
+          fieldId="northbound-dependencies"
+          toStringFn={northToStringFn}
+          value={northboundDependencies}
+          setValue={setNorthboundDependencies}
+          options={(applications?.data || [])
+            .filter((f) => f.id !== application.id)
+            .map((f) =>
+              dependencyToOption({ from: f, to: application }, northToStringFn)
+            )}
+          isFetching={isFetchingApplications || isFetchingNorthDependencies}
+          fetchError={fetchErrorApplications || fetchErrorNorthDependencies}
+          isSaving={isNorthBeingSaved}
+          setIsSaving={setIsNorthBeingSaved}
+          saveError={northSaveError}
+          setSaveError={setNorthSaveError}
+        />
+      </FormGroup>
+      <FormGroup
+        // t("terms.southboundDependencies")
+        label={t("composed.add", {
+          what: t("terms.southboundDependencies").toLowerCase(),
+        })}
+        fieldId="southbound-dependencies"
+        isRequired={false}
+        validated={southSaveError ? "error" : "default"}
+        helperTextInvalid={
+          southSaveError ? getAxiosErrorMessage(southSaveError) : ""
+        }
+        helperText={isSouthBeingSaved ? savingMsg : ""}
+      >
+        <SelectDependency
+          fieldId="southbound-dependencies"
+          toStringFn={southToStringFn}
+          value={southboundDependencies}
+          setValue={setSouthboundDependencies}
+          options={(applications?.data || [])
+            .filter((f) => f.id !== application.id)
+            .map((f) =>
+              dependencyToOption({ from: application, to: f }, southToStringFn)
+            )}
+          isFetching={isFetchingApplications || isFetchingSouthDependencies}
+          fetchError={fetchErrorApplications || fetchErrorSouthDependencies}
+          isSaving={isSouthBeingSaved}
+          setIsSaving={setIsSouthBeingSaved}
+          saveError={southSaveError}
+          setSaveError={setSouthSaveError}
+        />
+      </FormGroup>
 
       <ActionGroup>
         <Button

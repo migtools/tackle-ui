@@ -221,8 +221,12 @@ export const BusinessServices: React.FC = () => {
   const deleteRow = (row: BusinessService) => {
     dispatch(
       confirmDialogActions.openDialog({
-        title: t("dialog.title.delete", { what: row.name }),
-        message: t("dialog.message.delete", { what: row.name }),
+        // t("terms.businessService")
+        title: t("dialog.title.delete", {
+          what: t("terms.businessService").toLowerCase(),
+        }),
+        titleIconVariant: "warning",
+        message: t("dialog.message.delete"),
         confirmBtnVariant: ButtonVariant.danger,
         confirmBtnLabel: t("actions.delete"),
         cancelBtnLabel: t("actions.cancel"),

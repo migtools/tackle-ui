@@ -7,10 +7,6 @@ import { useSelectionState } from "@konveyor/lib-ui";
 import {
   Button,
   ButtonVariant,
-  DescriptionList,
-  DescriptionListDescription,
-  DescriptionListGroup,
-  DescriptionListTerm,
   Modal,
   PageSection,
   PageSectionVariants,
@@ -58,8 +54,6 @@ import { Application, Assessment, SortByQuery } from "api/models";
 import {
   ApplicationSortBy,
   ApplicationSortByQuery,
-  deleteAssessment,
-  deleteReview,
   getAssessments,
 } from "api/rest";
 import { getAxiosErrorMessage } from "utils/utils";
@@ -72,9 +66,9 @@ import { SelectBusinessServiceFilter } from "./components/toolbar-search-filter/
 import { ApplicationAssessment } from "./components/application-assessment";
 import { ApplicationBusinessService } from "./components/application-business-service";
 
-import { ApplicationTags } from "./components/application-tags/application-tags";
 import { SelectTagFilter } from "./components/toolbar-search-filter/select-tag-filter";
 import ApplicationDependenciesForm from "./components/application-dependencies-form";
+import { ApplicationListExpandedArea } from "./components/application-list-expanded-area";
 
 enum FilterKey {
   NAME = "name",
@@ -161,10 +155,6 @@ export const ApplicationList: React.FC = () => {
     assessApplication,
     inProgress: isApplicationAssessInProgress,
   } = useAssessApplication();
-  const {
-    getCurrentAssessment,
-    inProgress: isApplicationReviewInProgress,
-  } = useAssessApplication();
 
   const {
     applications,
@@ -212,7 +202,7 @@ export const ApplicationList: React.FC = () => {
     );
   }, [filtersValue, paginationQuery, sortByQuery, fetchApplications]);
 
-  //
+  // Assessments
 
   const {
     getData: getApplicationAssessment,
@@ -225,7 +215,6 @@ export const ApplicationList: React.FC = () => {
   useEffect(() => {
     if (applications) {
       fetchApplicationsAssessment(applications.data.map((f) => f.id!));
-      console.log(fetchApplicationsAssessment);
     }
   }, [applications, fetchApplicationsAssessment]);
 
@@ -333,20 +322,7 @@ export const ApplicationList: React.FC = () => {
       fullWidth: false,
       cells: [
         <div className="pf-c-table__expandable-row-content">
-          <DescriptionList isHorizontal>
-            <DescriptionListGroup>
-              <DescriptionListTerm>{t("terms.tags")}</DescriptionListTerm>
-              <DescriptionListDescription>
-                <ApplicationTags application={item} />
-              </DescriptionListDescription>
-            </DescriptionListGroup>
-            <DescriptionListGroup>
-              <DescriptionListTerm>{t("terms.comments")}</DescriptionListTerm>
-              <DescriptionListDescription>
-                {item.comments}
-              </DescriptionListDescription>
-            </DescriptionListGroup>
-          </DescriptionList>
+          <ApplicationListExpandedArea application={item} />
         </div>,
       ],
     });
@@ -475,8 +451,12 @@ export const ApplicationList: React.FC = () => {
   const deleteRow = (row: Application) => {
     dispatch(
       confirmDialogActions.openDialog({
-        title: t("dialog.title.delete", { what: row.name }),
-        message: t("dialog.message.delete", { what: row.name }),
+        // t("terms.application")
+        title: t("dialog.title.delete", {
+          what: t("terms.application").toLowerCase(),
+        }),
+        titleIconVariant: "warning",
+        message: t("dialog.message.delete"),
         confirmBtnVariant: ButtonVariant.danger,
         confirmBtnLabel: t("actions.delete"),
         cancelBtnLabel: t("actions.cancel"),
@@ -630,26 +610,16 @@ export const ApplicationList: React.FC = () => {
   };
 
   const startApplicationReview = (row: Application) => {
-    getCurrentAssessment(
-      row,
-      (assessment?: Assessment) => {
-        if (!assessment || (assessment && assessment.status !== "COMPLETE")) {
-          dispatch(
-            alertActions.addDanger(
-              "You must assess the application before reviewing it"
-            )
-          );
-        } else {
-          history.push(
-            formatPath(Paths.applicationInventory_review, {
-              applicationId: row.id,
-            })
-          );
-        }
-      },
-      (error) => {
-        dispatch(alertActions.addDanger(getAxiosErrorMessage(error)));
-      }
+    const assessment = getApplicationAssessment(row.id!);
+    if (!assessment) {
+      console.log("You must assess the application before reviewing it");
+      return;
+    }
+
+    history.push(
+      formatPath(Paths.applicationInventory_review, {
+        applicationId: row.id,
+      })
     );
   };
 
@@ -665,6 +635,11 @@ export const ApplicationList: React.FC = () => {
 
     const row = selectedRows[0];
     startApplicationReview(row);
+  };
+
+  const isReviewBtnDisabled = (row: Application) => {
+    const assessment = getApplicationAssessment(row.id!);
+    return assessment === undefined || assessment.status !== "COMPLETE";
   };
 
   return (
@@ -802,9 +777,8 @@ export const ApplicationList: React.FC = () => {
                       onClick={handleOnReviewSelectedRow}
                       isDisabled={
                         selectedRows.length !== 1 ||
-                        isApplicationReviewInProgress
+                        isReviewBtnDisabled(selectedRows[0])
                       }
-                      isLoading={isApplicationReviewInProgress}
                     >
                       {t("actions.review")}
                     </Button>

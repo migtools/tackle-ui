@@ -23,14 +23,23 @@ export const useTableFilter = <T>({
   sortBy,
   pagination,
   filterItem,
-  compareToByColumn: compareTo,
+  compareToByColumn,
 }: HookArgs<T>): HookState<T> => {
+  const unsortedItems = [...(items || [])];
+
+  let orderChanged = false;
+
   //  Sort
   let sortedItems: T[];
-  sortedItems = [...(items || [])].sort((a, b) =>
-    compareTo(a, b, sortBy?.index)
-  );
-  if (sortBy?.direction === SortByDirection.desc) {
+  sortedItems = [...unsortedItems].sort((a, b) => {
+    const comparisonResult = compareToByColumn(a, b, sortBy?.index);
+    if (comparisonResult !== 0) {
+      orderChanged = true;
+    }
+    return comparisonResult;
+  });
+
+  if (orderChanged && sortBy?.direction === SortByDirection.desc) {
     sortedItems = sortedItems.reverse();
   }
 

@@ -48,6 +48,9 @@ const reducer = (state: State, action: Action): State => {
         isFetching: action.payload.reduce((reducer, id) => {
           return reducer.set(id, true);
         }, new Map(state.isFetching)),
+        fetchCount: action.payload.reduce((reducer, id) => {
+          return reducer.set(id, (state.fetchCount.get(id) || 0) + 1);
+        }, new Map(state.isFetching)),
       };
     case getType(fetchSuccess):
       return {
@@ -55,10 +58,6 @@ const reducer = (state: State, action: Action): State => {
         isFetching: new Map(state.isFetching).set(action.payload.id, false),
         fetchError: new Map(state.fetchError).set(action.payload.id, undefined),
         data: new Map(state.data).set(action.payload.id, action.payload.data),
-        fetchCount: new Map(state.fetchCount).set(
-          action.payload.id,
-          (state.fetchCount.get(action.payload.id) || 0) + 1
-        ),
       };
     case getType(fetchFailure):
       return {
@@ -67,10 +66,6 @@ const reducer = (state: State, action: Action): State => {
         fetchError: new Map(state.fetchError).set(
           action.payload.id,
           action.payload.error
-        ),
-        fetchCount: new Map(state.fetchCount).set(
-          action.payload.id,
-          (state.fetchCount.get(action.payload.id) || 0) + 1
         ),
       };
     default:

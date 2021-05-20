@@ -181,6 +181,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
       tags: formValues.tags
         ? formValues.tags.map((f) => `${f.value.id}`)
         : undefined,
+      review: undefined, // The review should not updated through this form
     };
 
     let promise: AxiosPromise<Application>;

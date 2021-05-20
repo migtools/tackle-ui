@@ -5,6 +5,8 @@ import {
   DescriptionListDescription,
   DescriptionListGroup,
   DescriptionListTerm,
+  List,
+  ListItem,
 } from "@patternfly/react-core";
 
 import { Application, Assessment } from "api/models";
@@ -35,10 +37,15 @@ export const ApplicationDetails: React.FC<IApplicationDetailsProps> = ({
       <DescriptionListGroup>
         <DescriptionListTerm>Assessment notes</DescriptionListTerm>
         <DescriptionListDescription>
-          {assessment?.questionnaire.categories
-            .map((f) => f.comment)
-            .filter((f) => f !== undefined && f.length > 0)
-            .join(". ")}
+          <List>
+            {assessment?.questionnaire.categories
+              .filter((f) => f.comment && f.comment.trim().length > 0)
+              .map((category, i) => (
+                <ListItem key={i}>
+                  {category.title}: {category.comment}
+                </ListItem>
+              ))}
+          </List>
         </DescriptionListDescription>
       </DescriptionListGroup>
     </DescriptionList>

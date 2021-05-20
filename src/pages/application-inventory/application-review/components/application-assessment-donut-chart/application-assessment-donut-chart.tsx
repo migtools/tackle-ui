@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { ChartDonut } from "@patternfly/react-charts";
+import { ChartDonut, ChartLegend } from "@patternfly/react-charts";
 
 import { global_palette_black_400 as black } from "@patternfly/react-tokens";
 
@@ -60,20 +60,55 @@ export const ApplicationAssessmentDonutChart: React.FC<IApplicationAssessmentDon
     return getChartDataFromCategories(assessment.questionnaire.categories);
   }, [assessment]);
 
+  const chartDefinition = [
+    {
+      x: DEFAULT_RISK_LABELS.get("GREEN")?.label,
+      y: charData.green,
+      color: "#68b240",
+    },
+    {
+      x: DEFAULT_RISK_LABELS.get("AMBER")?.label,
+      y: charData.amber,
+      color: "#f0ab0b",
+    },
+    {
+      x: DEFAULT_RISK_LABELS.get("RED")?.label,
+      y: charData.red,
+      color: "#cb440d",
+    },
+    {
+      x: DEFAULT_RISK_LABELS.get("UNKNOWN")?.label,
+      y: charData.unknown,
+      color: black.value,
+    },
+  ].filter((f) => f.y > 0);
+
   return (
-    <div style={{ height: "230px", width: "230px" }}>
+    <div style={{ height: "250px", width: "380px" }}>
       <ChartDonut
         ariaDesc="risk-donut-chart"
         constrainToVisibleArea={true}
-        data={[
-          { x: DEFAULT_RISK_LABELS.get("GREEN")?.label, y: charData.green },
-          { x: DEFAULT_RISK_LABELS.get("AMBER")?.label, y: charData.amber },
-          { x: DEFAULT_RISK_LABELS.get("RED")?.label, y: charData.red },
-          { x: DEFAULT_RISK_LABELS.get("UNKNOWN")?.label, y: charData.unknown },
-        ]}
+        data={chartDefinition.map((elem) => ({ x: elem.x, y: elem.y }))}
         labels={({ datum }) => `${datum.x}: ${datum.y}`}
-        colorScale={["#68b240", "#f0ab0b", "#cb440d", black.value]}
+        colorScale={chartDefinition.map((elem) => elem.color)}
+        legendComponent={
+          <ChartLegend
+            data={chartDefinition.map((elem) => ({
+              name: `${elem.x}: ${elem.y}`,
+            }))}
+            colorScale={chartDefinition.map((elem) => elem.color)}
+          />
+        }
+        legendOrientation="vertical"
+        legendPosition="right"
+        padding={{
+          bottom: 20,
+          left: 20,
+          right: 140, // Adjusted to accommodate legend
+          top: 20,
+        }}
         innerRadius={50}
+        width={380}
       />
     </div>
   );

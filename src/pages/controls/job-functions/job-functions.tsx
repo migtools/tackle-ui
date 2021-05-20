@@ -161,8 +161,12 @@ export const JobFunctions: React.FC = () => {
   const deleteRow = (row: JobFunction) => {
     dispatch(
       confirmDialogActions.openDialog({
-        title: t("dialog.title.delete", { what: row.role }),
-        message: t("dialog.message.delete", { what: row.role }),
+        // t("terms.jobFunction")
+        title: t("dialog.title.delete", {
+          what: t("terms.jobFunction").toLowerCase(),
+        }),
+        titleIconVariant: "warning",
+        message: t("dialog.message.delete"),
         confirmBtnVariant: ButtonVariant.danger,
         confirmBtnLabel: t("actions.delete"),
         cancelBtnLabel: t("actions.cancel"),

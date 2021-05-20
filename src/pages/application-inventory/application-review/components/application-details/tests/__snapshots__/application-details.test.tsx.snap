@@ -23,7 +23,29 @@ exports[`AppTable Renders without crashing 1`] = `
       Assessment notes
     </DescriptionListTerm>
     <DescriptionListDescription>
-      comments1. comments2. comments3
+      <List>
+        <ListItem
+          key="0"
+        >
+          title1
+          : 
+          comments1
+        </ListItem>
+        <ListItem
+          key="1"
+        >
+          title2
+          : 
+          comments2
+        </ListItem>
+        <ListItem
+          key="2"
+        >
+          title3
+          : 
+          comments3
+        </ListItem>
+      </List>
     </DescriptionListDescription>
   </DescriptionListGroup>
 </DescriptionList>

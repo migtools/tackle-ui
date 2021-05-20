@@ -6,11 +6,7 @@ import { FilterIcon } from "@patternfly/react-icons";
 
 import { OptionWithValue, SimpleSelect } from "shared/components";
 
-import {
-  DEFAULT_RISK_LABELS,
-  DEFAULT_RISK_LIST,
-  DEFAULT_SELECT_MAX_HEIGHT,
-} from "Constants";
+import { DEFAULT_RISK_LABELS, DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 import { Risk } from "api/models";
 import { getToolbarChipKey } from "utils/utils";
 
@@ -66,10 +62,14 @@ export const SelectRiskFilter: React.FC<ISelectRiskFilterProps> = ({
       placeholderText={t("terms.risk")}
       maxHeight={DEFAULT_SELECT_MAX_HEIGHT}
       value={value
-        .map((a) => DEFAULT_RISK_LIST.find((b) => getToolbarChipKey(a) === b))
+        .map((a) => {
+          return Array.from(DEFAULT_RISK_LABELS.keys()).find(
+            (b) => getToolbarChipKey(a) === b
+          );
+        })
         .filter((f) => f !== undefined)
         .map((f) => riskToOption(f!))}
-      options={DEFAULT_RISK_LIST.map(riskToOption)}
+      options={Array.from(DEFAULT_RISK_LABELS.keys()).map(riskToOption)}
       onChange={(option) => {
         const optionValue = (option as OptionWithValue<Risk>).value;
 
