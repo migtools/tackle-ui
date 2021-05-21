@@ -375,6 +375,13 @@ export const ApplicationList: React.FC = () => {
                   })
                   .then(() => {
                     dispatch(confirmDialogActions.closeDialog());
+                    dispatch(
+                      alertActions.addSuccess(
+                        t("toastr.success.assessmentDiscarded", {
+                          application: row.name,
+                        })
+                      )
+                    );
                     refreshTable();
                   })
                   .catch((error) => {

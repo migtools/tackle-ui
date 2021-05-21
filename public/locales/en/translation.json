@@ -132,7 +132,8 @@
     },
     "toastr": {
         "success": {
-            "added": "Success! {{what}} was added as a {{type}}."
+            "added": "Success! {{what}} was added as a {{type}}.",
+            "assessmentDiscarded": "Success! Assessment discarded for {{application}}"
         }
     },
     "validation": {
