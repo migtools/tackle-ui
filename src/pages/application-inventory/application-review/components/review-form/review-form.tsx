@@ -197,7 +197,7 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
           />
         </FormGroup>
         <FormGroup
-          label={t("terms.effortEstimation")}
+          label={t("terms.effortEstimate")}
           fieldId="effort"
           isRequired={true}
           validated={getValidatedFromError(formik.errors.effort)}

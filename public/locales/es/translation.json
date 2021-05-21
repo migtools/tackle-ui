@@ -92,7 +92,7 @@
         "controls": "Controles",
         "description": "Descripción",
         "displayName": "Nombre a mostrar",
-        "effortEstimation": "Esfuerzo estimado",
+        "effortEstimate": "Esfuerzo estimado",
         "email": "Email",
         "group": "Grupo",
         "group(s)": "Grupo(s)",

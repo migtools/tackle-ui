@@ -54,8 +54,6 @@ import { Application, Assessment, SortByQuery } from "api/models";
 import {
   ApplicationSortBy,
   ApplicationSortByQuery,
-  deleteAssessment,
-  deleteReview,
   getAssessments,
 } from "api/rest";
 import { getAxiosErrorMessage } from "utils/utils";
