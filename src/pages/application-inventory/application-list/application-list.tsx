@@ -7,10 +7,6 @@ import { useSelectionState } from "@konveyor/lib-ui";
 import {
   Button,
   ButtonVariant,
-  DescriptionList,
-  DescriptionListDescription,
-  DescriptionListGroup,
-  DescriptionListTerm,
   Modal,
   PageSection,
   PageSectionVariants,
@@ -43,16 +39,23 @@ import {
   AppTableWithControls,
   ConditionalRender,
   NoDataEmptyState,
+  StatusIconAssessment,
 } from "shared/components";
 import {
   useDeleteApplication,
   useTableControls,
   useFetchApplications,
+  useAssessApplication,
+  useMultipleFetch,
 } from "shared/hooks";
 
 import { formatPath, Paths } from "Paths";
 import { Application, Assessment, SortByQuery } from "api/models";
-import { ApplicationSortBy, ApplicationSortByQuery } from "api/rest";
+import {
+  ApplicationSortBy,
+  ApplicationSortByQuery,
+  getAssessments,
+} from "api/rest";
 import { getAxiosErrorMessage } from "utils/utils";
 
 import { NewApplicationModal } from "./components/new-application-modal";
@@ -63,10 +66,9 @@ import { SelectBusinessServiceFilter } from "./components/toolbar-search-filter/
 import { ApplicationAssessment } from "./components/application-assessment";
 import { ApplicationBusinessService } from "./components/application-business-service";
 
-import { useAssessApplication } from "./hooks/useAssessApplication";
-import { ApplicationTags } from "./components/application-tags/application-tags";
 import { SelectTagFilter } from "./components/toolbar-search-filter/select-tag-filter";
 import ApplicationDependenciesForm from "./components/application-dependencies-form";
+import { ApplicationListExpandedArea } from "./components/application-list-expanded-area";
 
 enum FilterKey {
   NAME = "name",
@@ -87,7 +89,7 @@ const toSortByQuery = (
     case 2:
       field = ApplicationSortBy.NAME;
       break;
-    case 6:
+    case 7:
       field = ApplicationSortBy.TAGS;
       break;
     default:
@@ -104,6 +106,13 @@ const ENTITY_FIELD = "entity";
 
 const getRow = (rowData: IRowData): Application => {
   return rowData[ENTITY_FIELD];
+};
+
+const searchAppAssessment = (id: number) => {
+  const result = getAssessments({ applicationId: id }).then(({ data }) =>
+    data[0] ? data[0] : undefined
+  );
+  return result;
 };
 
 export const ApplicationList: React.FC = () => {
@@ -141,6 +150,7 @@ export const ApplicationList: React.FC = () => {
   ] = useState<Application>();
 
   const { deleteApplication } = useDeleteApplication();
+
   const {
     assessApplication,
     inProgress: isApplicationAssessInProgress,
@@ -192,6 +202,22 @@ export const ApplicationList: React.FC = () => {
     );
   }, [filtersValue, paginationQuery, sortByQuery, fetchApplications]);
 
+  // Assessments
+
+  const {
+    getData: getApplicationAssessment,
+    isFetching: isFetchingApplicationAssessment,
+    fetchError: fetchErrorApplicationAssessment,
+    fetchCount: fetchCountApplicationAssessment,
+    triggerFetch: fetchApplicationsAssessment,
+  } = useMultipleFetch<number, Assessment | undefined>(searchAppAssessment);
+
+  useEffect(() => {
+    if (applications) {
+      fetchApplicationsAssessment(applications.data.map((f) => f.id!));
+    }
+  }, [applications, fetchApplicationsAssessment]);
+
   // Expansion and selection of rows
 
   const {
@@ -222,6 +248,7 @@ export const ApplicationList: React.FC = () => {
     { title: t("terms.description"), transforms: [] },
     { title: t("terms.businessService"), transforms: [] },
     { title: t("terms.assessment"), transforms: [cellWidth(10)] },
+    { title: t("terms.review"), transforms: [cellWidth(10)] },
     { title: t("terms.tags"), transforms: [sortable, cellWidth(10)] },
     {
       title: "",
@@ -251,7 +278,21 @@ export const ApplicationList: React.FC = () => {
           title: <ApplicationBusinessService application={item} />,
         },
         {
-          title: <ApplicationAssessment application={item} />,
+          title: (
+            <ApplicationAssessment
+              assessment={getApplicationAssessment(item.id!)}
+              isFetching={isFetchingApplicationAssessment(item.id!)}
+              fetchError={fetchErrorApplicationAssessment(item.id!)}
+              fetchCount={fetchCountApplicationAssessment(item.id!)}
+            />
+          ),
+        },
+        {
+          title: item.review ? (
+            <StatusIconAssessment status="Completed" />
+          ) : (
+            <StatusIconAssessment status="NotStarted" />
+          ),
         },
         {
           title: (
@@ -281,20 +322,7 @@ export const ApplicationList: React.FC = () => {
       fullWidth: false,
       cells: [
         <div className="pf-c-table__expandable-row-content">
-          <DescriptionList isHorizontal>
-            <DescriptionListGroup>
-              <DescriptionListTerm>{t("terms.tags")}</DescriptionListTerm>
-              <DescriptionListDescription>
-                <ApplicationTags application={item} />
-              </DescriptionListDescription>
-            </DescriptionListGroup>
-            <DescriptionListGroup>
-              <DescriptionListTerm>{t("terms.comments")}</DescriptionListTerm>
-              <DescriptionListDescription>
-                {item.comments}
-              </DescriptionListDescription>
-            </DescriptionListGroup>
-          </DescriptionList>
+          <ApplicationListExpandedArea application={item} />
         </div>,
       ],
     });
@@ -527,6 +555,39 @@ export const ApplicationList: React.FC = () => {
     startApplicationAssessment(row);
   };
 
+  const startApplicationReview = (row: Application) => {
+    const assessment = getApplicationAssessment(row.id!);
+    if (!assessment) {
+      console.log("You must assess the application before reviewing it");
+      return;
+    }
+
+    history.push(
+      formatPath(Paths.applicationInventory_review, {
+        applicationId: row.id,
+      })
+    );
+  };
+
+  const handleOnReviewSelectedRow = () => {
+    if (selectedRows.length !== 1) {
+      dispatch(
+        alertActions.addDanger(
+          "The number of applications to be reviewed must be 1"
+        )
+      );
+      return;
+    }
+
+    const row = selectedRows[0];
+    startApplicationReview(row);
+  };
+
+  const isReviewBtnDisabled = (row: Application) => {
+    const assessment = getApplicationAssessment(row.id!);
+    return assessment === undefined || assessment.status !== "COMPLETE";
+  };
+
   return (
     <>
       <PageSection variant={PageSectionVariants.light}>
@@ -543,19 +604,19 @@ export const ApplicationList: React.FC = () => {
             count={applications ? applications.meta.count : 0}
             pagination={paginationQuery}
             sortBy={sortByQuery}
-            handlePaginationChange={handlePaginationChange}
-            handleSortChange={handleSortChange}
+            onPaginationChange={handlePaginationChange}
+            onSort={handleSortChange}
             onCollapse={collapseRow}
             onSelect={selectRow}
             canSelectAll={false}
-            columns={columns}
+            cells={columns}
             rows={rows}
             actionResolver={actionResolver}
             areActionsDisabled={areActionsDisabled}
             isLoading={isFetching}
             loadingVariant="skeleton"
             fetchError={fetchError}
-            clearAllFilters={handleOnClearAllFilters}
+            toolbarClearAllFilters={handleOnClearAllFilters}
             filtersApplied={
               Array.from(filtersValue.values()).reduce(
                 (previous, current) => [...previous, ...current],
@@ -652,6 +713,20 @@ export const ApplicationList: React.FC = () => {
                       isLoading={isApplicationAssessInProgress}
                     >
                       {t("actions.assess")}
+                    </Button>
+                  </ToolbarItem>
+                  <ToolbarItem>
+                    <Button
+                      type="button"
+                      aria-label="review-application"
+                      variant={ButtonVariant.primary}
+                      onClick={handleOnReviewSelectedRow}
+                      isDisabled={
+                        selectedRows.length !== 1 ||
+                        isReviewBtnDisabled(selectedRows[0])
+                      }
+                    >
+                      {t("actions.review")}
                     </Button>
                   </ToolbarItem>
                 </ToolbarGroup>

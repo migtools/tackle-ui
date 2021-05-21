@@ -46,6 +46,9 @@ describe("Answer questionnaire", () => {
     cy.intercept("GET", "/api/application-inventory/application*").as(
       "getApplicationsApi"
     );
+    cy.intercept("GET", "/api/application-inventory/application/*").as(
+      "getApplicationApi"
+    );
 
     // Go to page
     cy.visit("/application-inventory/assessment/" + assessment.id);

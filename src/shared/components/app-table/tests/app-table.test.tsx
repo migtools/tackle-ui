@@ -41,7 +41,7 @@ describe("AppTable", () => {
   it("Renders without crashing", () => {
     const wrapper = shallow(
       <AppTable
-        columns={columns}
+        cells={columns}
         rows={rows}
         isLoading={false}
         filtersApplied={false}
@@ -53,7 +53,7 @@ describe("AppTable", () => {
   it("Renders error", () => {
     const wrapper = mount(
       <AppTable
-        columns={columns}
+        cells={columns}
         rows={rows}
         isLoading={false}
         fetchError={"Any error"}
@@ -66,7 +66,7 @@ describe("AppTable", () => {
   it("Renders loading with skeleton", () => {
     const wrapper = mount(
       <AppTable
-        columns={columns}
+        cells={columns}
         rows={rows}
         isLoading={true}
         loadingVariant="skeleton"
@@ -79,7 +79,7 @@ describe("AppTable", () => {
   it("Renders loading with spinner", () => {
     const wrapper = mount(
       <AppTable
-        columns={columns}
+        cells={columns}
         rows={rows}
         isLoading={true}
         loadingVariant="spinner"
@@ -92,7 +92,7 @@ describe("AppTable", () => {
   it("Renders empty table without aplying filters", () => {
     const wrapper = mount(
       <AppTable
-        columns={columns}
+        cells={columns}
         rows={[]}
         isLoading={false}
         filtersApplied={false}
@@ -104,7 +104,7 @@ describe("AppTable", () => {
   it("Renders empty table after applying filters", () => {
     const wrapper = mount(
       <AppTable
-        columns={columns}
+        cells={columns}
         rows={[]}
         isLoading={false}
         filtersApplied={true}
@@ -116,7 +116,7 @@ describe("AppTable", () => {
   it("Render rows with static actions", () => {
     const wrapper = mount(
       <AppTable
-        columns={columns}
+        cells={columns}
         rows={rows}
         actions={actions}
         isLoading={false}
@@ -131,7 +131,7 @@ describe("AppTable", () => {
 
     const wrapper = mount(
       <AppTable
-        columns={columns}
+        cells={columns}
         rows={rows}
         isLoading={false}
         onSort={onSortMock}

@@ -13,8 +13,11 @@
         "edit": "Editar",
         "manageDependencies": "Administrar dependencias",
         "next": "Siguiente",
+        "review": "Revisar",
         "save": "Guardar",
-        "saveAsDraft": "Guardar como borrador"
+        "saveAndReview": "Guardar y revisar",
+        "saveAsDraft": "Guardar como borrador",
+        "submitReview": "Enviar revisión"
     },
     "colors": {
         "blue": "Azul",
@@ -28,13 +31,15 @@
         "add": "Agregar {{what}}",
         "applicationAssessment": "Evaluación de la aplicación",
         "applicationInventory": "Inventario de aplicaciones",
+        "businessCriticality": "Business criticality (1=bajo, 10=alto)",
         "editQuestion": "Editar {{what}}?",
         "manageDependenciesFor": "Administrar dependencias para {{what}}",
         "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
         "noDataStateTitle": "No existen {{what}} disponibles",
         "Nquestions": "{{n}} preguntas",
         "selectMany": "Seleccione {{what}}",
-        "selectOne": "Seleccione un(a) {{what}}"
+        "selectOne": "Seleccione un(a) {{what}}",
+        "workPriority": "Work priority (1=bajo, 10=alto)"
     },
     "dialog": {
         "message": {
@@ -59,6 +64,8 @@
         }
     },
     "message": {
+        "appNotAssesedTitle": "",
+        "appNotAssessedBody": "",
         "couldNotFetchBody": "El recurso no existe o no tienes permiso para acceder al mismo",
         "couldNotFetchTitle": "No disponible",
         "overrideAssessmentConfirmation": "Esta aplicación ya fue evaluada ¿Deseas continuar?",
@@ -70,17 +77,21 @@
         "reports": "Reportes"
     },
     "terms": {
+        "answer": "Respuesta",
         "application": "Applicación",
         "applications": "Applicaciones",
         "assessment": "Evaluación",
+        "businessCriticality": "Criticidad de negocio",
         "businessService": "Servicio de negocio",
         "businessServices": "Servicios de negocio",
+        "category": "Categoría",
         "color": "Color",
         "comments": "Comentarios",
         "completed": "Completado",
         "controls": "Controles",
         "description": "Descripción",
         "displayName": "Nombre a mostrar",
+        "effortEstimate": "Esfuerzo estimado",
         "email": "Email",
         "group": "Grupo",
         "group(s)": "Grupo(s)",
@@ -93,8 +104,15 @@
         "northboundDependencies": "Dependencias del norte",
         "notAvailable": "No disponible",
         "notStarted": "No empezado",
+        "notYetReviewed": "No revisado todavía",
         "owner": "Propietario",
+        "proposedAction": "Acción propuesta",
+        "question": "Pregunta",
         "rank": "Rango",
+        "review": "Revisar",
+        "reviewComments": "Comentarios de la revisión",
+        "risk": "Riesgo",
+        "select": "Seleccione",
         "southboundDependencies": "Dependencias del sur",
         "stakeholder": "Interesado",
         "stakeholder(s)": "Interesado(s)",
@@ -108,7 +126,8 @@
         "tags": "Etiquetas",
         "tagType": "Tipo de etiqueta",
         "tagTypes": "Tipos de etiqueta",
-        "unknown": "Desconocido"
+        "unknown": "Desconocido",
+        "workPriority": "Prioridad de trabajo"
     },
     "toastr": {
         "success": {
@@ -117,6 +136,7 @@
     },
     "validation": {
         "email": "Este campo requiere un email válido.",
+        "max": "Este campo debe de ser menor a {{value}}.",
         "maxLength": "Este campo debe de tener menos de {{length}} caracteres.",
         "min": "Este campo debe de ser mayor a {{value}}.",
         "minLength": "Este campo debe de tener al menos {{length}} caracteres.",

@@ -414,16 +414,16 @@ export const Tags: React.FC = () => {
           count={tagTypes ? tagTypes.meta.count : 0}
           pagination={paginationQuery}
           sortBy={sortByQuery}
-          handlePaginationChange={handlePaginationChange}
-          handleSortChange={handleSortChange}
+          onPaginationChange={handlePaginationChange}
+          onSort={handleSortChange}
           onCollapse={collapseRow}
-          columns={columns}
+          cells={columns}
           rows={rows}
           // actions={actions}
           isLoading={isFetching}
           loadingVariant="skeleton"
           fetchError={fetchError}
-          clearAllFilters={handleOnClearAllFilters}
+          toolbarClearAllFilters={handleOnClearAllFilters}
           filtersApplied={
             Array.from(filtersValue.values()).reduce(
               (previous, current) => [...previous, ...current],

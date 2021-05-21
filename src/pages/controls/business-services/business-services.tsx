@@ -327,15 +327,15 @@ export const BusinessServices: React.FC = () => {
           count={businessServices ? businessServices.meta.count : 0}
           pagination={paginationQuery}
           sortBy={sortByQuery}
-          handlePaginationChange={handlePaginationChange}
-          handleSortChange={handleSortChange}
-          columns={columns}
+          onPaginationChange={handlePaginationChange}
+          onSort={handleSortChange}
+          cells={columns}
           rows={rows}
           // actions={actions}
           isLoading={isFetching}
           loadingVariant="skeleton"
           fetchError={fetchError}
-          clearAllFilters={handleOnClearAllFilters}
+          toolbarClearAllFilters={handleOnClearAllFilters}
           filtersApplied={
             Array.from(filtersValue.values()).reduce(
               (current, accumulator) => [...accumulator, ...current],

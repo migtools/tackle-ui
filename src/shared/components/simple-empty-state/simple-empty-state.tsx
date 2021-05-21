@@ -11,12 +11,14 @@ export interface SimpleEmptyStateProps {
   icon?: any;
   title: string;
   description?: string;
+  primaryAction?: any;
 }
 
 export const SimpleEmptyState: React.FC<SimpleEmptyStateProps> = ({
   icon,
   title,
   description,
+  primaryAction,
 }) => {
   return (
     <EmptyState variant={EmptyStateVariant.small}>
@@ -25,6 +27,7 @@ export const SimpleEmptyState: React.FC<SimpleEmptyStateProps> = ({
         {title}
       </Title>
       {description && <EmptyStateBody>{description}</EmptyStateBody>}
+      {primaryAction}
     </EmptyState>
   );
 };

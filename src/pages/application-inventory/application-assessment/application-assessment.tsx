@@ -4,6 +4,9 @@ import { useTranslation } from "react-i18next";
 import { FormikHelpers, FormikProvider, useFormik } from "formik";
 import { AxiosError } from "axios";
 
+import { useDispatch } from "react-redux";
+import { alertActions } from "store/alert";
+
 import {
   Alert,
   AlertActionCloseButton,
@@ -19,14 +22,18 @@ import {
   AppPlaceholder,
 } from "shared/components";
 
-import { AssessmentRoute, Paths } from "Paths";
+import { AssessmentRoute, formatPath, Paths } from "Paths";
 import {
   Assessment,
   AssessmentStatus,
   Question,
   QuestionnaireCategory,
 } from "api/models";
-import { getAssessmentById, patchAssessment } from "api/rest";
+import {
+  getApplicationById,
+  getAssessmentById,
+  patchAssessment,
+} from "api/rest";
 
 import { CustomWizardFooter } from "./components/custom-wizard-footer";
 
@@ -49,6 +56,8 @@ import { WizardStepNavDescription } from "./components/wizard-step-nav-descripti
 
 export const ApplicationAssessment: React.FC = () => {
   const { t } = useTranslation();
+
+  const dispatch = useDispatch();
 
   const history = useHistory();
   const { assessmentId } = useParams<AssessmentRoute>();
@@ -173,6 +182,21 @@ export const ApplicationAssessment: React.FC = () => {
           case SAVE_ACTION_VALUE.SAVE:
             redirectToApplicationList();
             break;
+          case SAVE_ACTION_VALUE.SAVE_AND_REVIEW:
+            getApplicationById(assessment.applicationId)
+              .then(({ data }) => {
+                formikHelpers.setSubmitting(false);
+                history.push(
+                  formatPath(Paths.applicationInventory_review, {
+                    applicationId: data.id,
+                  })
+                );
+              })
+              .catch((error) => {
+                dispatch(alertActions.addDanger(getAxiosErrorMessage(error)));
+                formikHelpers.setSubmitting(false);
+              });
+            break;
         }
       })
       .catch((error) => {
@@ -277,8 +301,12 @@ export const ApplicationAssessment: React.FC = () => {
       isLastStep={currentStep === sortedCategories.length}
       isDisabled={formik.isSubmitting || formik.isValidating}
       isFormInvalid={!formik.isValid}
-      onSave={() => {
-        formik.setFieldValue(SAVE_ACTION_KEY, SAVE_ACTION_VALUE.SAVE);
+      onSave={(review) => {
+        const saveActionValue = review
+          ? SAVE_ACTION_VALUE.SAVE_AND_REVIEW
+          : SAVE_ACTION_VALUE.SAVE;
+
+        formik.setFieldValue(SAVE_ACTION_KEY, saveActionValue);
         formik.submitForm();
       }}
       onSaveAsDraft={() => {
