@@ -54,6 +54,8 @@ import { Application, Assessment, SortByQuery } from "api/models";
 import {
   ApplicationSortBy,
   ApplicationSortByQuery,
+  deleteAssessment,
+  deleteReview,
   getAssessments,
 } from "api/rest";
 import { getAxiosErrorMessage } from "utils/utils";
@@ -334,7 +336,68 @@ export const ApplicationList: React.FC = () => {
       return [];
     }
 
-    const actions: (IAction | ISeparator)[] = [
+    const actions: (IAction | ISeparator)[] = [];
+
+    if (getApplicationAssessment(row.id!)) {
+      actions.push({
+        title: t("actions.discardAssessment"),
+        onClick: (
+          event: React.MouseEvent,
+          rowIndex: number,
+          rowData: IRowData
+        ) => {
+          const row: Application = getRow(rowData);
+          dispatch(
+            confirmDialogActions.openDialog({
+              title: "Discard assessment?",
+              titleIconVariant: "warning",
+              message: (
+                <span>
+                  The assessment for <strong>{row.name}</strong> will be
+                  discarded, as well as the review result. Do you wish to
+                  continue?
+                </span>
+              ),
+              confirmBtnVariant: ButtonVariant.primary,
+              confirmBtnLabel: t("actions.continue"),
+              cancelBtnLabel: t("actions.cancel"),
+              onConfirm: () => {
+                dispatch(confirmDialogActions.processing());
+
+                Promise.all([
+                  row.review ? deleteReview(row.review.id!) : undefined,
+                ])
+                  .then(() => {
+                    const assessment = getApplicationAssessment(row.id!);
+                    return Promise.all([
+                      assessment ? deleteAssessment(assessment.id!) : undefined,
+                    ]);
+                  })
+                  .then(() => {
+                    dispatch(confirmDialogActions.closeDialog());
+                    dispatch(
+                      alertActions.addSuccess(
+                        t("toastr.success.assessmentDiscarded", {
+                          application: row.name,
+                        })
+                      )
+                    );
+                    refreshTable();
+                  })
+                  .catch((error) => {
+                    dispatch(confirmDialogActions.closeDialog());
+                    dispatch(
+                      alertActions.addDanger(getAxiosErrorMessage(error))
+                    );
+                  });
+              },
+            })
+          );
+        },
+      });
+    }
+
+    actions.push(
       {
         title: t("actions.manageDependencies"),
         onClick: (
@@ -356,8 +419,8 @@ export const ApplicationList: React.FC = () => {
           const row: Application = getRow(rowData);
           deleteRow(row);
         },
-      },
-    ];
+      }
+    );
 
     return actions;
   };

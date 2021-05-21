@@ -10,6 +10,7 @@
         "createTag": "Crear etiqueta",
         "createTagType": "Crear typo de etiqueta",
         "delete": "Eliminar",
+        "discardAssessment": "Descartar evaluación",
         "edit": "Editar",
         "manageDependencies": "Administrar dependencias",
         "next": "Siguiente",
@@ -131,7 +132,8 @@
     },
     "toastr": {
         "success": {
-            "added": "Éxito! {{what}} fue creado como un {{type}}."
+            "added": "Éxito! {{what}} fue creado como un {{type}}.",
+            "assessmentDiscarded": "Éxito! Evaluación de {{application}} desechada"
         }
     },
     "validation": {

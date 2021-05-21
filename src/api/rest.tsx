@@ -547,6 +547,10 @@ export const updateReview = (obj: Review): AxiosPromise<Review> => {
   return APIClient.put(`${REVIEW}/${obj.id}`, obj);
 };
 
+export const deleteReview = (id: number): AxiosPromise => {
+  return APIClient.delete(`${REVIEW}/${id}`);
+};
+
 //
 
 export const getAssessments = (filters: {
@@ -572,4 +576,8 @@ export const getAssessmentById = (
   id: number | string
 ): AxiosPromise<Assessment> => {
   return APIClient.get(`${ASSESSMENTS}/${id}`);
+};
+
+export const deleteAssessment = (id: number): AxiosPromise => {
+  return APIClient.delete(`${ASSESSMENTS}/${id}`);
 };

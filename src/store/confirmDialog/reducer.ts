@@ -16,7 +16,7 @@ export type ConfirmDialogState = Readonly<{
     | "info"
     | "default"
     | React.ComponentType<any>;
-  message: string;
+  message: string | React.ReactNode;
   confirmBtnLabel: string;
   cancelBtnLabel: string;
   confirmBtnVariant: ButtonVariant;
