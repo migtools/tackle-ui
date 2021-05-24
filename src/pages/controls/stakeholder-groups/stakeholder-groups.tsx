@@ -169,7 +169,7 @@ export const StakeholderGroups: React.FC = () => {
       transforms: [sortable, cellWidth(30)],
       cellFormatters: [expandable],
     },
-    { title: t("terms.description"), transforms: [cellWidth(30)] },
+    { title: t("terms.description"), transforms: [cellWidth(35)] },
     {
       title: t("terms.member(s)"),
       transforms: [sortable],
