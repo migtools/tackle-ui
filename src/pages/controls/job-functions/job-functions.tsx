@@ -9,7 +9,13 @@ import {
   ToolbarGroup,
   ToolbarItem,
 } from "@patternfly/react-core";
-import { ICell, IRow, sortable } from "@patternfly/react-table";
+import {
+  cellWidth,
+  ICell,
+  IRow,
+  sortable,
+  TableText,
+} from "@patternfly/react-table";
 
 import { useDispatch } from "react-redux";
 import { alertActions } from "store/alert";
@@ -125,7 +131,7 @@ export const JobFunctions: React.FC = () => {
   const columns: ICell[] = [
     {
       title: t("terms.name"),
-      transforms: [sortable],
+      transforms: [sortable, cellWidth(70)],
       cellFormatters: [],
     },
     {
@@ -142,7 +148,7 @@ export const JobFunctions: React.FC = () => {
       [ENTITY_FIELD]: item,
       cells: [
         {
-          title: item.role,
+          title: <TableText wrapModifier="truncate">{item.role}</TableText>,
         },
         {
           title: (
