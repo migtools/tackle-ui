@@ -186,6 +186,7 @@ export const Stakeholders: React.FC = () => {
     { title: t("terms.jobFunction"), transforms: [sortable, cellWidth(20)] },
     {
       title: t("terms.group(s)"),
+      transforms: [sortable],
     },
     {
       title: "",
