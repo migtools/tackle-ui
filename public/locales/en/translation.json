@@ -44,10 +44,12 @@
     },
     "dialog": {
         "message": {
-            "delete": "This action cannot be undone."
+            "delete": "This action cannot be undone.",
+            "leavePage": "Are you sure you want to leave this page?"
         },
         "title": {
             "delete": "Delete {{what}}?",
+            "leavePage": "Leave page",
             "newApplication": "New application",
             "newBusinessService": "New business service",
             "newJobFunction": "New job function",
