@@ -26,9 +26,7 @@ export class StakeholderGroupPage {
       "deleteStakeholderGroup"
     );
 
-    cy.intercept("GET", "/api/controls/stakeholder*").as(
-      "getAllStakeholdersDropdown"
-    );
+    cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholders");
 
     // Open page
     cy.visit("/controls/stakeholder-groups");
@@ -44,10 +42,9 @@ export class StakeholderGroupPage {
         .type(formValue.description);
     }
     if (formValue.members) {
-      cy.wait("@getAllStakeholdersDropdown");
+      cy.wait("@getStakeholders");
       formValue.members.forEach((e) => {
-        cy.get(".pf-c-form__group-control input.pf-c-select__toggle-typeahead")
-          .eq(0)
+        cy.get("input[aria-label='stakeholders']")
           .clear()
           .type(e)
           .type("{enter}");

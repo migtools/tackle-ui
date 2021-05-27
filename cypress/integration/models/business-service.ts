@@ -16,6 +16,7 @@ export class BusinessServicePage {
     cy.intercept("GET", "/api/controls/business-service*").as(
       "getBusinessServices"
     );
+
     cy.intercept("POST", "/api/controls/business-service*").as(
       "postBusinessService"
     );
@@ -26,9 +27,7 @@ export class BusinessServicePage {
       "deleteBusinessService"
     );
 
-    cy.intercept("GET", "/api/controls/stakeholder*").as(
-      "getAllStakeholdersDropdown"
-    );
+    cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholders");
 
     // Open page
     cy.visit("/controls/business-services");
@@ -44,9 +43,8 @@ export class BusinessServicePage {
         .type(formValue.description);
     }
     if (formValue.owner) {
-      cy.wait("@getAllStakeholdersDropdown");
-      cy.get(".pf-c-form__group-control input.pf-c-select__toggle-typeahead")
-        .eq(0)
+      cy.wait("@getStakeholders");
+      cy.get("input[aria-label='owner']")
         .clear()
         .type(formValue.owner)
         .type("{enter}");

@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-keycloak-commands" />
 
-import { Stakeholder } from "../../../models/stakeholder";
+import { StakeholderPage } from "../../../models/stakeholder";
 
-describe("Filter business services", () => {
-  const stakeholder = new Stakeholder();
+describe("Filter stakeholders", () => {
+  const stakeholder = new StakeholderPage();
 
   before(() => {
     cy.kcLogout();
@@ -66,66 +66,57 @@ describe("Filter business services", () => {
   beforeEach(() => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
-
-    // Inteceptors
-    cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholders");
   });
 
   it("By email", () => {
+    const filterIndex = 0;
     stakeholder.openPage();
-    cy.wait("@getStakeholders");
 
     // First filter
     stakeholder.applyFilter(0, "email-a");
 
-    cy.wait("@getStakeholders");
-    cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("email-a");
+    cy.get(".pf-c-table").pf4_table_rows().eq(filterIndex).contains("email-a");
 
     // Second filter
-    stakeholder.applyFilter(0, "email-k");
+    stakeholder.applyFilter(filterIndex, "email-k");
 
-    cy.wait("@getStakeholders");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("email-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(1).contains("email-k");
   });
 
   it("By displayName", () => {
+    const filterIndex = 1;
     stakeholder.openPage();
-    cy.wait("@getStakeholders");
 
     // First filter
-    stakeholder.applyFilter(1, "stakeholder-a");
+    stakeholder.applyFilter(filterIndex, "stakeholder-a");
 
-    cy.wait("@getStakeholders");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-a");
 
     // Second filter
-    stakeholder.applyFilter(1, "stakeholder-k");
+    stakeholder.applyFilter(filterIndex, "stakeholder-k");
 
-    cy.wait("@getStakeholders");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(1).contains("stakeholder-k");
   });
 
   it("By job function", () => {
+    const filterIndex = 2;
     stakeholder.openPage();
-    cy.wait("@getStakeholders");
 
     // First filter
-    stakeholder.applyFilter(2, "function-j");
+    stakeholder.applyFilter(filterIndex, "function-j");
 
-    cy.wait("@getStakeholders");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("function-j");
   });
 
   it("By group", () => {
+    const filterIndex = 3;
     stakeholder.openPage();
-    cy.wait("@getStakeholders");
 
     // First filter
-    stakeholder.applyFilter(3, "group-j");
+    stakeholder.applyFilter(filterIndex, "group-j");
 
-    cy.wait("@getStakeholders");
     cy.get(".pf-c-table").pf4_table_row_expand(0);
     cy.get(".pf-c-table > tbody > tr.pf-c-table__expandable-row")
       .find(".pf-c-description-list .pf-c-description-list__text")

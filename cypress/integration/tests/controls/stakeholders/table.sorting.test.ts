@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-keycloak-commands" />
 
-import { Stakeholder } from "../../../models/stakeholder";
+import { StakeholderPage } from "../../../models/stakeholder";
 
-describe("Sort business services", () => {
-  const stakeholder = new Stakeholder();
+describe("Sort stakeholder", () => {
+  const stakeholder = new StakeholderPage();
 
   before(() => {
     cy.kcLogout();
@@ -66,80 +66,71 @@ describe("Sort business services", () => {
   beforeEach(() => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
-
-    // Inteceptors
-    cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholders");
   });
 
   it("Sort by email", () => {
+    const columnName = "Email";
     stakeholder.openPage();
-    cy.wait("@getStakeholders");
 
     // Asc is the default
-    cy.get(".pf-c-table").pf4_table_column_isAsc("Email");
+    cy.get(".pf-c-table").pf4_table_column_isAsc(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("email-a@domain.com");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("email-j@domain.com");
 
     // Desc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Email");
-    cy.wait("@getStakeholders");
+    stakeholder.toggleSortBy(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("email-k@domain.com");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("email-b@domain.com");
   });
 
   it("Sort by displayName", () => {
+    const columnName = "Display name";
     stakeholder.openPage();
-    cy.wait("@getStakeholders");
 
     // Asc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Display name");
-    cy.wait("@getStakeholders");
+    stakeholder.toggleSortBy(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("stakeholder-j");
 
     // Desc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Display name");
-    cy.wait("@getStakeholders");
+    stakeholder.toggleSortBy(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-k");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("stakeholder-b");
   });
 
   it("Sort by job function", () => {
+    const columnName = "Job function";
     stakeholder.openPage();
-    cy.wait("@getStakeholders");
 
     // Asc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Job function");
-    cy.wait("@getStakeholders");
+    stakeholder.toggleSortBy(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("stakeholder-j");
 
     // Desc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Job function");
-    cy.wait("@getStakeholders");
+    stakeholder.toggleSortBy(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("stakeholder-k");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("stakeholder-b");
   });
 
   it("Sort by groups", () => {
-    cy.wait("@getStakeholders");
+    const columnName = "Group(s)";
+    stakeholder.openPage();
 
     // Asc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Group(s)");
-    cy.wait("@getStakeholders");
+    stakeholder.toggleSortBy(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("0");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("9");
 
     // Desc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Group(s)");
-    cy.wait("@getStakeholders");
+    stakeholder.toggleSortBy(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("10");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("1");

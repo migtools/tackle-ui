@@ -57,7 +57,7 @@ describe("Sort stakeholder groups", () => {
     stakeholderGroupPage.openPage();
 
     // Asc is the default
-    cy.get(".pf-c-table").pf4_table_column_isAsc("Name");
+    cy.get(".pf-c-table").pf4_table_column_isAsc(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("group-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("group-j");

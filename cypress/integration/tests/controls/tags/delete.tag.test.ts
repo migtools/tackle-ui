@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-keycloak-commands" />
 
-import { Tag } from "../../../models/tag";
+import { TagTypePage } from "../../../models/tag-type";
 
 describe("Delete tag", () => {
-  const tag = new Tag();
+  const tagTypePage = new TagTypePage();
 
   beforeEach(() => {
     cy.kcLogout();
@@ -34,18 +34,12 @@ describe("Delete tag", () => {
             });
         });
     });
-
-    // Interceptors
-    cy.intercept("DELETE", "/api/controls/tag/*").as("deleteTag");
-    cy.intercept("GET", "/api/controls/tag-type*").as("getTagTypes");
   });
 
   it("Delete", () => {
-    tag.delete(0, 0);
-    cy.wait("@deleteTag");
+    tagTypePage.deleteTag(0, 0);
 
     // Verify table
-    cy.wait("@getTagTypes");
     cy.get(".pf-c-table__expandable-row-content > div > .pf-c-table")
       .pf4_table_rows()
       .eq(0)

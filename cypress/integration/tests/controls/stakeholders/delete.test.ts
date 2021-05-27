@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-keycloak-commands" />
 
-import { Stakeholder } from "../../../models/stakeholder";
+import { StakeholderPage } from "../../../models/stakeholder";
 
 describe("Delete stakeholder", () => {
-  const stakeholder = new Stakeholder();
+  const stakeholder = new StakeholderPage();
 
   beforeEach(() => {
     cy.kcLogout();
@@ -17,20 +17,12 @@ describe("Delete stakeholder", () => {
         displayName: "stakeholder-a",
       });
     });
-
-    // Interceptors
-    cy.intercept("DELETE", "/api/controls/stakeholder/*").as(
-      "deleteStakeholder"
-    );
-    cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholder");
   });
 
   it("Delete the only item available", () => {
     stakeholder.delete(0);
-    cy.wait("@deleteStakeholder");
 
     // Verify table
-    cy.wait("@getStakeholder");
     cy.get(
       ".pf-c-empty-state > .pf-c-empty-state__content > .pf-c-title"
     ).contains("No stakeholders available");

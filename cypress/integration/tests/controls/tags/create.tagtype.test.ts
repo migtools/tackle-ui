@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-keycloak-commands" />
 
-import { TagType } from "../../../models/tag-type";
+import { TagTypePage } from "../../../models/tag-type";
 
 describe("Create new tag type", () => {
-  const tagType = new TagType();
+  const tagType = new TagTypePage();
 
   beforeEach(() => {
     cy.kcLogout();
@@ -13,21 +13,15 @@ describe("Create new tag type", () => {
     cy.get<KcTokens>("@tokens").then((tokens) => {
       cy.api_clean(tokens, "TagType");
     });
-
-    // Interceptors
-    cy.intercept("GET", "/api/controls/tag-type*").as("getTagTypes");
-    cy.intercept("POST", "/api/controls/tag-type*").as("postTagTypes");
   });
 
   it("With min data", () => {
-    tagType.create({
+    tagType.createTagType({
       name: "myTagType",
       rank: 3,
     });
-    cy.wait("@postTagTypes");
 
     // Verify table
-    cy.wait("@getTagTypes");
     cy.get(".pf-c-table")
       .pf4_table_rows()
       .eq(0)
@@ -41,14 +35,12 @@ describe("Create new tag type", () => {
   });
 
   it("With rank", () => {
-    tagType.create({
+    tagType.createTagType({
       name: "myTagType",
       rank: 5,
     });
-    cy.wait("@postTagTypes");
 
     // Verify table
-    cy.wait("@getTagTypes");
     cy.get(".pf-c-table")
       .pf4_table_rows()
       .eq(0)
@@ -62,15 +54,13 @@ describe("Create new tag type", () => {
   });
 
   it("With color", () => {
-    tagType.create({
+    tagType.createTagType({
       name: "myTagType",
       rank: 3,
       color: "Blue",
     });
-    cy.wait("@postTagTypes");
 
     // Verify table
-    cy.wait("@getTagTypes");
     cy.get(".pf-c-table")
       .pf4_table_rows()
       .eq(0)

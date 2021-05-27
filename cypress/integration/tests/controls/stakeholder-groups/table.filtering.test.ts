@@ -3,7 +3,7 @@
 
 import { StakeholderGroupPage } from "../../../models/stakeholder-group";
 
-describe("Filter business services", () => {
+describe("Filter stakeholder group", () => {
   const stakeholderGroupPage = new StakeholderGroupPage();
 
   before(() => {

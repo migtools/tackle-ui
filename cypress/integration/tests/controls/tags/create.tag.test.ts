@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-keycloak-commands" />
 
-import { Tag } from "../../../models/tag";
+import { TagTypePage } from "../../../models/tag-type";
 
 describe("Create new tag type", () => {
-  const tag = new Tag();
+  const tagTypePage = new TagTypePage();
 
   before(() => {
     cy.kcLogout();
@@ -23,21 +23,15 @@ describe("Create new tag type", () => {
     cy.get<KcTokens>("@tokens").then((tokens) => {
       cy.api_clean(tokens, "Tag");
     });
-
-    // Interceptors
-    cy.intercept("GET", "/api/controls/tag-type*").as("getTagTypes");
-    cy.intercept("POST", "/api/controls/tag*").as("postTag");
   });
 
   it("With min data", () => {
-    tag.create({
+    tagTypePage.createTag({
       name: "myTag",
       tagType: "type-a",
     });
-    cy.wait("@postTag");
 
     // Verify table
-    cy.wait("@getTagTypes");
     cy.get(".pf-c-table")
       .pf4_table_rows()
       .eq(0)

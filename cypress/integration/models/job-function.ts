@@ -12,6 +12,7 @@ export class JobFunctionsPage {
   openPage(): void {
     // Interceptors
     cy.intercept("GET", "/api/controls/job-function*").as("getJobFunctions");
+    
     cy.intercept("POST", "/api/controls/job-function*").as("postJobFunction");
     cy.intercept("PUT", "/api/controls/job-function/*").as("putJobFunction");
     cy.intercept("DELETE", "/api/controls/job-function/*").as(

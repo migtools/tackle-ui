@@ -4,42 +4,87 @@ import {
   verifyInitialFormStatus,
 } from "./commons";
 
-export interface IFormValue {
+export interface ITagTypeFormValue {
   name: string;
   rank: number;
   color?: string;
 }
 
-export class TagType {
+export interface ITagFormValue {
+  name: string;
+  tagType?: string;
+}
+
+export class TagTypePage {
   openPage(): void {
+    // Interceptors
+    cy.intercept("GET", "/api/controls/tag-type*").as("getTagTypes");
+
+    cy.intercept("POST", "/api/controls/tag-type*").as("postTagType");
+    cy.intercept("PUT", "/api/controls/tag-type/*").as("putTagType");
+    cy.intercept("DELETE", "/api/controls/tag-type/*").as("deleteTagType");
+
+    cy.intercept("POST", "/api/controls/tag*").as("postTag");
+    cy.intercept("PUT", "/api/controls/tag/*").as("putTag");
+    cy.intercept("DELETE", "/api/controls/tag/*").as("deleteTag");
+
+    // Open page
     cy.visit("/controls/tags");
+    cy.wait("@getTagTypes");
   }
 
-  protected fillForm(formValue: IFormValue): void {
+  protected fillTagTypeForm(formValue: ITagTypeFormValue): void {
     cy.get("input[name='name']").clear().type(formValue.name);
     cy.get("input[name='rank']").clear().type(`${formValue.rank}`);
 
     if (formValue.color) {
-      cy.get(".pf-c-form__group-control button.pf-c-select__toggle-button")
-        .eq(0)
-        .click();
-      cy.get(".pf-c-select.pf-m-expanded > ul > li > button")
+      cy.get("button[aria-label='color'].pf-c-select__toggle-button").click();
+      cy.get("ul[aria-label='color'].pf-c-select__menu > li > button")
         .contains(formValue.color)
         .click();
     }
   }
 
-  create(formValue: IFormValue): void {
+  protected fillTagForm(formValue: ITagFormValue): void {
+    cy.get("input[name='name']").clear().type(formValue.name);
+
+    if (formValue.tagType) {
+      cy.get(
+        "button[aria-label='tag-type'].pf-c-select__toggle-button"
+      ).click();
+      cy.get("ul[aria-label='tag-type'].pf-c-select__menu > li > button")
+        .contains(formValue.tagType)
+        .click();
+    }
+  }
+
+  createTagType(formValue: ITagTypeFormValue): void {
     this.openPage();
 
     cy.get("button[aria-label='create-tag-type']").click();
 
     verifyInitialFormStatus();
-    this.fillForm(formValue);
+    this.fillTagTypeForm(formValue);
     submitForm();
+
+    cy.wait("@postTagType");
+    cy.wait("@getTagTypes");
   }
 
-  edit(rowIndex: number, formValue: IFormValue): void {
+  createTag(formValue: ITagFormValue): void {
+    this.openPage();
+
+    cy.get("button[aria-label='create-tag']").click();
+
+    verifyInitialFormStatus();
+    this.fillTagForm(formValue);
+    submitForm();
+
+    cy.wait("@postTag");
+    cy.wait("@getTagTypes");
+  }
+
+  editTagType(rowIndex: number, formValue: ITagTypeFormValue): void {
     this.openPage();
 
     cy.get(".pf-c-table")
@@ -49,11 +94,34 @@ export class TagType {
       .click();
 
     verifyInitialFormStatus();
-    this.fillForm(formValue);
+    this.fillTagTypeForm(formValue);
     submitForm();
+
+    cy.wait("@putTagType");
+    cy.wait("@getTagTypes");
   }
 
-  delete(rowIndex: number): void {
+  editTag(
+    tagTypeRowIndex: number,
+    tagRowIndex: number,
+    formValue: ITagFormValue
+  ): void {
+    this.openPage();
+
+    cy.get(".pf-c-table").pf4_table_row_expand(tagTypeRowIndex);
+    cy.get(
+      ".pf-c-table__expandable-row-content > div > .pf-c-table"
+    ).pf4_table_action_select(tagRowIndex, "Edit");
+
+    verifyInitialFormStatus();
+    this.fillTagForm(formValue);
+    submitForm();
+
+    cy.wait("@putTag");
+    cy.wait("@getTagTypes");
+  }
+
+  deleteTagType(rowIndex: number): void {
     this.openPage();
 
     cy.get(".pf-c-table")
@@ -62,9 +130,32 @@ export class TagType {
       .find("button[aria-label='delete']")
       .click();
     cy.get("button[aria-label='confirm']").click();
+
+    cy.wait("@deleteTagType");
+    cy.wait("@getTagTypes");
+  }
+
+  deleteTag(tagTypeRowIndex: number, tagRowIndex: number): void {
+    this.openPage();
+
+    cy.get(".pf-c-table").pf4_table_row_expand(tagTypeRowIndex);
+    cy.get(
+      ".pf-c-table__expandable-row-content > div > .pf-c-table"
+    ).pf4_table_action_select(tagRowIndex, "Delete");
+
+    cy.get("button[aria-label='confirm']").click();
+
+    cy.wait("@deleteTag");
+    cy.wait("@getTagTypes");
   }
 
   applyFilter(filterIndex: number, filterText: string): void {
     applyFilterTextToolbar(filterIndex, filterText);
+    cy.wait("@getTagTypes");
+  }
+
+  toggleSortBy(columnName: string): void {
+    cy.get(".pf-c-table").pf4_table_column_toggle(columnName);
+    cy.wait("@getTagTypes");
   }
 }

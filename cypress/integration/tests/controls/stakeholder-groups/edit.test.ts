@@ -73,5 +73,12 @@ describe("Edit stakeholder group", () => {
       .eq(0)
       .should("contain", "newName")
       .should("contain", "3");
+
+    cy.get(".pf-c-table").pf4_table_row_expand(0);
+    cy.get(".pf-c-table > tbody > tr.pf-c-table__expandable-row")
+      .find(".pf-c-description-list .pf-c-description-list__text")
+      .should("contain", "stakeholder-a")
+      .should("contain", "stakeholder-b")
+      .should("contain", "stakeholder-c");
   });
 });

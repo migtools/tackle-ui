@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-keycloak-commands" />
 
-import { TagType } from "../../../models/tag-type";
+import { TagTypePage } from "../../../models/tag-type";
 
 describe("Edit tag type", () => {
-  const tagType = new TagType();
+  const tagType = new TagTypePage();
 
   before(() => {
     cy.kcLogout();
@@ -25,21 +25,15 @@ describe("Edit tag type", () => {
   beforeEach(() => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
-
-    // Interceptors
-    cy.intercept("GET", "/api/controls/tag-type*").as("getTagTypes");
-    cy.intercept("PUT", "/api/controls/tag-type/*").as("putTagType");
   });
 
   it("Name and rank", () => {
-    tagType.edit(0, {
+    tagType.editTagType(0, {
       name: "newName",
       rank: 222,
     });
-    cy.wait("@putTagType");
 
     // Verify table
-    cy.wait("@getTagTypes");
     cy.get(".pf-c-table")
       .pf4_table_rows()
       .eq(0)
@@ -48,15 +42,13 @@ describe("Edit tag type", () => {
   });
 
   it("Color", () => {
-    tagType.edit(0, {
+    tagType.editTagType(0, {
       name: "newName",
       rank: 10,
       color: "Red",
     });
-    cy.wait("@putTagType");
 
     // Verify table
-    cy.wait("@getTagTypes");
     cy.get(".pf-c-table")
       .pf4_table_rows()
       .eq(0)

@@ -1,17 +1,16 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-keycloak-commands" />
 
-import { TagType } from "../../../models/tag-type";
+import { TagTypePage } from "../../../models/tag-type";
 
-describe("Sort business services", () => {
-  const tagType = new TagType();
+describe("Sort tagtypes", () => {
+  const tagTypePage = new TagTypePage();
 
   before(() => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
 
     // Data
-    const stakeholders = [];
 
     cy.get<KcTokens>("@tokens").then((tokens) => {
       cy.api_clean(tokens, "TagType");
@@ -49,62 +48,54 @@ describe("Sort business services", () => {
   beforeEach(() => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
-
-    // Inteceptors
-    cy.intercept("GET", "/api/controls/tag-type*").as("getTagTypes");
   });
 
   it("Sort by name", () => {
-    tagType.openPage();
-    cy.wait("@getTagTypes");
+    const columnName = "Tag type";
+    tagTypePage.openPage();
 
     // Asc is the default
-    cy.get(".pf-c-table").pf4_table_column_isAsc("Tag type");
+    cy.get(".pf-c-table").pf4_table_column_isAsc(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("type-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("type-j");
 
     // Desc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Tag type");
-    cy.wait("@getTagTypes");
+    tagTypePage.toggleSortBy(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("type-k");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("type-b");
   });
 
   it("Sort by rank", () => {
-    tagType.openPage();
-    cy.wait("@getTagTypes");
+    const columnName = "Rank";
+    tagTypePage.openPage();
 
     // Asc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Rank");
-    cy.wait("@getTagTypes");
+    tagTypePage.toggleSortBy(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("type-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("type-j");
 
     // Desc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Rank");
-    cy.wait("@getTagTypes");
+    tagTypePage.toggleSortBy(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("type-k");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("type-b");
   });
 
   it("Sort by tags", () => {
-    tagType.openPage();
-    cy.wait("@getTagTypes");
+    const columnName = "Tag(s)";
+    tagTypePage.openPage();
 
     // Asc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Tag(s)");
-    cy.wait("@getTagTypes");
+    tagTypePage.toggleSortBy(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("type-k");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("type-j");
 
     // Desc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Tag(s)");
-    cy.wait("@getTagTypes");
+    tagTypePage.toggleSortBy(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("type-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("type-j");

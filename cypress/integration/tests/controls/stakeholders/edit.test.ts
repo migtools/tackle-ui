@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-keycloak-commands" />
 
-import { Stakeholder } from "../../../models/stakeholder";
+import { StakeholderPage } from "../../../models/stakeholder";
 
 describe("Edit stakeholder", () => {
-  const stakeholder = new Stakeholder();
+  const stakeholder = new StakeholderPage();
 
   before(() => {
     cy.kcLogout();
@@ -63,10 +63,6 @@ describe("Edit stakeholder", () => {
   beforeEach(() => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
-
-    // Interceptors
-    cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholders");
-    cy.intercept("PUT", "/api/controls/stakeholder/*").as("putStakeholder");
   });
 
   it("Email and displayName", () => {
@@ -74,10 +70,8 @@ describe("Edit stakeholder", () => {
       email: "newEmail@domain.com",
       displayName: "newDisplayName",
     });
-    cy.wait("@putStakeholder");
 
     // Verify table
-    cy.wait("@getStakeholders");
     cy.get(".pf-c-table")
       .pf4_table_rows()
       .eq(0)
@@ -91,10 +85,8 @@ describe("Edit stakeholder", () => {
       displayName: "newDisplayName",
       jobFunction: "Business Analyst",
     });
-    cy.wait("@putStakeholder");
 
     // Verify table
-    cy.wait("@getStakeholders");
     cy.get(".pf-c-table")
       .pf4_table_rows()
       .eq(0)
@@ -108,10 +100,8 @@ describe("Edit stakeholder", () => {
       displayName: "newDisplayName",
       jobFunction: "Consultant",
     });
-    cy.wait("@putStakeholder");
 
     // Verify table
-    cy.wait("@getStakeholders");
     cy.get(".pf-c-table")
       .pf4_table_rows()
       .eq(0)
@@ -126,15 +116,20 @@ describe("Edit stakeholder", () => {
       displayName: "newDisplayName",
       groups: ["group-b", "group-c"],
     });
-    cy.wait("@putStakeholder");
 
     // Verify table
-    cy.wait("@getStakeholders");
     cy.get(".pf-c-table")
       .pf4_table_rows()
       .eq(0)
       .should("contain", "newEmail@domain.com")
       .should("contain", "newDisplayName")
       .should("contain", "3");
+
+    cy.get(".pf-c-table").pf4_table_row_expand(0);
+    cy.get(".pf-c-table > tbody > tr.pf-c-table__expandable-row")
+      .find(".pf-c-description-list .pf-c-description-list__text")
+      .should("contain", "group-a")
+      .should("contain", "group-b")
+      .should("contain", "group-c");
   });
 });

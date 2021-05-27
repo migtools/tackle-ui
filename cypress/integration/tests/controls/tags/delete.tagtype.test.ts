@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-keycloak-commands" />
 
-import { TagType } from "../../../models/tag-type";
+import { TagTypePage } from "../../../models/tag-type";
 
 describe("Delete tag type", () => {
-  const tagType = new TagType();
+  const tagType = new TagTypePage();
 
   beforeEach(() => {
     cy.kcLogout();
@@ -16,18 +16,12 @@ describe("Delete tag type", () => {
         name: "tagtype-a",
       });
     });
-
-    // Interceptors
-    cy.intercept("DELETE", "/api/controls/tag-type/*").as("deleteTagType");
-    cy.intercept("GET", "/api/controls/tag-type*").as("getTagTypes");
   });
 
   it("Delete the only item available", () => {
-    tagType.delete(0);
-    cy.wait("@deleteTagType");
+    tagType.deleteTagType(0);
 
     // Verify table
-    cy.wait("@getTagTypes");
     cy.get(
       ".pf-c-empty-state > .pf-c-empty-state__content > .pf-c-title"
     ).contains("No tag types available");

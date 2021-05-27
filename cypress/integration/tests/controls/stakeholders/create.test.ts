@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-keycloak-commands" />
 
-import { Stakeholder } from "../../../models/stakeholder";
+import { StakeholderPage } from "../../../models/stakeholder";
 
 describe("Create new business service", () => {
-  const stakeholder = new Stakeholder();
+  const stakeholder = new StakeholderPage();
 
   before(() => {
     cy.kcLogout();
@@ -52,10 +52,6 @@ describe("Create new business service", () => {
     cy.get<KcTokens>("@tokens").then((tokens) => {
       cy.api_clean(tokens, "Stakeholder");
     });
-
-    // Interceptors
-    cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholders");
-    cy.intercept("POST", "/api/controls/stakeholder*").as("postStakeholder");
   });
 
   it("With min data", () => {
@@ -63,10 +59,8 @@ describe("Create new business service", () => {
       email: "aaa@domain.com",
       displayName: "myDisplayName",
     });
-    cy.wait("@postStakeholder");
 
     // Verify table
-    cy.wait("@getStakeholders");
     cy.get(".pf-c-table")
       .pf4_table_rows()
       .eq(0)
@@ -80,10 +74,8 @@ describe("Create new business service", () => {
       displayName: "myDisplayName",
       jobFunction: "Business Analyst",
     });
-    cy.wait("@postStakeholder");
 
     // Verify table
-    cy.wait("@getStakeholders");
     cy.get(".pf-c-table")
       .pf4_table_rows()
       .eq(0)
@@ -98,10 +90,8 @@ describe("Create new business service", () => {
       displayName: "myDisplayName",
       groups: ["group-a", "group-b"],
     });
-    cy.wait("@postStakeholder");
 
     // Verify table
-    cy.wait("@getStakeholders");
     cy.get(".pf-c-table")
       .pf4_table_rows()
       .eq(0)
