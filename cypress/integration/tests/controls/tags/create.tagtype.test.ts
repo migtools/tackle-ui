@@ -19,6 +19,7 @@ describe("Create new tag type", () => {
     tagType.createTagType({
       name: "myTagType",
       rank: 3,
+      color: "Blue",
     });
 
     // Verify table
@@ -32,12 +33,18 @@ describe("Create new tag type", () => {
       .eq(0)
       .find("td[data-label='Rank']")
       .should("contain", "3");
+    cy.get(".pf-c-table")
+      .pf4_table_rows()
+      .eq(0)
+      .find("td[data-label='Color']")
+      .should("contain", "Blue");
   });
 
   it("With rank", () => {
     tagType.createTagType({
       name: "myTagType",
       rank: 5,
+      color: "Blue",
     });
 
     // Verify table
@@ -51,6 +58,11 @@ describe("Create new tag type", () => {
       .eq(0)
       .find("td[data-label='Rank']")
       .should("contain", "5");
+    cy.get(".pf-c-table")
+      .pf4_table_rows()
+      .eq(0)
+      .find("td[data-label='Color']")
+      .should("contain", "Blue");
   });
 
   it("With color", () => {

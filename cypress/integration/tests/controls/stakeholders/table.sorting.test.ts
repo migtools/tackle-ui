@@ -120,7 +120,7 @@ describe("Sort stakeholder", () => {
   });
 
   it("Sort by groups", () => {
-    const columnName = "Group(s)";
+    const columnName = "Group count";
     stakeholder.openPage();
 
     // Asc

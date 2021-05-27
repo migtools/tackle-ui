@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-keycloak-commands" />
 
-import { Application } from "../../../models/application";
+import { ApplicationPage } from "../../../models/application";
 
-describe("Edit business service", () => {
-  const application = new Application();
+describe("Edit application", () => {
+  const applicationPage = new ApplicationPage();
 
   const businessServices = [];
   const tagTypes = [];
@@ -85,26 +85,16 @@ describe("Edit business service", () => {
         });
       });
     });
-
-    // Interceptors
-    cy.intercept("GET", "/api/application-inventory/application*").as(
-      "getApplications"
-    );
-    cy.intercept("PUT", "/api/application-inventory/application/*").as(
-      "putApplication"
-    );
   });
 
   it("Name, description, and comments", () => {
-    application.edit(0, {
+    applicationPage.edit(0, {
       name: "newName",
       description: "newDescription",
       comments: "newComments",
     });
-    cy.wait("@putApplication");
 
     // Verify table
-    cy.wait("@getApplications");
     cy.get(".pf-c-table")
       .pf4_table_rows()
       .eq(0)
@@ -118,33 +108,23 @@ describe("Edit business service", () => {
   });
 
   it("Business service", () => {
-    cy.intercept("GET", new RegExp("/api/controls/business-service*")).as(
-      "getBusinessServices"
-    );
-
     // Edit
-    application.edit(0, {
+    applicationPage.edit(0, {
       businessService: "service-b",
     });
-    cy.wait("@putApplication");
 
     // Verify table
-    cy.wait("@getApplications");
-    cy.wait("@getBusinessServices");
+    cy.wait("@getBusinessService");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).should("contain", "service-b");
   });
 
   it("Tags", () => {
-    cy.intercept("GET", new RegExp("/api/controls/tag*")).as("getTags");
-
     // Edit
-    application.edit(0, {
+    applicationPage.edit(0, {
       tags: ["tag-b-a", "tag-b-b"],
     });
-    cy.wait("@putApplication");
 
     // Verify table
-    cy.wait("@getApplications");
     cy.wait("@getTags");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).should("contain", "2");
 

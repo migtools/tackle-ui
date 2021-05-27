@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-keycloak-commands" />
 
-import { Application } from "../../../models/application";
+import { ApplicationPage } from "../../../models/application";
 
 describe("Assess an application", () => {
-  const application = new Application();
+  const application = new ApplicationPage();
 
   beforeEach(() => {
     cy.kcLogout();
@@ -50,9 +50,6 @@ describe("Assess an application", () => {
             );
         });
     });
-
-    // Interceptors
-    cy.intercept("POST", "/api/pathfinder/assessments*").as("postAssessment");
   });
 
   it("Assess application without asessment", () => {

@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-keycloak-commands" />
 
-import { Application } from "../../../models/application";
+import { ApplicationPage } from "../../../models/application";
 
 describe("Delete application", () => {
-  const application = new Application();
+  const application = new ApplicationPage();
 
   beforeEach(() => {
     cy.kcLogout();
@@ -16,22 +16,12 @@ describe("Delete application", () => {
         name: "application-a",
       });
     });
-
-    // Interceptors
-    cy.intercept("DELETE", "/api/application-inventory/application/*").as(
-      "deleteApplication"
-    );
-    cy.intercept("GET", "/api/application-inventory/application*").as(
-      "getApplications"
-    );
   });
 
   it("Delete the only item available", () => {
     application.delete(0);
-    cy.wait("@deleteApplication");
 
     // Verify table
-    cy.wait("@getApplications");
     cy.get(
       ".pf-c-empty-state > .pf-c-empty-state__content > .pf-c-title"
     ).contains("No applications available");

@@ -1,38 +1,85 @@
 import { applyFilterTextToolbar } from "./commons";
 
 export interface IFormValue {
+  stakeholders: string[];
+  stakeholderGroups: string[];
   categories?: {
     answerIndex: number;
     comments?: string;
   }[];
 }
 
-export class Assessment {
-  openPage(assessmentId: number): void {
-    cy.intercept("GET", "/api/pathfinder/assessments/*").as(
-      "getAssessmentFromURL"
-    );
-
-    cy.visit(`/application-inventory/assessment/${assessmentId}`);
-    cy.wait("@getAssessmentFromURL");
-
+export class AssessmentReviewPage {
+  openAssessmentPage(assessmentId: number): void {
     // Interceptors
+    this.configInterceptors();
+
+    // Open page
+    cy.visit(`/application-inventory/assessment/${assessmentId}`);
+    cy.wait("@getAssessment");
+  }
+
+  openReviewPage(applicationId: number): void {
+    // Interceptors
+    this.configInterceptors();
+
+    // Open page
+    cy.visit(`/application-inventory/application/${applicationId}/review`);
+    cy.wait("@getApplication");
+  }
+
+  protected configInterceptors(): void {
+    cy.intercept("GET", "/api/pathfinder/assessments*").as("getAssessments");
+    cy.intercept("GET", "/api/pathfinder/assessments/*").as("getAssessment");
     cy.intercept("PATCH", "/api/pathfinder/assessments/*").as(
       "patchAssessment"
     );
+
+    cy.intercept("GET", "/api/application-inventory/application*").as(
+      "getApplications"
+    );
+    cy.intercept("GET", "/api/application-inventory/application/*").as(
+      "getApplication"
+    );
+
+    cy.intercept("POST", "/api/application-inventory/review").as("postReview");
   }
 
   protected verifyInitialFormStatus(): void {
     cy.get(".pf-c-wizard__footer button[cy-data='back']").should("be.disabled");
+    cy.get(".pf-c-wizard__footer button[cy-data='next']").should("be.disabled");
   }
 
-  protected submitForm(): void {
-    cy.get(".pf-c-wizard__footer").find("button[cy-data='next']").click();
-    cy.wait("@patchAssessment");
+  protected submitForm(action: "save" | "saveAndReview"): void {
+    switch (action) {
+      case "save":
+        cy.get(".pf-c-wizard__footer").find("button[cy-data='next']").click();
+        break;
+      case "saveAndReview":
+        cy.get(".pf-c-wizard__footer")
+          .find("button[cy-data='save-and-review']")
+          .click();
+        break;
+    }
   }
 
   protected fillForm(formValue: IFormValue): void {
-    // Jump to first category
+    formValue.stakeholders.forEach((e) => {
+      cy.get("input[aria-label='stakeholders']")
+        .clear()
+        .type(e)
+        .type("{enter}");
+    });
+    formValue.stakeholderGroups.forEach((e) => {
+      cy.get("input[aria-label='stakeholder-groups']")
+        .clear()
+        .type(e)
+        .type("{enter}");
+    });
+
+    cy.get(".pf-c-wizard__footer button[cy-data='next']").should(
+      "not.be.disabled"
+    );
     cy.get(".pf-c-wizard__footer").find("button[cy-data='next']").click();
 
     // Fill answers
@@ -72,15 +119,30 @@ export class Assessment {
     }
   }
 
-  edit(assessmentId: number, formValue: IFormValue): void {
-    this.openPage(assessmentId);
+  fillQuestionnaire(assessmentId: number, formValue: IFormValue): void {
+    this.openAssessmentPage(assessmentId);
 
     this.verifyInitialFormStatus();
     this.fillForm(formValue);
-    this.submitForm();
+    this.submitForm("save");
+
+    cy.wait("@patchAssessment");
   }
 
-  applyFilter(filterIndex: number, filterText: string): void {
-    applyFilterTextToolbar(filterIndex, filterText);
+  fillQuestionnaireAndReview(
+    assessmentId: number,
+    formValue: IFormValue
+  ): void {
+    this.openAssessmentPage(assessmentId);
+
+    this.verifyInitialFormStatus();
+    this.fillForm(formValue);
+    this.submitForm("saveAndReview");
+
+    cy.wait("@patchAssessment");
+
+    cy.wait("@getAssessments");
+    cy.wait("@getApplication");
+    cy.wait("@getAssessment");
   }
 }

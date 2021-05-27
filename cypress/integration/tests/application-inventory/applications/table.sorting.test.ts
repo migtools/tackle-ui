@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-keycloak-commands" />
 
-import { Application } from "../../../models/application";
+import { ApplicationPage } from "../../../models/application";
 
 describe("Sort applications", () => {
-  const application = new Application();
+  const application = new ApplicationPage();
 
   before(() => {
     cy.kcLogout();
@@ -73,45 +73,37 @@ describe("Sort applications", () => {
   beforeEach(() => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
-
-    // Inteceptors
-    cy.intercept("GET", "/api/application-inventory/application*").as(
-      "getApplications"
-    );
   });
 
   it("Sort by name", () => {
+    const columnName = "Name";
     application.openPage();
-    cy.wait("@getApplications");
 
     // Asc is the default
-    cy.get(".pf-c-table").pf4_table_column_isAsc("Name");
+    cy.get(".pf-c-table").pf4_table_column_isAsc(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("application-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("application-j");
 
     // Desc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Name");
-    cy.wait("@getApplications");
+    application.toggleSortBy(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("application-k");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("application-b");
   });
 
   it("Sort by tags", () => {
+    const columnName = "Tags";
     application.openPage();
-    cy.wait("@getApplications");
 
     // Asc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Tags");
-    cy.wait("@getApplications");
+    application.toggleSortBy(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("application-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("application-j");
 
     // Desc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Tags");
-    cy.wait("@getApplications");
+    application.toggleSortBy(columnName);
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("application-k");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("application-b");

@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-keycloak-commands" />
 
-import { Application } from "../../../models/application";
+import { ApplicationPage } from "../../../models/application";
 
-describe("Create new business service", () => {
-  const application = new Application();
+describe("Create new application", () => {
+  const application = new ApplicationPage();
 
   before(() => {
     cy.kcLogout();
@@ -69,24 +69,14 @@ describe("Create new business service", () => {
     cy.get<KcTokens>("@tokens").then((tokens) => {
       cy.api_clean(tokens, "Application");
     });
-
-    // Interceptors
-    cy.intercept("GET", "/api/application-inventory/application*").as(
-      "getApplications"
-    );
-    cy.intercept("POST", "/api/application-inventory/application*").as(
-      "postApplication"
-    );
   });
 
   it("With min data", () => {
     application.create({
       name: "myApplication",
     });
-    cy.wait("@postApplication");
 
     // Verify table
-    cy.wait("@getApplications");
     cy.get(".pf-c-table")
       .pf4_table_rows()
       .eq(0)
@@ -99,10 +89,8 @@ describe("Create new business service", () => {
       description: "myDescription",
       comments: "myComments",
     });
-    cy.wait("@postApplication");
 
     // Verify table
-    cy.wait("@getApplications");
     cy.get(".pf-c-table")
       .pf4_table_rows()
       .eq(0)
@@ -116,20 +104,14 @@ describe("Create new business service", () => {
   });
 
   it("With business service", () => {
-    cy.intercept("GET", new RegExp("/api/controls/business-service*")).as(
-      "getBusinessServices"
-    );
-
     // Create
     application.create({
       name: "myApplication",
       businessService: "service-a",
     });
-    cy.wait("@postApplication");
 
     // Verify table
-    cy.wait("@getApplications");
-    cy.wait("@getBusinessServices");
+    cy.wait("@getBusinessService");
     cy.get(".pf-c-table")
       .pf4_table_rows()
       .eq(0)
@@ -138,17 +120,13 @@ describe("Create new business service", () => {
   });
 
   it("With tags", () => {
-    cy.intercept("GET", new RegExp("/api/controls/tag/*")).as("getTag");
-
     // Create
     application.create({
       name: "myApplication",
       tags: ["tag-a-a", "tag-b-a"],
     });
-    cy.wait("@postApplication");
 
     // Verify table
-    cy.wait("@getApplications");
     cy.wait("@getTag"); // Fetch first tag
     cy.wait("@getTag"); // Fetch second tag
     cy.get(".pf-c-table")

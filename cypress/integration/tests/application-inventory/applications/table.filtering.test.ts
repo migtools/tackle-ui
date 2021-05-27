@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-keycloak-commands" />
 
-import { Application } from "../../../models/application";
+import { ApplicationPage } from "../../../models/application";
 
 describe("Filter applications", () => {
-  const application = new Application();
+  const application = new ApplicationPage();
 
   before(() => {
     cy.kcLogout();
@@ -91,81 +91,68 @@ describe("Filter applications", () => {
   beforeEach(() => {
     cy.kcLogout();
     cy.kcLogin("alice").as("tokens");
-
-    // Inteceptors
-    cy.intercept("GET", "/api/application-inventory/application*").as(
-      "getApplications"
-    );
   });
 
   it("By name", () => {
+    const filterIndex = 0;
     application.openPage();
-    cy.wait("@getApplications");
 
     // First filter
-    application.applyFilter(0, "application-a");
+    application.applyFilter(filterIndex, "application-a");
 
-    cy.wait("@getApplications");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("application-a");
 
     // Second filter
-    application.applyFilter(0, "application-k");
+    application.applyFilter(filterIndex, "application-k");
 
-    cy.wait("@getApplications");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("application-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(1).contains("application-k");
   });
 
   it("By description", () => {
+    const filterIndex = 1;
     application.openPage();
-    cy.wait("@getApplications");
 
     // First filter
-    application.applyFilter(1, "description-a");
+    application.applyFilter(filterIndex, "description-a");
 
-    cy.wait("@getApplications");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("description-a");
 
     // Second filter
-    application.applyFilter(1, "description-k");
+    application.applyFilter(filterIndex, "description-k");
 
-    cy.wait("@getApplications");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("description-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(1).contains("description-k");
   });
 
   it("By business service", () => {
+    const filterIndex = 2;
     application.openPage();
-    cy.wait("@getApplications");
 
     // First filter
-    application.applyFilter(2, "service-a");
+    application.applyFilter(filterIndex, "service-a");
 
-    cy.wait("@getApplications");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("service-a");
 
     // Second filter
-    application.applyFilter(2, "service-k");
+    application.applyFilter(filterIndex, "service-k");
 
-    cy.wait("@getApplications");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("service-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(1).contains("service-k");
   });
 
   it("By tags", () => {
+    const filterIndex = 3;
     application.openPage();
-    cy.wait("@getApplications");
 
     // First filter
-    application.applyFilter(3, "tag-a-1");
+    application.applyFilter(filterIndex, "tag-a-1");
 
-    cy.wait("@getApplications");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("application-a");
 
     // Second filter
-    application.applyFilter(3, "tag-a-2");
+    application.applyFilter(filterIndex, "tag-a-2");
 
-    cy.wait("@getApplications");
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("application-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(1).contains("application-b");
   });

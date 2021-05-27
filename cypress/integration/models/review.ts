@@ -14,58 +14,26 @@ export interface IFormValue {
   comments?: string;
 }
 
-export interface IDependencyAction {
-  type: "north" | "south";
-  operation: "add" | "remove";
-  application: string;
-}
-
-export class ApplicationPage {
-  openPage(): void {
+export class ReviewPage {
+  openPage(applicationId: number): void {
     // Interceptors
+    cy.intercept("GET", "/api/pathfinder/assessments*").as("getAssessments");
+    cy.intercept("GET", "/api/pathfinder/assessments/*").as("getAssessment");
+    cy.intercept("PATCH", "/api/pathfinder/assessments/*").as(
+      "patchAssessment"
+    );
+
     cy.intercept("GET", "/api/application-inventory/application*").as(
       "getApplications"
     );
-    cy.intercept("POST", "/api/application-inventory/application*").as(
-      "postApplication"
+    cy.intercept("GET", "/api/application-inventory/application/*").as(
+      "getApplication"
     );
-    cy.intercept("PUT", "/api/application-inventory/application/*").as(
-      "putApplication"
-    );
-    cy.intercept("DELETE", "/api/application-inventory/application/*").as(
-      "deleteApplication"
-    );
-
-    cy.intercept("GET", "/api/controls/business-service*").as(
-      "getBusinessServices"
-    );
-    cy.intercept("GET", "/api/controls/business-service/*").as(
-      "getBusinessService"
-    );
-
-    cy.intercept("GET", "/api/controls/tag-type*").as("getTagTypes");
-    cy.intercept("GET", "/api/controls/tag*").as("getTags");
-    cy.intercept("GET", "/api/controls/tag/*").as("getTag");
-
-    cy.intercept(
-      "GET",
-      "/api/application-inventory/applications-dependency*"
-    ).as("getApplicationDependencies");
-    cy.intercept(
-      "POST",
-      "/api/application-inventory/applications-dependency*"
-    ).as("postApplicationDependency");
-    cy.intercept(
-      "DELETE",
-      "/api/application-inventory/applications-dependency/*"
-    ).as("deleteApplicationDependency");
-
-    cy.intercept("GET", "/api/pathfinder/assessments*").as("getAssessments");
-    cy.intercept("POST", "/api/pathfinder/assessments*").as("postAssessment");
+    cy.intercept("POST", "/api/application-inventory/review").as("postReview");
 
     // Open page
-    cy.visit("/application-inventory");
-    cy.wait("@getApplications");
+    cy.visit(`/application-inventory/application/${applicationId}/review`);
+    cy.wait("@getApplication");
   }
 
   protected fillForm(formValue: IFormValue): void {
