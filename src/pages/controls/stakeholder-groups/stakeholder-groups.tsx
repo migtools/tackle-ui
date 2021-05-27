@@ -70,7 +70,7 @@ const toSortByQuery = (
       field = StakeholderGroupSortBy.NAME;
       break;
     case 3:
-      field = StakeholderGroupSortBy.STAKEHOLDERS;
+      field = StakeholderGroupSortBy.STAKEHOLDERS_COUNT;
       break;
     default:
       throw new Error("Invalid column index=" + sortBy.index);
@@ -171,7 +171,7 @@ export const StakeholderGroups: React.FC = () => {
     },
     { title: t("terms.description"), transforms: [cellWidth(35)] },
     {
-      title: t("terms.member(s)"),
+      title: t("terms.memberCount"),
       transforms: [sortable],
     },
     {
