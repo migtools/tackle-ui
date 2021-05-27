@@ -81,7 +81,10 @@ export const TagTypeForm: React.FC<TagTypeFormProps> = ({
       .min(3, t("validation.minLength", { length: 3 }))
       .max(40, t("validation.maxLength", { length: 40 })),
     rank: number().min(1, t("validation.min", { value: 1 })),
-    color: string().trim(),
+    color: string()
+      .trim()
+      .required(t("validation.required"))
+      .min(1, t("validation.minLength", { length: 3 })),
   });
 
   const onSubmit = (
@@ -184,7 +187,7 @@ export const TagTypeForm: React.FC<TagTypeFormProps> = ({
         <FormGroup
           label={t("terms.color")}
           fieldId="color"
-          isRequired={false}
+          isRequired={true}
           validated={getValidatedFromError(formik.errors.color)}
           helperTextInvalid={formik.errors.color}
         >

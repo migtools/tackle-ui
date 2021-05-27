@@ -31,6 +31,13 @@ describe("Create new tagType", () => {
     // Fill form
     cy.get("input[name='name']").type("aaa");
 
+    cy.get(".pf-c-form__group-control button.pf-c-select__toggle-button")
+      .eq(0)
+      .click();
+    cy.get(".pf-c-select.pf-m-expanded > ul > li > button")
+      .contains("Blue")
+      .click();
+
     cy.get("button[aria-label='submit']").should("not.be.disabled");
     cy.get("form").submit();
 
@@ -38,7 +45,11 @@ describe("Create new tagType", () => {
     cy.wait("@getTagTypeApi");
 
     // Verify table
-    cy.get(".pf-c-table").pf4_table_rows().eq(0).should("contain", "aaa");
+    cy.get(".pf-c-table")
+      .pf4_table_rows()
+      .eq(0)
+      .should("contain", "aaa")
+      .should("contain", "Blue");
   });
 
   it("With rank", () => {
@@ -52,6 +63,13 @@ describe("Create new tagType", () => {
     cy.get("input[name='name']").type("aaa");
     cy.get("input[name='rank']").clear().type("22");
 
+    cy.get(".pf-c-form__group-control button.pf-c-select__toggle-button")
+      .eq(0)
+      .click();
+    cy.get(".pf-c-select.pf-m-expanded > ul > li > button")
+      .contains("Blue")
+      .click();
+
     cy.get("button[aria-label='submit']").should("not.be.disabled");
     cy.get("form").submit();
 
@@ -63,7 +81,8 @@ describe("Create new tagType", () => {
       .pf4_table_rows()
       .eq(0)
       .should("contain", "aaa")
-      .should("contain", "22");
+      .should("contain", "22")
+      .should("contain", "Blue");
   });
 
   it("With color", () => {
