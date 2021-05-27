@@ -9,6 +9,7 @@ export { ConfirmDialog } from "./confirm-dialog";
 export { EmptyTextMessage } from "./empty-text-message";
 export { NoDataEmptyState } from "./no-data-empty-state";
 export { PageHeader } from "./page-header";
+export { RiskLabel } from "./risk-label";
 export { SearchFilter } from "./search-filter";
 export { SearchInput } from "./search-input";
 export { SimpleEmptyState } from "./simple-empty-state";

@@ -23,4 +23,15 @@ describe("SimpleEmptyState", () => {
     );
     expect(wrapper).toMatchSnapshot();
   });
+
+  it("Renders with primaryAction", () => {
+    const wrapper = shallow(
+      <SimpleEmptyState
+        title="my title"
+        description="my description"
+        primaryAction={<button>My action</button>}
+      />
+    );
+    expect(wrapper).toMatchSnapshot();
+  });
 });

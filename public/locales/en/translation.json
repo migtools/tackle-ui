@@ -10,11 +10,15 @@
         "createTag": "Create tag",
         "createTagType": "Create tag type",
         "delete": "Delete",
+        "discardAssessment": "Discard assessment",
         "edit": "Edit",
         "manageDependencies": "Manage dependencies",
         "next": "Next",
+        "review": "Review",
         "save": "Save",
-        "saveAsDraft": "Save as draft"
+        "saveAndReview": "Save and review",
+        "saveAsDraft": "Save as draft",
+        "submitReview": "Submit review"
     },
     "colors": {
         "blue": "Blue",
@@ -28,20 +32,22 @@
         "add": "Add {{what}}",
         "applicationAssessment": "Application assessment",
         "applicationInventory": "Application inventory",
+        "businessCriticality": "Business criticality (1=low, 10=high)",
         "editQuestion": "Edit {{what}}?",
         "manageDependenciesFor": "Manage dependencies for {{what}}",
         "noDataStateBody": "Create a new {{what}} to start seeing data here",
         "noDataStateTitle": "No {{what}} available",
         "Nquestions": "{{n}} questions",
         "selectMany": "Select {{what}}",
-        "selectOne": "Select a {{what}}"
+        "selectOne": "Select a {{what}}",
+        "workPriority": "Work priority (1=low, 10=high)"
     },
     "dialog": {
         "message": {
-            "delete": "Are you sure you want to delete '{{what}}'? This will delete all resources associated with it and cannot be undone. Make sure this is something you really want to do!"
+            "delete": "This action cannot be undone."
         },
         "title": {
-            "delete": "Delete '{{what}}'",
+            "delete": "Delete {{what}}?",
             "newApplication": "New application",
             "newBusinessService": "New business service",
             "newJobFunction": "New job function",
@@ -59,6 +65,8 @@
         }
     },
     "message": {
+        "appNotAssesedTitle": "Assessment has not been completed",
+        "appNotAssessedBody": "In order to review an application it must be assessed first. Please assess the application",
         "couldNotFetchBody": "Resource doesn't exists or you don't have access to it",
         "couldNotFetchTitle": "Not available",
         "overrideAssessmentConfirmation": "This application has already been assessed. Do you want to continue?",
@@ -70,31 +78,44 @@
         "reports": "Reports"
     },
     "terms": {
+        "answer": "Answer",
         "application": "Application",
         "applications": "Applications",
         "assessment": "Assessment",
+        "businessCriticality": "Business criticality",
         "businessService": "Business service",
         "businessServices": "Business services",
+        "category": "Category",
         "color": "Color",
         "comments": "Comments",
         "completed": "Completed",
         "controls": "Controls",
         "description": "Description",
         "displayName": "Display name",
+        "effortEstimate": "Effort estimate",
         "email": "Email",
         "group": "Group",
         "group(s)": "Group(s)",
+        "groupCount": "Group count",
         "inProgress": "In-progress",
         "jobFunction": "Job function",
         "jobFunctions": "Job functions",
         "member": "Member",
         "member(s)": "Member(s)",
+        "memberCount": "Member count",
         "name": "Name",
         "northboundDependencies": "Northbound dependencies",
         "notAvailable": "Not available",
         "notStarted": "Not started",
+        "notYetReviewed": "Not yet reviewed",
         "owner": "Owner",
+        "proposedAction": "Proposed action",
+        "question": "Question",
         "rank": "Rank",
+        "review": "Review",
+        "reviewComments": "Review comments",
+        "risk": "Risk",
+        "select": "Select",
         "southboundDependencies": "Southbound dependencies",
         "stakeholder": "Stakeholder",
         "stakeholder(s)": "Stakeholder(s)",
@@ -104,22 +125,27 @@
         "stakeholders": "Stakeholders",
         "tag": "Tag",
         "tag(s)": "Tag(s)",
+        "tagCount": "Tag count",
         "tagName": "Tag name",
         "tags": "Tags",
         "tagType": "Tag type",
         "tagTypes": "Tag types",
-        "unknown": "Unknown"
+        "unknown": "Unknown",
+        "workPriority": "Work priority"
     },
     "toastr": {
         "success": {
-            "added": "Success! {{what}} was added as a {{type}}."
+            "added": "Success! {{what}} was added as a {{type}}.",
+            "assessmentDiscarded": "Success! Assessment discarded for {{application}}"
         }
     },
     "validation": {
         "email": "This field requires a valid email.",
+        "max": "This field must be less than {{value}}.",
         "maxLength": "This field must contain fewer than {{length}} characters.",
         "min": "This field must be greater than {{value}}.",
         "minLength": "This field must contain at least {{length}} characters.",
+        "minOneStakeholderOrGroupRequired": "At least one stakeholder or stakeholder groups is required.",
         "required": "This field is required."
     }
 }

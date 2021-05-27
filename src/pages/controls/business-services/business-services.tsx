@@ -149,7 +149,7 @@ export const BusinessServices: React.FC = () => {
 
   const columns: ICell[] = [
     { title: t("terms.name"), transforms: [sortable, cellWidth(25)] },
-    { title: t("terms.description"), transforms: [cellWidth(35)] },
+    { title: t("terms.description"), transforms: [cellWidth(40)] },
     { title: t("terms.owner"), transforms: [sortable] },
     {
       title: "",
@@ -165,7 +165,7 @@ export const BusinessServices: React.FC = () => {
       [ENTITY_FIELD]: item,
       cells: [
         {
-          title: item.name,
+          title: <TableText wrapModifier="truncate">{item.name}</TableText>,
         },
         {
           title: (
@@ -173,7 +173,11 @@ export const BusinessServices: React.FC = () => {
           ),
         },
         {
-          title: item.owner?.displayName,
+          title: (
+            <TableText wrapModifier="truncate">
+              {item.owner?.displayName}
+            </TableText>
+          ),
         },
         {
           title: (
@@ -221,9 +225,13 @@ export const BusinessServices: React.FC = () => {
   const deleteRow = (row: BusinessService) => {
     dispatch(
       confirmDialogActions.openDialog({
-        title: t("dialog.title.delete", { what: row.name }),
-        message: t("dialog.message.delete", { what: row.name }),
-        variant: ButtonVariant.danger,
+        // t("terms.businessService")
+        title: t("dialog.title.delete", {
+          what: t("terms.businessService").toLowerCase(),
+        }),
+        titleIconVariant: "warning",
+        message: t("dialog.message.delete"),
+        confirmBtnVariant: ButtonVariant.danger,
         confirmBtnLabel: t("actions.delete"),
         cancelBtnLabel: t("actions.cancel"),
         onConfirm: () => {
@@ -323,15 +331,15 @@ export const BusinessServices: React.FC = () => {
           count={businessServices ? businessServices.meta.count : 0}
           pagination={paginationQuery}
           sortBy={sortByQuery}
-          handlePaginationChange={handlePaginationChange}
-          handleSortChange={handleSortChange}
-          columns={columns}
+          onPaginationChange={handlePaginationChange}
+          onSort={handleSortChange}
+          cells={columns}
           rows={rows}
           // actions={actions}
           isLoading={isFetching}
           loadingVariant="skeleton"
           fetchError={fetchError}
-          clearAllFilters={handleOnClearAllFilters}
+          toolbarClearAllFilters={handleOnClearAllFilters}
           filtersApplied={
             Array.from(filtersValue.values()).reduce(
               (current, accumulator) => [...accumulator, ...current],

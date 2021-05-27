@@ -15,12 +15,14 @@ import {
   ToolbarItem,
 } from "@patternfly/react-core";
 import {
+  cellWidth,
   expandable,
   ICell,
   IExtraData,
   IRow,
   IRowData,
   sortable,
+  TableText,
 } from "@patternfly/react-table";
 
 import { useDispatch } from "react-redux";
@@ -68,7 +70,7 @@ const toSortByQuery = (
       field = StakeholderGroupSortBy.NAME;
       break;
     case 3:
-      field = StakeholderGroupSortBy.STAKEHOLDERS;
+      field = StakeholderGroupSortBy.STAKEHOLDERS_COUNT;
       break;
     default:
       throw new Error("Invalid column index=" + sortBy.index);
@@ -164,12 +166,12 @@ export const StakeholderGroups: React.FC = () => {
   const columns: ICell[] = [
     {
       title: t("terms.name"),
-      transforms: [sortable],
+      transforms: [sortable, cellWidth(30)],
       cellFormatters: [expandable],
     },
-    { title: t("terms.description"), transforms: [] },
+    { title: t("terms.description"), transforms: [cellWidth(35)] },
     {
-      title: t("terms.member(s)"),
+      title: t("terms.memberCount"),
       transforms: [sortable],
     },
     {
@@ -188,10 +190,12 @@ export const StakeholderGroups: React.FC = () => {
       isOpen: isExpanded,
       cells: [
         {
-          title: item.name,
+          title: <TableText wrapModifier="truncate">{item.name}</TableText>,
         },
         {
-          title: item.description,
+          title: (
+            <TableText wrapModifier="truncate">{item.description}</TableText>
+          ),
         },
         {
           title: item.stakeholders ? item.stakeholders.length : 0,
@@ -249,9 +253,13 @@ export const StakeholderGroups: React.FC = () => {
   const deleteRow = (row: StakeholderGroup) => {
     dispatch(
       confirmDialogActions.openDialog({
-        title: t("dialog.title.delete", { what: row.name }),
-        message: t("dialog.message.delete", { what: row.name }),
-        variant: ButtonVariant.danger,
+        // t("terms.stakeholderGroup")
+        title: t("dialog.title.delete", {
+          what: t("terms.stakeholderGroup").toLowerCase(),
+        }),
+        titleIconVariant: "warning",
+        message: t("dialog.message.delete"),
+        confirmBtnVariant: ButtonVariant.danger,
         confirmBtnLabel: t("actions.delete"),
         cancelBtnLabel: t("actions.cancel"),
         onConfirm: () => {
@@ -349,16 +357,16 @@ export const StakeholderGroups: React.FC = () => {
           count={stakeholderGroups ? stakeholderGroups.meta.count : 0}
           pagination={paginationQuery}
           sortBy={sortByQuery}
-          handlePaginationChange={handlePaginationChange}
-          handleSortChange={handleSortChange}
+          onPaginationChange={handlePaginationChange}
+          onSort={handleSortChange}
           onCollapse={collapseRow}
-          columns={columns}
+          cells={columns}
           rows={rows}
           // actions={actions}
           isLoading={isFetching}
           loadingVariant="skeleton"
           fetchError={fetchError}
-          clearAllFilters={handleOnClearAllFilters}
+          toolbarClearAllFilters={handleOnClearAllFilters}
           filtersApplied={
             Array.from(filtersValue.values()).reduce(
               (previous, current) => [...previous, ...current],

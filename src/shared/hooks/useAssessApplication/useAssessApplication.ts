@@ -6,6 +6,11 @@ import { Application, Assessment } from "api/models";
 
 export interface IState {
   inProgress: boolean;
+  getCurrentAssessment: (
+    application: Application,
+    onSuccess: (assessment?: Assessment) => void,
+    onError: (error: AxiosError) => void
+  ) => void;
   assessApplication: (
     application: Application,
     onSuccess: (assessment: Assessment) => void,
@@ -16,6 +21,35 @@ export interface IState {
 export const useAssessApplication = (): IState => {
   const [inProgress, setInProgress] = useState(false);
 
+  const getCurrentAssessmentHandler = useCallback(
+    (
+      application: Application,
+      onSuccess: (assessment?: Assessment) => void,
+      onError: (error: AxiosError) => void
+    ) => {
+      if (!application.id) {
+        console.log("Entity must have 'id' to execute this operationn");
+        return;
+      }
+
+      setInProgress(true);
+      getAssessments({ applicationId: application.id })
+        .then(({ data }) => {
+          const currentAssessment: Assessment | undefined = data[0]
+            ? data[0]
+            : undefined;
+
+          setInProgress(false);
+          onSuccess(currentAssessment);
+        })
+        .catch((error: AxiosError) => {
+          setInProgress(false);
+          onError(error);
+        });
+    },
+    []
+  );
+
   const assessApplicationHandler = useCallback(
     (
       application: Application,
@@ -23,7 +57,8 @@ export const useAssessApplication = (): IState => {
       onError: (error: AxiosError) => void
     ) => {
       if (!application.id) {
-        throw new Error("Entity must have 'id' to execute this operation");
+        console.log("Entity must have 'id' to execute this operation");
+        return;
       }
 
       setInProgress(true);
@@ -54,6 +89,7 @@ export const useAssessApplication = (): IState => {
 
   return {
     inProgress: inProgress,
+    getCurrentAssessment: getCurrentAssessmentHandler,
     assessApplication: assessApplicationHandler,
   };
 };

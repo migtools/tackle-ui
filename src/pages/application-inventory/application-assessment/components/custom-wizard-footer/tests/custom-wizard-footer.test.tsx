@@ -34,6 +34,23 @@ describe("AppPlaceholder", () => {
     expect(wrapper.find("button[cy-data='next']").text()).toBe("actions.save");
   });
 
+  it("Last step: should have 'saveAndReview' button", () => {
+    const wrapper = mount(
+      <CustomWizardFooter
+        isFirstStep={false}
+        isLastStep={true}
+        isDisabled={false}
+        isFormInvalid={false}
+        onSave={jest.fn()}
+        onSaveAsDraft={jest.fn()}
+      />
+    );
+
+    expect(wrapper.find("button[cy-data='save-and-review']").text()).toBe(
+      "actions.saveAndReview"
+    );
+  });
+
   it("Disable all using 'isDisabled=true'", () => {
     const wrapper = mount(
       <CustomWizardFooter

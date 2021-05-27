@@ -9,7 +9,13 @@ import {
   ToolbarGroup,
   ToolbarItem,
 } from "@patternfly/react-core";
-import { ICell, IRow, sortable } from "@patternfly/react-table";
+import {
+  cellWidth,
+  ICell,
+  IRow,
+  sortable,
+  TableText,
+} from "@patternfly/react-table";
 
 import { useDispatch } from "react-redux";
 import { alertActions } from "store/alert";
@@ -125,7 +131,7 @@ export const JobFunctions: React.FC = () => {
   const columns: ICell[] = [
     {
       title: t("terms.name"),
-      transforms: [sortable],
+      transforms: [sortable, cellWidth(70)],
       cellFormatters: [],
     },
     {
@@ -142,7 +148,7 @@ export const JobFunctions: React.FC = () => {
       [ENTITY_FIELD]: item,
       cells: [
         {
-          title: item.role,
+          title: <TableText wrapModifier="truncate">{item.role}</TableText>,
         },
         {
           title: (
@@ -161,9 +167,13 @@ export const JobFunctions: React.FC = () => {
   const deleteRow = (row: JobFunction) => {
     dispatch(
       confirmDialogActions.openDialog({
-        title: t("dialog.title.delete", { what: row.role }),
-        message: t("dialog.message.delete", { what: row.role }),
-        variant: ButtonVariant.danger,
+        // t("terms.jobFunction")
+        title: t("dialog.title.delete", {
+          what: t("terms.jobFunction").toLowerCase(),
+        }),
+        titleIconVariant: "warning",
+        message: t("dialog.message.delete"),
+        confirmBtnVariant: ButtonVariant.danger,
         confirmBtnLabel: t("actions.delete"),
         cancelBtnLabel: t("actions.cancel"),
         onConfirm: () => {
@@ -261,14 +271,14 @@ export const JobFunctions: React.FC = () => {
           count={jobFunctions ? jobFunctions.meta.count : 0}
           pagination={paginationQuery}
           sortBy={sortByQuery}
-          handlePaginationChange={handlePaginationChange}
-          handleSortChange={handleSortChange}
-          columns={columns}
+          onPaginationChange={handlePaginationChange}
+          onSort={handleSortChange}
+          cells={columns}
           rows={rows}
           isLoading={isFetching}
           loadingVariant="skeleton"
           fetchError={fetchError}
-          clearAllFilters={handleOnClearAllFilters}
+          toolbarClearAllFilters={handleOnClearAllFilters}
           filtersApplied={
             Array.from(filtersValue.values()).reduce(
               (previous, current) => [...previous, ...current],

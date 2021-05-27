@@ -10,11 +10,15 @@
         "createTag": "Crear etiqueta",
         "createTagType": "Crear typo de etiqueta",
         "delete": "Eliminar",
+        "discardAssessment": "Descartar evaluación",
         "edit": "Editar",
         "manageDependencies": "Administrar dependencias",
         "next": "Siguiente",
+        "review": "Revisar",
         "save": "Guardar",
-        "saveAsDraft": "Guardar como borrador"
+        "saveAndReview": "Guardar y revisar",
+        "saveAsDraft": "Guardar como borrador",
+        "submitReview": "Enviar revisión"
     },
     "colors": {
         "blue": "Azul",
@@ -28,20 +32,22 @@
         "add": "Agregar {{what}}",
         "applicationAssessment": "Evaluación de la aplicación",
         "applicationInventory": "Inventario de aplicaciones",
+        "businessCriticality": "Business criticality (1=bajo, 10=alto)",
         "editQuestion": "Editar {{what}}?",
         "manageDependenciesFor": "Administrar dependencias para {{what}}",
         "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
         "noDataStateTitle": "No existen {{what}} disponibles",
         "Nquestions": "{{n}} preguntas",
         "selectMany": "Seleccione {{what}}",
-        "selectOne": "Seleccione un(a) {{what}}"
+        "selectOne": "Seleccione un(a) {{what}}",
+        "workPriority": "Work priority (1=bajo, 10=alto)"
     },
     "dialog": {
         "message": {
-            "delete": "¿Estás seguro de querer eliminar '{{what}}'?. Esta acción eliminará todos los recursos asociados al mismo y no puede ser revertida. ¡Asegúrate de que esto es lo que realmente quieres!"
+            "delete": "Esta acción no puede ser revertida."
         },
         "title": {
-            "delete": "Eliminar '{{what}}'",
+            "delete": "¿Eliminar {{what}}?",
             "newApplication": "Nueva aplicación",
             "newBusinessService": "Nuevo servicio de negocio",
             "newJobFunction": "Nueva función laboral",
@@ -59,6 +65,8 @@
         }
     },
     "message": {
+        "appNotAssesedTitle": "",
+        "appNotAssessedBody": "",
         "couldNotFetchBody": "El recurso no existe o no tienes permiso para acceder al mismo",
         "couldNotFetchTitle": "No disponible",
         "overrideAssessmentConfirmation": "Esta aplicación ya fue evaluada ¿Deseas continuar?",
@@ -70,31 +78,44 @@
         "reports": "Reportes"
     },
     "terms": {
+        "answer": "Respuesta",
         "application": "Applicación",
         "applications": "Applicaciones",
         "assessment": "Evaluación",
+        "businessCriticality": "Criticidad de negocio",
         "businessService": "Servicio de negocio",
         "businessServices": "Servicios de negocio",
+        "category": "Categoría",
         "color": "Color",
         "comments": "Comentarios",
         "completed": "Completado",
         "controls": "Controles",
         "description": "Descripción",
         "displayName": "Nombre a mostrar",
+        "effortEstimate": "Esfuerzo estimado",
         "email": "Email",
         "group": "Grupo",
         "group(s)": "Grupo(s)",
+        "groupCount": "Número de grupos",
         "inProgress": "En progreso",
         "jobFunction": "Función laboral",
         "jobFunctions": "Funciones laborales",
         "member": "Miembro",
         "member(s)": "Miembro(s)",
+        "memberCount": "Número de miembros",
         "name": "Nombre",
         "northboundDependencies": "Dependencias del norte",
         "notAvailable": "No disponible",
         "notStarted": "No empezado",
+        "notYetReviewed": "No revisado todavía",
         "owner": "Propietario",
+        "proposedAction": "Acción propuesta",
+        "question": "Pregunta",
         "rank": "Rango",
+        "review": "Revisar",
+        "reviewComments": "Comentarios de la revisión",
+        "risk": "Riesgo",
+        "select": "Seleccione",
         "southboundDependencies": "Dependencias del sur",
         "stakeholder": "Interesado",
         "stakeholder(s)": "Interesado(s)",
@@ -104,22 +125,27 @@
         "stakeholders": "Interesados",
         "tag": "Etiqueta",
         "tag(s)": "Etiqueta(s)",
+        "tagCount": "Número de etiquetas",
         "tagName": "Nombde de etiqueta",
         "tags": "Etiquetas",
         "tagType": "Tipo de etiqueta",
         "tagTypes": "Tipos de etiqueta",
-        "unknown": "Desconocido"
+        "unknown": "Desconocido",
+        "workPriority": "Prioridad de trabajo"
     },
     "toastr": {
         "success": {
-            "added": "Éxito! {{what}} fue creado como un {{type}}."
+            "added": "Éxito! {{what}} fue creado como un {{type}}.",
+            "assessmentDiscarded": "Éxito! Evaluación de {{application}} desechada"
         }
     },
     "validation": {
         "email": "Este campo requiere un email válido.",
+        "max": "Este campo debe de ser menor a {{value}}.",
         "maxLength": "Este campo debe de tener menos de {{length}} caracteres.",
         "min": "Este campo debe de ser mayor a {{value}}.",
         "minLength": "Este campo debe de tener al menos {{length}} caracteres.",
+        "minOneStakeholderOrGroupRequired": "Al menos un interesado o grupo interesado es requerido.",
         "required": "Este campo es requerido."
     }
 }

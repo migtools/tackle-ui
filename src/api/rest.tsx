@@ -19,6 +19,7 @@ import {
   TagTypePage,
   TagType,
   Tag,
+  Review,
 } from "./models";
 
 export const CONTROLS_BASE_URL = "controls";
@@ -35,6 +36,7 @@ export const TAGS = CONTROLS_BASE_URL + "/tag";
 export const APPLICATIONS = APP_INVENTORY_BASE_URL + "/application";
 export const APPLICATION_DEPENDENCY =
   APP_INVENTORY_BASE_URL + "/applications-dependency";
+export const REVIEW = APP_INVENTORY_BASE_URL + "/review";
 
 export const ASSESSMENTS = PATHFINDER_BASE_URL + "/assessments";
 
@@ -140,7 +142,7 @@ export enum StakeholderSortBy {
   EMAIL,
   DISPLAY_NAME,
   JOB_FUNCTION,
-  STAKEHOLDER_GROUPS,
+  STAKEHOLDER_GROUPS_COUNT,
 }
 export interface StakeholderSortByQuery {
   field: StakeholderSortBy;
@@ -170,7 +172,7 @@ export const getStakeholders = (
       case StakeholderSortBy.JOB_FUNCTION:
         field = "jobFunction.role";
         break;
-      case StakeholderSortBy.STAKEHOLDER_GROUPS:
+      case StakeholderSortBy.STAKEHOLDER_GROUPS_COUNT:
         field = "stakeholderGroups.size()";
         break;
       default:
@@ -230,7 +232,7 @@ export const updateStakeholder = (
 
 export enum StakeholderGroupSortBy {
   NAME,
-  STAKEHOLDERS,
+  STAKEHOLDERS_COUNT,
 }
 export interface StakeholderGroupSortByQuery {
   field: StakeholderGroupSortBy;
@@ -253,7 +255,7 @@ export const getStakeholderGroups = (
       case StakeholderGroupSortBy.NAME:
         field = "name";
         break;
-      case StakeholderGroupSortBy.STAKEHOLDERS:
+      case StakeholderGroupSortBy.STAKEHOLDERS_COUNT:
         field = "stakeholders.size()";
         break;
       default:
@@ -340,7 +342,7 @@ export enum TagTypeSortBy {
   NAME,
   RANK,
   COLOR,
-  TAGS,
+  TAGS_COUNT,
 }
 export interface TagTypeSortByQuery {
   field: TagTypeSortBy;
@@ -368,7 +370,7 @@ export const getTagTypes = (
       case TagTypeSortBy.COLOR:
         field = "rank";
         break;
-      case TagTypeSortBy.TAGS:
+      case TagTypeSortBy.TAGS_COUNT:
         field = "tags.size()";
         break;
       default:
@@ -533,8 +535,26 @@ export const deleteApplicationDependency = (id: number): AxiosPromise => {
 
 //
 
+export const getReviewId = (id: number | string): AxiosPromise<Review> => {
+  return APIClient.get(`${REVIEW}/${id}`);
+};
+
+export const createReview = (obj: Review): AxiosPromise<Review> => {
+  return APIClient.post(`${REVIEW}`, obj);
+};
+
+export const updateReview = (obj: Review): AxiosPromise<Review> => {
+  return APIClient.put(`${REVIEW}/${obj.id}`, obj);
+};
+
+export const deleteReview = (id: number): AxiosPromise => {
+  return APIClient.delete(`${REVIEW}/${id}`);
+};
+
+//
+
 export const getAssessments = (filters: {
-  applicationId?: number;
+  applicationId?: number | string;
 }): AxiosPromise<Assessment[]> => {
   const params = {
     applicationId: filters.applicationId,
@@ -556,4 +576,8 @@ export const getAssessmentById = (
   id: number | string
 ): AxiosPromise<Assessment> => {
   return APIClient.get(`${ASSESSMENTS}/${id}`);
+};
+
+export const deleteAssessment = (id: number): AxiosPromise => {
+  return APIClient.delete(`${ASSESSMENTS}/${id}`);
 };

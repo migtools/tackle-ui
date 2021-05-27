@@ -70,7 +70,7 @@ describe("Sort stakeholder groups", () => {
   });
 
   it("Sort by members", () => {
-    const columnName = "Member(s)";
+    const columnName = "Member count";
     stakeholderGroupPage.openPage();
 
     // Asc

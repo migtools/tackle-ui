@@ -85,7 +85,7 @@ describe("Sort tagtypes", () => {
   });
 
   it("Sort by tags", () => {
-    const columnName = "Tag(s)";
+    const columnName = "Tag count";
     tagTypePage.openPage();
 
     // Asc

@@ -7,113 +7,48 @@ import {
   ToolbarItemVariant,
   ToolbarToggleGroup,
 } from "@patternfly/react-core";
-import {
-  IActions,
-  IActionsResolver,
-  IAreActionsDisabled,
-  ICell,
-  IExtraColumnData,
-  IRow,
-  ISortBy,
-  OnCollapse,
-  OnRowEdit,
-  OnSelect,
-  SortByDirection,
-} from "@patternfly/react-table";
+
 import { FilterIcon } from "@patternfly/react-icons";
 
-import { AppTable } from "../app-table/app-table";
+import { AppTable, IAppTableProps } from "../app-table/app-table";
 import { SimplePagination } from "../simple-pagination";
 
-export interface AppTableWithControlsProps {
+export interface IAppTableWithControlsProps extends IAppTableProps {
   count: number;
-
   pagination: {
     perPage?: number;
     page?: number;
   };
-  sortBy?: ISortBy;
-  handlePaginationChange: ({
+  onPaginationChange: ({
     page,
     perPage,
   }: {
     page: number;
     perPage: number;
   }) => void;
-  handleSortChange: (
-    event: React.MouseEvent,
-    index: number,
-    direction: SortByDirection,
-    extraData: IExtraColumnData
-  ) => void;
-
-  onCollapse?: OnCollapse;
-
-  onSelect?: OnSelect;
-  canSelectAll?: boolean;
-
-  onRowEdit?: OnRowEdit;
-
-  rows: IRow[];
-  columns: ICell[];
-  actions?: IActions;
-  actionResolver?: IActionsResolver;
-  areActionsDisabled?: IAreActionsDisabled;
-
-  isLoading: boolean;
-  loadingVariant?: "skeleton" | "spinner" | "none";
-  fetchError?: any;
 
   toolbar?: any;
   toolbarToggle?: any;
-  clearAllFilters?: () => void;
-
-  filtersApplied: boolean;
-  noDataState?: any;
-  noSearchResultsState?: any;
-  errorState?: any;
+  toolbarClearAllFilters?: () => void;
 }
 
-export const AppTableWithControls: React.FC<AppTableWithControlsProps> = ({
+export const AppTableWithControls: React.FC<IAppTableWithControlsProps> = ({
   count,
-
   pagination,
-  sortBy,
-  handlePaginationChange,
-  handleSortChange,
-
-  onCollapse,
-
-  onSelect,
-  canSelectAll,
-
-  onRowEdit,
-
-  rows,
-  columns,
-  actions,
-  actionResolver,
-  areActionsDisabled,
-
-  isLoading,
-  fetchError,
-  loadingVariant,
+  onPaginationChange,
 
   toolbar,
   toolbarToggle,
-  clearAllFilters,
+  toolbarClearAllFilters,
 
-  filtersApplied,
-  noDataState,
-  noSearchResultsState,
-  errorState,
+  ...rest
 }) => {
   return (
     <div style={{ backgroundColor: "var(--pf-global--BackgroundColor--100)" }}>
       <Toolbar
         className="pf-m-toggle-group-container"
         collapseListedFiltersBreakpoint="xl"
-        clearAllFilters={clearAllFilters}
+        clearAllFilters={toolbarClearAllFilters}
       >
         <ToolbarContent>
           {toolbarToggle && (
@@ -129,36 +64,17 @@ export const AppTableWithControls: React.FC<AppTableWithControlsProps> = ({
             <SimplePagination
               count={count}
               params={pagination}
-              onChange={handlePaginationChange}
+              onChange={onPaginationChange}
               isTop={true}
             />
           </ToolbarItem>
         </ToolbarContent>
       </Toolbar>
-      <AppTable
-        columns={columns}
-        rows={rows}
-        actions={actions}
-        actionResolver={actionResolver}
-        areActionsDisabled={areActionsDisabled}
-        isLoading={isLoading}
-        fetchError={fetchError}
-        loadingVariant={loadingVariant}
-        sortBy={sortBy}
-        onSort={handleSortChange}
-        onCollapse={onCollapse}
-        onSelect={onSelect}
-        onRowEdit={onRowEdit}
-        canSelectAll={canSelectAll}
-        filtersApplied={filtersApplied}
-        noDataState={noDataState}
-        noSearchResultsState={noSearchResultsState}
-        errorState={errorState}
-      />
+      <AppTable {...rest} />
       <SimplePagination
         count={count}
         params={pagination}
-        onChange={handlePaginationChange}
+        onChange={onPaginationChange}
       />
     </div>
   );

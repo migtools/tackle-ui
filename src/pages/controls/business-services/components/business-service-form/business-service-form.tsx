@@ -39,7 +39,7 @@ const stakeholderToOption = (
 
 export interface FormValues {
   name: string;
-  description?: string;
+  description: string;
   owner?: OptionWithValue<Stakeholder>;
 }
 
@@ -99,8 +99,8 @@ export const BusinessServiceForm: React.FC<BusinessServiceFormProps> = ({
     formikHelpers: FormikHelpers<FormValues>
   ) => {
     const payload: BusinessService = {
-      name: formValues.name,
-      description: formValues.description,
+      name: formValues.name.trim(),
+      description: formValues.description.trim(),
       owner: formValues.owner ? formValues.owner.value : undefined,
     };
 
