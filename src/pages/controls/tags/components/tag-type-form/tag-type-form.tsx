@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AxiosError, AxiosPromise, AxiosResponse } from "axios";
 import { useFormik, FormikProvider, FormikHelpers } from "formik";
@@ -15,11 +15,7 @@ import {
   TextInput,
 } from "@patternfly/react-core";
 
-import {
-  SingleSelectFormikField,
-  OptionWithValue,
-  Color,
-} from "shared/components";
+import { SingleSelectOptionValueFormikField } from "shared/components";
 
 import {
   DEFAULT_SELECT_MAX_HEIGHT,
@@ -32,19 +28,12 @@ import {
   getValidatedFromError,
   getValidatedFromErrorTouched,
 } from "utils/utils";
-
-const colorToOption = (value: string): OptionWithValue<string> => ({
-  value,
-  toString: () => value,
-  props: {
-    children: <Color hex={value} />,
-  },
-});
+import { colorHexToOptionWithValue } from "utils/model-utils";
 
 export interface FormValues {
   name: string;
   rank?: number;
-  color?: OptionWithValue<string>;
+  color: string | null;
 }
 
 export interface TagTypeFormProps {
@@ -62,16 +51,10 @@ export const TagTypeForm: React.FC<TagTypeFormProps> = ({
 
   const [error, setError] = useState<AxiosError>();
 
-  const colorInitialValue: OptionWithValue<string> | undefined = useMemo(() => {
-    return tagType && tagType.colour
-      ? colorToOption(tagType.colour)
-      : undefined;
-  }, [tagType]);
-
   const initialValues: FormValues = {
     name: tagType?.name || "",
     rank: tagType?.rank || 1,
-    color: colorInitialValue,
+    color: tagType?.colour || null,
   };
 
   const validationSchema = object().shape({
@@ -81,7 +64,7 @@ export const TagTypeForm: React.FC<TagTypeFormProps> = ({
       .min(3, t("validation.minLength", { length: 3 }))
       .max(120, t("validation.maxLength", { length: 120 })),
     rank: number().min(1, t("validation.min", { value: 1 })),
-    color: string().trim(),
+    color: string().trim().nullable(),
   });
 
   const onSubmit = (
@@ -91,7 +74,7 @@ export const TagTypeForm: React.FC<TagTypeFormProps> = ({
     const payload: TagType = {
       name: formValues.name,
       rank: formValues.rank,
-      colour: formValues.color ? formValues.color.value : undefined,
+      colour: formValues.color || undefined,
     };
 
     let promise: AxiosPromise<TagType>;
@@ -188,7 +171,7 @@ export const TagTypeForm: React.FC<TagTypeFormProps> = ({
           validated={getValidatedFromError(formik.errors.color)}
           helperTextInvalid={formik.errors.color}
         >
-          <SingleSelectFormikField
+          <SingleSelectOptionValueFormikField<string>
             fieldConfig={{ name: "color" }}
             selectConfig={{
               variant: "single",
@@ -199,8 +182,9 @@ export const TagTypeForm: React.FC<TagTypeFormProps> = ({
               }),
               menuAppendTo: () => document.body,
               maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
-              options: DEFAULT_COLOR_PALETTE.map(colorToOption),
             }}
+            options={DEFAULT_COLOR_PALETTE}
+            toOptionWithValue={colorHexToOptionWithValue}
           />
         </FormGroup>
 

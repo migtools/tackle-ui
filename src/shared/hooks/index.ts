@@ -14,6 +14,7 @@ export { useFetchStakeholderGroups } from "./useFetchStakeholderGroups";
 export { useFetchStakeholders } from "./useFetchStakeholders";
 export { useFetchTagTypes } from "./useFetchTagTypes";
 export { useMultipleFetch } from "./useMultipleFetch";
+export { useOptioWithValue } from "./useOptionWithValue";
 export { useToolbarFilter } from "./useToolbarFilter";
 export { useTableControls } from "./useTableControls";
 export { useTableFilter } from "./useTableFilter";

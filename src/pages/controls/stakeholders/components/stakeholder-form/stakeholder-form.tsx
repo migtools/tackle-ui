@@ -15,9 +15,8 @@ import {
 } from "@patternfly/react-core";
 
 import {
-  SingleSelectFetchFormikField,
-  OptionWithValue,
-  MultiSelectFetchFormikField,
+  SingleSelectFetchOptionValueFormikField,
+  MultiSelectFetchOptionValueFormikField,
 } from "shared/components";
 import { useFetchStakeholderGroups, useFetchJobFunctions } from "shared/hooks";
 
@@ -29,26 +28,21 @@ import {
   getValidatedFromError,
   getValidatedFromErrorTouched,
 } from "utils/utils";
-
-const jobFunctionToOption = (
-  value: JobFunction
-): OptionWithValue<JobFunction> => ({
-  value,
-  toString: () => value.role,
-});
-
-const stakeholderGroupToOption = (
-  value: StakeholderGroup
-): OptionWithValue<StakeholderGroup> => ({
-  value,
-  toString: () => value.name,
-});
+import {
+  IJobFunctionDropdown,
+  toIJobFunctionDropdownOptionWithValue,
+  toIJobFunctionDropdown,
+  IStakeholderGroupDropdown,
+  toIStakeholderGroupDropdownOptionWithValue,
+  toIStakeholderGroupDropdown,
+  isIModelEqual,
+} from "utils/model-utils";
 
 export interface FormValues {
   email: string;
   displayName: string;
-  jobFunction?: OptionWithValue<JobFunction>;
-  stakeholderGroups?: OptionWithValue<StakeholderGroup>[];
+  jobFunction: IJobFunctionDropdown | null;
+  stakeholderGroups: IStakeholderGroupDropdown[];
 }
 
 export interface StakeholderFormProps {
@@ -88,20 +82,16 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
     fetchAllStakeholderGroups();
   }, [fetchAllStakeholderGroups]);
 
-  const jobFunctionInitialValue:
-    | OptionWithValue<JobFunction>
-    | undefined = useMemo(() => {
+  const jobFunctionInitialValue: IJobFunctionDropdown | null = useMemo(() => {
     return stakeholder && stakeholder.jobFunction
-      ? jobFunctionToOption(stakeholder.jobFunction)
-      : undefined;
+      ? toIJobFunctionDropdown(stakeholder.jobFunction)
+      : null;
   }, [stakeholder]);
 
-  const stakeholderGroupsInitialValue:
-    | OptionWithValue<StakeholderGroup>[]
-    | undefined = useMemo(() => {
+  const stakeholderGroupsInitialValue: IStakeholderGroupDropdown[] = useMemo(() => {
     return stakeholder && stakeholder.stakeholderGroups
-      ? stakeholder.stakeholderGroups.map(stakeholderGroupToOption)
-      : undefined;
+      ? stakeholder.stakeholderGroups.map(toIStakeholderGroupDropdown)
+      : [];
   }, [stakeholder]);
 
   const initialValues: FormValues = {
@@ -132,10 +122,8 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
     const payload: Stakeholder = {
       email: formValues.email,
       displayName: formValues.displayName,
-      jobFunction: formValues.jobFunction
-        ? formValues.jobFunction.value
-        : undefined,
-      stakeholderGroups: formValues.stakeholderGroups?.map((f) => f.value),
+      jobFunction: formValues.jobFunction as JobFunction,
+      stakeholderGroups: formValues.stakeholderGroups as StakeholderGroup[],
     };
 
     let promise: AxiosPromise<Stakeholder>;
@@ -231,7 +219,7 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
           validated={getValidatedFromError(formik.errors.jobFunction)}
           helperTextInvalid={formik.errors.jobFunction}
         >
-          <SingleSelectFetchFormikField
+          <SingleSelectFetchOptionValueFormikField<JobFunction>
             fieldConfig={{ name: "jobFunction" }}
             selectConfig={{
               variant: "typeahead",
@@ -242,10 +230,11 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
               }),
               menuAppendTo: () => document.body,
               maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
-              options: (jobFunctions?.data || []).map(jobFunctionToOption),
               isFetching: isFetchingJobFunctions,
               fetchError: fetchErrorJobFunctions,
             }}
+            options={(jobFunctions?.data || []).map(toIJobFunctionDropdown)}
+            toOptionWithValue={toIJobFunctionDropdownOptionWithValue}
           />
         </FormGroup>
         <FormGroup
@@ -255,7 +244,7 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
           validated={getValidatedFromError(formik.errors.stakeholderGroups)}
           helperTextInvalid={formik.errors.stakeholderGroups}
         >
-          <MultiSelectFetchFormikField
+          <MultiSelectFetchOptionValueFormikField<IStakeholderGroupDropdown>
             fieldConfig={{ name: "stakeholderGroups" }}
             selectConfig={{
               variant: "typeaheadmulti",
@@ -266,17 +255,14 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
               }),
               menuAppendTo: () => document.body,
               maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
-              options: (stakeholderGroups?.data || []).map(
-                stakeholderGroupToOption
-              ),
               isFetching: isFetchingGroups,
               fetchError: fetchErrorGroups,
             }}
-            isEqual={(a: any, b: any) => {
-              const option1 = a as OptionWithValue<StakeholderGroup>;
-              const option2 = b as OptionWithValue<StakeholderGroup>;
-              return option1.value.id === option2.value.id;
-            }}
+            options={(stakeholderGroups?.data || []).map(
+              toIStakeholderGroupDropdown
+            )}
+            toOptionWithValue={toIStakeholderGroupDropdownOptionWithValue}
+            isEqual={isIModelEqual}
           />
         </FormGroup>
 

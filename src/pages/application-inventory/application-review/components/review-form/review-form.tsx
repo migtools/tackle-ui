@@ -14,7 +14,7 @@ import {
   TextArea,
 } from "@patternfly/react-core";
 
-import { OptionWithValue, SingleSelectFormikField } from "shared/components";
+import { SingleSelectOptionValueFormikField } from "shared/components";
 
 import {
   DEFAULT_SELECT_MAX_HEIGHT,
@@ -28,8 +28,12 @@ import {
 import { number } from "yup";
 import { Application, Review } from "api/models";
 import { createReview, updateReview } from "api/rest";
+import {
+  ISimpleOptionDropdown,
+  toISimpleOptionDropdownWithValue,
+} from "utils/model-utils";
 
-const actionOptions: SimpleOption[] = Array.from(
+const actionOptions: ISimpleOptionDropdown[] = Array.from(
   DEFAULT_PROPOSED_ACTIONS.keys()
 ).map((key) => {
   return {
@@ -38,30 +42,18 @@ const actionOptions: SimpleOption[] = Array.from(
   };
 });
 
-const effortOptions: SimpleOption[] = Array.from(DEFAULT_EFFORTS.keys()).map(
-  (key) => {
-    return {
-      key,
-      name: DEFAULT_EFFORTS.get(key)!,
-    };
-  }
-);
-
-interface SimpleOption {
-  key: string;
-  name: string;
-}
-
-const toOptionWithValue = (
-  value: SimpleOption
-): OptionWithValue<SimpleOption> => ({
-  value,
-  toString: () => value.name,
+const effortOptions: ISimpleOptionDropdown[] = Array.from(
+  DEFAULT_EFFORTS.keys()
+).map((key) => {
+  return {
+    key,
+    name: DEFAULT_EFFORTS.get(key)!,
+  };
 });
 
 export interface FormValues {
-  action?: OptionWithValue<SimpleOption>;
-  effort?: OptionWithValue<SimpleOption>;
+  action: ISimpleOptionDropdown | null;
+  effort: ISimpleOptionDropdown | null;
   criticality?: number;
   priority?: number;
   comments?: string;
@@ -106,8 +98,8 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
   ) => {
     const payload: Review = {
       ...review,
-      proposedAction: formValues.action ? formValues.action.value.key : "",
-      effortEstimate: formValues.effort ? formValues.effort.value.key : "",
+      proposedAction: formValues.action ? formValues.action.key : "",
+      effortEstimate: formValues.effort ? formValues.effort.key : "",
       businessCriticality: formValues.criticality || 0,
       workPriority: formValues.priority || 0,
       comments: formValues.comments,
@@ -135,28 +127,26 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
       });
   };
 
-  const actionInitialValue:
-    | OptionWithValue<SimpleOption>
-    | undefined = useMemo(() => {
-    let result: OptionWithValue<SimpleOption> | undefined;
+  const actionInitialValue: ISimpleOptionDropdown | null = useMemo(() => {
+    let result: ISimpleOptionDropdown | null = null;
     if (review) {
       const exists = actionOptions.find((f) => f.key === review.proposedAction);
-      result = toOptionWithValue(
-        exists || { key: review.proposedAction, name: t("terms.unknown") }
-      );
+      result = exists || {
+        key: review.proposedAction,
+        name: t("terms.unknown"),
+      };
     }
     return result;
   }, [review, t]);
 
-  const effortInitialValue:
-    | OptionWithValue<SimpleOption>
-    | undefined = useMemo(() => {
-    let result: OptionWithValue<SimpleOption> | undefined;
+  const effortInitialValue: ISimpleOptionDropdown | null = useMemo(() => {
+    let result: ISimpleOptionDropdown | null = null;
     if (review) {
       const exists = effortOptions.find((f) => f.key === review.effortEstimate);
-      result = toOptionWithValue(
-        exists || { key: review.effortEstimate, name: t("terms.unknown") }
-      );
+      result = exists || {
+        key: review.effortEstimate,
+        name: t("terms.unknown"),
+      };
     }
     return result;
   }, [review, t]);
@@ -184,7 +174,7 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
           validated={getValidatedFromError(formik.errors.action)}
           helperTextInvalid={formik.errors.action}
         >
-          <SingleSelectFormikField
+          <SingleSelectOptionValueFormikField<ISimpleOptionDropdown>
             fieldConfig={{ name: "action" }}
             selectConfig={{
               variant: "typeahead",
@@ -192,8 +182,9 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
               "aria-describedby": "action",
               placeholderText: t("terms.select"),
               maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
-              options: actionOptions.map(toOptionWithValue),
             }}
+            options={actionOptions}
+            toOptionWithValue={toISimpleOptionDropdownWithValue}
           />
         </FormGroup>
         <FormGroup
@@ -203,7 +194,7 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
           validated={getValidatedFromError(formik.errors.effort)}
           helperTextInvalid={formik.errors.effort}
         >
-          <SingleSelectFormikField
+          <SingleSelectOptionValueFormikField<ISimpleOptionDropdown>
             fieldConfig={{ name: "effort" }}
             selectConfig={{
               variant: "typeahead",
@@ -211,8 +202,9 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
               "aria-describedby": "effort",
               placeholderText: t("terms.select"),
               maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
-              options: effortOptions.map(toOptionWithValue),
             }}
+            options={effortOptions}
+            toOptionWithValue={toISimpleOptionDropdownWithValue}
           />
         </FormGroup>
         <FormGroup

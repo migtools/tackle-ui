@@ -16,42 +16,35 @@ import {
 } from "@patternfly/react-core";
 
 import {
-  SingleSelectFetchFormikField,
-  MultiSelectFetchFormikField,
-  OptionWithValue,
+  SingleSelectFetchOptionValueFormikField,
+  MultiSelectFetchOptionValueFormikField,
 } from "shared/components";
 import { useFetchBusinessServices, useFetchTagTypes } from "shared/hooks";
 
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 import { createApplication, TagTypeSortBy, updateApplication } from "api/rest";
-import { Application, BusinessService, Tag } from "api/models";
+import { Application, Tag } from "api/models";
 import {
   getAxiosErrorMessage,
   getValidatedFromError,
   getValidatedFromErrorTouched,
 } from "utils/utils";
-
-const businesServiceToOption = (
-  value: BusinessService
-): OptionWithValue<BusinessService> => ({
-  value,
-  toString: () => value.name,
-});
-
-const tagToOption = (value: Tag): OptionWithValue<Tag> => ({
-  value,
-  toString: () => value.name,
-  props: {
-    description: value.tagType?.name,
-  },
-});
+import {
+  IBusinessServiceDropdown,
+  isIModelEqual,
+  ITagDropdown,
+  toIBusinessServiceDropdown,
+  toIBusinessServiceDropdownOptionWithValue,
+  toITagDropdown,
+  toITagDropdownOptionWithValue,
+} from "utils/model-utils";
 
 export interface FormValues {
   name: string;
   description?: string;
   comments?: string;
-  businessService?: OptionWithValue<BusinessService>;
-  tags?: OptionWithValue<Tag>[];
+  businessService: IBusinessServiceDropdown | null;
+  tags: ITagDropdown[];
 }
 
 export interface ApplicationFormProps {
@@ -108,7 +101,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
   // Formik
 
   const businessServiceInitialValue = useMemo(() => {
-    let result: OptionWithValue<BusinessService> | undefined = undefined;
+    let result: IBusinessServiceDropdown | null = null;
     if (
       application &&
       application.businessService &&
@@ -120,7 +113,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
         (f) => f.id === businessServiceId
       );
 
-      result = businesServiceToOption({
+      result = toIBusinessServiceDropdown({
         id: businessServiceId,
         name: businessService ? businessService.name : t("terms.notAvailable"),
       });
@@ -130,15 +123,15 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
   }, [application, businessServices, t]);
 
   const tagsInitialValue = useMemo(() => {
-    let result: OptionWithValue<Tag>[] | undefined = undefined;
+    let result: ITagDropdown[] = [];
 
     const notAvailable = t("terms.notAvailable");
     if (application && application.tags && tags) {
       result = application.tags.map((t) => {
         const exists = tags.find((f) => `${f.id}` === t);
         return exists
-          ? tagToOption(exists)
-          : tagToOption({ id: Number(t), name: notAvailable });
+          ? toITagDropdown(exists)
+          : toITagDropdown({ id: Number(t), name: notAvailable });
       });
     }
 
@@ -176,11 +169,9 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
       description: formValues.description,
       comments: formValues.comments,
       businessService: formValues.businessService
-        ? `${formValues.businessService.value.id}`
+        ? `${formValues.businessService.id}`
         : undefined,
-      tags: formValues.tags
-        ? formValues.tags.map((f) => `${f.value.id}`)
-        : undefined,
+      tags: formValues.tags.map((f) => `${f.id}`),
       review: undefined, // The review should not updated through this form
     };
 
@@ -277,7 +268,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
           validated={getValidatedFromError(formik.errors.businessService)}
           helperTextInvalid={formik.errors.businessService}
         >
-          <SingleSelectFetchFormikField
+          <SingleSelectFetchOptionValueFormikField<IBusinessServiceDropdown>
             fieldConfig={{
               name: "businessService",
             }}
@@ -291,12 +282,13 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
               }),
               menuAppendTo: () => document.body,
               maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
-              options: (businessServices?.data || []).map(
-                businesServiceToOption
-              ),
               isFetching: isFetchingBusinessServices,
               fetchError: fetchErrorBusinessServices,
             }}
+            options={(businessServices?.data || []).map(
+              toIBusinessServiceDropdown
+            )}
+            toOptionWithValue={toIBusinessServiceDropdownOptionWithValue}
           />
         </FormGroup>
         <FormGroup
@@ -306,7 +298,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
           validated={getValidatedFromError(formik.errors.tags)}
           helperTextInvalid={formik.errors.tags}
         >
-          <MultiSelectFetchFormikField
+          <MultiSelectFetchOptionValueFormikField<ITagDropdown>
             fieldConfig={{
               name: "tags",
             }}
@@ -320,15 +312,12 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
               }),
               menuAppendTo: () => document.body,
               maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
-              options: (tags || []).map(tagToOption),
               isFetching: isFetchingTagTypes,
               fetchError: fetchErrorTagTypes,
             }}
-            isEqual={(a: any, b: any) => {
-              const option1 = a as OptionWithValue<Tag>;
-              const option2 = b as OptionWithValue<Tag>;
-              return option1.value.id === option2.value.id;
-            }}
+            options={(tags || []).map(toITagDropdown)}
+            toOptionWithValue={toITagDropdownOptionWithValue}
+            isEqual={isIModelEqual}
           />
         </FormGroup>
         <FormGroup
