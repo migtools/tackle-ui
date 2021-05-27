@@ -85,7 +85,7 @@ export const TagForm: React.FC<TagFormProps> = ({ tag, onSaved, onCancel }) => {
     formikHelpers: FormikHelpers<FormValues>
   ) => {
     const payload: Tag = {
-      name: formValues.name,
+      name: formValues.name.trim(),
       tagType: formValues.tagType ? formValues.tagType.value : undefined,
     };
 

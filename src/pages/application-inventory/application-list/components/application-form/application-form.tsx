@@ -48,8 +48,8 @@ const tagToOption = (value: Tag): OptionWithValue<Tag> => ({
 
 export interface FormValues {
   name: string;
-  description?: string;
-  comments?: string;
+  description: string;
+  comments: string;
   businessService?: OptionWithValue<BusinessService>;
   tags?: OptionWithValue<Tag>[];
 }
@@ -172,9 +172,9 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
     formikHelpers: FormikHelpers<FormValues>
   ) => {
     const payload: Application = {
-      name: formValues.name,
-      description: formValues.description,
-      comments: formValues.comments,
+      name: formValues.name.trim(),
+      description: formValues.description.trim(),
+      comments: formValues.comments.trim(),
       businessService: formValues.businessService
         ? `${formValues.businessService.value.id}`
         : undefined,

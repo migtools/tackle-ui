@@ -92,7 +92,7 @@ export const TagTypeForm: React.FC<TagTypeFormProps> = ({
     formikHelpers: FormikHelpers<FormValues>
   ) => {
     const payload: TagType = {
-      name: formValues.name,
+      name: formValues.name.trim(),
       rank: formValues.rank,
       colour: formValues.color ? formValues.color.value : undefined,
     };
