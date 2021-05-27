@@ -6,11 +6,13 @@ import { AxiosError } from "axios";
 
 import { useDispatch } from "react-redux";
 import { alertActions } from "store/alert";
+import { confirmDialogActions } from "store/confirmDialog";
 
 import {
   Alert,
   AlertActionCloseButton,
   Bullseye,
+  ButtonVariant,
   Wizard,
   WizardStep,
 } from "@patternfly/react-core";
@@ -101,6 +103,22 @@ export const ApplicationAssessment: React.FC = () => {
 
   const redirectToApplicationList = () => {
     history.push(Paths.applicationInventory_applicationList);
+  };
+
+  const confirmAndRedirectToApplicationList = () => {
+    dispatch(
+      confirmDialogActions.openDialog({
+        title: t("dialog.title.leavePage"),
+        message: t("dialog.message.leavePage"),
+        confirmBtnVariant: ButtonVariant.primary,
+        confirmBtnLabel: t("actions.continue"),
+        cancelBtnLabel: t("actions.cancel"),
+        onConfirm: () => {
+          dispatch(confirmDialogActions.closeDialog());
+          redirectToApplicationList();
+        },
+      })
+    );
   };
 
   // Formik
@@ -368,7 +386,7 @@ export const ApplicationAssessment: React.FC = () => {
             onBack={() => {
               setCurrentStep((current) => current - 1);
             }}
-            onClose={redirectToApplicationList}
+            onClose={confirmAndRedirectToApplicationList}
             onGoToStep={(step) => {
               setCurrentStep(step.id as number);
             }}

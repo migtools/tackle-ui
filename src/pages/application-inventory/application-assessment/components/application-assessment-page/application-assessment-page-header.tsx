@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router";
 import { useTranslation } from "react-i18next";
 
-import { Text } from "@patternfly/react-core";
+import { ButtonVariant, Text } from "@patternfly/react-core";
+
+import { useDispatch } from "react-redux";
+import { confirmDialogActions } from "store/confirmDialog";
 
 import { PageHeader } from "shared/components";
 
@@ -17,6 +21,8 @@ export const ApplicationAssessmentPageHeader: React.FC<IApplicationAssessmentPag
   assessment,
 }) => {
   const { t } = useTranslation();
+  const history = useHistory();
+  const dispatch = useDispatch();
 
   const [application, setApplication] = useState<Application>();
 
@@ -35,7 +41,21 @@ export const ApplicationAssessmentPageHeader: React.FC<IApplicationAssessmentPag
       breadcrumbs={[
         {
           title: t("terms.applications"),
-          path: Paths.applicationInventory_applicationList,
+          path: () => {
+            dispatch(
+              confirmDialogActions.openDialog({
+                title: t("dialog.title.leavePage"),
+                message: t("dialog.message.leavePage"),
+                confirmBtnVariant: ButtonVariant.primary,
+                confirmBtnLabel: t("actions.continue"),
+                cancelBtnLabel: t("actions.cancel"),
+                onConfirm: () => {
+                  dispatch(confirmDialogActions.closeDialog());
+                  history.push(Paths.applicationInventory_applicationList);
+                },
+              })
+            );
+          },
         },
         {
           title: t("terms.assessment"),
