@@ -79,7 +79,7 @@ export const TagTypeForm: React.FC<TagTypeFormProps> = ({
       .trim()
       .required(t("validation.required"))
       .min(3, t("validation.minLength", { length: 3 }))
-      .max(120, t("validation.maxLength", { length: 120 })),
+      .max(40, t("validation.maxLength", { length: 40 })),
     rank: number().min(1, t("validation.min", { value: 1 })),
     color: string().trim(),
   });
