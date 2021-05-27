@@ -26,6 +26,7 @@ import {
   IRowData,
   ISeparator,
   sortable,
+  TableText,
 } from "@patternfly/react-table";
 import { PencilAltIcon, TagIcon } from "@patternfly/react-icons";
 
@@ -244,11 +245,11 @@ export const ApplicationList: React.FC = () => {
   const columns: ICell[] = [
     {
       title: t("terms.name"),
-      transforms: [sortable],
+      transforms: [sortable, cellWidth(20)],
       cellFormatters: [expandable],
     },
-    { title: t("terms.description"), transforms: [] },
-    { title: t("terms.businessService"), transforms: [] },
+    { title: t("terms.description"), transforms: [cellWidth(25)] },
+    { title: t("terms.businessService"), transforms: [cellWidth(20)] },
     { title: t("terms.assessment"), transforms: [cellWidth(10)] },
     { title: t("terms.review"), transforms: [cellWidth(10)] },
     { title: t("terms.tags"), transforms: [sortable, cellWidth(10)] },
@@ -271,13 +272,19 @@ export const ApplicationList: React.FC = () => {
       selected: isSelected,
       cells: [
         {
-          title: item.name,
+          title: <TableText wrapModifier="truncate">{item.name}</TableText>,
         },
         {
-          title: item.description,
+          title: (
+            <TableText wrapModifier="truncate">{item.description}</TableText>
+          ),
         },
         {
-          title: <ApplicationBusinessService application={item} />,
+          title: (
+            <TableText wrapModifier="truncate">
+              <ApplicationBusinessService application={item} />
+            </TableText>
+          ),
         },
         {
           title: (
