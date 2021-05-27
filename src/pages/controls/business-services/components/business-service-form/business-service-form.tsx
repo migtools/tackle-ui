@@ -92,8 +92,8 @@ export const BusinessServiceForm: React.FC<BusinessServiceFormProps> = ({
     formikHelpers: FormikHelpers<FormValues>
   ) => {
     const payload: BusinessService = {
-      name: formValues.name,
-      description: formValues.description,
+      name: formValues.name.trim(),
+      description: formValues.description.trim(),
       owner: formValues.owner as Stakeholder,
     };
 

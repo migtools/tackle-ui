@@ -15,12 +15,14 @@ import {
   ToolbarItem,
 } from "@patternfly/react-core";
 import {
+  cellWidth,
   expandable,
   ICell,
   IExtraData,
   IRow,
   IRowData,
   sortable,
+  TableText,
 } from "@patternfly/react-table";
 
 import { useDispatch } from "react-redux";
@@ -75,7 +77,7 @@ const toSortByQuery = (
       field = StakeholderSortBy.JOB_FUNCTION;
       break;
     case 4:
-      field = StakeholderSortBy.STAKEHOLDER_GROUPS;
+      field = StakeholderSortBy.STAKEHOLDER_GROUPS_COUNT;
       break;
     default:
       throw new Error("Invalid column index=" + sortBy.index);
@@ -177,13 +179,13 @@ export const Stakeholders: React.FC = () => {
   const columns: ICell[] = [
     {
       title: t("terms.email"),
-      transforms: [sortable],
+      transforms: [sortable, cellWidth(20)],
       cellFormatters: [expandable],
     },
-    { title: t("terms.displayName"), transforms: [sortable] },
-    { title: t("terms.jobFunction"), transforms: [sortable] },
+    { title: t("terms.displayName"), transforms: [sortable, cellWidth(25)] },
+    { title: t("terms.jobFunction"), transforms: [sortable, cellWidth(20)] },
     {
-      title: t("terms.group(s)"),
+      title: t("terms.groupCount"),
       transforms: [sortable],
     },
     {
@@ -205,10 +207,16 @@ export const Stakeholders: React.FC = () => {
           title: item.email,
         },
         {
-          title: item.displayName,
+          title: (
+            <TableText wrapModifier="truncate">{item.displayName}</TableText>
+          ),
         },
         {
-          title: item.jobFunction?.role,
+          title: (
+            <TableText wrapModifier="truncate">
+              {item.jobFunction?.role}
+            </TableText>
+          ),
         },
         {
           title: item.stakeholderGroups ? item.stakeholderGroups.length : 0,

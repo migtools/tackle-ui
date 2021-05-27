@@ -32,6 +32,15 @@ describe("Review", () => {
       });
     });
 
+    // Create stakeholder
+    cy.get("@tokens").then((tokens) => {
+      const payload = {
+        email: `email-a@domain.com`,
+        displayName: `stakeholder-a`,
+      };
+      cy.createStakeholder(payload, tokens);
+    });
+
     // Create assessment
     cy.get("@tokens").then((tokens) => {
       cy.deleteAssessmentByApplicationId(applicationWithAssessment1.id, tokens);
@@ -66,6 +75,8 @@ describe("Review", () => {
     cy.intercept("POST", "/api/application-inventory/review").as(
       "postReviewApi"
     );
+
+    cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholdersApi");
   });
 
   it("Go to review page when application doesn't exists", () => {
@@ -89,9 +100,16 @@ describe("Review", () => {
   it("Answer questionnaire and then create a review", () => {
     // Go to page
     cy.visit("/application-inventory/assessment/" + assessment1.id);
+    cy.wait("@getStakeholdersApi");
 
     // First step
+    cy.get(".pf-c-wizard__footer button[cy-data='next']").should("be.disabled");
     cy.get(".pf-c-wizard__footer button[cy-data='back']").should("be.disabled");
+
+    cy.get(".pf-c-form__group-control input.pf-c-select__toggle-typeahead")
+      .eq(0)
+      .type("stakeholder-a")
+      .type("{enter}");
     cy.get(".pf-c-wizard__footer").find("button[cy-data='next']").click();
 
     // Category 1

@@ -74,7 +74,7 @@ const toSortByQuery = (
       field = TagTypeSortBy.COLOR;
       break;
     case 4:
-      field = TagTypeSortBy.TAGS;
+      field = TagTypeSortBy.TAGS_COUNT;
       break;
     default:
       throw new Error("Invalid column index=" + sortBy.index);
@@ -206,7 +206,7 @@ export const Tags: React.FC = () => {
       transforms: [],
     },
     {
-      title: t("terms.tag(s)"),
+      title: t("terms.tagCount"),
       transforms: [sortable],
     },
     {

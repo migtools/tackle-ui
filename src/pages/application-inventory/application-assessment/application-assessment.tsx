@@ -215,10 +215,23 @@ export const ApplicationAssessment: React.FC = () => {
       [SAVE_ACTION_KEY]: SAVE_ACTION_VALUE.SAVE_AS_DRAFT,
     },
     onSubmit: onSubmit,
+    validate: (values) => {
+      // Only validations for Fields that depends on others should go here.
+      // Individual field's validation should be defined within each Field
+      if (values.stakeholders.length + values.stakeholderGroups.length <= 0) {
+        const errorMsg = t("validation.minOneStakeholderOrGroupRequired");
+        return {
+          stakeholders: errorMsg,
+          stakeholderGroups: errorMsg,
+        };
+      }
+    },
   });
 
-  const areFieldsValid = (fieldKeys: (keyof IFormValues)[]) => {
-    return fieldKeys.every((fieldKey) => !formik.errors[fieldKey]);
+  const isFirstStepValid = () => {
+    const numberOfStakeholdlers = formik.values.stakeholders.length;
+    const numberOfGroups = formik.values.stakeholderGroups.length;
+    return numberOfStakeholdlers + numberOfGroups > 0;
   };
 
   const isQuestionValid = (question: Question): boolean => {
@@ -276,7 +289,7 @@ export const ApplicationAssessment: React.FC = () => {
       }),
       component: <StakeholdersForm />,
       canJumpTo: 0 === currentStep || !disableNavigation,
-      enableNext: areFieldsValid(["stakeholders", "stakeholderGroups"]),
+      enableNext: isFirstStepValid(),
     },
     ...sortedCategories.map((category, index) => {
       const stepIndex = index + 1;

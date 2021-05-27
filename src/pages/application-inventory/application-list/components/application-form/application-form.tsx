@@ -41,8 +41,8 @@ import {
 
 export interface FormValues {
   name: string;
-  description?: string;
-  comments?: string;
+  description: string;
+  comments: string;
   businessService: IBusinessServiceDropdown | null;
   tags: ITagDropdown[];
 }
@@ -165,9 +165,9 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
     formikHelpers: FormikHelpers<FormValues>
   ) => {
     const payload: Application = {
-      name: formValues.name,
-      description: formValues.description,
-      comments: formValues.comments,
+      name: formValues.name.trim(),
+      description: formValues.description.trim(),
+      comments: formValues.comments.trim(),
       businessService: formValues.businessService
         ? `${formValues.businessService.id}`
         : undefined,

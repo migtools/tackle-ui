@@ -120,8 +120,8 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
     formikHelpers: FormikHelpers<FormValues>
   ) => {
     const payload: Stakeholder = {
-      email: formValues.email,
-      displayName: formValues.displayName,
+      email: formValues.email.trim(),
+      displayName: formValues.displayName.trim(),
       jobFunction: formValues.jobFunction as JobFunction,
       stakeholderGroups: formValues.stakeholderGroups as StakeholderGroup[],
     };

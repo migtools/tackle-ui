@@ -57,7 +57,7 @@ export const JobFunctionForm: React.FC<JobFunctionFormProps> = ({
     formikHelpers: FormikHelpers<FormValues>
   ) => {
     const payload: JobFunction = {
-      role: formValues.name,
+      role: formValues.name.trim(),
     };
 
     let promise: AxiosPromise<JobFunction>;

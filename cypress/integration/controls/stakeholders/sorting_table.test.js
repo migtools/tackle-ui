@@ -88,14 +88,14 @@ describe("Stakeholders table", () => {
     cy.wait("@getStakeholdersApi");
 
     // Asc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Group(s)");
+    cy.get(".pf-c-table").pf4_table_column_toggle("Group count");
     cy.wait("@getStakeholdersApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("0");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("9");
 
     // Desc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Group(s)");
+    cy.get(".pf-c-table").pf4_table_column_toggle("Group count");
     cy.wait("@getStakeholdersApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("10");

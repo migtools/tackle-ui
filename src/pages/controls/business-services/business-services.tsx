@@ -149,7 +149,7 @@ export const BusinessServices: React.FC = () => {
 
   const columns: ICell[] = [
     { title: t("terms.name"), transforms: [sortable, cellWidth(25)] },
-    { title: t("terms.description"), transforms: [cellWidth(35)] },
+    { title: t("terms.description"), transforms: [cellWidth(40)] },
     { title: t("terms.owner"), transforms: [sortable] },
     {
       title: "",
@@ -165,7 +165,7 @@ export const BusinessServices: React.FC = () => {
       [ENTITY_FIELD]: item,
       cells: [
         {
-          title: item.name,
+          title: <TableText wrapModifier="truncate">{item.name}</TableText>,
         },
         {
           title: (
@@ -173,7 +173,11 @@ export const BusinessServices: React.FC = () => {
           ),
         },
         {
-          title: item.owner?.displayName,
+          title: (
+            <TableText wrapModifier="truncate">
+              {item.owner?.displayName}
+            </TableText>
+          ),
         },
         {
           title: (

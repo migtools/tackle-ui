@@ -142,7 +142,7 @@ export enum StakeholderSortBy {
   EMAIL,
   DISPLAY_NAME,
   JOB_FUNCTION,
-  STAKEHOLDER_GROUPS,
+  STAKEHOLDER_GROUPS_COUNT,
 }
 export interface StakeholderSortByQuery {
   field: StakeholderSortBy;
@@ -172,7 +172,7 @@ export const getStakeholders = (
       case StakeholderSortBy.JOB_FUNCTION:
         field = "jobFunction.role";
         break;
-      case StakeholderSortBy.STAKEHOLDER_GROUPS:
+      case StakeholderSortBy.STAKEHOLDER_GROUPS_COUNT:
         field = "stakeholderGroups.size()";
         break;
       default:
@@ -232,7 +232,7 @@ export const updateStakeholder = (
 
 export enum StakeholderGroupSortBy {
   NAME,
-  STAKEHOLDERS,
+  STAKEHOLDERS_COUNT,
 }
 export interface StakeholderGroupSortByQuery {
   field: StakeholderGroupSortBy;
@@ -255,7 +255,7 @@ export const getStakeholderGroups = (
       case StakeholderGroupSortBy.NAME:
         field = "name";
         break;
-      case StakeholderGroupSortBy.STAKEHOLDERS:
+      case StakeholderGroupSortBy.STAKEHOLDERS_COUNT:
         field = "stakeholders.size()";
         break;
       default:
@@ -342,7 +342,7 @@ export enum TagTypeSortBy {
   NAME,
   RANK,
   COLOR,
-  TAGS,
+  TAGS_COUNT,
 }
 export interface TagTypeSortByQuery {
   field: TagTypeSortBy;
@@ -370,7 +370,7 @@ export const getTagTypes = (
       case TagTypeSortBy.COLOR:
         field = "rank";
         break;
-      case TagTypeSortBy.TAGS:
+      case TagTypeSortBy.TAGS_COUNT:
         field = "tags.size()";
         break;
       default:

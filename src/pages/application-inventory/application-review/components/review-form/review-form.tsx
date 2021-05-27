@@ -56,7 +56,7 @@ export interface FormValues {
   effort: ISimpleOptionDropdown | null;
   criticality?: number;
   priority?: number;
-  comments?: string;
+  comments: string;
 }
 
 export interface IReviewFormProps {
@@ -102,7 +102,7 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
       effortEstimate: formValues.effort ? formValues.effort.key : "",
       businessCriticality: formValues.criticality || 0,
       workPriority: formValues.priority || 0,
-      comments: formValues.comments,
+      comments: formValues.comments.trim(),
       application: application,
     };
 
