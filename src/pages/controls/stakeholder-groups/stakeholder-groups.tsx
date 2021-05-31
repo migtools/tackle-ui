@@ -268,7 +268,11 @@ export const StakeholderGroups: React.FC = () => {
             row,
             () => {
               dispatch(confirmDialogActions.closeDialog());
-              refreshTable();
+              if (stakeholderGroups?.data.length === 1) {
+                handlePaginationChange({ page: paginationQuery.page - 1 });
+              } else {
+                refreshTable();
+              }
             },
             (error) => {
               dispatch(confirmDialogActions.closeDialog());

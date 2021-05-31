@@ -64,4 +64,24 @@ describe("useTableControls", () => {
     expect(sortByQuery?.index).toBe(2);
     expect(sortByQuery?.direction).toBe("desc");
   });
+
+  it("Doesn't allow Zero or negative page values", () => {
+    const { result } = renderHook(() => useTableControls());
+
+    const { handlePaginationChange } = result.current;
+
+    // Zero
+    act(() => handlePaginationChange({ page: 0, perPage: 50 }));
+    expect(result.current.paginationQuery).toMatchObject({
+      page: 1,
+      perPage: 50,
+    });
+
+    // Negative
+    act(() => handlePaginationChange({ page: -1, perPage: 50 }));
+    expect(result.current.paginationQuery).toMatchObject({
+      page: 1,
+      perPage: 50,
+    });
+  });
 });
