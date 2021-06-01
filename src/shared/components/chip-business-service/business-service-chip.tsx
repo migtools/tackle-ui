@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-import { EmptyTextMessage } from "shared/components";
 import { useFetch } from "shared/hooks";
 
 import { BusinessService } from "api/models";
 import { getBusinessServiceById } from "api/rest";
+import { Spinner } from "@patternfly/react-core";
 
-export interface ApplicationBusinessServiceProps {
+export interface IChipBusinessServiceProps {
   id: number | string;
 }
 
-export const ApplicationBusinessService: React.FC<ApplicationBusinessServiceProps> = ({
+export const ChipBusinessService: React.FC<IChipBusinessServiceProps> = ({
   id,
 }) => {
   const { t } = useTranslation();
@@ -22,6 +22,7 @@ export const ApplicationBusinessService: React.FC<ApplicationBusinessServiceProp
 
   const {
     data: businessService,
+    isFetching,
     fetchError,
     requestFetch: refreshBusinessService,
   } = useFetch<BusinessService>({
@@ -34,7 +35,15 @@ export const ApplicationBusinessService: React.FC<ApplicationBusinessServiceProp
   }, [refreshBusinessService]);
 
   if (fetchError) {
-    return <EmptyTextMessage message={t("terms.notAvailable")} />;
+    return <span>id: {id}</span>;
+  }
+
+  if (isFetching) {
+    return (
+      <>
+        <Spinner size="sm" /> {t("terms.loading")}...
+      </>
+    );
   }
 
   return <>{businessService?.name}</>;

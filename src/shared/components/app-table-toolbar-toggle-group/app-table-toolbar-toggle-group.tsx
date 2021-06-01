@@ -12,18 +12,18 @@ interface FilterOption {
 }
 
 export interface AppTableToolbarToggleGroupProps {
-  options: FilterOption[];
-  filtersValue: Map<string, (string | ToolbarChip)[]>;
-  onDeleteFilter: (key: string, value: (string | ToolbarChip)[]) => void;
+  categories: FilterOption[];
+  chips: Map<string, (string | ToolbarChip)[]>;
+  onChange: (key: string, value: (string | ToolbarChip)[]) => void;
 
   children: React.ReactNode;
 }
 
 export const AppTableToolbarToggleGroup: React.FC<AppTableToolbarToggleGroupProps> = ({
-  options,
-  filtersValue,
+  categories,
+  chips,
   children,
-  onDeleteFilter,
+  onChange,
 }) => {
   const handleOnDeleteChip = (
     category: string | ToolbarChipGroup,
@@ -43,7 +43,7 @@ export const AppTableToolbarToggleGroup: React.FC<AppTableToolbarToggleGroupProp
       chipKey = chip.key;
     }
 
-    const currentFilters = filtersValue.get(categoryKey);
+    const currentFilters = chips.get(categoryKey);
     if (!currentFilters) {
       throw new Error("Could not find category");
     }
@@ -56,7 +56,7 @@ export const AppTableToolbarToggleGroup: React.FC<AppTableToolbarToggleGroupProp
       }
     });
 
-    onDeleteFilter(categoryKey, newFilters);
+    onChange(categoryKey, newFilters);
   };
 
   const handleOnDeleteChipGroup = (category: string | ToolbarChipGroup) => {
@@ -67,21 +67,21 @@ export const AppTableToolbarToggleGroup: React.FC<AppTableToolbarToggleGroupProp
       categoryKey = category.key;
     }
 
-    onDeleteFilter(categoryKey, []);
+    onChange(categoryKey, []);
   };
 
   return (
     <ToolbarGroup variant="filter-group">
-      {options.map((elem, index) => (
+      {categories.map((elem, index) => (
         <ToolbarFilter
           key={index}
-          chips={filtersValue.get(elem.key)}
+          chips={chips.get(elem.key)}
           deleteChip={handleOnDeleteChip}
           deleteChipGroup={handleOnDeleteChipGroup}
           categoryName={{ key: elem.key, name: elem.name }}
-          showToolbarItem={index === options.length - 1 ? true : false}
+          showToolbarItem={index === categories.length - 1 ? true : false}
         >
-          {index === options.length - 1 ? children : null}
+          {index === categories.length - 1 ? children : null}
         </ToolbarFilter>
       ))}
     </ToolbarGroup>

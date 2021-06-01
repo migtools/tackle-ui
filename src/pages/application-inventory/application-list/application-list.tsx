@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { useHistory } from "react-router-dom";
 import { AxiosResponse } from "axios";
 import { useTranslation } from "react-i18next";
@@ -38,39 +38,52 @@ import {
   AppPlaceholder,
   AppTableToolbarToggleGroup,
   AppTableWithControls,
+  ChipBusinessService,
+  ChipTag,
   ConditionalRender,
   NoDataEmptyState,
   StatusIconAssessment,
 } from "shared/components";
 import {
-  useDeleteApplication,
   useTableControls,
-  useFetchApplications,
   useAssessApplication,
   useMultipleFetch,
+  useQueryString,
+  useToolbarFilter,
+  useFetch,
+  useEntityModal,
+  useDelete,
 } from "shared/hooks";
 
 import { formatPath, Paths } from "Paths";
-import { Application, Assessment, SortByQuery } from "api/models";
+import {
+  Application,
+  ApplicationPage,
+  Assessment,
+  SortByQuery,
+} from "api/models";
 import {
   ApplicationSortBy,
   ApplicationSortByQuery,
+  deleteApplication,
   deleteAssessment,
   deleteReview,
+  getApplications,
   getAssessments,
 } from "api/rest";
+import { applicationPageMapper } from "api/apiUtils";
 import { getAxiosErrorMessage } from "utils/utils";
 
-import { NewApplicationModal } from "./components/new-application-modal";
-import { UpdateApplicationModal } from "./components/update-application-modal";
+import { ApplicationForm } from "./components/application-form";
+import ApplicationDependenciesForm from "./components/application-dependencies-form";
+
 import { ToolbarSearchFilter } from "./components/toolbar-search-filter";
 import { InputTextFilter } from "./components/toolbar-search-filter/input-text-filter";
 import { SelectBusinessServiceFilter } from "./components/toolbar-search-filter/select-business-service-filter";
+import { SelectTagFilter } from "./components/toolbar-search-filter/select-tag-filter";
+
 import { ApplicationAssessment } from "./components/application-assessment";
 import { ApplicationBusinessService } from "./components/application-business-service";
-
-import { SelectTagFilter } from "./components/toolbar-search-filter/select-tag-filter";
-import ApplicationDependenciesForm from "./components/application-dependencies-form";
 import { ApplicationListExpandedArea } from "./components/application-list-expanded-area";
 
 enum FilterKey {
@@ -96,7 +109,7 @@ const toSortByQuery = (
       field = ApplicationSortBy.TAGS;
       break;
     default:
-      throw new Error("Invalid column index=" + sortBy.index);
+      return undefined;
   }
 
   return {
@@ -119,53 +132,71 @@ const searchAppAssessment = (id: number) => {
 };
 
 export const ApplicationList: React.FC = () => {
+  // i18
   const { t } = useTranslation();
+
+  // Redux
   const dispatch = useDispatch();
+
+  // Router
   const history = useHistory();
+  const [queryParams, updateParams] = useQueryString();
 
-  const filters = [
-    {
-      key: FilterKey.NAME,
-      name: t("terms.name"),
-    },
-    {
-      key: FilterKey.DESCRIPTION,
-      name: t("terms.description"),
-    },
-    {
-      key: FilterKey.BUSINESS_SERVICE,
-      name: t("terms.businessService"),
-    },
-    {
-      key: FilterKey.TAG,
-      name: t("terms.tag"),
-    },
-  ];
-  const [filtersValue, setFiltersValue] = useState<
-    Map<FilterKey, ToolbarChip[]>
-  >(new Map([]));
-
-  const [isNewModalOpen, setIsNewModalOpen] = useState(false);
-  const [rowToUpdate, setRowToUpdate] = useState<Application>();
-  const [
-    rowToManageDependencies,
-    setRowToManageDependencies,
-  ] = useState<Application>();
-
-  const { deleteApplication } = useDeleteApplication();
-
+  // Toolbar filters
   const {
-    assessApplication,
-    inProgress: isApplicationAssessInProgress,
-  } = useAssessApplication();
+    filters: filtersValue,
+    isPresent: areFiltersPresent,
+    addFilter,
+    setFilter,
+    clearAllFilters,
+  } = useToolbarFilter<ToolbarChip>(() => {
+    const initialValue = new Map<FilterKey, ToolbarChip[]>();
 
-  const {
-    applications,
-    isFetching,
-    fetchError,
-    fetchApplications,
-  } = useFetchApplications(true);
+    Object.keys(queryParams).forEach((key) => {
+      const filterKey = key as FilterKey;
+      switch (filterKey) {
+        case FilterKey.NAME:
+        case FilterKey.DESCRIPTION:
+          initialValue.set(
+            filterKey,
+            queryParams[key].map((q) => ({ key: q, node: q }))
+          );
+          break;
+        case FilterKey.BUSINESS_SERVICE:
+          initialValue.set(
+            filterKey,
+            queryParams[key].map((elem) => ({
+              key: elem,
+              node: <ChipBusinessService id={elem} />,
+            }))
+          );
+          break;
+        case FilterKey.TAG:
+          initialValue.set(
+            filterKey,
+            queryParams[key].map((elem) => ({
+              key: elem,
+              node: <ChipTag id={elem} />,
+            }))
+          );
+          break;
+      }
+    });
 
+    return initialValue;
+  });
+
+  useEffect(() => {
+    const result: Record<string, string[]> = {};
+    Array.from(filtersValue.entries()).forEach((entry) => {
+      const filterKey = entry[0];
+      const filterValue = entry[1];
+      result[filterKey] = filterValue.map((f) => f.key);
+    });
+    updateParams(result);
+  }, [filtersValue, updateParams]);
+
+  // Table data
   const {
     paginationQuery,
     sortByQuery,
@@ -175,8 +206,8 @@ export const ApplicationList: React.FC = () => {
     sortByQuery: { direction: "asc", index: 2 },
   });
 
-  const refreshTable = useCallback(() => {
-    fetchApplications(
+  const fetchApplications = useCallback(() => {
+    return getApplications(
       {
         name: filtersValue.get(FilterKey.NAME)?.map((f) => f.key),
         description: filtersValue.get(FilterKey.DESCRIPTION)?.map((f) => f.key),
@@ -188,25 +219,66 @@ export const ApplicationList: React.FC = () => {
       paginationQuery,
       toSortByQuery(sortByQuery)
     );
-  }, [filtersValue, paginationQuery, sortByQuery, fetchApplications]);
+  }, [filtersValue, paginationQuery, sortByQuery]);
+
+  const {
+    data: page,
+    isFetching,
+    fetchError,
+    requestFetch: refreshTable,
+  } = useFetch<ApplicationPage>({
+    defaultIsFetching: true,
+    onFetch: fetchApplications,
+  });
+
+  const applications = useMemo(() => {
+    return page ? applicationPageMapper(page) : undefined;
+  }, [page]);
 
   useEffect(() => {
-    fetchApplications(
-      {
-        name: filtersValue.get(FilterKey.NAME)?.map((f) => f.key),
-        description: filtersValue.get(FilterKey.DESCRIPTION)?.map((f) => f.key),
-        businessService: filtersValue
-          .get(FilterKey.BUSINESS_SERVICE)
-          ?.map((f) => f.key),
-        tag: filtersValue.get(FilterKey.TAG)?.map((f) => f.key),
-      },
-      paginationQuery,
-      toSortByQuery(sortByQuery)
-    );
-  }, [filtersValue, paginationQuery, sortByQuery, fetchApplications]);
+    refreshTable();
+  }, [filtersValue, paginationQuery, sortByQuery, refreshTable]);
 
-  // Assessments
+  // Create and update modal
+  const {
+    isOpen: isApplicationModalOpen,
+    data: applicationToUpdate,
+    create: openCreateApplicationModal,
+    update: openUpdateApplicationModal,
+    close: closeApplicationModal,
+  } = useEntityModal<Application>();
 
+  const onApplicationModalSaved = (response: AxiosResponse<Application>) => {
+    if (!applicationToUpdate) {
+      dispatch(
+        alertActions.addSuccess(
+          // t('terms.application')
+          t("toastr.success.added", {
+            what: response.data.name,
+            type: t("terms.application").toLowerCase(),
+          })
+        )
+      );
+    }
+
+    closeApplicationModal();
+    refreshTable();
+  };
+
+  // Delete
+  const { requestDelete: requestDeleteApplication } = useDelete<Application>({
+    onDelete: (t: Application) => deleteApplication(t.id!),
+  });
+
+  // Dependencies modal
+  const {
+    isOpen: isDependenciesModalOpen,
+    data: applicationToManageDependencies,
+    update: openDependenciesModal,
+    close: closeDependenciesModal,
+  } = useEntityModal<Application>();
+
+  // Table's assessments
   const {
     getData: getApplicationAssessment,
     isFetching: isFetchingApplicationAssessment,
@@ -221,8 +293,13 @@ export const ApplicationList: React.FC = () => {
     }
   }, [applications, fetchApplicationsAssessment]);
 
-  // Expansion and selection of rows
+  // Create assessment
+  const {
+    assessApplication,
+    inProgress: isApplicationAssessInProgress,
+  } = useAssessApplication();
 
+  // Expand, select rows
   const {
     isItemSelected: isRowExpanded,
     toggleItemSelected: toggleRowExpanded,
@@ -240,8 +317,7 @@ export const ApplicationList: React.FC = () => {
     isEqual: (a, b) => a.id === b.id,
   });
 
-  // Table content definition
-
+  // Table
   const columns: ICell[] = [
     {
       title: t("terms.name"),
@@ -282,7 +358,9 @@ export const ApplicationList: React.FC = () => {
         {
           title: (
             <TableText wrapModifier="truncate">
-              <ApplicationBusinessService application={item} />
+              {item.businessService && (
+                <ApplicationBusinessService id={item.businessService} />
+              )}
             </TableText>
           ),
         },
@@ -316,7 +394,7 @@ export const ApplicationList: React.FC = () => {
               <Button
                 type="button"
                 variant="plain"
-                onClick={() => editRow(item)}
+                onClick={() => openUpdateApplicationModal(item)}
               >
                 <PencilAltIcon />
               </Button>
@@ -354,52 +432,7 @@ export const ApplicationList: React.FC = () => {
           rowData: IRowData
         ) => {
           const row: Application = getRow(rowData);
-          dispatch(
-            confirmDialogActions.openDialog({
-              title: "Discard assessment?",
-              titleIconVariant: "warning",
-              message: (
-                <span>
-                  The assessment for <strong>{row.name}</strong> will be
-                  discarded, as well as the review result. Do you wish to
-                  continue?
-                </span>
-              ),
-              confirmBtnVariant: ButtonVariant.primary,
-              confirmBtnLabel: t("actions.continue"),
-              cancelBtnLabel: t("actions.cancel"),
-              onConfirm: () => {
-                dispatch(confirmDialogActions.processing());
-
-                Promise.all([
-                  row.review ? deleteReview(row.review.id!) : undefined,
-                ])
-                  .then(() => {
-                    const assessment = getApplicationAssessment(row.id!);
-                    return Promise.all([
-                      assessment ? deleteAssessment(assessment.id!) : undefined,
-                    ]);
-                  })
-                  .then(() => {
-                    dispatch(confirmDialogActions.closeDialog());
-                    dispatch(
-                      alertActions.addSuccess(
-                        t("toastr.success.assessmentDiscarded", {
-                          application: row.name,
-                        })
-                      )
-                    );
-                    refreshTable();
-                  })
-                  .catch((error) => {
-                    dispatch(confirmDialogActions.closeDialog());
-                    dispatch(
-                      alertActions.addDanger(getAxiosErrorMessage(error))
-                    );
-                  });
-              },
-            })
-          );
+          discardAssessmentRow(row);
         },
       });
     }
@@ -413,7 +446,7 @@ export const ApplicationList: React.FC = () => {
           rowData: IRowData
         ) => {
           const row: Application = getRow(rowData);
-          setRowToManageDependencies(row);
+          openDependenciesModal(row);
         },
       },
       {
@@ -432,12 +465,7 @@ export const ApplicationList: React.FC = () => {
     return actions;
   };
 
-  const areActionsDisabled = (): boolean => {
-    return false;
-  };
-
-  // Rows
-
+  // Row actions
   const collapseRow = (
     event: React.MouseEvent,
     rowIndex: number,
@@ -460,10 +488,6 @@ export const ApplicationList: React.FC = () => {
     toggleRowSelected(row);
   };
 
-  const editRow = (row: Application) => {
-    setRowToUpdate(row);
-  };
-
   const deleteRow = (row: Application) => {
     dispatch(
       confirmDialogActions.openDialog({
@@ -478,7 +502,7 @@ export const ApplicationList: React.FC = () => {
         cancelBtnLabel: t("actions.cancel"),
         onConfirm: () => {
           dispatch(confirmDialogActions.processing());
-          deleteApplication(
+          requestDeleteApplication(
             row,
             () => {
               dispatch(confirmDialogActions.closeDialog());
@@ -498,84 +522,59 @@ export const ApplicationList: React.FC = () => {
     );
   };
 
-  // Advanced filters
-
-  const handleOnClearAllFilters = () => {
-    setFiltersValue((current) => {
-      const newVal = new Map(current);
-      Array.from(newVal.keys()).forEach((key) => {
-        newVal.set(key, []);
-      });
-      return newVal;
-    });
-  };
-
-  const handleOnAddFilter = (
-    key: string,
-    value: ToolbarChip | ToolbarChip[]
-  ) => {
-    const filterKey: FilterKey = key as FilterKey;
-
-    setFiltersValue((current) => {
-      if (Array.isArray(value)) {
-        return new Map(current).set(filterKey, value);
-      } else {
-        const currentChips: ToolbarChip[] = current.get(filterKey) || [];
-        return new Map(current).set(filterKey, [...currentChips, value]);
-      }
-    });
-
-    handlePaginationChange({ page: 1 });
-  };
-
-  const handleOnDeleteFilter = (
-    key: string,
-    value: (string | ToolbarChip)[]
-  ) => {
-    const filterKey: FilterKey = key as FilterKey;
-    setFiltersValue((current) =>
-      new Map(current).set(filterKey, value as ToolbarChip[])
-    );
-  };
-
-  // Create Modal
-
-  const handleOnOpenCreateNewModal = () => {
-    setIsNewModalOpen(true);
-  };
-
-  const handleOnCreatedNew = (response: AxiosResponse<Application>) => {
-    setIsNewModalOpen(false);
-    refreshTable();
-
+  const discardAssessmentRow = (row: Application) => {
     dispatch(
-      alertActions.addSuccess(
-        t("toastr.success.added", {
-          what: response.data.name,
-          type: "application",
-        })
-      )
+      confirmDialogActions.openDialog({
+        title: "Discard assessment?",
+        titleIconVariant: "warning",
+        message: (
+          <span>
+            The assessment for <strong>{row.name}</strong> will be discarded, as
+            well as the review result. Do you wish to continue?
+          </span>
+        ),
+        confirmBtnVariant: ButtonVariant.primary,
+        confirmBtnLabel: t("actions.continue"),
+        cancelBtnLabel: t("actions.cancel"),
+        onConfirm: () => {
+          dispatch(confirmDialogActions.processing());
+
+          Promise.all([row.review ? deleteReview(row.review.id!) : undefined])
+            .then(() => {
+              const assessment = getApplicationAssessment(row.id!);
+              return Promise.all([
+                assessment ? deleteAssessment(assessment.id!) : undefined,
+              ]);
+            })
+            .then(() => {
+              dispatch(confirmDialogActions.closeDialog());
+              dispatch(
+                alertActions.addSuccess(
+                  t("toastr.success.assessmentDiscarded", {
+                    application: row.name,
+                  })
+                )
+              );
+              refreshTable();
+            })
+            .catch((error) => {
+              dispatch(confirmDialogActions.closeDialog());
+              dispatch(alertActions.addDanger(getAxiosErrorMessage(error)));
+            });
+        },
+      })
     );
   };
 
-  const handleOnCreateNewCancel = () => {
-    setIsNewModalOpen(false);
-  };
+  // Toolbar actions
+  const assessSelectedRows = () => {
+    if (selectedRows.length !== 1) {
+      const msg = "The number of applications to be assess must be 1";
+      dispatch(alertActions.addDanger(msg));
+      return;
+    }
 
-  // Update Modal
-
-  const handleOnUpdated = () => {
-    setRowToUpdate(undefined);
-    refreshTable();
-  };
-
-  const handleOnUpdatedCancel = () => {
-    setRowToUpdate(undefined);
-  };
-
-  // General actions
-
-  const startApplicationAssessment = (row: Application) => {
+    const row = selectedRows[0];
     assessApplication(
       row,
       (assessment: Assessment) => {
@@ -615,21 +614,14 @@ export const ApplicationList: React.FC = () => {
     );
   };
 
-  const handleOnAssessSelectedRow = () => {
+  const reviewSelectedRows = () => {
     if (selectedRows.length !== 1) {
-      dispatch(
-        alertActions.addDanger(
-          "The number of applications to be assess must be 1"
-        )
-      );
+      const msg = "The number of applications to be reviewed must be 1";
+      dispatch(alertActions.addDanger(msg));
       return;
     }
 
     const row = selectedRows[0];
-    startApplicationAssessment(row);
-  };
-
-  const startApplicationReview = (row: Application) => {
     const assessment = getApplicationAssessment(row.id!);
     if (!assessment) {
       console.log("You must assess the application before reviewing it");
@@ -643,20 +635,61 @@ export const ApplicationList: React.FC = () => {
     );
   };
 
-  const handleOnReviewSelectedRow = () => {
-    if (selectedRows.length !== 1) {
-      dispatch(
-        alertActions.addDanger(
-          "The number of applications to be reviewed must be 1"
-        )
-      );
-      return;
-    }
+  // Filter components
+  const filterOptions = [
+    {
+      key: FilterKey.NAME,
+      name: t("terms.name"),
+      input: (
+        <InputTextFilter
+          onApplyFilter={(filterText) => {
+            addFilter(FilterKey.NAME, {
+              key: filterText,
+              node: filterText,
+            });
+          }}
+        />
+      ),
+    },
+    {
+      key: FilterKey.DESCRIPTION,
+      name: t("terms.description"),
+      input: (
+        <InputTextFilter
+          onApplyFilter={(filterText) => {
+            addFilter(FilterKey.DESCRIPTION, {
+              key: filterText,
+              node: filterText,
+            });
+          }}
+        />
+      ),
+    },
+    {
+      key: FilterKey.BUSINESS_SERVICE,
+      name: t("terms.businessService"),
+      input: (
+        <SelectBusinessServiceFilter
+          value={filtersValue.get(FilterKey.BUSINESS_SERVICE)}
+          onApplyFilter={(values) => {
+            setFilter(FilterKey.BUSINESS_SERVICE, values);
+          }}
+        />
+      ),
+    },
+    {
+      key: FilterKey.TAG,
+      name: t("terms.tag"),
+      input: (
+        <SelectTagFilter
+          value={filtersValue.get(FilterKey.TAG)}
+          onApplyFilter={(values) => setFilter(FilterKey.TAG, values)}
+        />
+      ),
+    },
+  ];
 
-    const row = selectedRows[0];
-    startApplicationReview(row);
-  };
-
+  // Flags
   const isReviewBtnDisabled = (row: Application) => {
     const assessment = getApplicationAssessment(row.id!);
     return assessment === undefined || assessment.status !== "COMPLETE";
@@ -686,79 +719,23 @@ export const ApplicationList: React.FC = () => {
             cells={columns}
             rows={rows}
             actionResolver={actionResolver}
-            areActionsDisabled={areActionsDisabled}
             isLoading={isFetching}
             loadingVariant="skeleton"
             fetchError={fetchError}
-            toolbarClearAllFilters={handleOnClearAllFilters}
-            filtersApplied={
-              Array.from(filtersValue.values()).reduce(
-                (previous, current) => [...previous, ...current],
-                []
-              ).length > 0
-            }
+            toolbarClearAllFilters={clearAllFilters}
+            filtersApplied={areFiltersPresent}
             toolbarToggle={
               <AppTableToolbarToggleGroup
-                options={filters}
-                filtersValue={filtersValue}
-                onDeleteFilter={handleOnDeleteFilter}
+                categories={filterOptions.map((f) => ({
+                  key: f.key,
+                  name: f.name,
+                }))}
+                chips={filtersValue}
+                onChange={(key, value) => {
+                  setFilter(key, value as ToolbarChip[]);
+                }}
               >
-                <ToolbarSearchFilter
-                  options={filters}
-                  filterInputs={[
-                    {
-                      key: FilterKey.NAME,
-                      input: (
-                        <InputTextFilter
-                          onApplyFilter={(filterText) =>
-                            handleOnAddFilter(FilterKey.NAME, {
-                              key: filterText,
-                              node: filterText,
-                            })
-                          }
-                        />
-                      ),
-                    },
-                    {
-                      key: FilterKey.DESCRIPTION,
-                      input: (
-                        <InputTextFilter
-                          onApplyFilter={(filterText) =>
-                            handleOnAddFilter(FilterKey.DESCRIPTION, {
-                              key: filterText,
-                              node: filterText,
-                            })
-                          }
-                        />
-                      ),
-                    },
-                    {
-                      key: FilterKey.BUSINESS_SERVICE,
-                      input: (
-                        <SelectBusinessServiceFilter
-                          value={filtersValue.get(FilterKey.BUSINESS_SERVICE)}
-                          onApplyFilter={(values) =>
-                            handleOnAddFilter(
-                              FilterKey.BUSINESS_SERVICE,
-                              values
-                            )
-                          }
-                        />
-                      ),
-                    },
-                    {
-                      key: FilterKey.TAG,
-                      input: (
-                        <SelectTagFilter
-                          value={filtersValue.get(FilterKey.TAG)}
-                          onApplyFilter={(values) =>
-                            handleOnAddFilter(FilterKey.TAG, values)
-                          }
-                        />
-                      ),
-                    },
-                  ]}
-                />
+                <ToolbarSearchFilter filters={filterOptions} />
               </AppTableToolbarToggleGroup>
             }
             toolbar={
@@ -769,7 +746,7 @@ export const ApplicationList: React.FC = () => {
                       type="button"
                       aria-label="create-application"
                       variant={ButtonVariant.primary}
-                      onClick={handleOnOpenCreateNewModal}
+                      onClick={openCreateApplicationModal}
                     >
                       {t("actions.createNew")}
                     </Button>
@@ -779,7 +756,7 @@ export const ApplicationList: React.FC = () => {
                       type="button"
                       aria-label="assess-application"
                       variant={ButtonVariant.primary}
-                      onClick={handleOnAssessSelectedRow}
+                      onClick={assessSelectedRows}
                       isDisabled={
                         selectedRows.length !== 1 ||
                         isApplicationAssessInProgress
@@ -794,7 +771,7 @@ export const ApplicationList: React.FC = () => {
                       type="button"
                       aria-label="review-application"
                       variant={ButtonVariant.primary}
-                      onClick={handleOnReviewSelectedRow}
+                      onClick={reviewSelectedRows}
                       isDisabled={
                         selectedRows.length !== 1 ||
                         isReviewBtnDisabled(selectedRows[0])
@@ -824,29 +801,36 @@ export const ApplicationList: React.FC = () => {
         </ConditionalRender>
       </PageSection>
 
-      <NewApplicationModal
-        isOpen={isNewModalOpen}
-        onSaved={handleOnCreatedNew}
-        onCancel={handleOnCreateNewCancel}
-      />
-      <UpdateApplicationModal
-        application={rowToUpdate}
-        onSaved={handleOnUpdated}
-        onCancel={handleOnUpdatedCancel}
-      />
+      <Modal
+        // t('dialog.title.update')
+        // t('dialog.title.new')
+        // t('terms.application')
+        title={t(`dialog.title.${applicationToUpdate ? "update" : "new"}`, {
+          what: t("terms.application").toLowerCase(),
+        })}
+        variant="medium"
+        isOpen={isApplicationModalOpen}
+        onClose={closeApplicationModal}
+      >
+        <ApplicationForm
+          application={applicationToUpdate}
+          onSaved={onApplicationModalSaved}
+          onCancel={closeApplicationModal}
+        />
+      </Modal>
 
       <Modal
-        isOpen={!!rowToManageDependencies}
+        isOpen={isDependenciesModalOpen}
         variant="medium"
         title={t("composed.manageDependenciesFor", {
-          what: rowToManageDependencies?.name,
+          what: applicationToManageDependencies?.name,
         })}
-        onClose={() => setRowToManageDependencies(undefined)}
+        onClose={closeDependenciesModal}
       >
-        {rowToManageDependencies && (
+        {applicationToManageDependencies && (
           <ApplicationDependenciesForm
-            application={rowToManageDependencies}
-            onCancel={() => setRowToManageDependencies(undefined)}
+            application={applicationToManageDependencies}
+            onCancel={closeDependenciesModal}
           />
         )}
       </Modal>

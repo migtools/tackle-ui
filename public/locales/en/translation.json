@@ -50,6 +50,7 @@
         "title": {
             "delete": "Delete {{what}}?",
             "leavePage": "Leave page",
+            "new": "New {{what}}",
             "newApplication": "New application",
             "newBusinessService": "New business service",
             "newJobFunction": "New job function",
@@ -57,6 +58,7 @@
             "newStakeholderGroup": "New stakeholder group",
             "newTag": "New Tag",
             "newTagType": "New tag type",
+            "update": "Update {{what}}",
             "updateApplication": "Update application",
             "updateBusinessService": "Update business service",
             "updateJobFunction": "Update job function",
@@ -102,6 +104,7 @@
         "inProgress": "In-progress",
         "jobFunction": "Job function",
         "jobFunctions": "Job functions",
+        "loading": "Loading",
         "member": "Member",
         "member(s)": "Member(s)",
         "memberCount": "Member count",

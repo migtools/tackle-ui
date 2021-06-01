@@ -203,9 +203,9 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
       toolbarClearAllFilters={clearAllFilters}
       toolbarToggle={
         <AppTableToolbarToggleGroup
-          options={filters}
-          filtersValue={filtersValue}
-          onDeleteFilter={(key, value) => {
+          categories={filters}
+          chips={filtersValue}
+          onChange={(key, value) => {
             setFilter(key, value as ToolbarChip[]);
           }}
         >

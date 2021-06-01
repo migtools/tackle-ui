@@ -50,6 +50,7 @@
         "title": {
             "delete": "¿Eliminar {{what}}?",
             "leavePage": "¿Estás seguro de querer salir de esta página?",
+            "new": "Nuevo(a) {{what}}",
             "newApplication": "Nueva aplicación",
             "newBusinessService": "Nuevo servicio de negocio",
             "newJobFunction": "Nueva función laboral",
@@ -57,6 +58,7 @@
             "newStakeholderGroup": "Nuevo grupo de interesados",
             "newTag": "Nueva etiqueta",
             "newTagType": "Nuevo tipo de etiqueta",
+            "update": "Actualizar {{what}}",
             "updateApplication": "Actualizar aplicación",
             "updateBusinessService": "Actualizar servicio de negocio",
             "updateJobFunction": "Actualizar función laboral",
@@ -102,6 +104,7 @@
         "inProgress": "En progreso",
         "jobFunction": "Función laboral",
         "jobFunctions": "Funciones laborales",
+        "loading": "Cargando",
         "member": "Miembro",
         "member(s)": "Miembro(s)",
         "memberCount": "Número de miembros",

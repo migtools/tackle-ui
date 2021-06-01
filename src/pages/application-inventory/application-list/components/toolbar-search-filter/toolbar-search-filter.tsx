@@ -6,35 +6,30 @@ import { SimpleFilterDropdown } from "shared/components";
 interface FilterOption {
   key: string;
   name: React.ReactNode;
-}
-
-interface FilterInput {
-  key: string;
   input: React.ReactNode;
 }
 
 export interface SearchFilterProps {
-  options: FilterOption[];
-  filterInputs: FilterInput[];
+  filters: FilterOption[];
 }
 
 export const ToolbarSearchFilter: React.FC<SearchFilterProps> = ({
-  options,
-  filterInputs,
+  filters,
 }) => {
-  const [selectedKey, setSelectedKey] = useState<string>(options[0].key);
+  const [selectedKey, setSelectedKey] = useState<string | undefined>(
+    filters.length > 0 ? filters[0].key : undefined
+  );
 
-  const selectedFilter = options.find((f) => f.key === selectedKey);
-  const selectedFilterInput = filterInputs.find((f) => f.key === selectedKey);
+  const selectedFilter = filters.find((f) => f.key === selectedKey);
 
   return (
     <InputGroup>
       <SimpleFilterDropdown
         label={selectedFilter?.name}
-        options={[...options]}
+        options={filters.map((f) => ({ key: f.key, name: f.name }))}
         onSelect={(dropdown) => setSelectedKey(dropdown.key)}
       />
-      {selectedFilterInput?.input}
+      {selectedFilter?.input}
     </InputGroup>
   );
 };

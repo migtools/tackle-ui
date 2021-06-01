@@ -12,7 +12,7 @@ describe("AppTableToolbarToggleGroup", () => {
 
     const wrapper = shallow(
       <AppTableToolbarToggleGroup
-        options={[
+        categories={[
           {
             key: "name",
             name: "Name",
@@ -22,8 +22,8 @@ describe("AppTableToolbarToggleGroup", () => {
             name: "Description",
           },
         ]}
-        filtersValue={filtersValue}
-        onDeleteFilter={jest.fn()}
+        chips={filtersValue}
+        onChange={jest.fn()}
       >
         <span>children</span>
       </AppTableToolbarToggleGroup>

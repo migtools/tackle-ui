@@ -16,7 +16,7 @@ interface HookState<T> {
 }
 
 export const useToolbarFilter = <T extends FilterType>(
-  initialValue: Map<string, T[]> = new Map()
+  initialValue: Map<string, T[]> | (() => Map<string, T[]>) = new Map()
 ): HookState<T> => {
   const [filters, setFilters] = useState<Map<string, T[]>>(initialValue);
 
