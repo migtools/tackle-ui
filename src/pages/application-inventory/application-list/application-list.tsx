@@ -35,11 +35,9 @@ import { alertActions } from "store/alert";
 import { confirmDialogActions } from "store/confirmDialog";
 
 import {
+  ApplicationToolbarToggleGroup,
   AppPlaceholder,
-  AppTableToolbarToggleGroup,
   AppTableWithControls,
-  ChipBusinessService,
-  ChipTag,
   ConditionalRender,
   NoDataEmptyState,
   StatusIconAssessment,
@@ -48,14 +46,15 @@ import {
   useTableControls,
   useAssessApplication,
   useMultipleFetch,
-  useQueryString,
-  useToolbarFilter,
   useFetch,
   useEntityModal,
   useDelete,
+  useApplicationToolbarFilter,
 } from "shared/hooks";
 
 import { formatPath, Paths } from "Paths";
+import { ApplicationFilterKey } from "Constants";
+
 import {
   Application,
   ApplicationPage,
@@ -77,21 +76,9 @@ import { getAxiosErrorMessage } from "utils/utils";
 import { ApplicationForm } from "./components/application-form";
 import ApplicationDependenciesForm from "./components/application-dependencies-form";
 
-import { ToolbarSearchFilter } from "./components/toolbar-search-filter";
-import { InputTextFilter } from "./components/toolbar-search-filter/input-text-filter";
-import { SelectBusinessServiceFilter } from "./components/toolbar-search-filter/select-business-service-filter";
-import { SelectTagFilter } from "./components/toolbar-search-filter/select-tag-filter";
-
 import { ApplicationAssessment } from "./components/application-assessment";
 import { ApplicationBusinessService } from "./components/application-business-service";
 import { ApplicationListExpandedArea } from "./components/application-list-expanded-area";
-
-enum FilterKey {
-  NAME = "name",
-  DESCRIPTION = "description",
-  BUSINESS_SERVICE = "businessService",
-  TAG = "tag",
-}
 
 const toSortByQuery = (
   sortBy?: SortByQuery
@@ -140,7 +127,6 @@ export const ApplicationList: React.FC = () => {
 
   // Router
   const history = useHistory();
-  const [queryParams, updateParams] = useQueryString();
 
   // Toolbar filters
   const {
@@ -149,52 +135,7 @@ export const ApplicationList: React.FC = () => {
     addFilter,
     setFilter,
     clearAllFilters,
-  } = useToolbarFilter<ToolbarChip>(() => {
-    const initialValue = new Map<FilterKey, ToolbarChip[]>();
-
-    Object.keys(queryParams).forEach((key) => {
-      const filterKey = key as FilterKey;
-      switch (filterKey) {
-        case FilterKey.NAME:
-        case FilterKey.DESCRIPTION:
-          initialValue.set(
-            filterKey,
-            queryParams[key].map((q) => ({ key: q, node: q }))
-          );
-          break;
-        case FilterKey.BUSINESS_SERVICE:
-          initialValue.set(
-            filterKey,
-            queryParams[key].map((elem) => ({
-              key: elem,
-              node: <ChipBusinessService id={elem} />,
-            }))
-          );
-          break;
-        case FilterKey.TAG:
-          initialValue.set(
-            filterKey,
-            queryParams[key].map((elem) => ({
-              key: elem,
-              node: <ChipTag id={elem} />,
-            }))
-          );
-          break;
-      }
-    });
-
-    return initialValue;
-  });
-
-  useEffect(() => {
-    const result: Record<string, string[]> = {};
-    Array.from(filtersValue.entries()).forEach((entry) => {
-      const filterKey = entry[0];
-      const filterValue = entry[1];
-      result[filterKey] = filterValue.map((f) => f.key);
-    });
-    updateParams(result);
-  }, [filtersValue, updateParams]);
+  } = useApplicationToolbarFilter();
 
   // Table data
   const {
@@ -207,14 +148,16 @@ export const ApplicationList: React.FC = () => {
   });
 
   const fetchApplications = useCallback(() => {
+    const nameVal = filtersValue.get(ApplicationFilterKey.NAME);
+    const descriptionVal = filtersValue.get(ApplicationFilterKey.DESCRIPTION);
+    const serviceVal = filtersValue.get(ApplicationFilterKey.BUSINESS_SERVICE);
+    const tagVal = filtersValue.get(ApplicationFilterKey.TAG);
     return getApplications(
       {
-        name: filtersValue.get(FilterKey.NAME)?.map((f) => f.key),
-        description: filtersValue.get(FilterKey.DESCRIPTION)?.map((f) => f.key),
-        businessService: filtersValue
-          .get(FilterKey.BUSINESS_SERVICE)
-          ?.map((f) => f.key),
-        tag: filtersValue.get(FilterKey.TAG)?.map((f) => f.key),
+        name: nameVal?.map((f) => f.key),
+        description: descriptionVal?.map((f) => f.key),
+        businessService: serviceVal?.map((f) => f.key),
+        tag: tagVal?.map((f) => f.key),
       },
       paginationQuery,
       toSortByQuery(sortByQuery)
@@ -635,60 +578,6 @@ export const ApplicationList: React.FC = () => {
     );
   };
 
-  // Filter components
-  const filterOptions = [
-    {
-      key: FilterKey.NAME,
-      name: t("terms.name"),
-      input: (
-        <InputTextFilter
-          onApplyFilter={(filterText) => {
-            addFilter(FilterKey.NAME, {
-              key: filterText,
-              node: filterText,
-            });
-          }}
-        />
-      ),
-    },
-    {
-      key: FilterKey.DESCRIPTION,
-      name: t("terms.description"),
-      input: (
-        <InputTextFilter
-          onApplyFilter={(filterText) => {
-            addFilter(FilterKey.DESCRIPTION, {
-              key: filterText,
-              node: filterText,
-            });
-          }}
-        />
-      ),
-    },
-    {
-      key: FilterKey.BUSINESS_SERVICE,
-      name: t("terms.businessService"),
-      input: (
-        <SelectBusinessServiceFilter
-          value={filtersValue.get(FilterKey.BUSINESS_SERVICE)}
-          onApplyFilter={(values) => {
-            setFilter(FilterKey.BUSINESS_SERVICE, values);
-          }}
-        />
-      ),
-    },
-    {
-      key: FilterKey.TAG,
-      name: t("terms.tag"),
-      input: (
-        <SelectTagFilter
-          value={filtersValue.get(FilterKey.TAG)}
-          onApplyFilter={(values) => setFilter(FilterKey.TAG, values)}
-        />
-      ),
-    },
-  ];
-
   // Flags
   const isReviewBtnDisabled = (row: Application) => {
     const assessment = getApplicationAssessment(row.id!);
@@ -725,18 +614,11 @@ export const ApplicationList: React.FC = () => {
             toolbarClearAllFilters={clearAllFilters}
             filtersApplied={areFiltersPresent}
             toolbarToggle={
-              <AppTableToolbarToggleGroup
-                categories={filterOptions.map((f) => ({
-                  key: f.key,
-                  name: f.name,
-                }))}
-                chips={filtersValue}
-                onChange={(key, value) => {
-                  setFilter(key, value as ToolbarChip[]);
-                }}
-              >
-                <ToolbarSearchFilter filters={filterOptions} />
-              </AppTableToolbarToggleGroup>
+              <ApplicationToolbarToggleGroup
+                value={filtersValue as Map<ApplicationFilterKey, ToolbarChip[]>}
+                addFilter={addFilter}
+                setFilter={setFilter}
+              />
             }
             toolbar={
               <>

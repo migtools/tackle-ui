@@ -74,3 +74,12 @@ export const DEFAULT_EFFORTS: Map<string, string> = new Map([
   ["large", "Large"],
   ["extra_large", "Extra large"],
 ]);
+
+// Application toolbar
+
+export enum ApplicationFilterKey {
+  NAME = "name",
+  DESCRIPTION = "description",
+  BUSINESS_SERVICE = "businessService",
+  TAG = "tag",
+}

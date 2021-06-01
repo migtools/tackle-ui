@@ -9,11 +9,11 @@ interface FilterOption {
   input: React.ReactNode;
 }
 
-export interface SearchFilterProps {
+export interface IToolbarSearchFilterProps {
   filters: FilterOption[];
 }
 
-export const ToolbarSearchFilter: React.FC<SearchFilterProps> = ({
+export const ToolbarSearchFilter: React.FC<IToolbarSearchFilterProps> = ({
   filters,
 }) => {
   const [selectedKey, setSelectedKey] = useState<string | undefined>(
