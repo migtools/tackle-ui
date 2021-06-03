@@ -1,1 +1,1 @@
-export { useApplicationToolbarFilter } from "./useApplicationToolbarFilters";
+export { useApplicationToolbarFilter } from "./useApplicationToolbarFilter";

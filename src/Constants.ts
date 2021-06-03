@@ -80,6 +80,6 @@ export const DEFAULT_EFFORTS: Map<string, string> = new Map([
 export enum ApplicationFilterKey {
   NAME = "name",
   DESCRIPTION = "description",
-  BUSINESS_SERVICE = "businessService",
+  BUSINESS_SERVICE = "business_service",
   TAG = "tag",
 }

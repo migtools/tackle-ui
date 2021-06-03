@@ -1,3 +1,4 @@
+import { AxiosPromise } from "axios";
 import {
   Application,
   ApplicationDependency,
@@ -137,3 +138,28 @@ export const applicationDependencyPageMapper = (
   meta: { count: page.total_count },
   data: page._embedded["applications-dependency"],
 });
+
+//
+
+export const fetchAllPages = <T, P>(
+  fetchPage: (page: number) => AxiosPromise<P>,
+  responseToItems: (responseData: P) => T[],
+  responseToTotalCount: (responseData: P) => number,
+  page: number = 1,
+  initialItems: T[] = []
+): Promise<T[]> => {
+  return fetchPage(page).then(({ data }) => {
+    const accumulator = [...initialItems, ...responseToItems(data)];
+    if (accumulator.length < responseToTotalCount(data)) {
+      return fetchAllPages(
+        fetchPage,
+        responseToItems,
+        responseToTotalCount,
+        page + 1,
+        accumulator
+      );
+    } else {
+      return accumulator;
+    }
+  });
+};

@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
   Bullseye,
-  Button,
   Card,
   CardBody,
   CardHeader,
@@ -22,21 +21,16 @@ import {
   ToolbarItem,
   ToolbarItemVariant,
 } from "@patternfly/react-core";
-import { ExternalLinkAltIcon } from "@patternfly/react-icons";
 import { ChartDonut } from "@patternfly/react-charts";
 
-import {
-  useApplicationToolbarFilter,
-  useFetch,
-  useTableControls,
-} from "shared/hooks";
+import { useApplicationToolbarFilter, useFetch } from "shared/hooks";
 import { ApplicationToolbarToggleGroup } from "shared/components";
 
 import { ApplicationFilterKey } from "Constants";
 
-import { getApplications } from "api/rest";
-import { ApplicationPage } from "api/models";
-import { applicationPageMapper } from "api/apiUtils";
+import { getApplications, getLandscape } from "api/rest";
+import { Application, ApplicationPage } from "api/models";
+import { applicationPageMapper, fetchAllPages } from "api/apiUtils";
 
 export const Reports: React.FC = () => {
   // i18
@@ -45,53 +39,56 @@ export const Reports: React.FC = () => {
   // Toolbar filters
   const {
     filters: filtersValue,
-    isPresent: areFiltersPresent,
+    // isPresent: areFiltersPresent,
     addFilter,
     setFilter,
     clearAllFilters,
   } = useApplicationToolbarFilter();
 
   // Table data
-  const {
-    paginationQuery,
-    sortByQuery,
-    handlePaginationChange,
-    handleSortChange,
-  } = useTableControls();
+  // const {
+  //   paginationQuery,
+  //   handlePaginationChange,
+  // } = useTableControls();
 
   const fetchApplications = useCallback(() => {
     const nameVal = filtersValue.get(ApplicationFilterKey.NAME);
     const descriptionVal = filtersValue.get(ApplicationFilterKey.DESCRIPTION);
     const serviceVal = filtersValue.get(ApplicationFilterKey.BUSINESS_SERVICE);
     const tagVal = filtersValue.get(ApplicationFilterKey.TAG);
-    return getApplications(
-      {
-        name: nameVal?.map((f) => f.key),
-        description: descriptionVal?.map((f) => f.key),
-        businessService: serviceVal?.map((f) => f.key),
-        tag: tagVal?.map((f) => f.key),
-      },
-      paginationQuery
+
+    const getApplicationPage = (page: number) => {
+      return getApplications(
+        {
+          name: nameVal?.map((f) => f.key),
+          description: descriptionVal?.map((f) => f.key),
+          businessService: serviceVal?.map((f) => f.key),
+          tag: tagVal?.map((f) => f.key),
+        },
+        { page: page, perPage: 100 }
+      );
+    };
+
+    return fetchAllPages<Application, ApplicationPage>(
+      getApplicationPage,
+      (responseData) => applicationPageMapper(responseData).data,
+      (responseData) => applicationPageMapper(responseData).meta.count
     );
-  }, [filtersValue, paginationQuery, sortByQuery]);
+  }, [filtersValue]);
 
   const {
-    data: page,
-    isFetching,
-    fetchError,
+    data: applications,
+    // isFetching,
+    // fetchError,
     requestFetch: refreshTable,
-  } = useFetch<ApplicationPage>({
+  } = useFetch<Application[]>({
     defaultIsFetching: true,
-    onFetch: fetchApplications,
+    onFetchPromise: fetchApplications,
   });
-
-  const applications = useMemo(() => {
-    return page ? applicationPageMapper(page) : undefined;
-  }, [page]);
 
   useEffect(() => {
     refreshTable();
-  }, [filtersValue, paginationQuery, sortByQuery, refreshTable]);
+  }, [filtersValue, refreshTable]);
 
   return (
     <>
@@ -106,16 +103,16 @@ export const Reports: React.FC = () => {
               addFilter={addFilter}
               setFilter={setFilter}
             />
-            <ToolbarGroup variant="icon-button-group">
+            {/* <ToolbarGroup variant="icon-button-group">
               <ToolbarItem>
                 <Button variant="plain" aria-label="clone">
                   <ExternalLinkAltIcon />
                 </Button>
               </ToolbarItem>
-            </ToolbarGroup>
+            </ToolbarGroup> */}
             <ToolbarGroup alignment={{ default: "alignRight" }}>
               <ToolbarItem variant={ToolbarItemVariant.pagination}>
-                {applications?.meta.count} items
+                {applications ? applications.length : 0} items
               </ToolbarItem>
             </ToolbarGroup>
           </ToolbarContent>

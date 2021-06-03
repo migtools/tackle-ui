@@ -20,6 +20,7 @@ import {
   TagType,
   Tag,
   Review,
+  AssessmentRisk,
 } from "./models";
 
 export const CONTROLS_BASE_URL = "controls";
@@ -580,4 +581,14 @@ export const getAssessmentById = (
 
 export const deleteAssessment = (id: number): AxiosPromise => {
   return APIClient.delete(`${ASSESSMENTS}/${id}`);
+};
+
+export const getLandscape = (
+  applicationIds: number[]
+): AxiosPromise<AssessmentRisk[]> => {
+  return APIClient.get(
+    `${ASSESSMENTS}?${applicationIds
+      .map((f) => `applicationId=${f}`)
+      .join("&")}`
+  );
 };

@@ -130,6 +130,11 @@ export interface QuestionOption {
   risk: Risk;
 }
 
+export interface AssessmentRisk {
+  assessmentId: number;
+  risk: Risk;
+}
+
 // Pagination
 
 export interface BusinessServicePage {

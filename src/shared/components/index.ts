@@ -10,6 +10,7 @@ export { ConfirmDialog } from "./confirm-dialog";
 export { EmptyTextMessage } from "./empty-text-message";
 export { InputTextFilter } from "./input-text-filter";
 export { NoDataEmptyState } from "./no-data-empty-state";
+export { NodeFetch } from "./node-fetch";
 export { PageHeader } from "./page-header";
 export { RiskLabel } from "./risk-label";
 export { SearchFilter } from "./search-filter";

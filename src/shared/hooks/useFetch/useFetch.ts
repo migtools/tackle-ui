@@ -1,5 +1,5 @@
 import { useCallback, useReducer } from "react";
-import { AxiosError, AxiosPromise } from "axios";
+import { AxiosPromise } from "axios";
 import { ActionType, createAsyncAction, getType } from "typesafe-actions";
 
 export const {
@@ -10,12 +10,12 @@ export const {
   "useFetch/fetch/request",
   "useFetch/fetch/success",
   "useFetch/fetch/failure"
-)<void, any, AxiosError>();
+)<void, any, any>();
 
 type State = Readonly<{
   isFetching: boolean;
   data?: any;
-  fetchError?: AxiosError;
+  fetchError?: any;
   fetchCount: number;
 }>;
 
@@ -66,13 +66,14 @@ const reducer = (state: State, action: Action): State => {
 
 export interface IArgs<T> {
   defaultIsFetching?: boolean;
-  onFetch: () => AxiosPromise<T>;
+  onFetch?: () => AxiosPromise<T>;
+  onFetchPromise?: () => Promise<T>;
 }
 
 export interface IState<T> {
   data?: T;
   isFetching: boolean;
-  fetchError?: AxiosError;
+  fetchError?: any;
   fetchCount: number;
   requestFetch: () => void;
 }
@@ -80,20 +81,30 @@ export interface IState<T> {
 export const useFetch = <T>({
   defaultIsFetching = false,
   onFetch,
+  onFetchPromise,
 }: IArgs<T>): IState<T> => {
   const [state, dispatch] = useReducer(reducer, defaultIsFetching, initReducer);
 
   const fetchHandler = useCallback(() => {
     dispatch(fetchRequest());
 
-    onFetch()
-      .then(({ data }) => {
+    let promise;
+    if (onFetch) {
+      promise = onFetch().then(({ data }) => {
         dispatch(fetchSuccess(data));
-      })
-      .catch((error: AxiosError) => {
-        dispatch(fetchFailure(error));
       });
-  }, [onFetch]);
+    } else if (onFetchPromise) {
+      promise = onFetchPromise().then((data) => {
+        dispatch(fetchSuccess(data));
+      });
+    } else {
+      throw new Error("No onFetch nor onFetchPromise provided");
+    }
+
+    promise.catch((error) => {
+      dispatch(fetchFailure(error));
+    });
+  }, [onFetch, onFetchPromise]);
 
   return {
     data: state.data,

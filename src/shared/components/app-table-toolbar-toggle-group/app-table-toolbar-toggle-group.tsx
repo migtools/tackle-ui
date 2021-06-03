@@ -12,7 +12,7 @@ interface FilterOption {
 }
 
 export interface AppTableToolbarToggleGroupProps {
-  categories: FilterOption[];
+  categories: (string | FilterOption)[];
   chips: Map<string, (string | ToolbarChip)[]>;
   onChange: (key: string, value: (string | ToolbarChip)[]) => void;
 
@@ -75,10 +75,12 @@ export const AppTableToolbarToggleGroup: React.FC<AppTableToolbarToggleGroupProp
       {categories.map((elem, index) => (
         <ToolbarFilter
           key={index}
-          chips={chips.get(elem.key)}
+          chips={
+            typeof elem === "string" ? chips.get(elem) : chips.get(elem.key)
+          }
           deleteChip={handleOnDeleteChip}
           deleteChipGroup={handleOnDeleteChipGroup}
-          categoryName={{ key: elem.key, name: elem.name }}
+          categoryName={elem}
           showToolbarItem={index === categories.length - 1 ? true : false}
         >
           {index === categories.length - 1 ? children : null}
