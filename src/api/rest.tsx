@@ -587,7 +587,7 @@ export const getLandscape = (
   applicationIds: number[]
 ): AxiosPromise<AssessmentRisk[]> => {
   return APIClient.get(
-    `${ASSESSMENTS}?${applicationIds
+    `${ASSESSMENTS}/landscape?${applicationIds
       .map((f) => `applicationId=${f}`)
       .join("&")}`
   );

@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { ChartDonut, ChartLegend } from "@patternfly/react-charts";
 
-import { global_palette_black_400 as black } from "@patternfly/react-tokens";
+import { global_palette_blue_300 as defaultColor } from "@patternfly/react-tokens";
 
 import { DEFAULT_RISK_LABELS } from "Constants";
 import { Assessment, QuestionnaireCategory } from "api/models";
@@ -64,22 +64,22 @@ export const ApplicationAssessmentDonutChart: React.FC<IApplicationAssessmentDon
     {
       x: DEFAULT_RISK_LABELS.get("GREEN")?.label,
       y: charData.green,
-      color: "#68b240",
+      color: DEFAULT_RISK_LABELS.get("GREEN")?.color,
     },
     {
       x: DEFAULT_RISK_LABELS.get("AMBER")?.label,
       y: charData.amber,
-      color: "#f0ab0b",
+      color: DEFAULT_RISK_LABELS.get("AMBER")?.color,
     },
     {
       x: DEFAULT_RISK_LABELS.get("RED")?.label,
       y: charData.red,
-      color: "#cb440d",
+      color: DEFAULT_RISK_LABELS.get("RED")?.color,
     },
     {
       x: DEFAULT_RISK_LABELS.get("UNKNOWN")?.label,
       y: charData.unknown,
-      color: black.value,
+      color: DEFAULT_RISK_LABELS.get("UNKNOWN")?.color,
     },
   ].filter((f) => f.y > 0);
 
@@ -90,13 +90,17 @@ export const ApplicationAssessmentDonutChart: React.FC<IApplicationAssessmentDon
         constrainToVisibleArea={true}
         data={chartDefinition.map((elem) => ({ x: elem.x, y: elem.y }))}
         labels={({ datum }) => `${datum.x}: ${datum.y}`}
-        colorScale={chartDefinition.map((elem) => elem.color)}
+        colorScale={chartDefinition.map(
+          (elem) => elem.color || defaultColor.value
+        )}
         legendComponent={
           <ChartLegend
             data={chartDefinition.map((elem) => ({
               name: `${elem.x}: ${elem.y}`,
             }))}
-            colorScale={chartDefinition.map((elem) => elem.color)}
+            colorScale={chartDefinition.map(
+              (elem) => elem.color || defaultColor.value
+            )}
           />
         }
         legendOrientation="vertical"

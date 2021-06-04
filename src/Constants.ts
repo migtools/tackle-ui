@@ -5,6 +5,7 @@ import {
   global_palette_purple_300 as purple,
   global_palette_orange_300 as orange,
   global_palette_red_300 as red,
+  global_palette_black_400 as black,
 } from "@patternfly/react-tokens";
 
 import { PageQuery, Risk } from "api/models";
@@ -48,13 +49,14 @@ export const DEFAULT_COLOR_PALETE = [
 interface RiskData {
   label: string;
   order: number;
+  color: string;
 }
 
 export const DEFAULT_RISK_LABELS: Map<Risk, RiskData> = new Map([
-  ["GREEN", { label: "Low", order: 1 }],
-  ["AMBER", { label: "Medium", order: 2 }],
-  ["RED", { label: "High", order: 3 }],
-  ["UNKNOWN", { label: "Unknown", order: 4 }],
+  ["GREEN", { label: "Low", order: 1, color: "#68b240" }],
+  ["AMBER", { label: "Medium", order: 2, color: "#f0ab0b" }],
+  ["RED", { label: "High", order: 3, color: "#cb440d" }],
+  ["UNKNOWN", { label: "Unknown", order: 4, color: black.value }],
 ]);
 
 // Review
