@@ -5,18 +5,18 @@ import { NodeFetch } from "../chip-fetch";
 describe("NodeFetch", () => {
   it("Renders loading...", () => {
     const wrapper = mount(<NodeFetch isFetching={true} node="myChip" />);
-    expect(wrapper.find(".pf-c-chip").text()).toBe(" terms.loading...");
+    expect(wrapper.text()).toBe(" terms.loading...");
   });
 
   it("Renders error...", () => {
     const wrapper = mount(
       <NodeFetch isFetching={true} fetchError={"error"} node="myChip" />
     );
-    expect(wrapper.find(".pf-c-chip").text()).toBe("Error");
+    expect(wrapper.text()).toBe("terms.unknown");
   });
 
   it("Renders chip...", () => {
     const wrapper = mount(<NodeFetch isFetching={false} node="myChip" />);
-    expect(wrapper.find(".pf-c-chip").text()).toBe("myChip");
+    expect(wrapper.text()).toBe("myChip");
   });
 });
