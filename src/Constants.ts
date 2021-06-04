@@ -61,20 +61,41 @@ export const DEFAULT_RISK_LABELS: Map<Risk, RiskData> = new Map([
 
 // Review
 
-export const DEFAULT_PROPOSED_ACTIONS: Map<string, string> = new Map([
-  ["rehost", "Rehost"],
-  ["replatform", "Replatform"],
-  ["refactor", "Refactor"],
-  ["repurchase", "Repurchase"],
-  ["retire", "Retire"],
-  ["retain", "Retain"],
+export enum ProposedAction {
+  REHOST = "rehost",
+  REPLATFORM = "replatform",
+  REFACTOR = "refactor",
+  REPURCHASE = "repurchase",
+  RETIRE = "retire",
+  RETAIN = "retain",
+}
+
+export const DEFAULT_PROPOSED_ACTIONS: Map<ProposedAction, string> = new Map([
+  [ProposedAction.REHOST, "Rehost"],
+  [ProposedAction.REPLATFORM, "Replatform"],
+  [ProposedAction.REFACTOR, "Refactor"],
+  [ProposedAction.REPURCHASE, "Repurchase"],
+  [ProposedAction.RETIRE, "Retire"],
+  [ProposedAction.RETAIN, "Retain"],
 ]);
 
-export const DEFAULT_EFFORTS: Map<string, string> = new Map([
-  ["small", "Small"],
-  ["medium", "Medium"],
-  ["large", "Large"],
-  ["extra_large", "Extra large"],
+export enum Effort {
+  SMALL = "small",
+  MEDIUM = "medium",
+  LARGE = "large",
+  EXTRA_LARGE = "extra_large",
+}
+
+export interface EffortData {
+  label: string;
+  factor: number;
+}
+
+export const DEFAULT_EFFORTS: Map<Effort, EffortData> = new Map([
+  [Effort.SMALL, { label: "Small", factor: 1 }],
+  [Effort.MEDIUM, { label: "Medium", factor: 2 }],
+  [Effort.LARGE, { label: "Large", factor: 3 }],
+  [Effort.EXTRA_LARGE, { label: "Extra large", factor: 4 }],
 ]);
 
 // Application toolbar

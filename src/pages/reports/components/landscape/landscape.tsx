@@ -12,7 +12,6 @@ import { getLandscape } from "api/rest";
 import { Donut } from "./donut";
 
 export interface ILandscapeProps {
-  isFetching: boolean;
   applications: Application[];
 }
 

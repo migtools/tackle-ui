@@ -42,7 +42,7 @@ const effortOptions: SimpleOption[] = Array.from(DEFAULT_EFFORTS.keys()).map(
   (key) => {
     return {
       key,
-      name: DEFAULT_EFFORTS.get(key)!,
+      name: DEFAULT_EFFORTS.get(key)?.label || key,
     };
   }
 );

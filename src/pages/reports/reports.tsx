@@ -31,12 +31,13 @@ import {
 
 import { ApplicationFilterKey } from "Constants";
 
-import { getApplications } from "api/rest";
+import { ApplicationSortBy, getApplications } from "api/rest";
 import { Application, ApplicationPage } from "api/models";
 import { applicationPageMapper, fetchAllPages } from "api/apiUtils";
+import { getAxiosErrorMessage } from "utils/utils";
 
 import { Landscape } from "./components/landscape";
-import { getAxiosErrorMessage } from "utils/utils";
+import { AdoptionCandidateTable } from "./components/adoption-candidate-table";
 
 export const Reports: React.FC = () => {
   // i18
@@ -64,7 +65,8 @@ export const Reports: React.FC = () => {
           businessService: serviceVal?.map((f) => f.key),
           tag: tagVal?.map((f) => f.key),
         },
-        { page: page, perPage: 100 }
+        { page: page, perPage: 100 },
+        { field: ApplicationSortBy.NAME }
       );
     };
 
@@ -142,10 +144,7 @@ export const Reports: React.FC = () => {
                 </CardHeader>
                 <CardBody>
                   <Bullseye>
-                    <Landscape
-                      applications={applications || []}
-                      isFetching={isFetchingApplications}
-                    />
+                    <Landscape applications={applications || []} />
                   </Bullseye>
                 </CardBody>
               </Card>
@@ -157,7 +156,9 @@ export const Reports: React.FC = () => {
                     <Text component="h3">Adoption candidate distribution</Text>
                   </TextContent>
                 </CardHeader>
-                <CardBody></CardBody>
+                <CardBody>
+                  <AdoptionCandidateTable applications={applications || []} />
+                </CardBody>
               </Card>
             </StackItem>
           </Stack>
