@@ -26,7 +26,7 @@ module.exports = function (app) {
   app.use(
     "/api/pathfinder",
     createProxyMiddleware({
-      target: "http://localhost:8080",
+      target: "http://localhost:8083",
       changeOrigin: true,
       pathRewrite: {
         "^/api/pathfinder": "/pathfinder",
