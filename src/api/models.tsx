@@ -135,6 +135,13 @@ export interface AssessmentRisk {
   risk: Risk;
 }
 
+export interface AssessmentQuestionRisk {
+  category: string;
+  question: string;
+  answer: string;
+  applications: number[];
+}
+
 // Pagination
 
 export interface BusinessServicePage {

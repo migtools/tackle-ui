@@ -46,7 +46,6 @@ export const ProposedActionLabel: React.FunctionComponent<IProposedActionLabelPr
 }: IProposedActionLabelProps) => {
   const data = actionsList[action];
 
-  console.log(action, data);
   return (
     <Label color={data ? data.color : "grey"}>
       {data ? data.label : action}

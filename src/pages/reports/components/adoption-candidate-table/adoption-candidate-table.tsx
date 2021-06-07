@@ -1,26 +1,61 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useSelectionState } from "@konveyor/lib-ui";
 
 import {
   cellWidth,
   ICell,
+  IExtraData,
   IRow,
+  IRowData,
   sortable,
   TableText,
   TableVariant,
 } from "@patternfly/react-table";
+import {
+  Dropdown,
+  DropdownToggle,
+  DropdownToggleCheckbox,
+  Label,
+  ToolbarItem,
+} from "@patternfly/react-core";
 
 import { useTableControls, useTableFilter } from "shared/hooks";
-import {
-  AppTableWithControls,
-  ConditionalRender,
-  NoDataEmptyState,
-  ProposedActionLabel,
-} from "shared/components";
+import { AppTableWithControls, ProposedActionLabel } from "shared/components";
 
-import { Application } from "api/models";
 import { DEFAULT_EFFORTS, Effort, ProposedAction } from "Constants";
-import { Label } from "@patternfly/react-core";
+import { Application } from "api/models";
+import { ApplicationSelectionContext } from "pages/reports/application-selection-context";
+
+const compareToByColumn = (
+  a: Application,
+  b: Application,
+  columnIndex?: number
+) => {
+  switch (columnIndex) {
+    case 1: // AppName
+      return a.name.localeCompare(b.name);
+    case 2: // Criticality
+      return (
+        (a.review?.businessCriticality || 0) -
+        (b.review?.businessCriticality || 0)
+      );
+    case 3: // Priority
+      return (a.review?.workPriority || 0) - (b.review?.workPriority || 0);
+    case 4: // Effort
+      return (
+        (DEFAULT_EFFORTS.get(a.review?.effortEstimate as Effort)?.factor || 0) -
+        (DEFAULT_EFFORTS.get(b.review?.effortEstimate as Effort)?.factor || 0)
+      );
+    default:
+      return 0;
+  }
+};
+
+const ENTITY_FIELD = "entity";
+const getRow = (rowData: IRowData): Application => {
+  return rowData[ENTITY_FIELD];
+};
 
 export interface IAdoptionCandidateTableProps {
   applications: Application[];
@@ -29,44 +64,14 @@ export interface IAdoptionCandidateTableProps {
 export const AdoptionCandidateTable: React.FC<IAdoptionCandidateTableProps> = ({
   applications,
 }) => {
+  const { setApplications: setCtxSelectedApplications } = useContext(
+    ApplicationSelectionContext
+  );
+
   // i18
   const { t } = useTranslation();
 
-  // Filters
-  // const {
-  //   filters: filtersValue,
-  //   isPresent: areFiltersPresent,
-  //   setFilter,
-  //   clearAllFilters,
-  // } = useToolbarFilter<ToolbarChip>();
-
   // Table
-  const compareToByColumn = (
-    a: Application,
-    b: Application,
-    columnIndex?: number
-  ) => {
-    switch (columnIndex) {
-      case 0: // AppName
-        return a.name.localeCompare(b.name);
-      case 1: // Criticality
-        return (
-          (a.review?.businessCriticality || 0) -
-          (b.review?.businessCriticality || 0)
-        );
-      case 2: // Priority
-        return (a.review?.workPriority || 0) - (b.review?.workPriority || 0);
-      case 4: // Effort
-        return (
-          (DEFAULT_EFFORTS.get(a.review?.effortEstimate as Effort)?.factor ||
-            0) -
-          (DEFAULT_EFFORTS.get(b.review?.effortEstimate as Effort)?.factor || 0)
-        );
-      default:
-        return 0;
-    }
-  };
-
   const {
     paginationQuery: pagination,
     sortByQuery: sortBy,
@@ -77,17 +82,32 @@ export const AdoptionCandidateTable: React.FC<IAdoptionCandidateTableProps> = ({
     sortByQuery: { direction: "asc", index: 0 },
   });
 
-  const { pageItems } = useTableFilter<Application>({
+  const {
+    selectedItems: selectedRows,
+    areAllSelected: areAllRowsSelected,
+    isItemSelected: isRowSelected,
+    toggleItemSelected: toggleRowSelected,
+    selectAll: selectAllRows,
+    setSelectedItems: setSelectedRows,
+  } = useSelectionState<Application>({
+    items: applications,
+    initialSelected: applications,
+    isEqual: (a, b) => a.id === b.id,
+  });
+
+  const { pageItems: currentPageItems } = useTableFilter<Application>({
     items: applications,
     sortBy,
     compareToByColumn,
     pagination,
-    filterItem: (item) => {
-      let result: boolean = true;
-
-      return result;
-    },
+    filterItem: () => true,
   });
+
+  // Context selection
+  // useEffect(() => {
+  //   console.log(selectedRows);
+  //   setCtxSelectedApplications(selectedRows);
+  // }, [selectedRows]);
 
   // Table
   const columns: ICell[] = [
@@ -107,11 +127,6 @@ export const AdoptionCandidateTable: React.FC<IAdoptionCandidateTableProps> = ({
       cellFormatters: [],
     },
     {
-      title: t("terms.confidence"),
-      transforms: [cellWidth(15)],
-      cellFormatters: [],
-    },
-    {
       title: t("terms.effort"),
       transforms: [sortable, cellWidth(15)],
       cellFormatters: [],
@@ -124,8 +139,12 @@ export const AdoptionCandidateTable: React.FC<IAdoptionCandidateTableProps> = ({
   ];
 
   const rows: IRow[] = [];
-  pageItems.forEach((item) => {
+  currentPageItems.forEach((item) => {
+    const isSelected = isRowSelected(item);
+
     rows.push({
+      [ENTITY_FIELD]: item,
+      selected: isSelected,
       cells: [
         {
           title: <TableText wrapModifier="truncate">{item.name}</TableText>,
@@ -145,15 +164,12 @@ export const AdoptionCandidateTable: React.FC<IAdoptionCandidateTableProps> = ({
           ),
         },
         {
-          title: "",
-        },
-        {
           title: (
             <TableText wrapModifier="truncate">
-              {item.review?.effortEstimate
-                ? DEFAULT_EFFORTS.get(item.review.effortEstimate as Effort)
-                    ?.label || item.review.effortEstimate
-                : ""}
+              {item.review &&
+                (DEFAULT_EFFORTS.get(item.review.effortEstimate as Effort)
+                  ?.label ||
+                  item.review.effortEstimate)}
             </TableText>
           ),
         },
@@ -165,7 +181,7 @@ export const AdoptionCandidateTable: React.FC<IAdoptionCandidateTableProps> = ({
                   action={item.review.proposedAction as ProposedAction}
                 />
               ) : (
-                <Label>Not reviewed</Label>
+                <Label>{t("terms.notReviewed")}</Label>
               )}
             </TableText>
           ),
@@ -174,38 +190,69 @@ export const AdoptionCandidateTable: React.FC<IAdoptionCandidateTableProps> = ({
     });
   });
 
+  // Row actions
+  const selectRow = (
+    event: React.FormEvent<HTMLInputElement>,
+    isSelected: boolean,
+    rowIndex: number,
+    rowData: IRowData,
+    extraData: IExtraData
+  ) => {
+    if (rowIndex === -1) {
+      isSelected ? selectAllRows() : setSelectedRows([]);
+    } else {
+      const row = getRow(rowData);
+      toggleRowSelected(row);
+    }
+  };
+
   return (
-    <ConditionalRender
-      when={applications.length === 0}
-      then={<NoDataEmptyState title="No applications selected" />}
-    >
-      <AppTableWithControls
-        variant={TableVariant.compact}
-        count={applications.length}
-        pagination={pagination}
-        sortBy={sortBy}
-        onPaginationChange={onPaginationChange}
-        onSort={onSort}
-        cells={columns}
-        rows={rows}
-        isLoading={false}
-        filtersApplied={false}
-        // toolbarClearAllFilters={clearAllFilters}
-        // toolbarToggle={
-        //   <AppTableToolbarToggleGroup
-        //     categories={filters}
-        //     chips={filtersValue}
-        //     onChange={(key, value) => {
-        //       setFilter(key, value as ToolbarChip[]);
-        //     }}
-        //   >
-        //     <SelectRiskFilter
-        //       value={filtersValue.get(FilterKey.RISK)}
-        //       onChange={(values) => setFilter(FilterKey.RISK, values)}
-        //     />
-        //   </AppTableToolbarToggleGroup>
-        // }
-      />
-    </ConditionalRender>
+    <AppTableWithControls
+      variant={TableVariant.compact}
+      count={applications.length}
+      pagination={pagination}
+      sortBy={sortBy}
+      onPaginationChange={onPaginationChange}
+      onSort={onSort}
+      cells={columns}
+      rows={rows}
+      onSelect={selectRow}
+      canSelectAll={true}
+      isLoading={false}
+      filtersApplied={false}
+      toolbarToggle={
+        <>
+          <ToolbarItem variant="bulk-select">
+            <Dropdown
+              toggle={
+                <DropdownToggle
+                  splitButtonItems={[
+                    <DropdownToggleCheckbox
+                      id="toolbar-bulk-select"
+                      key="toolbar-bulk-select"
+                      aria-label="Select all"
+                      isDisabled
+                      isChecked={
+                        areAllRowsSelected
+                          ? true
+                          : selectedRows.length === 0
+                          ? false
+                          : null
+                      }
+                      // onChange={(checked) => {}}
+                    >
+                      {selectedRows.length} selected
+                    </DropdownToggleCheckbox>,
+                  ]}
+                  onToggle={() => {}}
+                />
+              }
+              isOpen={false}
+              dropdownItems={[]}
+            />
+          </ToolbarItem>
+        </>
+      }
+    />
   );
 };

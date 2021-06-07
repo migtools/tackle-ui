@@ -6,59 +6,66 @@ import { global_palette_blue_300 as defaultColor } from "@patternfly/react-token
 import { ConditionalRender, NoDataEmptyState } from "shared/components";
 
 import { DEFAULT_RISK_LABELS } from "Constants";
-import { Application } from "api/models";
-import { getLandscape } from "api/rest";
+import { Application, AssessmentRisk } from "api/models";
+import { getAssessmentLandscape } from "api/rest";
 
 import { Donut } from "./donut";
 
-export interface ILandscapeProps {
-  applications: Application[];
-}
-
-interface LandscapeData {
+interface ILandscapeData {
   low: number;
   medium: number;
   high: number;
   unassesed: number;
 }
 
-const defaultLandscape: LandscapeData = {
+const defaultLandscape: ILandscapeData = {
   low: 0,
   medium: 0,
   high: 0,
   unassesed: 0,
 };
 
+const extractLandscapeData = (
+  totalApps: number,
+  data: AssessmentRisk[]
+): ILandscapeData => {
+  let low = 0;
+  let medium = 0;
+  let high = 0;
+  let unassesed = 0;
+
+  data.forEach((elem) => {
+    switch (elem.risk) {
+      case "GREEN":
+        low++;
+        break;
+      case "AMBER":
+        medium++;
+        break;
+      case "RED":
+        high++;
+        break;
+    }
+  });
+
+  unassesed = totalApps - low - medium - high;
+  return { low, medium, high, unassesed };
+};
+
+export interface ILandscapeProps {
+  applications: Application[];
+}
+
 export const Landscape: React.FC<ILandscapeProps> = ({ applications }) => {
-  const [landscapeData, setLandscapeData] = useState<LandscapeData>(
+  const [landscapeData, setLandscapeData] = useState<ILandscapeData>(
     defaultLandscape
   );
 
   useEffect(() => {
     if (applications.length > 0) {
-      getLandscape(applications.map((f) => f.id!)).then(({ data }) => {
-        let low = 0;
-        let medium = 0;
-        let high = 0;
-        let unassesed = 0;
-
-        data.forEach((elem) => {
-          switch (elem.risk) {
-            case "GREEN":
-              low++;
-              break;
-            case "AMBER":
-              medium++;
-              break;
-            case "RED":
-              high++;
-              break;
-          }
-        });
-
-        unassesed = applications.length - low - medium - high;
-        setLandscapeData({ low, medium, high, unassesed });
-      });
+      getAssessmentLandscape(applications.map((f) => f.id!)).then(({ data }) =>
+        setLandscapeData(extractLandscapeData(applications.length, data))
+      );
     } else {
       setLandscapeData(defaultLandscape);
     }
@@ -67,7 +74,7 @@ export const Landscape: React.FC<ILandscapeProps> = ({ applications }) => {
   return (
     <ConditionalRender
       when={applications.length === 0}
-      then={<NoDataEmptyState title="No applications selected" />}
+      then={<NoDataEmptyState title="No data available" />}
     >
       <Split hasGutter>
         <SplitItem>
@@ -108,8 +115,8 @@ export const Landscape: React.FC<ILandscapeProps> = ({ applications }) => {
             color={
               DEFAULT_RISK_LABELS.get("UNKNOWN")?.color || defaultColor.value
             }
-            riskLabel="Unasssed"
-            riskDescription="Not assesed yet"
+            riskLabel="Unassessed"
+            riskDescription="Not yet assessed"
           />
         </SplitItem>
       </Split>

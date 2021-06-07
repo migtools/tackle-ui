@@ -98,7 +98,7 @@ export const useFetch = <T>({
         dispatch(fetchSuccess(data));
       });
     } else {
-      throw new Error("No onFetch nor onFetchPromise provided");
+      return;
     }
 
     promise.catch((error) => {

@@ -5,7 +5,7 @@ export const StateNoData: React.FC = () => {
   return (
     <NoDataEmptyState
       title="No data available"
-      description="Create a new resource to search using this table."
+      description="Not data available to be shown here."
     />
   );
 };

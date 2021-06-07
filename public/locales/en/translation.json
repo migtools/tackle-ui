@@ -84,6 +84,7 @@
     "terms": {
         "answer": "Answer",
         "application": "Application",
+        "application(s)": "Application(s)",
         "applicationName": "Application name",
         "applications": "Applications",
         "assessment": "Assessment",
@@ -94,7 +95,6 @@
         "color": "Color",
         "comments": "Comments",
         "completed": "Completed",
-        "confidence": "Confidence",
         "controls": "Controls",
         "criticality": "Criticality",
         "decision": "Decision",
@@ -116,6 +116,7 @@
         "name": "Name",
         "northboundDependencies": "Northbound dependencies",
         "notAvailable": "Not available",
+        "notReviewed": "Not reviewed",
         "notStarted": "Not started",
         "notYetReviewed": "Not yet reviewed",
         "owner": "Owner",

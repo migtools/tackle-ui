@@ -84,6 +84,7 @@
     "terms": {
         "answer": "Respuesta",
         "application": "Applicación",
+        "application(s)": "Aplicacion(es)",
         "applicationName": "Nombre de aplicación",
         "applications": "Applicaciones",
         "assessment": "Evaluación",
@@ -94,7 +95,6 @@
         "color": "Color",
         "comments": "Comentarios",
         "completed": "Completado",
-        "confidence": "Confianza",
         "controls": "Controles",
         "criticality": "Criticidad",
         "decision": "Decisión",
@@ -116,6 +116,7 @@
         "name": "Nombre",
         "northboundDependencies": "Dependencias del norte",
         "notAvailable": "No disponible",
+        "notReviewed": "No revisado",
         "notStarted": "No empezado",
         "notYetReviewed": "No revisado todavía",
         "owner": "Propietario",
