@@ -83,7 +83,7 @@ export const Landscape: React.FC<ILandscapeProps> = () => {
         <SplitItem>
           <Donut
             value={landscapeData.low}
-            total={applications.length - landscapeData.low}
+            total={applications.length}
             color={
               DEFAULT_RISK_LABELS.get("GREEN")?.color || defaultColor.value
             }

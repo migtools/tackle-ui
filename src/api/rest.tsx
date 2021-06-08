@@ -593,9 +593,5 @@ export const getAssessmentLandscape = (
 export const getAssessmentIdentifiedRisks = (
   applicationIds: number[]
 ): AxiosPromise<AssessmentQuestionRisk[]> => {
-  return APIClient.get(
-    `${ASSESSMENTS}/risks?${applicationIds
-      .map((f) => `applicationId=${f}`)
-      .join("&")}`
-  );
+  return APIClient.post(`${ASSESSMENTS}/risks`, applicationIds);
 };

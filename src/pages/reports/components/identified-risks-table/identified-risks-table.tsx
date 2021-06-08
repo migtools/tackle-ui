@@ -1,6 +1,7 @@
 import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
+import { ToolbarChip } from "@patternfly/react-core";
 import {
   cellWidth,
   ICell,
@@ -10,13 +11,27 @@ import {
   TableVariant,
 } from "@patternfly/react-table";
 
-import { useFetch, useTableControls, useTableFilter } from "shared/hooks";
-import { AppTableWithControls } from "shared/components";
+import {
+  useApplicationToolbarFilter,
+  useFetch,
+  useTableControls,
+  useTableFilter,
+} from "shared/hooks";
+import {
+  AppTableToolbarToggleGroup,
+  AppTableWithControls,
+  InputTextFilter,
+  ToolbarSearchFilter,
+} from "shared/components";
 
 import { Application, AssessmentQuestionRisk } from "api/models";
 import { getAssessmentIdentifiedRisks } from "api/rest";
 
-import { ApplicationSelectionContext } from "pages/reports/application-selection-context";
+import { ApplicationSelectionContext } from "../../application-selection-context";
+
+export enum FilterKey {
+  APPLICATION_NAME = "application_name",
+}
 
 export interface ITableRowData {
   category: string;
@@ -25,23 +40,6 @@ export interface ITableRowData {
   applicationId: number;
   application?: Application;
 }
-
-const compareToByColumn = (
-  a: ITableRowData,
-  b: ITableRowData,
-  columnIndex?: number
-) => {
-  switch (columnIndex) {
-    case 3: // Application name
-      return (a.application?.name || a.applicationId.toString()).localeCompare(
-        b.application?.name || b.applicationId.toString()
-      );
-    default:
-      return 0;
-  }
-};
-
-const filterItem = (value: ITableRowData) => true;
 
 export interface IIdentifiedRisksTableProps {}
 
@@ -53,6 +51,15 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = () => 
   const { selectedItems: applications } = useContext(
     ApplicationSelectionContext
   );
+
+  // Toolbar filters data
+  const {
+    filters: filtersValue,
+    isPresent: areFiltersPresent,
+    addFilter,
+    setFilter,
+    clearAllFilters,
+  } = useApplicationToolbarFilter();
 
   // Table data
   const fetchTableData = useCallback(() => {
@@ -75,10 +82,6 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = () => 
     onFetchPromise: fetchTableData,
   });
 
-  useEffect(() => {
-    refreshTable();
-  }, [applications, refreshTable]);
-
   const tableData = useMemo(() => {
     return assessmentQuestionRisks
       ? assessmentQuestionRisks
@@ -98,6 +101,10 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = () => 
       : [];
   }, [assessmentQuestionRisks, applications]);
 
+  useEffect(() => {
+    refreshTable();
+  }, [applications, refreshTable]);
+
   // Table pagination
   const {
     paginationQuery: pagination,
@@ -108,6 +115,38 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = () => 
     paginationQuery: { page: 1, perPage: 50 },
   });
 
+  const compareToByColumn = useCallback(
+    (a: ITableRowData, b: ITableRowData, columnIndex?: number) => {
+      switch (columnIndex) {
+        case 3: // Application name
+          return (
+            a.application?.name || a.applicationId.toString()
+          ).localeCompare(b.application?.name || b.applicationId.toString());
+        default:
+          return 0;
+      }
+    },
+    []
+  );
+
+  const filterItem = useCallback(
+    (item: ITableRowData) => {
+      let result: boolean = true;
+
+      const appNameAppliedFilters =
+        filtersValue.get(FilterKey.APPLICATION_NAME)?.map((f) => f.key) || [];
+      if (appNameAppliedFilters.length > 0) {
+        const itemAppName = item.application ? item.application.name : "";
+        result = appNameAppliedFilters.some(
+          (f) => itemAppName.toLowerCase().indexOf(f.toLowerCase()) !== -1
+        );
+      }
+
+      return result;
+    },
+    [filtersValue]
+  );
+
   const { pageItems, filteredItems } = useTableFilter<ITableRowData>({
     items: tableData,
     sortBy,
@@ -115,6 +154,24 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = () => 
     pagination,
     filterItem,
   });
+
+  // Filter components
+  const filterOptions = [
+    {
+      key: FilterKey.APPLICATION_NAME,
+      name: t("terms.name"),
+      input: (
+        <InputTextFilter
+          onApplyFilter={(filterText) => {
+            addFilter(FilterKey.APPLICATION_NAME, {
+              key: filterText,
+              node: filterText,
+            });
+          }}
+        />
+      ),
+    },
+  ];
 
   // Table
   const columns: ICell[] = [
@@ -176,7 +233,22 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = () => 
       rows={rows}
       isLoading={isFetching}
       fetchError={fetchError}
-      filtersApplied={false}
+      filtersApplied={areFiltersPresent}
+      toolbarClearAllFilters={clearAllFilters}
+      toolbarToggle={
+        <AppTableToolbarToggleGroup
+          categories={filterOptions.map((f) => ({
+            key: f.key,
+            name: f.name,
+          }))}
+          chips={filtersValue}
+          onChange={(key, value) => {
+            setFilter(key as FilterKey, value as ToolbarChip[]);
+          }}
+        >
+          <ToolbarSearchFilter filters={filterOptions} />
+        </AppTableToolbarToggleGroup>
+      }
     />
   );
 };
