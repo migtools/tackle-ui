@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -10,52 +10,95 @@ import {
   TableVariant,
 } from "@patternfly/react-table";
 
-import { useTableControls, useTableFilter } from "shared/hooks";
+import { useFetch, useTableControls, useTableFilter } from "shared/hooks";
 import { AppTableWithControls } from "shared/components";
 
 import { Application, AssessmentQuestionRisk } from "api/models";
 import { getAssessmentIdentifiedRisks } from "api/rest";
 
-export interface IIdentifiedRisksTableProps {
-  applications: Application[];
+import { ApplicationSelectionContext } from "pages/reports/application-selection-context";
+
+export interface ITableRowData {
+  category: string;
+  question: string;
+  answer: string;
+  applicationId: number;
+  application?: Application;
 }
 
-export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = ({
-  applications,
-}) => {
+const compareToByColumn = (
+  a: ITableRowData,
+  b: ITableRowData,
+  columnIndex?: number
+) => {
+  switch (columnIndex) {
+    case 3: // Application name
+      return (a.application?.name || a.applicationId.toString()).localeCompare(
+        b.application?.name || b.applicationId.toString()
+      );
+    default:
+      return 0;
+  }
+};
+
+const filterItem = (value: ITableRowData) => true;
+
+export interface IIdentifiedRisksTableProps {}
+
+export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = () => {
   // i18
   const { t } = useTranslation();
 
-  //
-  const [tableData, setTableData] = useState<AssessmentQuestionRisk[]>([]);
+  // Context
+  const { selectedItems: applications } = useContext(
+    ApplicationSelectionContext
+  );
 
-  useEffect(() => {
+  // Table data
+  const fetchTableData = useCallback(() => {
     if (applications.length > 0) {
-      getAssessmentIdentifiedRisks(
-        applications.map((f) => f.id!)
-      ).then(({ data }) => setTableData(data));
+      return getAssessmentIdentifiedRisks(applications.map((f) => f.id!)).then(
+        ({ data }) => data
+      );
     } else {
-      setTableData([]);
+      return Promise.resolve([]);
     }
   }, [applications]);
 
-  // Filters
-  // const {
-  //   filters: filtersValue,
-  //   isPresent: areFiltersPresent,
-  //   setFilter,
-  //   clearAllFilters,
-  // } = useToolbarFilter<ToolbarChip>();
+  const {
+    data: assessmentQuestionRisks,
+    isFetching,
+    fetchError,
+    requestFetch: refreshTable,
+  } = useFetch<AssessmentQuestionRisk[]>({
+    defaultIsFetching: true,
+    onFetchPromise: fetchTableData,
+  });
 
-  // Table
-  const compareToByColumn = (
-    a: AssessmentQuestionRisk,
-    b: AssessmentQuestionRisk,
-    columnIndex?: number
-  ) => {
-    return 0;
-  };
+  useEffect(() => {
+    refreshTable();
+  }, [applications, refreshTable]);
 
+  const tableData = useMemo(() => {
+    return assessmentQuestionRisks
+      ? assessmentQuestionRisks
+          .map((risk) => {
+            return risk.applications.map((applicationId) => {
+              const result: ITableRowData = {
+                category: risk.category,
+                question: risk.question,
+                answer: risk.answer,
+                applicationId: applicationId,
+                application: applications.find((f) => f.id === applicationId),
+              };
+              return result;
+            });
+          })
+          .flatMap((f) => f)
+      : [];
+  }, [assessmentQuestionRisks, applications]);
+
+  // Table pagination
   const {
     paginationQuery: pagination,
     sortByQuery: sortBy,
@@ -65,33 +108,29 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = ({
     paginationQuery: { page: 1, perPage: 50 },
   });
 
-  const {
-    filteredItems: currentPageItems,
-  } = useTableFilter<AssessmentQuestionRisk>({
+  const { pageItems, filteredItems } = useTableFilter<ITableRowData>({
     items: tableData,
     sortBy,
     compareToByColumn,
     pagination,
-    filterItem: (item) => {
-      return true;
-    },
+    filterItem,
   });
 
   // Table
   const columns: ICell[] = [
     {
       title: t("terms.category"),
-      transforms: [sortable, cellWidth(15)],
+      transforms: [cellWidth(15)],
       cellFormatters: [],
     },
     {
       title: t("terms.question"),
-      transforms: [sortable, cellWidth(35)],
+      transforms: [cellWidth(35)],
       cellFormatters: [],
     },
     {
       title: t("terms.answer"),
-      transforms: [sortable, cellWidth(35)],
+      transforms: [cellWidth(35)],
       cellFormatters: [],
     },
     {
@@ -102,7 +141,7 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = ({
   ];
 
   const rows: IRow[] = [];
-  currentPageItems.forEach((item) => {
+  pageItems.forEach((item) => {
     rows.push({
       cells: [
         {
@@ -117,7 +156,7 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = ({
         {
           title: (
             <TableText wrapModifier="truncate">
-              {item.applications.join(", ")}
+              {item.application ? item.application.name : item.applicationId}
             </TableText>
           ),
         },
@@ -128,30 +167,16 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = ({
   return (
     <AppTableWithControls
       variant={TableVariant.compact}
-      count={applications.length}
+      count={filteredItems.length}
       pagination={pagination}
       sortBy={sortBy}
       onPaginationChange={onPaginationChange}
       onSort={onSort}
       cells={columns}
       rows={rows}
-      isLoading={false}
+      isLoading={isFetching}
+      fetchError={fetchError}
       filtersApplied={false}
-      // toolbarClearAllFilters={clearAllFilters}
-      // toolbarToggle={
-      //   <AppTableToolbarToggleGroup
-      //     categories={filters}
-      //     chips={filtersValue}
-      //     onChange={(key, value) => {
-      //       setFilter(key, value as ToolbarChip[]);
-      //     }}
-      //   >
-      //     <SelectRiskFilter
-      //       value={filtersValue.get(FilterKey.RISK)}
-      //       onChange={(values) => setFilter(FilterKey.RISK, values)}
-      //     />
-      //   </AppTableToolbarToggleGroup>
-      // }
     />
   );
 };

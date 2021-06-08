@@ -1,5 +1,6 @@
 import { SortByDirection } from "@patternfly/react-table";
 import { PageQuery, SortByQuery } from "api/models";
+import { useMemo } from "react";
 
 // Hook
 
@@ -25,35 +26,39 @@ export const useTableFilter = <T>({
   filterItem,
   compareToByColumn,
 }: HookArgs<T>): HookState<T> => {
-  const allItems = [...(items || [])];
+  const state: HookState<T> = useMemo(() => {
+    const allItems = [...(items || [])];
 
-  // Filter
-  const filteredItems = allItems.filter(filterItem);
+    // Filter
+    const filteredItems = allItems.filter(filterItem);
 
-  //  Sort
-  let orderChanged = false;
+    //  Sort
+    let orderChanged = false;
 
-  let sortedItems: T[];
-  sortedItems = [...filteredItems].sort((a, b) => {
-    const comparisonResult = compareToByColumn(a, b, sortBy?.index);
-    if (comparisonResult !== 0) {
-      orderChanged = true;
+    let sortedItems: T[];
+    sortedItems = [...filteredItems].sort((a, b) => {
+      const comparisonResult = compareToByColumn(a, b, sortBy?.index);
+      if (comparisonResult !== 0) {
+        orderChanged = true;
+      }
+      return comparisonResult;
+    });
+
+    if (orderChanged && sortBy?.direction === SortByDirection.desc) {
+      sortedItems = sortedItems.reverse();
     }
-    return comparisonResult;
-  });
 
-  if (orderChanged && sortBy?.direction === SortByDirection.desc) {
-    sortedItems = sortedItems.reverse();
-  }
+    // Paginate
+    const pageItems = sortedItems.slice(
+      (pagination.page - 1) * pagination.perPage,
+      pagination.page * pagination.perPage
+    );
 
-  // Paginate
-  const pageItems = sortedItems.slice(
-    (pagination.page - 1) * pagination.perPage,
-    pagination.page * pagination.perPage
-  );
+    return {
+      pageItems,
+      filteredItems,
+    };
+  }, [items, pagination, sortBy, compareToByColumn, filterItem]);
 
-  return {
-    pageItems,
-    filteredItems,
-  };
+  return state;
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { Split, SplitItem } from "@patternfly/react-core";
 import { global_palette_blue_300 as defaultColor } from "@patternfly/react-tokens";
@@ -6,10 +6,11 @@ import { global_palette_blue_300 as defaultColor } from "@patternfly/react-token
 import { ConditionalRender, NoDataEmptyState } from "shared/components";
 
 import { DEFAULT_RISK_LABELS } from "Constants";
-import { Application, AssessmentRisk } from "api/models";
+import { AssessmentRisk } from "api/models";
 import { getAssessmentLandscape } from "api/rest";
 
 import { Donut } from "./donut";
+import { ApplicationSelectionContext } from "pages/reports/application-selection-context";
 
 interface ILandscapeData {
   low: number;
@@ -52,11 +53,13 @@ const extractLandscapeData = (
   return { low, medium, high, unassesed };
 };
 
-export interface ILandscapeProps {
-  applications: Application[];
-}
+export interface ILandscapeProps {}
 
-export const Landscape: React.FC<ILandscapeProps> = ({ applications }) => {
+export const Landscape: React.FC<ILandscapeProps> = () => {
+  // Context
+  const { allItems: applications } = useContext(ApplicationSelectionContext);
+
+  // Landscape
   const [landscapeData, setLandscapeData] = useState<ILandscapeData>(
     defaultLandscape
   );
@@ -80,7 +83,7 @@ export const Landscape: React.FC<ILandscapeProps> = ({ applications }) => {
         <SplitItem>
           <Donut
             value={landscapeData.low}
-            total={applications.length}
+            total={applications.length - landscapeData.low}
             color={
               DEFAULT_RISK_LABELS.get("GREEN")?.color || defaultColor.value
             }

@@ -1,6 +1,5 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { useSelectionState } from "@konveyor/lib-ui";
 
 import {
   cellWidth,
@@ -52,24 +51,29 @@ const compareToByColumn = (
   }
 };
 
+const filterItem = () => true;
+
 const ENTITY_FIELD = "entity";
 const getRow = (rowData: IRowData): Application => {
   return rowData[ENTITY_FIELD];
 };
 
-export interface IAdoptionCandidateTableProps {
-  applications: Application[];
-}
+export interface IAdoptionCandidateTableProps {}
 
-export const AdoptionCandidateTable: React.FC<IAdoptionCandidateTableProps> = ({
-  applications,
-}) => {
-  const { setApplications: setCtxSelectedApplications } = useContext(
-    ApplicationSelectionContext
-  );
-
+export const AdoptionCandidateTable: React.FC<IAdoptionCandidateTableProps> = () => {
   // i18
   const { t } = useTranslation();
+
+  // Context
+  const {
+    allItems: allRows,
+    selectedItems: selectedRows,
+    areAllSelected: areAllRowsSelected,
+    isItemSelected: isRowSelected,
+    toggleItemSelected: toggleRowSelected,
+    selectAll: selectAllRows,
+    setSelectedItems: setSelectedRows,
+  } = useContext(ApplicationSelectionContext);
 
   // Table
   const {
@@ -82,32 +86,13 @@ export const AdoptionCandidateTable: React.FC<IAdoptionCandidateTableProps> = ({
     sortByQuery: { direction: "asc", index: 0 },
   });
 
-  const {
-    selectedItems: selectedRows,
-    areAllSelected: areAllRowsSelected,
-    isItemSelected: isRowSelected,
-    toggleItemSelected: toggleRowSelected,
-    selectAll: selectAllRows,
-    setSelectedItems: setSelectedRows,
-  } = useSelectionState<Application>({
-    items: applications,
-    initialSelected: applications,
-    isEqual: (a, b) => a.id === b.id,
-  });
-
-  const { pageItems: currentPageItems } = useTableFilter<Application>({
-    items: applications,
+  const { pageItems } = useTableFilter<Application>({
+    items: allRows,
     sortBy,
     compareToByColumn,
     pagination,
-    filterItem: () => true,
+    filterItem: filterItem,
   });
-
-  // Context selection
-  // useEffect(() => {
-  //   console.log(selectedRows);
-  //   setCtxSelectedApplications(selectedRows);
-  // }, [selectedRows]);
 
   // Table
   const columns: ICell[] = [
@@ -139,7 +124,7 @@ export const AdoptionCandidateTable: React.FC<IAdoptionCandidateTableProps> = ({
   ];
 
   const rows: IRow[] = [];
-  currentPageItems.forEach((item) => {
+  pageItems.forEach((item) => {
     const isSelected = isRowSelected(item);
 
     rows.push({
@@ -209,7 +194,7 @@ export const AdoptionCandidateTable: React.FC<IAdoptionCandidateTableProps> = ({
   return (
     <AppTableWithControls
       variant={TableVariant.compact}
-      count={applications.length}
+      count={allRows.length}
       pagination={pagination}
       sortBy={sortBy}
       onPaginationChange={onPaginationChange}

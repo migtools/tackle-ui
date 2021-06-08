@@ -12,6 +12,9 @@ import {
   CardTitle,
   PageSection,
   PageSectionVariants,
+  Popover,
+  Split,
+  SplitItem,
   Stack,
   StackItem,
   Text,
@@ -23,6 +26,7 @@ import {
   ToolbarItem,
   ToolbarItemVariant,
 } from "@patternfly/react-core";
+import { HelpIcon } from "@patternfly/react-icons";
 
 import { useApplicationToolbarFilter, useFetch } from "shared/hooks";
 import {
@@ -141,7 +145,9 @@ export const Reports: React.FC = () => {
           when={isFetchingApplications}
           then={<AppPlaceholder />}
         >
-          <ApplicationSelectionContextProvider>
+          <ApplicationSelectionContextProvider
+            applications={applications || []}
+          >
             <Stack hasGutter>
               <StackItem>
                 <Card>
@@ -152,7 +158,7 @@ export const Reports: React.FC = () => {
                   </CardHeader>
                   <CardBody>
                     <Bullseye>
-                      <Landscape applications={applications || []} />
+                      <Landscape />
                     </Bullseye>
                   </CardBody>
                 </Card>
@@ -167,7 +173,7 @@ export const Reports: React.FC = () => {
                     </TextContent>
                   </CardHeader>
                   <CardBody>
-                    <AdoptionCandidateTable applications={applications || []} />
+                    <AdoptionCandidateTable />
                   </CardBody>
                 </Card>
               </StackItem>
@@ -177,18 +183,32 @@ export const Reports: React.FC = () => {
                     onExpand={() => setIsRiskCardOpen((current) => !current)}
                   >
                     <CardTitle>
-                      <TextContent>
-                        <Text component="h3">Identified risks</Text>
-                      </TextContent>
+                      <Split style={{ marginTop: -5 }}>
+                        <SplitItem>
+                          <Bullseye style={{ marginTop: -3 }}>
+                            <TextContent>
+                              <Text component="h3">Identified risks</Text>
+                            </TextContent>
+                          </Bullseye>
+                        </SplitItem>
+                        <SplitItem>
+                          <Popover bodyContent={<div>"hola"</div>}>
+                            <button
+                              type="button"
+                              aria-label="More info"
+                              onClick={(e) => e.preventDefault()}
+                              className="pf-c-button pf-m-plain"
+                            >
+                              <HelpIcon />
+                            </button>
+                          </Popover>
+                        </SplitItem>
+                      </Split>
                     </CardTitle>
                   </CardHeader>
                   <CardExpandableContent>
                     <CardBody>
-                      {isRiskCardOpen && (
-                        <IdentifiedRisksTable
-                          applications={applications || []}
-                        />
-                      )}
+                      {isRiskCardOpen && <IdentifiedRisksTable />}
                     </CardBody>
                   </CardExpandableContent>
                 </Card>

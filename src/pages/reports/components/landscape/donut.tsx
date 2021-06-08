@@ -34,7 +34,7 @@ export const Donut: React.FC<IDonutProps> = ({
             constrainToVisibleArea={true}
             data={[
               { x: riskLabel, y: value },
-              { x: t("terms.applications"), y: total },
+              { x: t("terms.other"), y: total - value },
             ]}
             labels={({ datum }) => `${datum.x}: ${datum.y}`}
             colorScale={[color, black.value]}

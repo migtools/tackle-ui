@@ -587,11 +587,7 @@ export const deleteAssessment = (id: number): AxiosPromise => {
 export const getAssessmentLandscape = (
   applicationIds: number[]
 ): AxiosPromise<AssessmentRisk[]> => {
-  return APIClient.get(
-    `${ASSESSMENTS}/landscape?${applicationIds
-      .map((f) => `applicationId=${f}`)
-      .join("&")}`
-  );
+  return APIClient.post(`${ASSESSMENTS}/assessment-risk`, applicationIds);
 };
 
 export const getAssessmentIdentifiedRisks = (

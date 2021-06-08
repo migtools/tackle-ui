@@ -228,7 +228,9 @@ export const ApplicationList: React.FC = () => {
     fetchError: fetchErrorApplicationAssessment,
     fetchCount: fetchCountApplicationAssessment,
     triggerFetch: fetchApplicationsAssessment,
-  } = useMultipleFetch<number, Assessment | undefined>(searchAppAssessment);
+  } = useMultipleFetch<number, Assessment | undefined>({
+    onFetchPromise: searchAppAssessment,
+  });
 
   useEffect(() => {
     if (applications) {

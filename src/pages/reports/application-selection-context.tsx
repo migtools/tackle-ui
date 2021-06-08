@@ -1,28 +1,47 @@
 import React, { useState } from "react";
+import { useSelectionState, ISelectionState } from "@konveyor/lib-ui";
 import { Application } from "api/models";
 
-interface IApplicationSelectionContext {
-  applications: Application[];
-  setApplications: (applications: Application[]) => void;
+interface IApplicationSelectionContext extends ISelectionState<Application> {
+  allItems: Application[];
 }
 
 const defaultState: IApplicationSelectionContext = {
-  applications: [],
-  setApplications: () => {},
+  allItems: [],
+
+  areAllSelected: false,
+  selectedItems: [],
+  isItemSelected: () => false,
+  selectAll: () => {},
+  selectMultiple: () => {},
+  setSelectedItems: () => {},
+  toggleItemSelected: () => {},
 };
 
 export const ApplicationSelectionContext = React.createContext<IApplicationSelectionContext>(
   defaultState
 );
 
-export const ApplicationSelectionContextProvider: React.FC = ({ children }) => {
-  const [applications, setApplications] = useState<Application[]>([]);
+// Component
+
+export interface IApplicationSelectionContextProviderProps {
+  applications: Application[];
+}
+
+export const ApplicationSelectionContextProvider: React.FC<IApplicationSelectionContextProviderProps> = ({
+  applications,
+  children,
+}) => {
+  const [allItems] = useState(applications);
+  const selectionState = useSelectionState<Application>({
+    items: applications,
+    initialSelected: applications,
+    isEqual: (a, b) => a.id === b.id,
+  });
+
   return (
     <ApplicationSelectionContext.Provider
-      value={{
-        applications,
-        setApplications,
-      }}
+      value={{ allItems, ...selectionState }}
     >
       {children}
     </ApplicationSelectionContext.Provider>
