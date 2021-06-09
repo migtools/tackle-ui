@@ -22,6 +22,7 @@ import {
   Review,
   AssessmentRisk,
   AssessmentQuestionRisk,
+  ApplicationAdoptionPlan,
 } from "./models";
 
 export const CONTROLS_BASE_URL = "controls";
@@ -39,6 +40,7 @@ export const APPLICATIONS = APP_INVENTORY_BASE_URL + "/application";
 export const APPLICATION_DEPENDENCY =
   APP_INVENTORY_BASE_URL + "/applications-dependency";
 export const REVIEW = APP_INVENTORY_BASE_URL + "/review";
+export const REPORT = APP_INVENTORY_BASE_URL + "/report";
 
 export const ASSESSMENTS = PATHFINDER_BASE_URL + "/assessments";
 
@@ -551,6 +553,12 @@ export const updateReview = (obj: Review): AxiosPromise<Review> => {
 
 export const deleteReview = (id: number): AxiosPromise => {
   return APIClient.delete(`${REVIEW}/${id}`);
+};
+
+export const getApplicationAdoptionPlan = (
+  applicationIds: number[]
+): AxiosPromise<ApplicationAdoptionPlan[]> => {
+  return APIClient.post(`${REPORT}/adoptionplan`, applicationIds);
 };
 
 //

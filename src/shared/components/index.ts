@@ -1,5 +1,6 @@
 export { AppPageSection } from "./app-page-section";
 export { AppPlaceholder } from "./app-placeholder";
+export { StateError } from "./app-table";
 export { AppTableActionButtons } from "./app-table-action-buttons";
 export { AppTableToolbarToggleGroup } from "./app-table-toolbar-toggle-group";
 export { AppTableWithControls } from "./app-table-with-controls";

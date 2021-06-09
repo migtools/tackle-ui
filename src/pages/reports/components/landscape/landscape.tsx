@@ -1,16 +1,18 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo } from "react";
 
-import { Split, SplitItem } from "@patternfly/react-core";
+import { Skeleton, Split, SplitItem } from "@patternfly/react-core";
 import { global_palette_blue_300 as defaultColor } from "@patternfly/react-tokens";
 
-import { ConditionalRender, NoDataEmptyState } from "shared/components";
+import { ConditionalRender, StateError } from "shared/components";
+import { useFetch } from "shared/hooks";
 
 import { DEFAULT_RISK_LABELS } from "Constants";
 import { AssessmentRisk } from "api/models";
 import { getAssessmentLandscape } from "api/rest";
 
+import { ApplicationSelectionContext } from "../../application-selection-context";
 import { Donut } from "./donut";
-import { ApplicationSelectionContext } from "pages/reports/application-selection-context";
+import { NoApplicationSelectedEmptyState } from "../no-application-selected-empty-state";
 
 interface ILandscapeData {
   low: number;
@@ -18,13 +20,6 @@ interface ILandscapeData {
   high: number;
   unassesed: number;
 }
-
-const defaultLandscape: ILandscapeData = {
-  low: 0,
-  medium: 0,
-  high: 0,
-  unassesed: 0,
-};
 
 const extractLandscapeData = (
   totalApps: number,
@@ -59,70 +54,104 @@ export const Landscape: React.FC<ILandscapeProps> = () => {
   // Context
   const { allItems: applications } = useContext(ApplicationSelectionContext);
 
-  // Landscape
-  const [landscapeData, setLandscapeData] = useState<ILandscapeData>(
-    defaultLandscape
-  );
-
-  useEffect(() => {
+  // Data
+  const fetchLandscapeData = useCallback(() => {
     if (applications.length > 0) {
-      getAssessmentLandscape(applications.map((f) => f.id!)).then(({ data }) =>
-        setLandscapeData(extractLandscapeData(applications.length, data))
+      return getAssessmentLandscape(applications.map((f) => f.id!)).then(
+        ({ data }) => data
       );
     } else {
-      setLandscapeData(defaultLandscape);
+      return Promise.resolve([]);
     }
   }, [applications]);
 
+  const {
+    data: assessmentRisks,
+    isFetching,
+    fetchError,
+    requestFetch: refreshChart,
+  } = useFetch<AssessmentRisk[]>({
+    defaultIsFetching: true,
+    onFetchPromise: fetchLandscapeData,
+  });
+
+  useEffect(() => {
+    refreshChart();
+  }, [applications, refreshChart]);
+
+  const landscapeData = useMemo(() => {
+    if (applications.length > 0 && assessmentRisks) {
+      return extractLandscapeData(applications.length, assessmentRisks);
+    } else {
+      return undefined;
+    }
+  }, [applications, assessmentRisks]);
+
+  if (fetchError) {
+    return <StateError />;
+  }
+
+  if (!isFetching && !landscapeData) {
+    return <NoApplicationSelectedEmptyState />;
+  }
+
   return (
     <ConditionalRender
-      when={applications.length === 0}
-      then={<NoDataEmptyState title="No data available" />}
+      when={isFetching}
+      then={
+        <div style={{ height: 200, width: 400 }}>
+          <Skeleton height="75%" width="100%" />
+        </div>
+      }
     >
-      <Split hasGutter>
-        <SplitItem>
-          <Donut
-            value={landscapeData.low}
-            total={applications.length}
-            color={
-              DEFAULT_RISK_LABELS.get("GREEN")?.color || defaultColor.value
-            }
-            riskLabel="Low risk"
-            riskDescription="Cloud-native ready"
-          />
-        </SplitItem>
-        <SplitItem>
-          <Donut
-            value={landscapeData.medium}
-            total={applications.length}
-            color={
-              DEFAULT_RISK_LABELS.get("AMBER")?.color || defaultColor.value
-            }
-            riskLabel="Medium risk"
-            riskDescription="Modernizable"
-          />
-        </SplitItem>
-        <SplitItem>
-          <Donut
-            value={landscapeData.high}
-            total={applications.length}
-            color={DEFAULT_RISK_LABELS.get("RED")?.color || defaultColor.value}
-            riskLabel="High risk"
-            riskDescription="Unsuitable for containers"
-          />
-        </SplitItem>
-        <SplitItem>
-          <Donut
-            value={landscapeData.unassesed}
-            total={applications.length}
-            color={
-              DEFAULT_RISK_LABELS.get("UNKNOWN")?.color || defaultColor.value
-            }
-            riskLabel="Unassessed"
-            riskDescription="Not yet assessed"
-          />
-        </SplitItem>
-      </Split>
+      {landscapeData && (
+        <Split hasGutter>
+          <SplitItem>
+            <Donut
+              value={landscapeData.low}
+              total={applications.length}
+              color={
+                DEFAULT_RISK_LABELS.get("GREEN")?.color || defaultColor.value
+              }
+              riskLabel="Low risk"
+              riskDescription="Cloud-native ready"
+            />
+          </SplitItem>
+          <SplitItem>
+            <Donut
+              value={landscapeData.medium}
+              total={applications.length}
+              color={
+                DEFAULT_RISK_LABELS.get("AMBER")?.color || defaultColor.value
+              }
+              riskLabel="Medium risk"
+              riskDescription="Modernizable"
+            />
+          </SplitItem>
+          <SplitItem>
+            <Donut
+              value={landscapeData.high}
+              total={applications.length}
+              color={
+                DEFAULT_RISK_LABELS.get("RED")?.color || defaultColor.value
+              }
+              riskLabel="High risk"
+              riskDescription="Unsuitable for containers"
+            />
+          </SplitItem>
+          <SplitItem>
+            <Donut
+              value={landscapeData.unassesed}
+              total={applications.length}
+              color={
+                DEFAULT_RISK_LABELS.get("UNKNOWN")?.color || defaultColor.value
+              }
+              riskLabel="Unassessed"
+              riskDescription="Not yet assessed"
+            />
+          </SplitItem>
+        </Split>
+      )}
     </ConditionalRender>
   );
 };

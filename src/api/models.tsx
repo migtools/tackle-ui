@@ -88,6 +88,16 @@ export interface ApplicationDependency {
   to: Application;
 }
 
+export interface ApplicationAdoptionPlan {
+  applicationId: number;
+  applicationName: string;
+  positionX: number;
+  positionY: number;
+  effort: number;
+  decision: string;
+  effortEstimate: string;
+}
+
 // Pathfinder
 
 export type AssessmentStatus = "EMPTY" | "STARTED" | "COMPLETE";

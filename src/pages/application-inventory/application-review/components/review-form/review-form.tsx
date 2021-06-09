@@ -111,7 +111,7 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
       businessCriticality: formValues.criticality || 0,
       workPriority: formValues.priority || 0,
       comments: formValues.comments.trim(),
-      application: application,
+      application: { ...application, review: undefined },
     };
 
     let promise: AxiosPromise<Review>;

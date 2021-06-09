@@ -2,8 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
-  Alert,
-  AlertVariant,
   Bullseye,
   Card,
   CardBody,
@@ -33,6 +31,7 @@ import {
   ApplicationToolbarToggleGroup,
   AppPlaceholder,
   ConditionalRender,
+  StateError,
 } from "shared/components";
 
 import { ApplicationFilterKey } from "Constants";
@@ -40,11 +39,11 @@ import { ApplicationFilterKey } from "Constants";
 import { ApplicationSortBy, getApplications } from "api/rest";
 import { Application, ApplicationPage } from "api/models";
 import { applicationPageMapper, fetchAllPages } from "api/apiUtils";
-import { getAxiosErrorMessage } from "utils/utils";
 
 import { ApplicationSelectionContextProvider } from "./application-selection-context";
 import { Landscape } from "./components/landscape";
 import { AdoptionCandidateTable } from "./components/adoption-candidate-table";
+import { AdoptionPlan } from "./components/adoption-plan";
 import { IdentifiedRisksTable } from "./components/identified-risks-table";
 
 export const Reports: React.FC = () => {
@@ -52,6 +51,7 @@ export const Reports: React.FC = () => {
   const { t } = useTranslation();
 
   // Cards
+  const [isAdoptionPlanOpen, setAdoptionPlanOpen] = useState(false);
   const [isRiskCardOpen, setIsRiskCardOpen] = useState(false);
 
   // Toolbar filters
@@ -129,9 +129,7 @@ export const Reports: React.FC = () => {
       <>
         {pageHeaderSection}
         <PageSection>
-          <Alert title="Error" variant={AlertVariant.danger}>
-            {getAxiosErrorMessage(fetchErrorApplications)}
-          </Alert>
+          <StateError />
         </PageSection>
       </>
     );
@@ -178,6 +176,52 @@ export const Reports: React.FC = () => {
                 </Card>
               </StackItem>
               <StackItem>
+                <Card isExpanded={isAdoptionPlanOpen}>
+                  <CardHeader
+                    onExpand={() => setAdoptionPlanOpen((current) => !current)}
+                  >
+                    <CardTitle>
+                      <Split style={{ marginTop: -5 }}>
+                        <SplitItem>
+                          <Bullseye style={{ marginTop: -3 }}>
+                            <TextContent>
+                              <Text component="h3">
+                                Suggested adoption plan
+                              </Text>
+                            </TextContent>
+                          </Bullseye>
+                        </SplitItem>
+                        <SplitItem>
+                          <Popover
+                            bodyContent={
+                              <div>
+                                The suggested approach to migration based on
+                                effort, priority, and dependencies.
+                              </div>
+                            }
+                            position="right"
+                          >
+                            <button
+                              type="button"
+                              aria-label="More info"
+                              onClick={(e) => e.preventDefault()}
+                              className="pf-c-button pf-m-plain"
+                            >
+                              <HelpIcon />
+                            </button>
+                          </Popover>
+                        </SplitItem>
+                      </Split>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardExpandableContent>
+                    <CardBody>
+                      {isAdoptionPlanOpen && <AdoptionPlan />}
+                    </CardBody>
+                  </CardExpandableContent>
+                </Card>
+              </StackItem>
+              <StackItem>
                 <Card isExpanded={isRiskCardOpen}>
                   <CardHeader
                     onExpand={() => setIsRiskCardOpen((current) => !current)}
@@ -190,18 +234,6 @@ export const Reports: React.FC = () => {
                               <Text component="h3">Identified risks</Text>
                             </TextContent>
                           </Bullseye>
-                        </SplitItem>
-                        <SplitItem>
-                          <Popover bodyContent={<div>"hola"</div>}>
-                            <button
-                              type="button"
-                              aria-label="More info"
-                              onClick={(e) => e.preventDefault()}
-                              className="pf-c-button pf-m-plain"
-                            >
-                              <HelpIcon />
-                            </button>
-                          </Popover>
                         </SplitItem>
                       </Split>
                     </CardTitle>
