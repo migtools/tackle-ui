@@ -24,7 +24,7 @@ import {
 import { Assessment, Question, QuestionnaireCategory, Risk } from "api/models";
 
 import { SelectRiskFilter } from "./components/select-risk-filter";
-import { DEFAULT_RISK_LABELS } from "Constants";
+import { RISK_LIST } from "Constants";
 
 enum FilterKey {
   RISK = "risk",
@@ -94,12 +94,12 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
 
   const compareToByColumn = useCallback(
     (a: ITableItem, b: ITableItem, columnIndex?: number) => {
-      const aData = DEFAULT_RISK_LABELS.get(a.riskValue);
-      const bData = DEFAULT_RISK_LABELS.get(b.riskValue);
-
       switch (columnIndex) {
         case 3: // Risk
-          return (aData?.order || 0) - (bData?.order || 0);
+          return (
+            RISK_LIST[a.riskValue].sortFactor -
+            RISK_LIST[b.riskValue].sortFactor
+          );
         default:
           return 0;
       }

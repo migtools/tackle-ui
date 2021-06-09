@@ -61,6 +61,15 @@ export interface Tag {
 }
 
 // Application inventory
+export type ProposedAction =
+  | "rehost"
+  | "replatform"
+  | "refactor"
+  | "repurchase"
+  | "retire"
+  | "retain";
+
+export type EffortEstimate = "small" | "medium" | "large" | "extra_large";
 
 export interface Application {
   id?: number;
@@ -74,8 +83,8 @@ export interface Application {
 
 export interface Review {
   id?: number;
-  proposedAction: string;
-  effortEstimate: string;
+  proposedAction: ProposedAction;
+  effortEstimate: EffortEstimate;
   businessCriticality: number;
   workPriority: number;
   comments?: string;
@@ -94,7 +103,7 @@ export interface ApplicationAdoptionPlan {
   positionX: number;
   positionY: number;
   effort: number;
-  decision: string;
+  decision: ProposedAction;
   effortEstimate: string;
 }
 

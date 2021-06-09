@@ -7,13 +7,13 @@ import {
   ChartAxis,
   ChartBar,
   ChartGroup,
-  ChartThemeColor,
   ChartVoronoiContainer,
 } from "@patternfly/react-charts";
 
 import { useFetch } from "shared/hooks";
 import { ConditionalRender, StateError } from "shared/components";
 
+import { PROPOSED_ACTION_LIST } from "Constants";
 import { ApplicationAdoptionPlan } from "api/models";
 import { getApplicationAdoptionPlan } from "api/rest";
 
@@ -25,6 +25,7 @@ interface IChartData {
   applicationName: string;
   startAt: number;
   width: number;
+  hexColor: string;
 }
 
 export const AdoptionPlan: React.FC = () => {
@@ -63,12 +64,16 @@ export const AdoptionPlan: React.FC = () => {
     return [...(adoptionPlan || [])]
       .sort((a, b) => b.positionY - a.positionY)
       .map((elem) => {
-        return {
+        const selectedProposedAction = PROPOSED_ACTION_LIST[elem.decision];
+
+        const result: IChartData = {
           applicationId: elem.applicationId,
           applicationName: elem.applicationName,
           startAt: elem.positionX,
           width: elem.effort,
-        } as IChartData;
+          hexColor: selectedProposedAction?.hexColor,
+        };
+        return result;
       });
   }, [adoptionPlan]);
 
@@ -105,7 +110,7 @@ export const AdoptionPlan: React.FC = () => {
                 }}
               >
                 <Chart
-                  themeColor={ChartThemeColor.multiOrdered}
+                  // themeColor={ChartThemeColor.multiOrdered}
                   containerComponent={
                     <ChartVoronoiContainer
                       labels={({ datum }) => `Effort: ${datum.effort}`}
@@ -125,17 +130,22 @@ export const AdoptionPlan: React.FC = () => {
                   <ChartAxis />
                   <ChartAxis dependentAxis showGrid />
                   <ChartGroup horizontal={true}>
-                    {chartData.map((f) => (
+                    {chartData.map((elem) => (
                       <ChartBar
-                        key={f.applicationId}
+                        key={elem.applicationId}
                         barWidth={15}
+                        style={{
+                          data: {
+                            fill: elem.hexColor,
+                          },
+                        }}
                         data={[
                           {
-                            name: f.applicationName,
-                            effort: f.width,
-                            x: f.applicationName,
-                            y0: f.startAt,
-                            y: f.startAt + f.width,
+                            name: elem.applicationName,
+                            effort: elem.width,
+                            x: elem.applicationName,
+                            y0: elem.startAt,
+                            y: elem.startAt + elem.width,
                           },
                         ]}
                       />

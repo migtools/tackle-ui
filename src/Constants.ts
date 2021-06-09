@@ -8,7 +8,7 @@ import {
   global_palette_black_400 as black,
 } from "@patternfly/react-tokens";
 
-import { PageQuery, Risk } from "api/models";
+import { EffortEstimate, PageQuery, ProposedAction, Risk } from "api/models";
 
 export const DEFAULT_PAGINATION: PageQuery = {
   page: 1,
@@ -45,58 +45,124 @@ export const DEFAULT_COLOR_PALETE = [
 ];
 
 // Risks
+type RiskListType = {
+  [key in Risk]: {
+    label: string;
+    hexColor: string;
+    labelColor:
+      | "blue"
+      | "cyan"
+      | "green"
+      | "orange"
+      | "purple"
+      | "red"
+      | "grey";
+    sortFactor: number;
+  };
+};
 
-interface RiskData {
-  label: string;
-  order: number;
-  color: string;
-}
+export const RISK_LIST: RiskListType = {
+  GREEN: {
+    label: "Low",
+    hexColor: "#68b240",
+    labelColor: "green",
+    sortFactor: 1,
+  },
+  AMBER: {
+    label: "Medium",
+    hexColor: "#f0ab0b",
+    labelColor: "orange",
+    sortFactor: 2,
+  },
+  RED: {
+    label: "High",
+    hexColor: "#cb440d",
+    labelColor: "red",
+    sortFactor: 3,
+  },
+  UNKNOWN: {
+    label: "Unknown",
+    hexColor: black.value,
+    labelColor: "grey",
+    sortFactor: 4,
+  },
+};
 
-export const DEFAULT_RISK_LABELS: Map<Risk, RiskData> = new Map([
-  ["GREEN", { label: "Low", order: 1, color: "#68b240" }],
-  ["AMBER", { label: "Medium", order: 2, color: "#f0ab0b" }],
-  ["RED", { label: "High", order: 3, color: "#cb440d" }],
-  ["UNKNOWN", { label: "Unknown", order: 4, color: black.value }],
-]);
+// Proposed action
+type ProposedActionListType = {
+  [key in ProposedAction]: {
+    label: string;
+    hexColor: string;
+    labelColor:
+      | "blue"
+      | "cyan"
+      | "green"
+      | "orange"
+      | "purple"
+      | "red"
+      | "grey";
+  };
+};
 
-// Review
+export const PROPOSED_ACTION_LIST: ProposedActionListType = {
+  rehost: {
+    label: "Rehost",
+    labelColor: "green",
+    hexColor: green.value,
+  },
+  replatform: {
+    label: "Replatform",
+    labelColor: "orange",
+    hexColor: orange.value,
+  },
+  refactor: {
+    label: "Refactor",
+    labelColor: "red",
+    hexColor: "#cb440d",
+  },
+  repurchase: {
+    label: "Repurchase",
+    labelColor: "purple",
+    hexColor: purple.value,
+  },
+  retire: {
+    label: "Retire",
+    labelColor: "cyan",
+    hexColor: cyan.value,
+  },
+  retain: {
+    label: "Retain",
+    labelColor: "blue",
+    hexColor: blue.value,
+  },
+};
 
-export enum ProposedAction {
-  REHOST = "rehost",
-  REPLATFORM = "replatform",
-  REFACTOR = "refactor",
-  REPURCHASE = "repurchase",
-  RETIRE = "retire",
-  RETAIN = "retain",
-}
+// Effort
+type EffortEstimateListType = {
+  [key in EffortEstimate]: {
+    label: string;
+    sortFactor: number;
+  };
+};
 
-export const DEFAULT_PROPOSED_ACTIONS: Map<ProposedAction, string> = new Map([
-  [ProposedAction.REHOST, "Rehost"],
-  [ProposedAction.REPLATFORM, "Replatform"],
-  [ProposedAction.REFACTOR, "Refactor"],
-  [ProposedAction.REPURCHASE, "Repurchase"],
-  [ProposedAction.RETIRE, "Retire"],
-  [ProposedAction.RETAIN, "Retain"],
-]);
-
-export enum Effort {
-  SMALL = "small",
-  MEDIUM = "medium",
-  LARGE = "large",
-  EXTRA_LARGE = "extra_large",
-}
-
-export interface EffortData {
-  label: string;
-  factor: number;
-}
-
-export const DEFAULT_EFFORTS: Map<Effort, EffortData> = new Map([
-  [Effort.SMALL, { label: "Small", factor: 1 }],
-  [Effort.MEDIUM, { label: "Medium", factor: 2 }],
-  [Effort.LARGE, { label: "Large", factor: 3 }],
-  [Effort.EXTRA_LARGE, { label: "Extra large", factor: 4 }],
-]);
+export const EFFORT_ESTIMATE_LIST: EffortEstimateListType = {
+  small: {
+    label: "Small",
+    sortFactor: 1,
+  },
+  medium: {
+    label: "Medium",
+    sortFactor: 2,
+  },
+  large: {
+    label: "Large",
+    sortFactor: 3,
+  },
+  extra_large: {
+    label: "Extra large",
+    sortFactor: 4,
+  },
+};
 
 // Application toolbar
 

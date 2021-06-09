@@ -18,50 +18,51 @@ import { OptionWithValue, SingleSelectFormikField } from "shared/components";
 
 import {
   DEFAULT_SELECT_MAX_HEIGHT,
-  DEFAULT_PROPOSED_ACTIONS,
-  DEFAULT_EFFORTS,
+  PROPOSED_ACTION_LIST,
+  EFFORT_ESTIMATE_LIST,
 } from "Constants";
 import {
   getValidatedFromError,
   getValidatedFromErrorTouched,
 } from "utils/utils";
 import { number } from "yup";
-import { Application, Review } from "api/models";
+import {
+  Application,
+  EffortEstimate,
+  ProposedAction,
+  Review,
+} from "api/models";
 import { createReview, updateReview } from "api/rest";
 
-const actionOptions: SimpleOption[] = Array.from(
-  DEFAULT_PROPOSED_ACTIONS.keys()
-).map((key) => {
-  return {
-    key,
-    name: DEFAULT_PROPOSED_ACTIONS.get(key)!,
-  };
-});
+const actionOptions: SimpleOption<ProposedAction>[] = Object.entries(
+  PROPOSED_ACTION_LIST
+).map(([key, value]) => ({
+  key: key as ProposedAction,
+  name: value.label,
+}));
 
-const effortOptions: SimpleOption[] = Array.from(DEFAULT_EFFORTS.keys()).map(
-  (key) => {
-    return {
-      key,
-      name: DEFAULT_EFFORTS.get(key)?.label || key,
-    };
-  }
-);
+const effortOptions: SimpleOption<EffortEstimate>[] = Object.entries(
+  EFFORT_ESTIMATE_LIST
+).map(([key, value]) => ({
+  key: key as EffortEstimate,
+  name: value.label,
+}));
 
-interface SimpleOption {
-  key: string;
+interface SimpleOption<T> {
+  key: T;
   name: string;
 }
 
 const toOptionWithValue = (
-  value: SimpleOption
-): OptionWithValue<SimpleOption> => ({
+  value: SimpleOption<any>
+): OptionWithValue<SimpleOption<any>> => ({
   value,
   toString: () => value.name,
 });
 
 export interface FormValues {
-  action?: OptionWithValue<SimpleOption>;
-  effort?: OptionWithValue<SimpleOption>;
+  action?: OptionWithValue<SimpleOption<ProposedAction>>;
+  effort?: OptionWithValue<SimpleOption<EffortEstimate>>;
   criticality?: number;
   priority?: number;
   comments: string;
@@ -104,10 +105,15 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
     formValues: FormValues,
     formikHelpers: FormikHelpers<FormValues>
   ) => {
+    if (!formValues.effort || !formValues.action) {
+      console.log("Invalid form");
+      return;
+    }
+
     const payload: Review = {
       ...review,
-      proposedAction: formValues.action ? formValues.action.value.key : "",
-      effortEstimate: formValues.effort ? formValues.effort.value.key : "",
+      proposedAction: formValues.action.value.key,
+      effortEstimate: formValues.effort.value.key,
       businessCriticality: formValues.criticality || 0,
       workPriority: formValues.priority || 0,
       comments: formValues.comments.trim(),
@@ -136,9 +142,9 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
   };
 
   const actionInitialValue:
-    | OptionWithValue<SimpleOption>
+    | OptionWithValue<SimpleOption<ProposedAction>>
     | undefined = useMemo(() => {
-    let result: OptionWithValue<SimpleOption> | undefined;
+    let result: OptionWithValue<SimpleOption<ProposedAction>> | undefined;
     if (review) {
       const exists = actionOptions.find((f) => f.key === review.proposedAction);
       result = toOptionWithValue(
@@ -149,9 +155,9 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
   }, [review, t]);
 
   const effortInitialValue:
-    | OptionWithValue<SimpleOption>
+    | OptionWithValue<SimpleOption<EffortEstimate>>
     | undefined = useMemo(() => {
-    let result: OptionWithValue<SimpleOption> | undefined;
+    let result: OptionWithValue<SimpleOption<EffortEstimate>> | undefined;
     if (review) {
       const exists = effortOptions.find((f) => f.key === review.effortEstimate);
       result = toOptionWithValue(

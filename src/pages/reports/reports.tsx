@@ -227,9 +227,9 @@ export const Reports: React.FC = () => {
                     onExpand={() => setIsRiskCardOpen((current) => !current)}
                   >
                     <CardTitle>
-                      <Split style={{ marginTop: -5 }}>
+                      <Split style={{ marginTop: -3 }}>
                         <SplitItem>
-                          <Bullseye style={{ marginTop: -3 }}>
+                          <Bullseye>
                             <TextContent>
                               <Text component="h3">Identified risks</Text>
                             </TextContent>

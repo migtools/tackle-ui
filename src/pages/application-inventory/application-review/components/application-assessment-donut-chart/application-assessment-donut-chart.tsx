@@ -3,7 +3,7 @@ import { ChartDonut, ChartLegend } from "@patternfly/react-charts";
 
 import { global_palette_blue_300 as defaultColor } from "@patternfly/react-tokens";
 
-import { DEFAULT_RISK_LABELS } from "Constants";
+import { RISK_LIST } from "Constants";
 import { Assessment, QuestionnaireCategory } from "api/models";
 
 export interface ChartData {
@@ -62,24 +62,24 @@ export const ApplicationAssessmentDonutChart: React.FC<IApplicationAssessmentDon
 
   const chartDefinition = [
     {
-      x: DEFAULT_RISK_LABELS.get("GREEN")?.label,
+      x: RISK_LIST["GREEN"].label,
       y: charData.green,
-      color: DEFAULT_RISK_LABELS.get("GREEN")?.color,
+      color: RISK_LIST["GREEN"].hexColor,
     },
     {
-      x: DEFAULT_RISK_LABELS.get("AMBER")?.label,
+      x: RISK_LIST["AMBER"].label,
       y: charData.amber,
-      color: DEFAULT_RISK_LABELS.get("AMBER")?.color,
+      color: RISK_LIST["AMBER"].hexColor,
     },
     {
-      x: DEFAULT_RISK_LABELS.get("RED")?.label,
+      x: RISK_LIST["RED"].label,
       y: charData.red,
-      color: DEFAULT_RISK_LABELS.get("RED")?.color,
+      color: RISK_LIST["RED"].hexColor,
     },
     {
-      x: DEFAULT_RISK_LABELS.get("UNKNOWN")?.label,
+      x: RISK_LIST["UNKNOWN"].label,
       y: charData.unknown,
-      color: DEFAULT_RISK_LABELS.get("UNKNOWN")?.color,
+      color: RISK_LIST["UNKNOWN"].hexColor,
     },
   ].filter((f) => f.y > 0);
 

@@ -6,12 +6,12 @@ import { FilterIcon } from "@patternfly/react-icons";
 
 import { OptionWithValue, SimpleSelect } from "shared/components";
 
-import { DEFAULT_RISK_LABELS, DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
-import { Risk } from "api/models";
+import { RISK_LIST, DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 import { getToolbarChipKey } from "utils/utils";
+import { Risk } from "api/models";
 
 const riskToToolbarChip = (value: Risk): ToolbarChip => {
-  const label: string = DEFAULT_RISK_LABELS.get(value)?.label || value;
+  const label: string = RISK_LIST[value]?.label || value;
 
   return {
     key: value,
@@ -20,7 +20,7 @@ const riskToToolbarChip = (value: Risk): ToolbarChip => {
 };
 
 const riskToOption = (value: Risk): OptionWithValue<Risk> => {
-  const label = DEFAULT_RISK_LABELS.get(value)?.label || value;
+  const label = RISK_LIST[value]?.label || value;
 
   return {
     value,
@@ -63,13 +63,12 @@ export const SelectRiskFilter: React.FC<ISelectRiskFilterProps> = ({
       maxHeight={DEFAULT_SELECT_MAX_HEIGHT}
       value={value
         .map((a) => {
-          return Array.from(DEFAULT_RISK_LABELS.keys()).find(
-            (b) => getToolbarChipKey(a) === b
-          );
+          const risks: Risk[] = Object.keys(RISK_LIST) as Risk[];
+          return risks.find((b) => getToolbarChipKey(a) === b);
         })
         .filter((f) => f !== undefined)
         .map((f) => riskToOption(f!))}
-      options={Array.from(DEFAULT_RISK_LABELS.keys()).map(riskToOption)}
+      options={Object.keys(RISK_LIST).map((k) => riskToOption(k as Risk))}
       onChange={(option) => {
         const optionValue = (option as OptionWithValue<Risk>).value;
 

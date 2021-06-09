@@ -1,18 +1,17 @@
 import React, { useCallback, useContext, useEffect, useMemo } from "react";
 
 import { Skeleton, Split, SplitItem } from "@patternfly/react-core";
-import { global_palette_blue_300 as defaultColor } from "@patternfly/react-tokens";
 
 import { ConditionalRender, StateError } from "shared/components";
 import { useFetch } from "shared/hooks";
 
-import { DEFAULT_RISK_LABELS } from "Constants";
+import { RISK_LIST } from "Constants";
 import { AssessmentRisk } from "api/models";
 import { getAssessmentLandscape } from "api/rest";
 
 import { ApplicationSelectionContext } from "../../application-selection-context";
-import { Donut } from "./donut";
 import { NoApplicationSelectedEmptyState } from "../no-application-selected-empty-state";
+import { Donut } from "./donut";
 
 interface ILandscapeData {
   low: number;
@@ -110,9 +109,7 @@ export const Landscape: React.FC<ILandscapeProps> = () => {
             <Donut
               value={landscapeData.low}
               total={applications.length}
-              color={
-                DEFAULT_RISK_LABELS.get("GREEN")?.color || defaultColor.value
-              }
+              color={RISK_LIST["GREEN"].hexColor}
               riskLabel="Low risk"
               riskDescription="Cloud-native ready"
             />
@@ -121,9 +118,7 @@ export const Landscape: React.FC<ILandscapeProps> = () => {
             <Donut
               value={landscapeData.medium}
               total={applications.length}
-              color={
-                DEFAULT_RISK_LABELS.get("AMBER")?.color || defaultColor.value
-              }
+              color={RISK_LIST["AMBER"].hexColor}
               riskLabel="Medium risk"
               riskDescription="Modernizable"
             />
@@ -132,9 +127,7 @@ export const Landscape: React.FC<ILandscapeProps> = () => {
             <Donut
               value={landscapeData.high}
               total={applications.length}
-              color={
-                DEFAULT_RISK_LABELS.get("RED")?.color || defaultColor.value
-              }
+              color={RISK_LIST["RED"].hexColor}
               riskLabel="High risk"
               riskDescription="Unsuitable for containers"
             />
@@ -143,9 +136,7 @@ export const Landscape: React.FC<ILandscapeProps> = () => {
             <Donut
               value={landscapeData.unassesed}
               total={applications.length}
-              color={
-                DEFAULT_RISK_LABELS.get("UNKNOWN")?.color || defaultColor.value
-              }
+              color={RISK_LIST["UNKNOWN"].hexColor}
               riskLabel="Unassessed"
               riskDescription="Not yet assessed"
             />

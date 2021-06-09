@@ -11,18 +11,16 @@ import {
   TableText,
   TableVariant,
 } from "@patternfly/react-table";
-import {
-  Dropdown,
-  DropdownToggle,
-  DropdownToggleCheckbox,
-  Label,
-  ToolbarItem,
-} from "@patternfly/react-core";
+import { Label, ToolbarItem } from "@patternfly/react-core";
 
 import { useTableControls, useTableFilter } from "shared/hooks";
-import { AppTableWithControls, ProposedActionLabel } from "shared/components";
+import {
+  AppTableWithControls,
+  ProposedActionLabel,
+  ToolbarBulkSelector,
+} from "shared/components";
 
-import { DEFAULT_EFFORTS, Effort, ProposedAction } from "Constants";
+import { EFFORT_ESTIMATE_LIST } from "Constants";
 import { Application } from "api/models";
 import { ApplicationSelectionContext } from "pages/reports/application-selection-context";
 
@@ -42,10 +40,13 @@ const compareToByColumn = (
     case 3: // Priority
       return (a.review?.workPriority || 0) - (b.review?.workPriority || 0);
     case 4: // Effort
-      return (
-        (DEFAULT_EFFORTS.get(a.review?.effortEstimate as Effort)?.factor || 0) -
-        (DEFAULT_EFFORTS.get(b.review?.effortEstimate as Effort)?.factor || 0)
-      );
+      const aEffortSortFactor = a.review
+        ? EFFORT_ESTIMATE_LIST[a.review.effortEstimate]?.sortFactor || 0
+        : 0;
+      const bEffortSortFactor = b.review
+        ? EFFORT_ESTIMATE_LIST[b.review.effortEstimate]?.sortFactor || 0
+        : 0;
+      return aEffortSortFactor - bEffortSortFactor;
     default:
       return 0;
   }
@@ -73,6 +74,7 @@ export const AdoptionCandidateTable: React.FC<IAdoptionCandidateTableProps> = ()
     toggleItemSelected: toggleRowSelected,
     selectAll: selectAllRows,
     setSelectedItems: setSelectedRows,
+    selectMultiple: selectMultipleRows,
   } = useContext(ApplicationSelectionContext);
 
   // Table
@@ -151,10 +153,9 @@ export const AdoptionCandidateTable: React.FC<IAdoptionCandidateTableProps> = ()
         {
           title: (
             <TableText wrapModifier="truncate">
-              {item.review &&
-                (DEFAULT_EFFORTS.get(item.review.effortEstimate as Effort)
-                  ?.label ||
-                  item.review.effortEstimate)}
+              {item.review
+                ? EFFORT_ESTIMATE_LIST[item.review.effortEstimate]?.label
+                : ""}
             </TableText>
           ),
         },
@@ -162,9 +163,7 @@ export const AdoptionCandidateTable: React.FC<IAdoptionCandidateTableProps> = ()
           title: (
             <TableText wrapModifier="truncate">
               {item.review ? (
-                <ProposedActionLabel
-                  action={item.review.proposedAction as ProposedAction}
-                />
+                <ProposedActionLabel action={item.review.proposedAction} />
               ) : (
                 <Label>{t("terms.notReviewed")}</Label>
               )}
@@ -202,38 +201,20 @@ export const AdoptionCandidateTable: React.FC<IAdoptionCandidateTableProps> = ()
       cells={columns}
       rows={rows}
       onSelect={selectRow}
-      canSelectAll={true}
+      canSelectAll={false}
       isLoading={false}
       filtersApplied={false}
       toolbarToggle={
         <>
           <ToolbarItem variant="bulk-select">
-            <Dropdown
-              toggle={
-                <DropdownToggle
-                  splitButtonItems={[
-                    <DropdownToggleCheckbox
-                      id="toolbar-bulk-select"
-                      key="toolbar-bulk-select"
-                      aria-label="Select all"
-                      isDisabled
-                      isChecked={
-                        areAllRowsSelected
-                          ? true
-                          : selectedRows.length === 0
-                          ? false
-                          : null
-                      }
-                      // onChange={(checked) => {}}
-                    >
-                      {selectedRows.length} selected
-                    </DropdownToggleCheckbox>,
-                  ]}
-                  onToggle={() => {}}
-                />
-              }
-              isOpen={false}
-              dropdownItems={[]}
+            <ToolbarBulkSelector
+              areAllRowsSelected={areAllRowsSelected}
+              perPage={pagination.perPage}
+              totalItems={allRows.length}
+              totalSelectedRows={selectedRows.length}
+              onSelectAll={selectAllRows}
+              onSelectNone={() => setSelectedRows([])}
+              onSelectCurrentPage={() => selectMultipleRows(pageItems, true)}
             />
           </ToolbarItem>
         </>
