@@ -21,10 +21,10 @@ import {
   useTableFilter,
 } from "shared/hooks";
 
+import { RISK_LIST } from "Constants";
 import { Assessment, Question, QuestionnaireCategory, Risk } from "api/models";
 
 import { SelectRiskFilter } from "./components/select-risk-filter";
-import { RISK_LIST } from "Constants";
 
 enum FilterKey {
   RISK = "risk",

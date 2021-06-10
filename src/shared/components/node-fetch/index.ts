@@ -1,1 +1,1 @@
-export { NodeFetch } from "./chip-fetch";
+export { NodeFetch } from "./node-fetch";

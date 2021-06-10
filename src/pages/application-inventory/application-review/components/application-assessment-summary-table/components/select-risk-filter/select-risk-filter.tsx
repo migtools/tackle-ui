@@ -7,8 +7,8 @@ import { FilterIcon } from "@patternfly/react-icons";
 import { OptionWithValue, SimpleSelect } from "shared/components";
 
 import { RISK_LIST, DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
-import { getToolbarChipKey } from "utils/utils";
 import { Risk } from "api/models";
+import { getToolbarChipKey } from "utils/utils";
 
 const riskToToolbarChip = (value: Risk): ToolbarChip => {
   const label: string = RISK_LIST[value]?.label || value;

@@ -1,6 +1,6 @@
 import React from "react";
 import { mount } from "enzyme";
-import { NodeFetch } from "../chip-fetch";
+import { NodeFetch } from "../node-fetch";
 
 describe("NodeFetch", () => {
   it("Renders loading...", () => {
