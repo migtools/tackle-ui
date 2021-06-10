@@ -558,7 +558,12 @@ export const deleteReview = (id: number): AxiosPromise => {
 export const getApplicationAdoptionPlan = (
   applicationIds: number[]
 ): AxiosPromise<ApplicationAdoptionPlan[]> => {
-  return APIClient.post(`${REPORT}/adoptionplan`, applicationIds);
+  return APIClient.post(
+    `${REPORT}/adoptionplan`,
+    applicationIds.map((f) => ({
+      applicationId: f,
+    }))
+  );
 };
 
 //
@@ -595,11 +600,17 @@ export const deleteAssessment = (id: number): AxiosPromise => {
 export const getAssessmentLandscape = (
   applicationIds: number[]
 ): AxiosPromise<AssessmentRisk[]> => {
-  return APIClient.post(`${ASSESSMENTS}/assessment-risk`, applicationIds);
+  return APIClient.post(
+    `${ASSESSMENTS}/assessment-risk`,
+    applicationIds.map((f) => ({ applicationId: f }))
+  );
 };
 
 export const getAssessmentIdentifiedRisks = (
   applicationIds: number[]
 ): AxiosPromise<AssessmentQuestionRisk[]> => {
-  return APIClient.post(`${ASSESSMENTS}/risks`, applicationIds);
+  return APIClient.post(
+    `${ASSESSMENTS}/risks`,
+    applicationIds.map((f) => ({ applicationId: f }))
+  );
 };
