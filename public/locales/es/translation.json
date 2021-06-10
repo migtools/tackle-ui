@@ -45,11 +45,11 @@
     "dialog": {
         "message": {
             "delete": "Esta acción no puede ser revertida.",
-            "leavePage": "Salir de página"
+            "leavePage": "¿Estás seguro de querer salir de esta página? Asegúrate de guardar tus cambios o estos se perderán."
         },
         "title": {
             "delete": "¿Eliminar {{what}}?",
-            "leavePage": "¿Estás seguro de querer salir de esta página?",
+            "leavePage": "Salir de página",
             "new": "Nuevo(a) {{what}}",
             "newApplication": "Nueva aplicación",
             "newBusinessService": "Nuevo servicio de negocio",

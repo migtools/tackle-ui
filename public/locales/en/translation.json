@@ -45,7 +45,7 @@
     "dialog": {
         "message": {
             "delete": "This action cannot be undone.",
-            "leavePage": "Are you sure you want to leave this page?"
+            "leavePage": "Are you sure you want to leave this page? Be sure to save your changes, or they will be lost."
         },
         "title": {
             "delete": "Delete {{what}}?",
