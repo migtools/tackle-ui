@@ -102,7 +102,7 @@ export const AdoptionPlan: React.FC = () => {
           const chartWidth = contentRect.bounds?.width || 400;
 
           return (
-            <div ref={measureRef} style={{ maxHeight: 700, overflowY: "auto" }}>
+            <div ref={measureRef}>
               <div
                 style={{
                   height: chartHeight,

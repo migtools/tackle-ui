@@ -215,7 +215,7 @@ export const Reports: React.FC = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardExpandableContent>
-                    <CardBody>
+                    <CardBody style={{ maxHeight: 700, overflowY: "auto" }}>
                       {isAdoptionPlanOpen && <AdoptionPlan />}
                     </CardBody>
                   </CardExpandableContent>

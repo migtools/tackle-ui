@@ -8,8 +8,8 @@ import {
   IRow,
   IRowData,
   sortable,
-  TableText,
   TableVariant,
+  truncate,
 } from "@patternfly/react-table";
 import { Label, ToolbarItem } from "@patternfly/react-core";
 
@@ -101,27 +101,27 @@ export const AdoptionCandidateTable: React.FC<IAdoptionCandidateTableProps> = ()
     {
       title: t("terms.applicationName"),
       transforms: [sortable, cellWidth(25)],
-      cellFormatters: [],
+      cellTransforms: [truncate],
     },
     {
       title: t("terms.criticality"),
       transforms: [sortable, cellWidth(15)],
-      cellFormatters: [],
+      cellTransforms: [],
     },
     {
       title: t("terms.priority"),
       transforms: [sortable, cellWidth(15)],
-      cellFormatters: [],
+      cellTransforms: [],
     },
     {
       title: t("terms.effort"),
       transforms: [sortable, cellWidth(15)],
-      cellFormatters: [],
+      cellTransforms: [],
     },
     {
       title: t("terms.decision"),
       transforms: [cellWidth(15)],
-      cellFormatters: [],
+      cellTransforms: [],
     },
   ];
 
@@ -134,40 +134,32 @@ export const AdoptionCandidateTable: React.FC<IAdoptionCandidateTableProps> = ()
       selected: isSelected,
       cells: [
         {
-          title: <TableText wrapModifier="truncate">{item.name}</TableText>,
+          title: item.name,
+        },
+        {
+          title: item.review?.businessCriticality,
+        },
+        {
+          title: item.review?.workPriority,
         },
         {
           title: (
-            <TableText wrapModifier="truncate">
-              {item.review?.businessCriticality}
-            </TableText>
-          ),
-        },
-        {
-          title: (
-            <TableText wrapModifier="truncate">
-              {item.review?.workPriority}
-            </TableText>
-          ),
-        },
-        {
-          title: (
-            <TableText wrapModifier="truncate">
+            <>
               {item.review
                 ? EFFORT_ESTIMATE_LIST[item.review.effortEstimate]?.label
                 : ""}
-            </TableText>
+            </>
           ),
         },
         {
           title: (
-            <TableText wrapModifier="truncate">
+            <>
               {item.review ? (
                 <ProposedActionLabel action={item.review.proposedAction} />
               ) : (
                 <Label>{t("terms.notReviewed")}</Label>
               )}
-            </TableText>
+            </>
           ),
         },
       ],

@@ -3,11 +3,10 @@ import { useTranslation } from "react-i18next";
 
 import { ToolbarChip } from "@patternfly/react-core";
 import {
+  breakWord,
   cellWidth,
   ICell,
   IRow,
-  sortable,
-  TableText,
   TableVariant,
 } from "@patternfly/react-table";
 
@@ -37,8 +36,7 @@ export interface ITableRowData {
   category: string;
   question: string;
   answer: string;
-  applicationId: number;
-  application?: Application;
+  applications: Application[];
 }
 
 export interface IIdentifiedRisksTableProps {}
@@ -82,23 +80,14 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = () => 
     onFetchPromise: fetchTableData,
   });
 
-  const tableData = useMemo(() => {
-    return assessmentQuestionRisks
-      ? assessmentQuestionRisks
-          .map((risk) => {
-            return risk.applications.map((applicationId) => {
-              const result: ITableRowData = {
-                category: risk.category,
-                question: risk.question,
-                answer: risk.answer,
-                applicationId: applicationId,
-                application: applications.find((f) => f.id === applicationId),
-              };
-              return result;
-            });
-          })
-          .flatMap((f) => f)
-      : [];
+  const tableData: ITableRowData[] = useMemo(() => {
+    return (assessmentQuestionRisks || []).map((risk) => ({
+      ...risk,
+      applications: risk.applications.reduce((prev, current) => {
+        const exists = applications.find((f) => f.id === current);
+        return exists ? [...prev, exists] : [...prev];
+      }, [] as Application[]),
+    }));
   }, [assessmentQuestionRisks, applications]);
 
   useEffect(() => {
@@ -116,33 +105,29 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = () => 
   });
 
   const compareToByColumn = useCallback(
-    (a: ITableRowData, b: ITableRowData, columnIndex?: number) => {
-      switch (columnIndex) {
-        case 3: // Application name
-          return (
-            a.application?.name || a.applicationId.toString()
-          ).localeCompare(b.application?.name || b.applicationId.toString());
-        default:
-          return 0;
-      }
-    },
+    (a: ITableRowData, b: ITableRowData, columnIndex?: number) => 0,
     []
   );
 
   const filterItem = useCallback(
     (item: ITableRowData) => {
-      let result: boolean = true;
+      let matchesFilter: boolean = true;
 
-      const appNameAppliedFilters =
-        filtersValue.get(FilterKey.APPLICATION_NAME)?.map((f) => f.key) || [];
-      if (appNameAppliedFilters.length > 0) {
-        const itemAppName = item.application ? item.application.name : "";
-        result = appNameAppliedFilters.some(
-          (f) => itemAppName.toLowerCase().indexOf(f.toLowerCase()) !== -1
+      const applicationNameFiltersText = (
+        filtersValue.get(FilterKey.APPLICATION_NAME) || []
+      ).map((f) => f.key);
+      if (applicationNameFiltersText.length > 0) {
+        matchesFilter = applicationNameFiltersText.some((filterText) =>
+          item.applications.some(
+            (application) =>
+              application.name
+                .toLowerCase()
+                .indexOf(filterText.toLowerCase()) !== -1
+          )
         );
       }
 
-      return result;
+      return matchesFilter;
     },
     [filtersValue]
   );
@@ -178,21 +163,25 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = () => 
     {
       title: t("terms.category"),
       transforms: [cellWidth(15)],
+      cellTransforms: [breakWord],
       cellFormatters: [],
     },
     {
       title: t("terms.question"),
       transforms: [cellWidth(35)],
+      cellTransforms: [breakWord],
       cellFormatters: [],
     },
     {
       title: t("terms.answer"),
       transforms: [cellWidth(35)],
+      cellTransforms: [breakWord],
       cellFormatters: [],
     },
     {
       title: t("terms.application(s)"),
-      transforms: [sortable, cellWidth(15)],
+      transforms: [cellWidth(15)],
+      cellTransforms: [breakWord],
       cellFormatters: [],
     },
   ];
@@ -202,20 +191,16 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = () => 
     rows.push({
       cells: [
         {
-          title: <TableText wrapModifier="truncate">{item.category}</TableText>,
+          title: item.category,
         },
         {
-          title: <TableText wrapModifier="truncate">{item.question}</TableText>,
+          title: item.question,
         },
         {
-          title: <TableText wrapModifier="truncate">{item.answer}</TableText>,
+          title: item.answer,
         },
         {
-          title: (
-            <TableText wrapModifier="truncate">
-              {item.application ? item.application.name : item.applicationId}
-            </TableText>
-          ),
+          title: item.applications.map((f) => f.name).join(", "),
         },
       ],
     });
