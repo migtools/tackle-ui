@@ -429,6 +429,7 @@ export const getTagById = (id: number | string): AxiosPromise<Tag> => {
 export enum ApplicationSortBy {
   NAME,
   TAGS,
+  REVIEW,
 }
 export interface ApplicationSortByQuery {
   field: ApplicationSortBy;
@@ -454,6 +455,9 @@ export const getApplications = (
         break;
       case ApplicationSortBy.TAGS:
         field = "tags.size()";
+        break;
+      case ApplicationSortBy.REVIEW:
+        field = "review.deleted,id";
         break;
       default:
         throw new Error("Could not define SortBy field name");

@@ -92,6 +92,9 @@ const toSortByQuery = (
     case 2:
       field = ApplicationSortBy.NAME;
       break;
+    case 6:
+      field = ApplicationSortBy.REVIEW;
+      break;
     case 7:
       field = ApplicationSortBy.TAGS;
       break;
@@ -251,7 +254,7 @@ export const ApplicationList: React.FC = () => {
     { title: t("terms.description"), transforms: [cellWidth(25)] },
     { title: t("terms.businessService"), transforms: [cellWidth(20)] },
     { title: t("terms.assessment"), transforms: [cellWidth(10)] },
-    { title: t("terms.review"), transforms: [cellWidth(10)] },
+    { title: t("terms.review"), transforms: [sortable, cellWidth(10)] },
     { title: t("terms.tags"), transforms: [sortable, cellWidth(10)] },
     {
       title: "",
