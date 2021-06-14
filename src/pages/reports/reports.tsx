@@ -114,11 +114,6 @@ export const Reports: React.FC = () => {
             addFilter={addFilter}
             setFilter={setFilter}
           />
-          <ToolbarGroup alignment={{ default: "alignRight" }}>
-            <ToolbarItem variant={ToolbarItemVariant.pagination}>
-              {applications ? applications.length : 0} items
-            </ToolbarItem>
-          </ToolbarGroup>
         </ToolbarContent>
       </Toolbar>
     </PageSection>
