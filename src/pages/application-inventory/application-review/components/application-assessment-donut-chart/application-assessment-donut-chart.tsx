@@ -1,9 +1,9 @@
 import React, { useMemo } from "react";
 import { ChartDonut, ChartLegend } from "@patternfly/react-charts";
 
-import { global_palette_black_400 as black } from "@patternfly/react-tokens";
+import { global_palette_blue_300 as defaultColor } from "@patternfly/react-tokens";
 
-import { DEFAULT_RISK_LABELS } from "Constants";
+import { RISK_LIST } from "Constants";
 import { Assessment, QuestionnaireCategory } from "api/models";
 
 export interface ChartData {
@@ -62,24 +62,24 @@ export const ApplicationAssessmentDonutChart: React.FC<IApplicationAssessmentDon
 
   const chartDefinition = [
     {
-      x: DEFAULT_RISK_LABELS.get("GREEN")?.label,
+      x: RISK_LIST["GREEN"].label,
       y: charData.green,
-      color: "#68b240",
+      color: RISK_LIST["GREEN"].hexColor,
     },
     {
-      x: DEFAULT_RISK_LABELS.get("AMBER")?.label,
+      x: RISK_LIST["AMBER"].label,
       y: charData.amber,
-      color: "#f0ab0b",
+      color: RISK_LIST["AMBER"].hexColor,
     },
     {
-      x: DEFAULT_RISK_LABELS.get("RED")?.label,
+      x: RISK_LIST["RED"].label,
       y: charData.red,
-      color: "#cb440d",
+      color: RISK_LIST["RED"].hexColor,
     },
     {
-      x: DEFAULT_RISK_LABELS.get("UNKNOWN")?.label,
+      x: RISK_LIST["UNKNOWN"].label,
       y: charData.unknown,
-      color: black.value,
+      color: RISK_LIST["UNKNOWN"].hexColor,
     },
   ].filter((f) => f.y > 0);
 
@@ -90,13 +90,17 @@ export const ApplicationAssessmentDonutChart: React.FC<IApplicationAssessmentDon
         constrainToVisibleArea={true}
         data={chartDefinition.map((elem) => ({ x: elem.x, y: elem.y }))}
         labels={({ datum }) => `${datum.x}: ${datum.y}`}
-        colorScale={chartDefinition.map((elem) => elem.color)}
+        colorScale={chartDefinition.map(
+          (elem) => elem.color || defaultColor.value
+        )}
         legendComponent={
           <ChartLegend
             data={chartDefinition.map((elem) => ({
               name: `${elem.x}: ${elem.y}`,
             }))}
-            colorScale={chartDefinition.map((elem) => elem.color)}
+            colorScale={chartDefinition.map(
+              (elem) => elem.color || defaultColor.value
+            )}
           />
         }
         legendOrientation="vertical"

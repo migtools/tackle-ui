@@ -291,9 +291,9 @@ export const JobFunctions: React.FC = () => {
           }
           toolbarToggle={
             <AppTableToolbarToggleGroup
-              options={filters}
-              filtersValue={filtersValue}
-              onDeleteFilter={handleOnDeleteFilter}
+              categories={filters}
+              chips={filtersValue}
+              onChange={handleOnDeleteFilter}
             >
               <SearchFilter
                 options={filters}

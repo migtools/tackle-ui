@@ -22,7 +22,7 @@ describe("useMultipleFetch", () => {
 
     // Use hook
     const { result, waitForNextUpdate } = renderHook(() =>
-      useMultipleFetch<number, string>(searchPromise)
+      useMultipleFetch<number, string>({ onFetchPromise: searchPromise })
     );
 
     const {
@@ -59,7 +59,7 @@ describe("useMultipleFetch", () => {
 
     // Use hook
     const { result, waitForNextUpdate } = renderHook(() =>
-      useMultipleFetch<number, string>(searchPromise)
+      useMultipleFetch<number, string>({ onFetchPromise: searchPromise })
     );
 
     const {
@@ -96,7 +96,7 @@ describe("useMultipleFetch", () => {
 
     // Use hook
     const { result, waitForNextUpdate } = renderHook(() =>
-      useMultipleFetch<number, string>(searchAxiosPromise)
+      useMultipleFetch<number, string>({ onFetch: searchAxiosPromise })
     );
 
     const {

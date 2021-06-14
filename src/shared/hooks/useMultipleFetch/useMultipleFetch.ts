@@ -1,5 +1,5 @@
 import { useCallback, useReducer } from "react";
-import { AxiosError, AxiosPromise, AxiosResponse } from "axios";
+import { AxiosPromise } from "axios";
 import { ActionType, createAsyncAction, getType } from "typesafe-actions";
 
 interface IFetchData<K = any, T = any> {
@@ -9,7 +9,7 @@ interface IFetchData<K = any, T = any> {
 
 interface IFetchError<K = any> {
   id: K;
-  error: AxiosError;
+  error: any;
 }
 
 export const {
@@ -25,7 +25,7 @@ export const {
 interface State<K = any, T = any> {
   isFetching: Map<K, boolean>;
   data: Map<K, T>;
-  fetchError: Map<K, AxiosError | undefined>;
+  fetchError: Map<K, any | undefined>;
   fetchCount: Map<K, number>;
 }
 
@@ -73,18 +73,24 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
+export interface IArgs<T, K> {
+  onFetch?: (id: K) => AxiosPromise<T>;
+  onFetchPromise?: (id: K) => Promise<T>;
+}
+
 export interface IState<K, T> {
   getData: (id: K) => T | undefined;
   isFetching: (id: K) => boolean;
-  fetchError: (id: K) => AxiosError | undefined;
+  fetchError: (id: K) => any | undefined;
   fetchCount: (id: K) => number;
 
   triggerFetch: (ids: K[]) => void;
 }
 
-export const useMultipleFetch = <K, T>(
-  fetchCallback: (id: K) => AxiosPromise<T> | Promise<T>
-): IState<K, T> => {
+export const useMultipleFetch = <K, T>({
+  onFetch,
+  onFetchPromise,
+}: IArgs<T, K>): IState<K, T> => {
   const [state, dispatch] = useReducer(reducer, defaultState);
 
   const getData = (id: K) => {
@@ -108,33 +114,25 @@ export const useMultipleFetch = <K, T>(
       dispatch(fetchRequest(ids));
 
       ids.forEach((id) => {
-        (fetchCallback(id) as any)
-          .then((response: AxiosResponse<T> | T) => {
-            let data: T;
-            if (response && (response as any)["data"]) {
-              data = (response as AxiosResponse<T>).data;
-            } else {
-              data = response as T;
-            }
-
-            dispatch(
-              fetchSuccess({
-                id,
-                data,
-              })
-            );
-          })
-          .catch((error: any) => {
-            dispatch(
-              fetchFailure({
-                id,
-                error,
-              })
-            );
+        let promise;
+        if (onFetch) {
+          promise = onFetch(id).then(({ data }) => {
+            dispatch(fetchSuccess({ id, data }));
           });
+        } else if (onFetchPromise) {
+          promise = onFetchPromise(id).then((data) => {
+            dispatch(fetchSuccess({ id, data }));
+          });
+        } else {
+          return;
+        }
+
+        promise.catch((error: any) => {
+          dispatch(fetchFailure({ id, error }));
+        });
       });
     },
-    [fetchCallback]
+    [onFetch, onFetchPromise]
   );
 
   return {
