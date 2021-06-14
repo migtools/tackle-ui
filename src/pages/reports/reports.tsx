@@ -20,9 +20,6 @@ import {
   Toolbar,
   ToolbarChip,
   ToolbarContent,
-  ToolbarGroup,
-  ToolbarItem,
-  ToolbarItemVariant,
 } from "@patternfly/react-core";
 import { HelpIcon } from "@patternfly/react-icons";
 
