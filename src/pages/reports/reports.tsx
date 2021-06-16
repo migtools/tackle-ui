@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import {
   Bullseye,
   Card,
+  CardActions,
   CardBody,
   CardExpandableContent,
   CardHeader,
@@ -17,6 +18,8 @@ import {
   StackItem,
   Text,
   TextContent,
+  ToggleGroup,
+  ToggleGroupItem,
   Toolbar,
   ToolbarChip,
   ToolbarContent,
@@ -42,12 +45,16 @@ import { Landscape } from "./components/landscape";
 import { AdoptionCandidateTable } from "./components/adoption-candidate-table";
 import { AdoptionPlan } from "./components/adoption-plan";
 import { IdentifiedRisksTable } from "./components/identified-risks-table";
+import { AdoptionCandidateGraph } from "./components/adoption-candidate-graph/adoption-candidate-graph";
 
 export const Reports: React.FC = () => {
   // i18
   const { t } = useTranslation();
 
   // Cards
+  const [isAdoptionCandidateTable, setIsAdoptionCandidateTable] = useState(
+    true
+  );
   const [isAdoptionPlanOpen, setAdoptionPlanOpen] = useState(false);
   const [isRiskCardOpen, setIsRiskCardOpen] = useState(false);
 
@@ -156,14 +163,40 @@ export const Reports: React.FC = () => {
               <StackItem>
                 <Card>
                   <CardHeader>
-                    <TextContent>
-                      <Text component="h3">
-                        Adoption candidate distribution
-                      </Text>
-                    </TextContent>
+                    <CardActions>
+                      <ToggleGroup>
+                        <ToggleGroupItem
+                          key={0}
+                          text="Table view"
+                          isSelected={isAdoptionCandidateTable}
+                          onChange={() => {
+                            setIsAdoptionCandidateTable(true);
+                          }}
+                        />
+                        <ToggleGroupItem
+                          key={1}
+                          text="Graph view"
+                          isSelected={!isAdoptionCandidateTable}
+                          onChange={() => {
+                            setIsAdoptionCandidateTable(false);
+                          }}
+                        />
+                      </ToggleGroup>
+                    </CardActions>
+                    <CardTitle>
+                      <TextContent>
+                        <Text component="h3">
+                          Adoption candidate distribution
+                        </Text>
+                      </TextContent>
+                    </CardTitle>
                   </CardHeader>
                   <CardBody>
-                    <AdoptionCandidateTable />
+                    {isAdoptionCandidateTable ? (
+                      <AdoptionCandidateTable />
+                    ) : (
+                      <AdoptionCandidateGraph />
+                    )}
                   </CardBody>
                 </Card>
               </StackItem>

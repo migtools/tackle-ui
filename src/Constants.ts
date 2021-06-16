@@ -142,6 +142,7 @@ type EffortEstimateListType = {
   [key in EffortEstimate]: {
     label: string;
     sortFactor: number;
+    size: number;
   };
 };
 
@@ -149,18 +150,22 @@ export const EFFORT_ESTIMATE_LIST: EffortEstimateListType = {
   small: {
     label: "Small",
     sortFactor: 1,
+    size: 4,
   },
   medium: {
     label: "Medium",
     sortFactor: 2,
+    size: 6,
   },
   large: {
     label: "Large",
     sortFactor: 3,
+    size: 8,
   },
   extra_large: {
     label: "Extra large",
     sortFactor: 4,
+    size: 10,
   },
 };
 
