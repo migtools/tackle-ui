@@ -32,8 +32,8 @@ export interface TableRowData {
 }
 
 const compareToByColumn = (
-  a: TableRowData,
-  b: TableRowData,
+  a: Application,
+  b: Application,
   columnIndex?: number
 ) => {
   switch (columnIndex) {
