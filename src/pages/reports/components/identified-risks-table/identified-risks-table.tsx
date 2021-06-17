@@ -144,7 +144,7 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = () => 
   const filterOptions = [
     {
       key: FilterKey.APPLICATION_NAME,
-      name: t("terms.name"),
+      name: t("terms.application"),
       input: (
         <InputTextFilter
           onApplyFilter={(filterText) => {
