@@ -24,8 +24,9 @@ import {
   ChartScatter,
   ChartThemeColor,
 } from "@patternfly/react-charts";
+import { global_palette_black_800 as black } from "@patternfly/react-tokens";
 
-import { useFetch } from "shared/hooks";
+import { useFetch, useFetchApplicationDependencies } from "shared/hooks";
 import { ConditionalRender, StateError } from "shared/components";
 
 import { EFFORT_ESTIMATE_LIST, PROPOSED_ACTION_LIST } from "Constants";
@@ -36,21 +37,26 @@ import { ApplicationSelectionContext } from "../../application-selection-context
 import { CartesianSquare } from "./cartesian-square";
 import { Arrow } from "./arrow";
 
-interface LegendItem {
-  name: string;
-  hexColor: string;
+interface Line {
+  from: Point;
+  to: Point;
 }
 
-interface DataPoint {
+interface Point {
   x: number;
   y: number;
   size: number;
   application: Application;
 }
 
+interface LegendItem {
+  name: string;
+  hexColor: string;
+}
+
 interface Serie {
   legendItem: LegendItem;
-  datapoints: DataPoint[];
+  datapoints: Point[];
 }
 
 type ProposedActionChartDataListType = {
@@ -108,8 +114,9 @@ export const AdoptionCandidateGraph: React.FC = () => {
     ApplicationSelectionContext
   );
 
-  // Controls
+  // Checkboxes
   const [showLabels, setShowLabels] = useState(true);
+  const [showDependencies, setShowDependencies] = useState(true);
 
   // Confidence
   const fetchChartData = useCallback(() => {
@@ -136,8 +143,18 @@ export const AdoptionCandidateGraph: React.FC = () => {
     refreshChart();
   }, [applications, refreshChart]);
 
+  // Dependencies
+  const {
+    applicationDependencies: dependencies,
+    fetchAllApplicationDependencies: fetchAllDependencies,
+  } = useFetchApplicationDependencies();
+
+  useEffect(() => {
+    fetchAllDependencies({});
+  }, [fetchAllDependencies]);
+
   // Chart data
-  const chartData: ProposedActionChartDataListType = useMemo(() => {
+  const chartPoints: ProposedActionChartDataListType = useMemo(() => {
     if (!confidences) {
       return defaultChartData;
     }
@@ -153,7 +170,7 @@ export const AdoptionCandidateGraph: React.FC = () => {
 
         // Create new datapoint
         const effortData = EFFORT_ESTIMATE_LIST[current.review.effortEstimate];
-        const datapoint: DataPoint = {
+        const datapoint: Point = {
           x: appConfidence.confidence,
           y: current.review.businessCriticality,
           size: effortData ? effortData.size : 0,
@@ -177,6 +194,30 @@ export const AdoptionCandidateGraph: React.FC = () => {
     }, defaultChartData);
   }, [confidences, applications]);
 
+  const chartLines = useMemo(() => {
+    if (!dependencies) {
+      return [];
+    }
+
+    const points = Object.keys(chartPoints)
+      .map((key) => chartPoints[key as ProposedAction].datapoints)
+      .flatMap((f) => f);
+
+    return dependencies.data.reduce((prev, current) => {
+      const fromPoint = points.find(
+        (f) => f.application.id === current.from.id
+      );
+      const toPoint = points.find((f) => f.application.id === current.to.id);
+
+      if (fromPoint && toPoint) {
+        const line: Line = { from: fromPoint, to: toPoint };
+        return [...prev, line];
+      } else {
+        return prev;
+      }
+    }, [] as Line[]);
+  }, [chartPoints, dependencies]);
+
   if (fetchError) {
     return <StateError />;
   }
@@ -194,7 +235,16 @@ export const AdoptionCandidateGraph: React.FC = () => {
     >
       <Stack>
         <StackItem>
-          <Split>
+          <Split hasGutter>
+            <SplitItem>
+              <Checkbox
+                id="show-dependencies"
+                name="show-dependencies"
+                label="Dependencies"
+                isChecked={showDependencies}
+                onChange={() => setShowDependencies((current) => !current)}
+              />
+            </SplitItem>
             <SplitItem>
               <Checkbox
                 id="show-labels"
@@ -229,8 +279,8 @@ export const AdoptionCandidateGraph: React.FC = () => {
                     <Chart
                       themeColor={ChartThemeColor.gray}
                       legendPosition="bottom-left"
-                      legendData={Object.keys(chartData).map((key) => {
-                        const serie = chartData[key as ProposedAction];
+                      legendData={Object.keys(chartPoints).map((key) => {
+                        const serie = chartPoints[key as ProposedAction];
                         const legend = serie.legendItem;
                         return {
                           name: legend.name,
@@ -242,7 +292,7 @@ export const AdoptionCandidateGraph: React.FC = () => {
                       padding={chartPadding}
                       height={chartHeight}
                       width={chartWidth}
-                      domain={{ x: [0, 100], y: [0, 10] }}
+                      domain={{ x: [-1, 100], y: [0, 10] }}
                     >
                       <CartesianSquare
                         height={chartHeight}
@@ -273,8 +323,8 @@ export const AdoptionCandidateGraph: React.FC = () => {
                         tickValues={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
                       />
                       <ChartGroup>
-                        {Object.keys(chartData).map((key, i) => {
-                          const serie = chartData[key as ProposedAction];
+                        {Object.keys(chartPoints).map((key, i) => {
+                          const serie = chartPoints[key as ProposedAction];
                           const legendItem = serie.legendItem;
                           return (
                             <ChartScatter
@@ -293,22 +343,24 @@ export const AdoptionCandidateGraph: React.FC = () => {
                           );
                         })}
                       </ChartGroup>
-                      <ChartGroup>
-                        {Object.keys(chartData).map((key, i) => {
-                          const serie = chartData[key as ProposedAction];
-                          return (
-                            <ChartLine
-                              key={"line-" + 1}
-                              name={"line-" + 1}
-                              data={serie.datapoints}
-                              style={{
-                                data: { stroke: "#b2b2b2", strokeWidth: 3 },
-                              }}
-                              dataComponent={<Arrow />}
-                            />
-                          );
-                        })}
-                      </ChartGroup>
+                      {showDependencies &&
+                        chartLines.map((line, i) => (
+                          <ChartLine
+                            key={"line-" + i}
+                            name={"line-" + i}
+                            data={[
+                              { x: line.from.x, y: line.from.y },
+                              {
+                                x: line.to.x,
+                                y: line.to.y,
+                              },
+                            ]}
+                            style={{
+                              data: { stroke: black.value, strokeWidth: 2 },
+                            }}
+                            dataComponent={<Arrow />}
+                          />
+                        ))}
                     </Chart>
                   </div>
                 </div>

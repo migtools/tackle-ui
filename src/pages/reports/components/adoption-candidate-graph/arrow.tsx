@@ -1,5 +1,6 @@
 import React from "react";
 import { Curve } from "victory-line";
+import { global_palette_black_800 as black } from "@patternfly/react-tokens";
 
 export const Arrow: React.FC = (props) => {
   return (
@@ -9,12 +10,12 @@ export const Arrow: React.FC = (props) => {
           id="arrow"
           markerWidth="10"
           markerHeight="10"
-          refX="1"
-          refY="2"
+          refX="6"
+          refY="3"
           orient="auto"
           markerUnits="strokeWidth"
         >
-          <path d="M0,0 L0,6 L9,3 z" fill="#282828" />
+          <path d="M0,0 L0,6 L6,3 z" fill={black.value} />
         </marker>
       </defs>
       <Curve {...props} pathComponent={<path markerEnd="url(#arrow)" />} />

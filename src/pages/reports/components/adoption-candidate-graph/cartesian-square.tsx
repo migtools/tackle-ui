@@ -26,7 +26,7 @@ export const CartesianSquare: React.FC<ICartesianSquareProps> = ({
         height={height}
         width={width}
         theme={VictoryTheme.grayscale}
-        offsetX={offsetX}
+        offsetX={offsetX + 5}
         standalone={false}
         padding={padding}
         tickLabelComponent={<></>}
@@ -47,7 +47,7 @@ export const CartesianSquare: React.FC<ICartesianSquareProps> = ({
             Impactful but not advisable to move
           </text>
           <text x={`${width - 250}`} y={topPosition}>
-            Inpactful but migratable
+            Impactful but migratable
           </text>
           <text x="100" y={bottomPosition}>
             Inadvisable
