@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { AxiosResponse } from "axios";
 import { useTranslation } from "react-i18next";
@@ -7,6 +7,7 @@ import { useSelectionState } from "@konveyor/lib-ui";
 import {
   Button,
   ButtonVariant,
+  DropdownItem,
   Modal,
   PageSection,
   PageSectionVariants,
@@ -79,6 +80,8 @@ import ApplicationDependenciesForm from "./components/application-dependencies-f
 import { ApplicationAssessment } from "./components/application-assessment";
 import { ApplicationBusinessService } from "./components/application-business-service";
 import { ApplicationListExpandedArea } from "./components/application-list-expanded-area";
+import { ImportApplicationsForm } from "./components/import-applications-form";
+import { KebabDropdown } from "./components/kebab-dropdown/kebab-dropdown";
 
 const toSortByQuery = (
   sortBy?: SortByQuery
@@ -223,6 +226,12 @@ export const ApplicationList: React.FC = () => {
     update: openDependenciesModal,
     close: closeDependenciesModal,
   } = useEntityModal<Application>();
+
+  // Application import modal
+  const [
+    isApplicationImportModalOpen,
+    setIsApplicationImportModalOpen,
+  ] = useState(false);
 
   // Table's assessments
   const {
@@ -667,6 +676,29 @@ export const ApplicationList: React.FC = () => {
                       {t("actions.review")}
                     </Button>
                   </ToolbarItem>
+                  <ToolbarItem>
+                    <KebabDropdown
+                      dropdownItems={[
+                        <DropdownItem
+                          key="import-applications"
+                          component="button"
+                          onClick={() => setIsApplicationImportModalOpen(true)}
+                        >
+                          Import
+                        </DropdownItem>,
+                        <DropdownItem
+                          key="manage-application-imports"
+                          onClick={() => {
+                            history.push(
+                              Paths.applicationInventory_manageImports
+                            );
+                          }}
+                        >
+                          Manage imports
+                        </DropdownItem>,
+                      ]}
+                    />
+                  </ToolbarItem>
                 </ToolbarGroup>
               </>
             }
@@ -720,6 +752,23 @@ export const ApplicationList: React.FC = () => {
             onCancel={closeDependenciesModal}
           />
         )}
+      </Modal>
+
+      <Modal
+        isOpen={isApplicationImportModalOpen}
+        variant="medium"
+        title="Import application file"
+        onClose={() => setIsApplicationImportModalOpen((current) => !current)}
+      >
+        <ImportApplicationsForm
+          onSaved={() => {
+            setIsApplicationImportModalOpen(false);
+            refreshTable();
+          }}
+          onCancel={() => {
+            setIsApplicationImportModalOpen((current) => !current);
+          }}
+        />
       </Modal>
     </>
   );
