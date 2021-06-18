@@ -150,22 +150,22 @@ export const EFFORT_ESTIMATE_LIST: EffortEstimateListType = {
   small: {
     label: "Small",
     sortFactor: 1,
-    size: 4,
+    size: 10,
   },
   medium: {
     label: "Medium",
     sortFactor: 2,
-    size: 6,
+    size: 20,
   },
   large: {
     label: "Large",
     sortFactor: 3,
-    size: 8,
+    size: 30,
   },
   extra_large: {
     label: "Extra large",
     sortFactor: 4,
-    size: 10,
+    size: 40,
   },
 };
 

@@ -6,6 +6,7 @@ import React, {
   useState,
 } from "react";
 import Measure from "react-measure";
+import { VictoryLabel } from "victory-core";
 
 import {
   Bullseye,
@@ -210,11 +211,16 @@ export const AdoptionCandidateGraph: React.FC = () => {
       const toPoint = points.find((f) => f.application.id === current.to.id);
 
       if (fromPoint && toPoint) {
-        const line: Line = { from: fromPoint, to: toPoint };
-        return [...prev, line];
-      } else {
-        return prev;
+        const a = fromPoint.x - toPoint.x;
+        const b = fromPoint.y - toPoint.y;
+        const distance = Math.sqrt(a * a + b * b);
+        if (distance > 0) {
+          const line: Line = { from: fromPoint, to: toPoint };
+          return [...prev, line];
+        }
       }
+
+      return prev;
     }, [] as Line[]);
   }, [chartPoints, dependencies]);
 
@@ -315,33 +321,55 @@ export const AdoptionCandidateGraph: React.FC = () => {
                           90,
                           100,
                         ]}
+                        tickLabelComponent={<></>}
+                        style={{
+                          axisLabel: { fontSize: 20, padding: 30 },
+                        }}
                       />
                       <ChartAxis
                         label="Business criticality"
                         showGrid
                         dependentAxis
                         tickValues={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+                        tickLabelComponent={<></>}
+                        style={{
+                          axisLabel: { fontSize: 20, padding: 30 },
+                        }}
                       />
                       <ChartGroup>
-                        {Object.keys(chartPoints).map((key, i) => {
-                          const serie = chartPoints[key as ProposedAction];
-                          const legendItem = serie.legendItem;
-                          return (
-                            <ChartScatter
-                              key={"scatter-" + i}
-                              name={"scatter-" + i}
-                              data={serie.datapoints}
-                              labels={({ datum }) =>
-                                showLabels ? datum.application?.name : undefined
-                              }
-                              style={{
-                                data: {
-                                  fill: legendItem.hexColor,
-                                },
-                              }}
-                            />
-                          );
-                        })}
+                        {Object.keys(chartPoints)
+                          .filter((key) => {
+                            const serie = chartPoints[key as ProposedAction];
+                            return serie.datapoints.length > 0;
+                          })
+                          .map((key, i) => {
+                            const serie = chartPoints[key as ProposedAction];
+                            const legendItem = serie.legendItem;
+                            return (
+                              <ChartScatter
+                                key={"scatter-" + i}
+                                name={"scatter-" + i}
+                                data={serie.datapoints}
+                                labels={({ datum }) => {
+                                  return showLabels
+                                    ? datum.application?.name
+                                    : undefined;
+                                }}
+                                labelComponent={
+                                  <VictoryLabel
+                                    dy={({ datum }) => {
+                                      return 0 - datum.size;
+                                    }}
+                                  />
+                                }
+                                style={{
+                                  data: {
+                                    fill: legendItem.hexColor,
+                                  },
+                                }}
+                              />
+                            );
+                          })}
                       </ChartGroup>
                       {showDependencies &&
                         chartLines.map((line, i) => (
