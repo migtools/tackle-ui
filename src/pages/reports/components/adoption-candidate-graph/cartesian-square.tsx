@@ -16,32 +16,11 @@ export const CartesianSquare: React.FC<ICartesianSquareProps> = ({
   const topY = ((padding?.top || 0) - 10).toString();
   const bottomY = (height - (padding?.bottom || 0) + 20).toString();
 
-  const offsetX = (width + 25) / 2;
-  const offsetY = (height + 50) / 2;
+  const offsetX = (width + ((padding?.left || 0) - (padding?.right || 0))) / 2;
+  const offsetY = (height + ((padding?.bottom || 0) - (padding?.top || 0))) / 2;
 
   return (
     <svg>
-      <ChartAxis
-        dependentAxis
-        crossAxis
-        height={height}
-        width={width}
-        theme={VictoryTheme.grayscale}
-        offsetX={offsetX + 5}
-        standalone={false}
-        padding={padding}
-        tickLabelComponent={<></>}
-      />
-      <ChartAxis
-        crossAxis
-        height={height}
-        width={width}
-        theme={VictoryTheme.grayscale}
-        offsetY={offsetY}
-        standalone={false}
-        padding={padding}
-        tickLabelComponent={<></>}
-      />
       <g>
         <g>
           <text x="100" y={topY}>
@@ -58,6 +37,27 @@ export const CartesianSquare: React.FC<ICartesianSquareProps> = ({
           </text>
         </g>
       </g>
+      <ChartAxis
+        crossAxis
+        height={height}
+        width={width}
+        theme={VictoryTheme.grayscale}
+        offsetY={offsetY}
+        standalone={false}
+        padding={padding}
+        tickLabelComponent={<></>}
+      />
+      <ChartAxis
+        dependentAxis
+        crossAxis
+        height={height}
+        width={width}
+        theme={VictoryTheme.grayscale}
+        offsetX={offsetX + 5} // Plus 5 to fix the -1 domain of parent
+        standalone={false}
+        padding={padding}
+        tickLabelComponent={<></>}
+      />
     </svg>
   );
 };
