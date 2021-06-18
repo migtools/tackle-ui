@@ -6,14 +6,11 @@ import React, {
   useState,
 } from "react";
 import Measure from "react-measure";
-import { VictoryLabel } from "victory-core";
 
 import {
   Bullseye,
   Checkbox,
   Skeleton,
-  Split,
-  SplitItem,
   Stack,
   StackItem,
 } from "@patternfly/react-core";
@@ -24,6 +21,7 @@ import {
   ChartLine,
   ChartScatter,
   ChartThemeColor,
+  ChartTooltip,
 } from "@patternfly/react-charts";
 import { global_palette_black_800 as black } from "@patternfly/react-tokens";
 
@@ -116,7 +114,6 @@ export const AdoptionCandidateGraph: React.FC = () => {
   );
 
   // Checkboxes
-  const [showLabels, setShowLabels] = useState(true);
   const [showDependencies, setShowDependencies] = useState(true);
 
   // Confidence
@@ -241,26 +238,13 @@ export const AdoptionCandidateGraph: React.FC = () => {
     >
       <Stack>
         <StackItem>
-          <Split hasGutter>
-            <SplitItem>
-              <Checkbox
-                id="show-dependencies"
-                name="show-dependencies"
-                label="Dependencies"
-                isChecked={showDependencies}
-                onChange={() => setShowDependencies((current) => !current)}
-              />
-            </SplitItem>
-            <SplitItem>
-              <Checkbox
-                id="show-labels"
-                name="show-labels"
-                label="Labels"
-                isChecked={showLabels}
-                onChange={() => setShowLabels((current) => !current)}
-              />
-            </SplitItem>
-          </Split>
+          <Checkbox
+            id="show-dependencies"
+            name="show-dependencies"
+            label="Dependencies"
+            isChecked={showDependencies}
+            onChange={() => setShowDependencies((current) => !current)}
+          />
         </StackItem>
         <StackItem isFilled>
           <Measure bounds>
@@ -351,15 +335,11 @@ export const AdoptionCandidateGraph: React.FC = () => {
                                 name={"scatter-" + i}
                                 data={serie.datapoints}
                                 labels={({ datum }) => {
-                                  return showLabels
-                                    ? datum.application?.name
-                                    : undefined;
+                                  return datum.application?.name;
                                 }}
                                 labelComponent={
-                                  <VictoryLabel
-                                    dy={({ datum }) => {
-                                      return 0 - datum.size;
-                                    }}
+                                  <ChartTooltip
+                                    dy={({ datum }) => 0 - datum.size}
                                   />
                                 }
                                 style={{
