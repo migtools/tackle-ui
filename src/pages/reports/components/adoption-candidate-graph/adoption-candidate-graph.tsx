@@ -236,7 +236,7 @@ export const AdoptionCandidateGraph: React.FC = () => {
         </Bullseye>
       }
     >
-      <Stack>
+      <Stack hasGutter>
         <StackItem>
           <Checkbox
             id="show-dependencies"

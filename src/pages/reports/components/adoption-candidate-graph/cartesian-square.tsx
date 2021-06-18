@@ -13,8 +13,9 @@ export const CartesianSquare: React.FC<ICartesianSquareProps> = ({
   width,
   padding,
 }) => {
-  const topPosition = ((padding?.top || 0) + 20).toString();
-  const bottomPosition = (height - (padding?.bottom || 0) - 10).toString();
+  const topY = ((padding?.top || 0) - 10).toString();
+  const bottomY = (height - (padding?.bottom || 0) + 20).toString();
+
   const offsetX = (width + 25) / 2;
   const offsetY = (height + 50) / 2;
 
@@ -43,16 +44,16 @@ export const CartesianSquare: React.FC<ICartesianSquareProps> = ({
       />
       <g>
         <g>
-          <text x="100" y={topPosition}>
+          <text x="100" y={topY}>
             Impactful but not advisable to move
           </text>
-          <text x={`${width - 250}`} y={topPosition}>
+          <text x={`${width - 250}`} y={topY}>
             Impactful but migratable
           </text>
-          <text x="100" y={bottomPosition}>
+          <text x="100" y={bottomY}>
             Inadvisable
           </text>
-          <text x={`${width - 225}`} y={bottomPosition}>
+          <text x={`${width - 225}`} y={bottomY}>
             Trivial but migratable
           </text>
         </g>
