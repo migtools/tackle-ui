@@ -107,6 +107,14 @@ export interface ApplicationAdoptionPlan {
   effortEstimate: string;
 }
 
+export interface ApplicationImportSummary {
+  filename: string;
+  createUser: string;
+  createTime: number;
+  validCount: number;
+  invalidCount: number;
+}
+
 // Pathfinder
 
 export type AssessmentStatus = "EMPTY" | "STARTED" | "COMPLETE";

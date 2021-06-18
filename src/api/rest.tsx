@@ -23,6 +23,7 @@ import {
   AssessmentRisk,
   AssessmentQuestionRisk,
   ApplicationAdoptionPlan,
+  ApplicationImportSummary,
 } from "./models";
 
 export const CONTROLS_BASE_URL = "controls";
@@ -42,6 +43,8 @@ export const APPLICATION_DEPENDENCY =
 export const REVIEW = APP_INVENTORY_BASE_URL + "/review";
 export const REPORT = APP_INVENTORY_BASE_URL + "/report";
 export const UPLOAD_FILE = APP_INVENTORY_BASE_URL + "/file/upload";
+export const APP_IMPORT_SUMMARY =
+  APP_INVENTORY_BASE_URL + "/import-summary/summary";
 
 export const ASSESSMENTS = PATHFINDER_BASE_URL + "/assessments";
 
@@ -569,6 +572,12 @@ export const getApplicationAdoptionPlan = (
       applicationId: f,
     }))
   );
+};
+
+export const getApplicationImportSummary = (): AxiosPromise<
+  ApplicationImportSummary[]
+> => {
+  return APIClient.get(APP_IMPORT_SUMMARY);
 };
 
 //
