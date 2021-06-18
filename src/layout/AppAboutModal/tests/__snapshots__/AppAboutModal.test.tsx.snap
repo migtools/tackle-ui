@@ -10,24 +10,48 @@ exports[`AppAboutModal 1`] = `
   isOpen={true}
   noAboutModalBoxContentContainer={false}
   onClose={[MockFunction]}
-  productName=""
-  trademark="COPYRIGHT © 2020."
+  productName="Tackle"
+  trademark="COPYRIGHT © 2021."
 >
   <TextContent>
-    <TextList
-      component="dl"
+    <Text
+      component="p"
     >
-      <TextListItem
-        component="dt"
+      Tackle is a collection of tools that supports large-scale application modernization and migration projects to Kubernetes.
+    </Text>
+    <Text
+      component="p"
+    >
+      Tackle allows users to maintain their portfolio of applications with a full set of metadata and to assess their suitability for modernization leveraging a questionnaire based approach.
+    </Text>
+    <Text
+      component="p"
+    >
+      Tackle is a project within the
+       
+      <Text
+        component="a"
+        href="https://www.konveyor.io/"
+        target="_blank"
       >
-        Source code
-      </TextListItem>
-      <TextListItem
-        component="dd"
+        Konveyor community
+      </Text>
+      .
+    </Text>
+    <Text
+      component="p"
+    >
+      For more information please refer to
+       
+      <Text
+        component="a"
+        href="https://tackle-docs.konveyor.io/"
+        target="_blank"
       >
-        some content here
-      </TextListItem>
-    </TextList>
+        Tackle documentation
+      </Text>
+      .
+    </Text>
   </TextContent>
 </AboutModal>
 `;
