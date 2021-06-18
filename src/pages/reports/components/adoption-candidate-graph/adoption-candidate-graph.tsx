@@ -282,7 +282,7 @@ export const AdoptionCandidateGraph: React.FC = () => {
                       padding={chartPadding}
                       height={chartHeight}
                       width={chartWidth}
-                      domain={{ x: [-1, 100], y: [0, 10] }}
+                      domain={{ x: [0, 100], y: [0, 10] }}
                     >
                       <CartesianSquare
                         height={chartHeight}
@@ -367,6 +367,7 @@ export const AdoptionCandidateGraph: React.FC = () => {
                               data: { stroke: black.value, strokeWidth: 2 },
                             }}
                             dataComponent={<Arrow />}
+                            groupComponent={<g></g>}
                           />
                         ))}
                     </Chart>
