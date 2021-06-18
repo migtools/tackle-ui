@@ -43,8 +43,7 @@ export const APPLICATION_DEPENDENCY =
 export const REVIEW = APP_INVENTORY_BASE_URL + "/review";
 export const REPORT = APP_INVENTORY_BASE_URL + "/report";
 export const UPLOAD_FILE = APP_INVENTORY_BASE_URL + "/file/upload";
-export const APP_IMPORT_SUMMARY =
-  APP_INVENTORY_BASE_URL + "/import-summary/summary";
+export const APP_IMPORT_SUMMARY = APP_INVENTORY_BASE_URL + "/import-summary";
 
 export const ASSESSMENTS = PATHFINDER_BASE_URL + "/assessments";
 
@@ -577,7 +576,7 @@ export const getApplicationAdoptionPlan = (
 export const getApplicationImportSummary = (): AxiosPromise<
   ApplicationImportSummary[]
 > => {
-  return APIClient.get(APP_IMPORT_SUMMARY);
+  return APIClient.get(APP_IMPORT_SUMMARY, { headers });
 };
 
 //
