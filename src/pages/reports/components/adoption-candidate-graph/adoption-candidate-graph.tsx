@@ -284,11 +284,6 @@ export const AdoptionCandidateGraph: React.FC = () => {
                       width={chartWidth}
                       domain={{ x: [0, 100], y: [0, 10] }}
                     >
-                      <CartesianSquare
-                        height={chartHeight}
-                        width={chartWidth}
-                        padding={chartPadding}
-                      />
                       <ChartAxis
                         label="Confidence"
                         showGrid
@@ -319,6 +314,11 @@ export const AdoptionCandidateGraph: React.FC = () => {
                         style={{
                           axisLabel: { fontSize: 20, padding: 30 },
                         }}
+                      />
+                      <CartesianSquare
+                        height={chartHeight}
+                        width={chartWidth}
+                        padding={chartPadding}
                       />
                       <ChartGroup>
                         {Object.keys(chartPoints)
