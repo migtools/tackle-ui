@@ -22,7 +22,7 @@ import { useFetch } from "shared/hooks";
 
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 import { createTag, updateTag } from "api/rest";
-import { PageRepresentation, Tag, TagType, TagTypePage } from "api/models";
+import { Tag, TagType, TagTypePage } from "api/models";
 import {
   getAxiosErrorMessage,
   getValidatedFromError,
@@ -51,15 +51,18 @@ export const TagForm: React.FC<TagFormProps> = ({ tag, onSaved, onCancel }) => {
   const [error, setError] = useState<AxiosError>();
 
   const {
-    data: tagTypes,
+    data: tagTypesPage,
     isFetching: isFetchingTagTypes,
     fetchError: fetchErrorTagTypes,
     requestFetch: fetchAllTagTypes,
-  } = useFetch<TagTypePage, PageRepresentation<TagType>>({
+  } = useFetch<TagTypePage>({
     defaultIsFetching: true,
     onFetch: getAllTagTypes,
-    mapper: tagTypePageMapper,
   });
+
+  const tagTypes = useMemo(() => {
+    return tagTypesPage ? tagTypePageMapper(tagTypesPage) : undefined;
+  }, [tagTypesPage]);
 
   useEffect(() => {
     fetchAllTagTypes();

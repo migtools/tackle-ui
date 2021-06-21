@@ -26,7 +26,6 @@ import { createStakeholder, updateStakeholder } from "api/rest";
 import {
   JobFunction,
   JobFunctionPage,
-  PageRepresentation,
   Stakeholder,
   StakeholderGroup,
   StakeholderGroupPage,
@@ -80,30 +79,40 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
   const [error, setError] = useState<AxiosError>();
 
   const {
-    data: jobFunctions,
+    data: jobFunctionsPage,
     isFetching: isFetchingJobFunctions,
     fetchError: fetchErrorJobFunctions,
     requestFetch: fetchAllJobFunctions,
-  } = useFetch<JobFunctionPage, PageRepresentation<JobFunction>>({
+  } = useFetch<JobFunctionPage>({
     defaultIsFetching: true,
     onFetch: getAllJobFunctions,
-    mapper: jobFunctionPageMapper,
   });
+
+  const jobFunctions = useMemo(() => {
+    return jobFunctionsPage
+      ? jobFunctionPageMapper(jobFunctionsPage)
+      : undefined;
+  }, [jobFunctionsPage]);
 
   useEffect(() => {
     fetchAllJobFunctions();
   }, [fetchAllJobFunctions]);
 
   const {
-    data: stakeholderGroups,
+    data: stakeholderGroupsPage,
     isFetching: isFetchingGroups,
     fetchError: fetchErrorGroups,
     requestFetch: fetchAllStakeholderGroups,
-  } = useFetch<StakeholderGroupPage, PageRepresentation<StakeholderGroup>>({
+  } = useFetch<StakeholderGroupPage>({
     defaultIsFetching: true,
     onFetch: getAllStakeholderGroups,
-    mapper: stakeholderGroupPageMapper,
   });
+
+  const stakeholderGroups = useMemo(() => {
+    return stakeholderGroupsPage
+      ? stakeholderGroupPageMapper(stakeholderGroupsPage)
+      : undefined;
+  }, [stakeholderGroupsPage]);
 
   useEffect(() => {
     fetchAllStakeholderGroups();

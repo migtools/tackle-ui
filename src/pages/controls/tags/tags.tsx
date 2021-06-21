@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { AxiosResponse } from "axios";
 import { useTranslation } from "react-i18next";
 import { useSelectionState } from "@konveyor/lib-ui";
@@ -42,13 +42,7 @@ import {
 
 import { getAxiosErrorMessage } from "utils/utils";
 import { getTagTypes, TagTypeSortBy, TagTypeSortByQuery } from "api/rest";
-import {
-  PageRepresentation,
-  SortByQuery,
-  Tag,
-  TagType,
-  TagTypePage,
-} from "api/models";
+import { SortByQuery, Tag, TagType, TagTypePage } from "api/models";
 import { tagTypePageMapper } from "api/apiUtils";
 
 import { NewTagTypeModal } from "./components/new-tag-type-modal";
@@ -147,15 +141,18 @@ export const Tags: React.FC = () => {
   }, [filtersValue, paginationQuery, sortByQuery]);
 
   const {
-    data: tagTypes,
+    data: tagTypesPage,
     isFetching: isFetchingTagTypes,
     fetchError: fetchErrorTagTypes,
     requestFetch: refreshTable,
-  } = useFetch<TagTypePage, PageRepresentation<TagType>>({
+  } = useFetch<TagTypePage>({
     defaultIsFetching: true,
     onFetch: fetchTagTypes,
-    mapper: tagTypePageMapper,
   });
+
+  const tagTypes = useMemo(() => {
+    return tagTypesPage ? tagTypePageMapper(tagTypesPage) : undefined;
+  }, [tagTypesPage]);
 
   useEffect(() => {
     refreshTable();

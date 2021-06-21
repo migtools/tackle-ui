@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { AxiosResponse } from "axios";
 import { useTranslation } from "react-i18next";
 import { useSelectionState } from "@konveyor/lib-ui";
@@ -46,12 +46,7 @@ import {
   StakeholderSortBy,
   StakeholderSortByQuery,
 } from "api/rest";
-import {
-  Stakeholder,
-  SortByQuery,
-  StakeholderPage,
-  PageRepresentation,
-} from "api/models";
+import { Stakeholder, SortByQuery, StakeholderPage } from "api/models";
 import { stakeholderPageMapper } from "api/apiUtils";
 
 import { NewStakeholderModal } from "./components/new-stakeholder-modal";
@@ -155,15 +150,20 @@ export const Stakeholders: React.FC = () => {
   }, [filtersValue, paginationQuery, sortByQuery]);
 
   const {
-    data: stakeholders,
+    data: stakeholdersPage,
     isFetching,
     fetchError,
     requestFetch: refreshTable,
-  } = useFetch<StakeholderPage, PageRepresentation<Stakeholder>>({
+  } = useFetch<StakeholderPage>({
     defaultIsFetching: true,
     onFetch: fetchStakeholders,
-    mapper: stakeholderPageMapper,
   });
+
+  const stakeholders = useMemo(() => {
+    return stakeholdersPage
+      ? stakeholderPageMapper(stakeholdersPage)
+      : undefined;
+  }, [stakeholdersPage]);
 
   useEffect(() => {
     refreshTable();

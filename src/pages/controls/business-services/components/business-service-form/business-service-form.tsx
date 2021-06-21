@@ -23,12 +23,7 @@ import { useFetch } from "shared/hooks";
 
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 import { createBusinessService, updateBusinessService } from "api/rest";
-import {
-  BusinessService,
-  PageRepresentation,
-  Stakeholder,
-  StakeholderPage,
-} from "api/models";
+import { BusinessService, Stakeholder, StakeholderPage } from "api/models";
 import {
   getAxiosErrorMessage,
   getValidatedFromError,
@@ -65,15 +60,20 @@ export const BusinessServiceForm: React.FC<BusinessServiceFormProps> = ({
   const [error, setError] = useState<AxiosError>();
 
   const {
-    data: stakeholders,
+    data: stakeholdersPage,
     isFetching: isFetchingStakeholders,
     fetchError: fetchErrorStakeholders,
     requestFetch: fetchAllStakeholders,
-  } = useFetch<StakeholderPage, PageRepresentation<Stakeholder>>({
+  } = useFetch<StakeholderPage>({
     defaultIsFetching: true,
     onFetch: getAllStakeholders,
-    mapper: stakeholderPageMapper,
   });
+
+  const stakeholders = useMemo(() => {
+    return stakeholdersPage
+      ? stakeholderPageMapper(stakeholdersPage)
+      : undefined;
+  }, [stakeholdersPage]);
 
   useEffect(() => {
     fetchAllStakeholders();

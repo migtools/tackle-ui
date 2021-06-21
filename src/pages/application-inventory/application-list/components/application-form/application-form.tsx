@@ -28,9 +28,7 @@ import {
   Application,
   BusinessService,
   BusinessServicePage,
-  PageRepresentation,
   Tag,
-  TagType,
   TagTypePage,
 } from "api/models";
 import {
@@ -90,15 +88,20 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
   // Business services
 
   const {
-    data: businessServices,
+    data: businessServicesPage,
     isFetching: isFetchingBusinessServices,
     fetchError: fetchErrorBusinessServices,
     requestFetch: fetchAllBusinessServices,
-  } = useFetch<BusinessServicePage, PageRepresentation<BusinessService>>({
+  } = useFetch<BusinessServicePage>({
     defaultIsFetching: true,
     onFetch: getAllBusinessServices,
-    mapper: bussinessServicePageMapper,
   });
+
+  const businessServices = useMemo(() => {
+    return businessServicesPage
+      ? bussinessServicePageMapper(businessServicesPage)
+      : undefined;
+  }, [businessServicesPage]);
 
   useEffect(() => {
     fetchAllBusinessServices();
@@ -107,15 +110,18 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
   // TagTypes
 
   const {
-    data: tagTypes,
+    data: tagTypesPage,
     isFetching: isFetchingTagTypes,
     fetchError: fetchErrorTagTypes,
     requestFetch: fetchAllTagTypes,
-  } = useFetch<TagTypePage, PageRepresentation<TagType>>({
+  } = useFetch<TagTypePage>({
     defaultIsFetching: true,
     onFetch: getAllTagTypesSortedByRank,
-    mapper: tagTypePageMapper,
   });
+
+  const tagTypes = useMemo(() => {
+    return tagTypesPage ? tagTypePageMapper(tagTypesPage) : undefined;
+  }, [tagTypesPage]);
 
   useEffect(() => {
     fetchAllTagTypes();

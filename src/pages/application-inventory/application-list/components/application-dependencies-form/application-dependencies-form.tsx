@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -20,7 +26,6 @@ import {
   ApplicationDependency,
   ApplicationDependencyPage,
   ApplicationPage,
-  PageRepresentation,
 } from "api/models";
 
 import {
@@ -89,32 +94,36 @@ export const ApplicationDependenciesForm: React.FC<ApplicationDependenciesFormPr
   }, [application]);
 
   const {
-    data: northDependencies,
+    data: northDependenciesPage,
     isFetching: isFetchingNorthDependencies,
     fetchError: fetchErrorNorthDependencies,
     requestFetch: fetchAllNorthDependencies,
-  } = useFetch<
-    ApplicationDependencyPage,
-    PageRepresentation<ApplicationDependency>
-  >({
+  } = useFetch<ApplicationDependencyPage>({
     defaultIsFetching: true,
     onFetch: getAllNorthApplicationDependencies,
-    mapper: applicationDependencyPageMapper,
   });
 
+  const northDependencies = useMemo(() => {
+    return northDependenciesPage
+      ? applicationDependencyPageMapper(northDependenciesPage)
+      : undefined;
+  }, [northDependenciesPage]);
+
   const {
-    data: southDependencies,
+    data: southDependenciesPage,
     isFetching: isFetchingSouthDependencies,
     fetchError: fetchErrorSouthDependencies,
     requestFetch: fetchAllSouthDependencies,
-  } = useFetch<
-    ApplicationDependencyPage,
-    PageRepresentation<ApplicationDependency>
-  >({
+  } = useFetch<ApplicationDependencyPage>({
     defaultIsFetching: true,
     onFetch: getAllSouthApplicationDependencies,
-    mapper: applicationDependencyPageMapper,
   });
+
+  const southDependencies = useMemo(() => {
+    return southDependenciesPage
+      ? applicationDependencyPageMapper(southDependenciesPage)
+      : undefined;
+  }, [southDependenciesPage]);
 
   useEffect(() => {
     fetchAllNorthDependencies();
@@ -127,15 +136,20 @@ export const ApplicationDependenciesForm: React.FC<ApplicationDependenciesFormPr
   // Applications
 
   const {
-    data: applications,
+    data: applicationsPage,
     isFetching: isFetchingApplications,
     fetchError: fetchErrorApplications,
     requestFetch: fetchAllApplications,
-  } = useFetch<ApplicationPage, PageRepresentation<Application>>({
+  } = useFetch<ApplicationPage>({
     defaultIsFetching: true,
     onFetch: getAllApplications,
-    mapper: applicationPageMapper,
   });
+
+  const applications = useMemo(() => {
+    return applicationsPage
+      ? applicationPageMapper(applicationsPage)
+      : undefined;
+  }, [applicationsPage]);
 
   useEffect(() => {
     fetchAllApplications();

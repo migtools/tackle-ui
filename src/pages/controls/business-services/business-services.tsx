@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { AxiosResponse } from "axios";
 import { useTranslation } from "react-i18next";
 
@@ -36,12 +36,7 @@ import {
   useDeleteBusinessService,
 } from "shared/hooks";
 
-import {
-  BusinessService,
-  BusinessServicePage,
-  PageRepresentation,
-  SortByQuery,
-} from "api/models";
+import { BusinessService, BusinessServicePage, SortByQuery } from "api/models";
 import {
   BusinessServiceSortBy,
   BusinessServiceSortByQuery,
@@ -139,15 +134,20 @@ export const BusinessServices: React.FC = () => {
   }, [filtersValue, paginationQuery, sortByQuery]);
 
   const {
-    data: businessServices,
+    data: businessServicesPage,
     isFetching,
     fetchError,
     requestFetch: refreshTable,
-  } = useFetch<BusinessServicePage, PageRepresentation<BusinessService>>({
+  } = useFetch<BusinessServicePage>({
     defaultIsFetching: true,
     onFetch: fetchBusinessServices,
-    mapper: bussinessServicePageMapper,
   });
+
+  const businessServices = useMemo(() => {
+    return businessServicesPage
+      ? bussinessServicePageMapper(businessServicesPage)
+      : undefined;
+  }, [businessServicesPage]);
 
   useEffect(() => {
     refreshTable();

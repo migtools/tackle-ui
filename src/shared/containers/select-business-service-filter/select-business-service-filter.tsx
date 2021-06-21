@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { SelectVariant, ToolbarChip } from "@patternfly/react-core";
@@ -6,11 +6,7 @@ import { SelectVariant, ToolbarChip } from "@patternfly/react-core";
 import { SimpleSelectFetch, OptionWithValue } from "shared/components";
 import { useFetch } from "shared/hooks";
 
-import {
-  BusinessService,
-  BusinessServicePage,
-  PageRepresentation,
-} from "api/models";
+import { BusinessService, BusinessServicePage } from "api/models";
 import {
   bussinessServicePageMapper,
   getAllBusinessServices,
@@ -54,15 +50,20 @@ export const SelectBusinessServiceFilter: React.FC<BusinessServiceFilterProps> =
   const { t } = useTranslation();
 
   const {
-    data: businessServices,
+    data: businessServicesPage,
     isFetching: isFetchingBusinessServices,
     fetchError: fetchErrorBusinessServices,
     requestFetch: fetchAllBusinessServices,
-  } = useFetch<BusinessServicePage, PageRepresentation<BusinessService>>({
+  } = useFetch<BusinessServicePage>({
     defaultIsFetching: true,
     onFetch: getAllBusinessServices,
-    mapper: bussinessServicePageMapper,
   });
+
+  const businessServices = useMemo(() => {
+    return businessServicesPage
+      ? bussinessServicePageMapper(businessServicesPage)
+      : undefined;
+  }, [businessServicesPage]);
 
   useEffect(() => {
     fetchAllBusinessServices();

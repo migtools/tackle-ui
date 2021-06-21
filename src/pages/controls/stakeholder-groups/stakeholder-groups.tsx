@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { AxiosResponse } from "axios";
 import { useTranslation } from "react-i18next";
 import { useSelectionState } from "@konveyor/lib-ui";
@@ -55,7 +55,6 @@ import {
   StakeholderGroup,
   SortByQuery,
   StakeholderGroupPage,
-  PageRepresentation,
 } from "api/models";
 import { stakeholderGroupPageMapper } from "api/apiUtils";
 
@@ -148,15 +147,20 @@ export const StakeholderGroups: React.FC = () => {
   }, [filtersValue, paginationQuery, sortByQuery]);
 
   const {
-    data: stakeholderGroups,
+    data: stakeholderGroupsPage,
     isFetching,
     fetchError,
     requestFetch: refreshTable,
-  } = useFetch<StakeholderGroupPage, PageRepresentation<StakeholderGroup>>({
+  } = useFetch<StakeholderGroupPage>({
     defaultIsFetching: true,
     onFetch: fetchStakeholderGroups,
-    mapper: stakeholderGroupPageMapper,
   });
+
+  const stakeholderGroups = useMemo(() => {
+    return stakeholderGroupsPage
+      ? stakeholderGroupPageMapper(stakeholderGroupsPage)
+      : undefined;
+  }, [stakeholderGroupsPage]);
 
   useEffect(() => {
     refreshTable();

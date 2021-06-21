@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { SelectVariant, ToolbarChip } from "@patternfly/react-core";
@@ -7,7 +7,7 @@ import { SimpleSelectFetch, OptionWithValue } from "shared/components";
 import { useFetch } from "shared/hooks";
 
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
-import { PageRepresentation, Tag, TagType, TagTypePage } from "api/models";
+import { Tag, TagTypePage } from "api/models";
 import { getAllTagTypes, tagTypePageMapper } from "api/apiUtils";
 import { TagTypeSortBy } from "api/rest";
 
@@ -55,15 +55,18 @@ export const SelectTagFilter: React.FC<SelectTagFilterProps> = ({
   // Tag types
 
   const {
-    data: tagTypes,
+    data: tagTypesPage,
     isFetching: isFetchingTagTypes,
     fetchError: fetchErrorTagTypes,
     requestFetch: fetchAllTagTypes,
-  } = useFetch<TagTypePage, PageRepresentation<TagType>>({
+  } = useFetch<TagTypePage>({
     defaultIsFetching: true,
     onFetch: getAllTagTypesSortedByRank,
-    mapper: tagTypePageMapper,
   });
+
+  const tagTypes = useMemo(() => {
+    return tagTypesPage ? tagTypePageMapper(tagTypesPage) : undefined;
+  }, [tagTypesPage]);
 
   useEffect(() => {
     fetchAllTagTypes();

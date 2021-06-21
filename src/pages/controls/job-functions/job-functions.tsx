@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { AxiosResponse } from "axios";
 import { useTranslation } from "react-i18next";
 
@@ -38,12 +38,7 @@ import {
   JobFunctionSortBy,
   JobFunctionSortByQuery,
 } from "api/rest";
-import {
-  SortByQuery,
-  JobFunction,
-  JobFunctionPage,
-  PageRepresentation,
-} from "api/models";
+import { SortByQuery, JobFunction, JobFunctionPage } from "api/models";
 import { jobFunctionPageMapper } from "api/apiUtils";
 
 import { NewJobFunctionModal } from "./components/new-job-function-modal";
@@ -116,15 +111,20 @@ export const JobFunctions: React.FC = () => {
   }, [filtersValue, paginationQuery, sortByQuery]);
 
   const {
-    data: jobFunctions,
+    data: jobFunctionsPage,
     isFetching,
     fetchError,
     requestFetch: refreshTable,
-  } = useFetch<JobFunctionPage, PageRepresentation<JobFunction>>({
+  } = useFetch<JobFunctionPage>({
     defaultIsFetching: true,
     onFetch: fetchJobFunctions,
-    mapper: jobFunctionPageMapper,
   });
+
+  const jobFunctions = useMemo(() => {
+    return jobFunctionsPage
+      ? jobFunctionPageMapper(jobFunctionsPage)
+      : undefined;
+  }, [jobFunctionsPage]);
 
   useEffect(() => {
     refreshTable();
