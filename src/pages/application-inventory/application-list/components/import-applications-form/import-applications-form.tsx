@@ -15,12 +15,10 @@ import { getAxiosErrorMessage } from "utils/utils";
 
 export interface ImportApplicationsFormProps {
   onSaved: (response: AxiosResponse) => void;
-  onCancel: () => void;
 }
 
 export const ImportApplicationsForm: React.FC<ImportApplicationsFormProps> = ({
   onSaved,
-  onCancel,
 }) => {
   const [file, setFile] = useState<File>();
 
@@ -73,9 +71,6 @@ export const ImportApplicationsForm: React.FC<ImportApplicationsFormProps> = ({
       <ActionGroup>
         <Button variant="primary" onClick={onSubmit} isDisabled={isSubmitting}>
           Import
-        </Button>
-        <Button variant="link" onClick={onCancel} isDisabled={isSubmitting}>
-          Cancel
         </Button>
       </ActionGroup>
     </Form>

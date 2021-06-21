@@ -1,1 +1,1 @@
-export { ApplicationReview as default } from "./manage-imports";
+export { ManageImports as default } from "./manage-imports";

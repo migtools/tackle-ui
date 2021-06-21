@@ -18,7 +18,8 @@
         "save": "Guardar",
         "saveAndReview": "Guardar y revisar",
         "saveAsDraft": "Guardar como borrador",
-        "submitReview": "Enviar revisión"
+        "submitReview": "Enviar revisión",
+        "viewErrorReport": "Ver reporte"
     },
     "colors": {
         "blue": "Azul",
@@ -82,6 +83,7 @@
         "reports": "Reportes"
     },
     "terms": {
+        "accepted": "Aceptado",
         "answer": "Respuesta",
         "application": "Applicación",
         "application(s)": "Aplicacion(es)",
@@ -97,12 +99,14 @@
         "completed": "Completado",
         "controls": "Controles",
         "criticality": "Criticidad",
+        "date": "Fecha",
         "decision": "Decisión",
         "description": "Descripción",
         "displayName": "Nombre a mostrar",
         "effort": "Esfuerzo",
         "effortEstimate": "Esfuerzo estimado",
         "email": "Email",
+        "filename": "Nombre de archivo",
         "group": "Grupo",
         "group(s)": "Grupo(s)",
         "groupCount": "Número de grupos",
@@ -113,6 +117,7 @@
         "member": "Miembro",
         "member(s)": "Miembro(s)",
         "memberCount": "Número de miembros",
+        "message": "Mensaje",
         "name": "Nombre",
         "northboundDependencies": "Dependencias del norte",
         "notAvailable": "No disponible",
@@ -125,6 +130,7 @@
         "proposedAction": "Acción propuesta",
         "question": "Pregunta",
         "rank": "Rango",
+        "rejected": "Rechazado",
         "reports": "Reportes",
         "review": "Revisar",
         "reviewComments": "Comentarios de la revisión",
@@ -137,6 +143,8 @@
         "stakeholderGroup(s)": "Grupo(s) de interesados",
         "stakeholderGroups": "Grupos de interesados",
         "stakeholders": "Interesados",
+        "status": "Estado",
+        "summaryImport": "Resumen de importe",
         "tag": "Etiqueta",
         "tag(s)": "Etiqueta(s)",
         "tagCount": "Número de etiquetas",
@@ -145,6 +153,7 @@
         "tagType": "Tipo de etiqueta",
         "tagTypes": "Tipos de etiqueta",
         "unknown": "Desconocido",
+        "user": "Usuario",
         "workPriority": "Prioridad de trabajo"
     },
     "toastr": {

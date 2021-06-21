@@ -15,6 +15,7 @@ export enum Paths {
   applicationInventory = "/application-inventory",
   applicationInventory_applicationList = "/application-inventory/application-list",
   applicationInventory_manageImports = "/application-inventory/application-imports",
+  applicationInventory_manageImports_details = "/application-inventory/application-imports/:importId",
   applicationInventory_assessment = "/application-inventory/assessment/:assessmentId",
   applicationInventory_review = "/application-inventory/application/:applicationId/review",
 

@@ -765,9 +765,6 @@ export const ApplicationList: React.FC = () => {
             setIsApplicationImportModalOpen(false);
             refreshTable();
           }}
-          onCancel={() => {
-            setIsApplicationImportModalOpen((current) => !current);
-          }}
         />
       </Modal>
     </>
