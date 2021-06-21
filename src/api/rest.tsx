@@ -20,6 +20,9 @@ import {
   TagType,
   Tag,
   Review,
+  AssessmentRisk,
+  AssessmentQuestionRisk,
+  ApplicationAdoptionPlan,
 } from "./models";
 
 export const CONTROLS_BASE_URL = "controls";
@@ -37,6 +40,7 @@ export const APPLICATIONS = APP_INVENTORY_BASE_URL + "/application";
 export const APPLICATION_DEPENDENCY =
   APP_INVENTORY_BASE_URL + "/applications-dependency";
 export const REVIEW = APP_INVENTORY_BASE_URL + "/review";
+export const REPORT = APP_INVENTORY_BASE_URL + "/report";
 
 export const ASSESSMENTS = PATHFINDER_BASE_URL + "/assessments";
 
@@ -429,6 +433,7 @@ export const getTagById = (id: number | string): AxiosPromise<Tag> => {
 export enum ApplicationSortBy {
   NAME,
   TAGS,
+  REVIEW,
 }
 export interface ApplicationSortByQuery {
   field: ApplicationSortBy;
@@ -454,6 +459,9 @@ export const getApplications = (
         break;
       case ApplicationSortBy.TAGS:
         field = "tags.size()";
+        break;
+      case ApplicationSortBy.REVIEW:
+        field = "review.deleted,id";
         break;
       default:
         throw new Error("Could not define SortBy field name");
@@ -551,6 +559,17 @@ export const deleteReview = (id: number): AxiosPromise => {
   return APIClient.delete(`${REVIEW}/${id}`);
 };
 
+export const getApplicationAdoptionPlan = (
+  applicationIds: number[]
+): AxiosPromise<ApplicationAdoptionPlan[]> => {
+  return APIClient.post(
+    `${REPORT}/adoptionplan`,
+    applicationIds.map((f) => ({
+      applicationId: f,
+    }))
+  );
+};
+
 //
 
 export const getAssessments = (filters: {
@@ -580,4 +599,22 @@ export const getAssessmentById = (
 
 export const deleteAssessment = (id: number): AxiosPromise => {
   return APIClient.delete(`${ASSESSMENTS}/${id}`);
+};
+
+export const getAssessmentLandscape = (
+  applicationIds: number[]
+): AxiosPromise<AssessmentRisk[]> => {
+  return APIClient.post(
+    `${ASSESSMENTS}/assessment-risk`,
+    applicationIds.map((f) => ({ applicationId: f }))
+  );
+};
+
+export const getAssessmentIdentifiedRisks = (
+  applicationIds: number[]
+): AxiosPromise<AssessmentQuestionRisk[]> => {
+  return APIClient.post(
+    `${ASSESSMENTS}/risks`,
+    applicationIds.map((f) => ({ applicationId: f }))
+  );
 };

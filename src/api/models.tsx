@@ -61,6 +61,15 @@ export interface Tag {
 }
 
 // Application inventory
+export type ProposedAction =
+  | "rehost"
+  | "replatform"
+  | "refactor"
+  | "repurchase"
+  | "retire"
+  | "retain";
+
+export type EffortEstimate = "small" | "medium" | "large" | "extra_large";
 
 export interface Application {
   id?: number;
@@ -74,8 +83,8 @@ export interface Application {
 
 export interface Review {
   id?: number;
-  proposedAction: string;
-  effortEstimate: string;
+  proposedAction: ProposedAction;
+  effortEstimate: EffortEstimate;
   businessCriticality: number;
   workPriority: number;
   comments?: string;
@@ -86,6 +95,16 @@ export interface ApplicationDependency {
   id?: number;
   from: Application;
   to: Application;
+}
+
+export interface ApplicationAdoptionPlan {
+  applicationId: number;
+  applicationName: string;
+  positionX: number;
+  positionY: number;
+  effort: number;
+  decision: ProposedAction;
+  effortEstimate: string;
 }
 
 // Pathfinder
@@ -128,6 +147,18 @@ export interface QuestionOption {
   option: string;
   checked: boolean;
   risk: Risk;
+}
+
+export interface AssessmentRisk {
+  assessmentId: number;
+  risk: Risk;
+}
+
+export interface AssessmentQuestionRisk {
+  category: string;
+  question: string;
+  answer: string;
+  applications: number[];
 }
 
 // Pagination

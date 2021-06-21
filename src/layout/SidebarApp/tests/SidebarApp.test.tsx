@@ -1,8 +1,9 @@
 import React from "react";
+import { BrowserRouter as Router } from "react-router-dom";
 import { shallow } from "enzyme";
 import { SidebarApp } from "../SidebarApp";
 
-it("Test snapshot", () => {
+it("Renders without crashing", () => {
   jest.mock("react-i18next", () => ({
     useTranslation: () => {
       return {
@@ -14,6 +15,10 @@ it("Test snapshot", () => {
     },
   }));
 
-  const wrapper = shallow(<SidebarApp />);
+  const wrapper = shallow(
+    <Router>
+      <SidebarApp />
+    </Router>
+  );
   expect(wrapper).toMatchSnapshot();
 });

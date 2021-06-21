@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InputTextFilter Renders without crashing 1`] = `
+<InputGroup>
+  <TextInput
+    aria-label="filter-text"
+    onChange={[Function]}
+    onKeyPress={[Function]}
+    placeholder="Filter..."
+    type="text"
+    value=""
+  />
+  <Button
+    aria-label="search"
+    onClick={[Function]}
+    variant="control"
+  >
+    <SearchIcon
+      color="currentColor"
+      noVerticalAlign={false}
+      size="sm"
+    />
+  </Button>
+</InputGroup>
+`;
