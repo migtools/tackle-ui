@@ -113,7 +113,7 @@ export const Tags: React.FC = () => {
 
   const {
     isOpen: isTagTypeModalOpen,
-    entity: tagTypeToUpdate,
+    data: tagTypeToUpdate,
     create: openCreateTagTypeModal,
     update: openUpdateTagTypeModal,
     close: closeTagTypeModal,
@@ -121,7 +121,7 @@ export const Tags: React.FC = () => {
 
   const {
     isOpen: isTagModalOpen,
-    entity: tagToUpdate,
+    data: tagToUpdate,
     create: openCreateTagModal,
     update: openUpdateTagModal,
     close: closeTagModal,

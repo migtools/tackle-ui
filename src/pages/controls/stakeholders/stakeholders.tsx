@@ -125,7 +125,7 @@ export const Stakeholders: React.FC = () => {
 
   const {
     isOpen: isStakeholderModalOpen,
-    entity: stakeholderToUpdate,
+    data: stakeholderToUpdate,
     create: openCreateStakeholderModal,
     update: openUpdateStakeholderModal,
     close: closeStakeholderModal,

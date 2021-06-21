@@ -114,7 +114,7 @@ export const StakeholderGroups: React.FC = () => {
 
   const {
     isOpen: isStakeholderGroupModalOpen,
-    entity: stakeholderGroupToUpdate,
+    data: stakeholderGroupToUpdate,
     create: openCreateStakeholderGroupModal,
     update: openUpdateStakeholderGroupModal,
     close: closeStakeholderGroupModal,

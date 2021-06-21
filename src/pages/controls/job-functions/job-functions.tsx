@@ -89,7 +89,7 @@ export const JobFunctions: React.FC = () => {
 
   const {
     isOpen: isJobFunctionModalOpen,
-    entity: jobFunctionToUpdate,
+    data: jobFunctionToUpdate,
     create: openCreateJobFunctionModal,
     update: openUpdateJobFunctionModal,
     close: closeJobFunctionModal,

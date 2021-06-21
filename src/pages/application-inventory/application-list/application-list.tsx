@@ -8,7 +8,6 @@ import {
   Button,
   ButtonVariant,
   Modal,
-  ModalVariant,
   PageSection,
   PageSectionVariants,
   Text,

@@ -106,7 +106,7 @@ export const BusinessServices: React.FC = () => {
 
   const {
     isOpen: isBusinessServiceModalOpen,
-    entity: businessServiceToUpdate,
+    data: businessServiceToUpdate,
     create: openCreateBusinessServiceModal,
     update: openUpdateBusinessServiceModal,
     close: closeBusinessServiceModal,
