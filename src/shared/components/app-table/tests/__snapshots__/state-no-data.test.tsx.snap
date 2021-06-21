@@ -2,7 +2,7 @@
 
 exports[`StateNoData Renders without crashing 1`] = `
 <NoDataEmptyState
-  description="Create a new resource to search using this table."
+  description="No data available to be shown here."
   title="No data available"
 />
 `;

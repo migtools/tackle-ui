@@ -1,5 +1,6 @@
 import React from "react";
-import { shallow } from "enzyme";
+import { BrowserRouter as Router } from "react-router-dom";
+import { mount, shallow } from "enzyme";
 import { BreadCrumbPath } from "../breadcrumb-path";
 
 describe("BreadCrumbPath", () => {
@@ -23,5 +24,33 @@ describe("BreadCrumbPath", () => {
       />
     );
     expect(wrapper).toMatchSnapshot();
+  });
+
+  it("Given a function path, should callback", () => {
+    const secondBreadcrumbSpy = jest.fn();
+
+    const wrapper = mount(
+      <Router>
+        <BreadCrumbPath
+          breadcrumbs={[
+            {
+              title: "first",
+              path: "/first",
+            },
+            {
+              title: "second",
+              path: secondBreadcrumbSpy,
+            },
+            {
+              title: "thrid",
+              path: "/thrid",
+            },
+          ]}
+        />
+      </Router>
+    );
+
+    wrapper.find("button").simulate("click");
+    expect(secondBreadcrumbSpy).toHaveBeenCalledTimes(1);
   });
 });

@@ -9,7 +9,7 @@ describe("useEntityModal", () => {
     const { create } = result.current;
     act(() => create());
     expect(result.current.isOpen).toEqual(true);
-    expect(result.current.entity).toBeUndefined();
+    expect(result.current.data).toBeUndefined();
   });
 
   it("onUpdate", () => {
@@ -22,7 +22,7 @@ describe("useEntityModal", () => {
     act(() => update(ENTITY));
 
     expect(result.current.isOpen).toEqual(true);
-    expect(result.current.entity).toEqual(ENTITY);
+    expect(result.current.data).toEqual(ENTITY);
   });
 
   it("Close after update", () => {
@@ -35,12 +35,12 @@ describe("useEntityModal", () => {
     act(() => update(ENTITY));
 
     expect(result.current.isOpen).toEqual(true);
-    expect(result.current.entity).toEqual(ENTITY);
+    expect(result.current.data).toEqual(ENTITY);
 
     // close
     act(() => close());
 
     expect(result.current.isOpen).toEqual(false);
-    expect(result.current.entity).toBeUndefined();
+    expect(result.current.data).toBeUndefined();
   });
 });

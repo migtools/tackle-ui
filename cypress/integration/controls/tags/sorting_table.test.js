@@ -89,14 +89,14 @@ describe("TagType table sorting", () => {
     cy.wait("@getTagTypeApi");
 
     // Asc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Tag(s)");
+    cy.get(".pf-c-table").pf4_table_column_toggle("Tag count");
     cy.wait("@getTagTypeApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("type-k");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("type-j");
 
     // Desc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Tag(s)");
+    cy.get(".pf-c-table").pf4_table_column_toggle("Tag count");
     cy.wait("@getTagTypeApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("type-a");

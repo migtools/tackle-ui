@@ -32,6 +32,25 @@ exports[`SimpleEmptyState Renders with icon 1`] = `
 </EmptyState>
 `;
 
+exports[`SimpleEmptyState Renders with primaryAction 1`] = `
+<EmptyState
+  variant="small"
+>
+  <Title
+    headingLevel="h2"
+    size="lg"
+  >
+    my title
+  </Title>
+  <EmptyStateBody>
+    my description
+  </EmptyStateBody>
+  <button>
+    My action
+  </button>
+</EmptyState>
+`;
+
 exports[`SimpleEmptyState Renders without crashing 1`] = `
 <EmptyState
   variant="small"

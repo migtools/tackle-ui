@@ -99,8 +99,8 @@ export const StakeholderGroupForm: React.FC<StakeholderGroupFormProps> = ({
     formikHelpers: FormikHelpers<FormValues>
   ) => {
     const payload: StakeholderGroup = {
-      name: formValues.name,
-      description: formValues.description,
+      name: formValues.name.trim(),
+      description: formValues.description.trim(),
       stakeholders: formValues.stakeholders?.map((f) => f.value),
     };
 

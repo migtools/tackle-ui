@@ -7,12 +7,12 @@ const startClose = createAction("useEntityModal/action/startClose")();
 
 // State
 type State = Readonly<{
-  entity: any;
+  data: any;
   isOpen: boolean;
 }>;
 
 const defaultState: State = {
-  entity: undefined,
+  data: undefined,
   isOpen: false,
 };
 
@@ -27,19 +27,19 @@ const reducer = (state: State, action: Action): State => {
     case getType(startCreate):
       return {
         ...state,
-        entity: undefined,
+        data: undefined,
         isOpen: true,
       };
     case getType(startUpdate):
       return {
         ...state,
-        entity: action.payload,
+        data: action.payload,
         isOpen: true,
       };
     case getType(startClose):
       return {
         ...state,
-        entity: undefined,
+        data: undefined,
         isOpen: false,
       };
     default:
@@ -50,10 +50,10 @@ const reducer = (state: State, action: Action): State => {
 // Hook
 
 interface HookState<T> {
-  entity?: T;
+  data?: T;
   isOpen: boolean;
   create: () => void;
-  update: (entity: T) => void;
+  update: (data: T) => void;
   close: () => void;
 }
 
@@ -75,7 +75,7 @@ export const useEntityModal = <T>(): HookState<T> => {
   }, []);
 
   return {
-    entity: state.entity,
+    data: state.data,
     isOpen: state.isOpen,
     create: createHandler,
     update: updateHandler,

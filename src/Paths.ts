@@ -15,6 +15,7 @@ export enum Paths {
   applicationInventory = "/application-inventory",
   applicationInventory_applicationList = "/application-inventory/application-list",
   applicationInventory_assessment = "/application-inventory/assessment/:assessmentId",
+  applicationInventory_review = "/application-inventory/application/:applicationId/review",
 
   reports = "/reports",
 
@@ -28,4 +29,8 @@ export enum Paths {
 
 export interface AssessmentRoute {
   assessmentId: string;
+}
+
+export interface ReviewRoute {
+  applicationId: string;
 }

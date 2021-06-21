@@ -4,10 +4,15 @@ import { useTranslation } from "react-i18next";
 import { FormikHelpers, FormikProvider, useFormik } from "formik";
 import { AxiosError } from "axios";
 
+import { useDispatch } from "react-redux";
+import { alertActions } from "store/alert";
+import { confirmDialogActions } from "store/confirmDialog";
+
 import {
   Alert,
   AlertActionCloseButton,
   Bullseye,
+  ButtonVariant,
   Wizard,
   WizardStep,
 } from "@patternfly/react-core";
@@ -19,14 +24,18 @@ import {
   AppPlaceholder,
 } from "shared/components";
 
-import { AssessmentRoute, Paths } from "Paths";
+import { AssessmentRoute, formatPath, Paths } from "Paths";
 import {
   Assessment,
   AssessmentStatus,
   Question,
   QuestionnaireCategory,
 } from "api/models";
-import { getAssessmentById, patchAssessment } from "api/rest";
+import {
+  getApplicationById,
+  getAssessmentById,
+  patchAssessment,
+} from "api/rest";
 
 import { CustomWizardFooter } from "./components/custom-wizard-footer";
 
@@ -49,6 +58,8 @@ import { WizardStepNavDescription } from "./components/wizard-step-nav-descripti
 
 export const ApplicationAssessment: React.FC = () => {
   const { t } = useTranslation();
+
+  const dispatch = useDispatch();
 
   const history = useHistory();
   const { assessmentId } = useParams<AssessmentRoute>();
@@ -92,6 +103,22 @@ export const ApplicationAssessment: React.FC = () => {
 
   const redirectToApplicationList = () => {
     history.push(Paths.applicationInventory_applicationList);
+  };
+
+  const confirmAndRedirectToApplicationList = () => {
+    dispatch(
+      confirmDialogActions.openDialog({
+        title: t("dialog.title.leavePage"),
+        message: t("dialog.message.leavePage"),
+        confirmBtnVariant: ButtonVariant.primary,
+        confirmBtnLabel: t("actions.continue"),
+        cancelBtnLabel: t("actions.cancel"),
+        onConfirm: () => {
+          dispatch(confirmDialogActions.closeDialog());
+          redirectToApplicationList();
+        },
+      })
+    );
   };
 
   // Formik
@@ -173,6 +200,21 @@ export const ApplicationAssessment: React.FC = () => {
           case SAVE_ACTION_VALUE.SAVE:
             redirectToApplicationList();
             break;
+          case SAVE_ACTION_VALUE.SAVE_AND_REVIEW:
+            getApplicationById(assessment.applicationId)
+              .then(({ data }) => {
+                formikHelpers.setSubmitting(false);
+                history.push(
+                  formatPath(Paths.applicationInventory_review, {
+                    applicationId: data.id,
+                  })
+                );
+              })
+              .catch((error) => {
+                dispatch(alertActions.addDanger(getAxiosErrorMessage(error)));
+                formikHelpers.setSubmitting(false);
+              });
+            break;
         }
       })
       .catch((error) => {
@@ -191,10 +233,23 @@ export const ApplicationAssessment: React.FC = () => {
       [SAVE_ACTION_KEY]: SAVE_ACTION_VALUE.SAVE_AS_DRAFT,
     },
     onSubmit: onSubmit,
+    validate: (values) => {
+      // Only validations for Fields that depends on others should go here.
+      // Individual field's validation should be defined within each Field
+      if (values.stakeholders.length + values.stakeholderGroups.length <= 0) {
+        const errorMsg = t("validation.minOneStakeholderOrGroupRequired");
+        return {
+          stakeholders: errorMsg,
+          stakeholderGroups: errorMsg,
+        };
+      }
+    },
   });
 
-  const areFieldsValid = (fieldKeys: (keyof IFormValues)[]) => {
-    return fieldKeys.every((fieldKey) => !formik.errors[fieldKey]);
+  const isFirstStepValid = () => {
+    const numberOfStakeholdlers = formik.values.stakeholders.length;
+    const numberOfGroups = formik.values.stakeholderGroups.length;
+    return numberOfStakeholdlers + numberOfGroups > 0;
   };
 
   const isQuestionValid = (question: Question): boolean => {
@@ -252,7 +307,7 @@ export const ApplicationAssessment: React.FC = () => {
       }),
       component: <StakeholdersForm />,
       canJumpTo: 0 === currentStep || !disableNavigation,
-      enableNext: areFieldsValid(["stakeholders", "stakeholderGroups"]),
+      enableNext: isFirstStepValid(),
     },
     ...sortedCategories.map((category, index) => {
       const stepIndex = index + 1;
@@ -277,8 +332,12 @@ export const ApplicationAssessment: React.FC = () => {
       isLastStep={currentStep === sortedCategories.length}
       isDisabled={formik.isSubmitting || formik.isValidating}
       isFormInvalid={!formik.isValid}
-      onSave={() => {
-        formik.setFieldValue(SAVE_ACTION_KEY, SAVE_ACTION_VALUE.SAVE);
+      onSave={(review) => {
+        const saveActionValue = review
+          ? SAVE_ACTION_VALUE.SAVE_AND_REVIEW
+          : SAVE_ACTION_VALUE.SAVE;
+
+        formik.setFieldValue(SAVE_ACTION_KEY, saveActionValue);
         formik.submitForm();
       }}
       onSaveAsDraft={() => {
@@ -327,7 +386,7 @@ export const ApplicationAssessment: React.FC = () => {
             onBack={() => {
               setCurrentStep((current) => current - 1);
             }}
-            onClose={redirectToApplicationList}
+            onClose={confirmAndRedirectToApplicationList}
             onGoToStep={(step) => {
               setCurrentStep(step.id as number);
             }}

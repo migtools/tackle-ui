@@ -1,4 +1,5 @@
 import { AxiosError } from "axios";
+import { ToolbarChip } from "@patternfly/react-core";
 
 // Axios error
 
@@ -27,4 +28,10 @@ export const getValidatedFromErrorTouched = (
   touched: boolean | undefined
 ): "success" | "warning" | "error" | "default" => {
   return error && touched ? "error" : "default";
+};
+
+// ToolbarChip
+
+export const getToolbarChipKey = (value: string | ToolbarChip) => {
+  return typeof value === "string" ? value : value.key;
 };

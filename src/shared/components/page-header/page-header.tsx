@@ -14,7 +14,7 @@ import { HorizontalNav } from "../horizontal-nav/horizontal-nav";
 export interface PageHeaderProps {
   title: string;
   description?: React.ReactNode;
-  breadcrumbs: { title: string; path: string }[];
+  breadcrumbs: { title: string; path: string | (() => void) }[];
   menuActions: { label: string; callback: () => void }[];
   navItems?: { title: string; path: string }[];
 }
