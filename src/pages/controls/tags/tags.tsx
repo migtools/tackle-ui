@@ -74,7 +74,7 @@ const toSortByQuery = (
       field = TagTypeSortBy.COLOR;
       break;
     case 4:
-      field = TagTypeSortBy.TAGS;
+      field = TagTypeSortBy.TAGS_COUNT;
       break;
     default:
       throw new Error("Invalid column index=" + sortBy.index);
@@ -171,9 +171,11 @@ export const Tags: React.FC = () => {
   const deleteTagFromTable = (row: Tag) => {
     dispatch(
       confirmDialogActions.openDialog({
-        title: t("dialog.title.delete", { what: row.name }),
-        message: t("dialog.message.delete", { what: row.name }),
-        variant: ButtonVariant.danger,
+        // t("terms.tag")
+        title: t("dialog.title.delete", { what: t("terms.tag").toLowerCase() }),
+        titleIconVariant: "warning",
+        message: t("dialog.message.delete"),
+        confirmBtnVariant: ButtonVariant.danger,
         confirmBtnLabel: t("actions.delete"),
         cancelBtnLabel: t("actions.cancel"),
         onConfirm: () => {
@@ -208,7 +210,7 @@ export const Tags: React.FC = () => {
       transforms: [],
     },
     {
-      title: t("terms.tag(s)"),
+      title: t("terms.tagCount"),
       transforms: [sortable],
     },
     {
@@ -287,9 +289,13 @@ export const Tags: React.FC = () => {
   const deleteRow = (row: TagType) => {
     dispatch(
       confirmDialogActions.openDialog({
-        title: t("dialog.title.delete", { what: row.name }),
-        message: t("dialog.message.delete", { what: row.name }),
-        variant: ButtonVariant.danger,
+        // t("terms.tagType")
+        title: t("dialog.title.delete", {
+          what: t("terms.tagType").toLowerCase(),
+        }),
+        titleIconVariant: "warning",
+        message: t("dialog.message.delete"),
+        confirmBtnVariant: ButtonVariant.danger,
         confirmBtnLabel: t("actions.delete"),
         cancelBtnLabel: t("actions.cancel"),
         onConfirm: () => {
@@ -298,7 +304,11 @@ export const Tags: React.FC = () => {
             row,
             () => {
               dispatch(confirmDialogActions.closeDialog());
-              refreshTable();
+              if (tagTypes?.data.length === 1) {
+                handlePaginationChange({ page: paginationQuery.page - 1 });
+              } else {
+                refreshTable();
+              }
             },
             (error) => {
               dispatch(confirmDialogActions.closeDialog());
@@ -412,16 +422,16 @@ export const Tags: React.FC = () => {
           count={tagTypes ? tagTypes.meta.count : 0}
           pagination={paginationQuery}
           sortBy={sortByQuery}
-          handlePaginationChange={handlePaginationChange}
-          handleSortChange={handleSortChange}
+          onPaginationChange={handlePaginationChange}
+          onSort={handleSortChange}
           onCollapse={collapseRow}
-          columns={columns}
+          cells={columns}
           rows={rows}
           // actions={actions}
           isLoading={isFetching}
           loadingVariant="skeleton"
           fetchError={fetchError}
-          clearAllFilters={handleOnClearAllFilters}
+          toolbarClearAllFilters={handleOnClearAllFilters}
           filtersApplied={
             Array.from(filtersValue.values()).reduce(
               (previous, current) => [...previous, ...current],
@@ -430,9 +440,9 @@ export const Tags: React.FC = () => {
           }
           toolbarToggle={
             <AppTableToolbarToggleGroup
-              options={filters}
-              filtersValue={filtersValue}
-              onDeleteFilter={handleOnDeleteFilter}
+              categories={filters}
+              chips={filtersValue}
+              onChange={handleOnDeleteFilter}
             >
               <SearchFilter
                 options={filters}

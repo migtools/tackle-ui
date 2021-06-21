@@ -104,7 +104,12 @@ export const useTableControls = (args?: HookArgs): HookState => {
   });
 
   const handlePaginationChange = useCallback((pagination: PaginationAction) => {
-    dispatch(setPagination(pagination));
+    dispatch(
+      setPagination({
+        ...pagination,
+        page: pagination.page >= 1 ? pagination.page : 1,
+      })
+    );
   }, []);
 
   const handleSortChange = useCallback(

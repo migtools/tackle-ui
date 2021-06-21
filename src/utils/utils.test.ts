@@ -3,9 +3,12 @@ import {
   getAxiosErrorMessage,
   getValidatedFromError,
   getValidatedFromErrorTouched,
+  getToolbarChipKey,
 } from "./utils";
 
 describe("utils", () => {
+  // getAxiosErrorMessage
+
   it("getAxiosErrorMessage: should pick axios message", () => {
     const errorMsg = "Network error";
 
@@ -45,6 +48,8 @@ describe("utils", () => {
     expect(errorMessage).toBe(errorMsg);
   });
 
+  // getValidatedFromError
+
   it("getValidatedFromError: given value should return 'error'", () => {
     const error = "Any value";
 
@@ -71,5 +76,17 @@ describe("utils", () => {
 
     const status = getValidatedFromErrorTouched(error, touched);
     expect(status).toBe("default");
+  });
+
+  // getToolbarChipKey
+
+  it("getToolbarChipKey: test 'string'", () => {
+    const result = getToolbarChipKey("myValue");
+    expect(result).toBe("myValue");
+  });
+
+  it("getToolbarChipKey: test 'ToolbarChip'", () => {
+    const result = getToolbarChipKey({ key: "myKey", node: "myNode" });
+    expect(result).toBe("myKey");
   });
 });

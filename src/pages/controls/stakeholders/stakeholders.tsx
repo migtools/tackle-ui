@@ -15,12 +15,14 @@ import {
   ToolbarItem,
 } from "@patternfly/react-core";
 import {
+  cellWidth,
   expandable,
   ICell,
   IExtraData,
   IRow,
   IRowData,
   sortable,
+  TableText,
 } from "@patternfly/react-table";
 
 import { useDispatch } from "react-redux";
@@ -79,7 +81,7 @@ const toSortByQuery = (
       field = StakeholderSortBy.JOB_FUNCTION;
       break;
     case 4:
-      field = StakeholderSortBy.STAKEHOLDER_GROUPS;
+      field = StakeholderSortBy.STAKEHOLDER_GROUPS_COUNT;
       break;
     default:
       throw new Error("Invalid column index=" + sortBy.index);
@@ -183,13 +185,13 @@ export const Stakeholders: React.FC = () => {
   const columns: ICell[] = [
     {
       title: t("terms.email"),
-      transforms: [sortable],
+      transforms: [sortable, cellWidth(20)],
       cellFormatters: [expandable],
     },
-    { title: t("terms.displayName"), transforms: [sortable] },
-    { title: t("terms.jobFunction"), transforms: [sortable] },
+    { title: t("terms.displayName"), transforms: [sortable, cellWidth(25)] },
+    { title: t("terms.jobFunction"), transforms: [sortable, cellWidth(20)] },
     {
-      title: t("terms.group(s)"),
+      title: t("terms.groupCount"),
       transforms: [sortable],
     },
     {
@@ -211,10 +213,16 @@ export const Stakeholders: React.FC = () => {
           title: item.email,
         },
         {
-          title: item.displayName,
+          title: (
+            <TableText wrapModifier="truncate">{item.displayName}</TableText>
+          ),
         },
         {
-          title: item.jobFunction?.role,
+          title: (
+            <TableText wrapModifier="truncate">
+              {item.jobFunction?.role}
+            </TableText>
+          ),
         },
         {
           title: item.stakeholderGroups ? item.stakeholderGroups.length : 0,
@@ -270,9 +278,13 @@ export const Stakeholders: React.FC = () => {
   const deleteRow = (row: Stakeholder) => {
     dispatch(
       confirmDialogActions.openDialog({
-        title: t("dialog.title.delete", { what: row.displayName }),
-        message: t("dialog.message.delete", { what: row.displayName }),
-        variant: ButtonVariant.danger,
+        // t("terms.stakeholder")
+        title: t("dialog.title.delete", {
+          what: t("terms.stakeholder").toLowerCase(),
+        }),
+        titleIconVariant: "warning",
+        message: t("dialog.message.delete"),
+        confirmBtnVariant: ButtonVariant.danger,
         confirmBtnLabel: t("actions.delete"),
         cancelBtnLabel: t("actions.cancel"),
         onConfirm: () => {
@@ -281,7 +293,11 @@ export const Stakeholders: React.FC = () => {
             row,
             () => {
               dispatch(confirmDialogActions.closeDialog());
-              refreshTable();
+              if (stakeholders?.data.length === 1) {
+                handlePaginationChange({ page: paginationQuery.page - 1 });
+              } else {
+                refreshTable();
+              }
             },
             (error) => {
               dispatch(confirmDialogActions.closeDialog());
@@ -370,16 +386,16 @@ export const Stakeholders: React.FC = () => {
           count={stakeholders ? stakeholders.meta.count : 0}
           pagination={paginationQuery}
           sortBy={sortByQuery}
-          handlePaginationChange={handlePaginationChange}
-          handleSortChange={handleSortChange}
+          onPaginationChange={handlePaginationChange}
+          onSort={handleSortChange}
           onCollapse={collapseRow}
-          columns={columns}
+          cells={columns}
           rows={rows}
           // actions={actions}
           isLoading={isFetching}
           loadingVariant="skeleton"
           fetchError={fetchError}
-          clearAllFilters={handleOnClearAllFilters}
+          toolbarClearAllFilters={handleOnClearAllFilters}
           filtersApplied={
             Array.from(filtersValue.values()).reduce(
               (previous, current) => [...previous, ...current],
@@ -388,9 +404,9 @@ export const Stakeholders: React.FC = () => {
           }
           toolbarToggle={
             <AppTableToolbarToggleGroup
-              options={filters}
-              filtersValue={filtersValue}
-              onDeleteFilter={handleOnDeleteFilter}
+              categories={filters}
+              chips={filtersValue}
+              onChange={handleOnDeleteFilter}
             >
               <SearchFilter
                 options={filters}

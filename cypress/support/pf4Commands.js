@@ -104,7 +104,7 @@ Cypress.Commands.add(
   { prevSubject: "element" },
   (table, rowIndex) => {
     cy.wrap(table)
-      .find("tbody > tr > td.pf-c-table__toggle")
+      .find("tbody > tr > td.pf-c-table__toggle > button")
       .eq(rowIndex)
       .click();
   }
