@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { AxiosResponse } from "axios";
 import { useTranslation } from "react-i18next";
 import { useSelectionState } from "@konveyor/lib-ui";
@@ -38,15 +38,16 @@ import {
   AppTableToolbarToggleGroup,
   NoDataEmptyState,
 } from "shared/components";
-import {
-  useTableControls,
-  useFetchStakeholders,
-  useDeleteStakeholder,
-} from "shared/hooks";
+import { useTableControls, useDeleteStakeholder, useFetch } from "shared/hooks";
 
 import { getAxiosErrorMessage } from "utils/utils";
-import { StakeholderSortBy, StakeholderSortByQuery } from "api/rest";
-import { Stakeholder, SortByQuery } from "api/models";
+import {
+  getStakeholders,
+  StakeholderSortBy,
+  StakeholderSortByQuery,
+} from "api/rest";
+import { Stakeholder, SortByQuery, StakeholderPage } from "api/models";
+import { stakeholderPageMapper } from "api/apiUtils";
 
 import { NewStakeholderModal } from "./components/new-stakeholder-modal";
 import { UpdateStakeholderModal } from "./components/update-stakeholder-modal";
@@ -127,13 +128,6 @@ export const Stakeholders: React.FC = () => {
   const { deleteStakeholder } = useDeleteStakeholder();
 
   const {
-    stakeholders,
-    isFetching,
-    fetchError,
-    fetchStakeholders,
-  } = useFetchStakeholders(true);
-
-  const {
     paginationQuery,
     sortByQuery,
     handlePaginationChange,
@@ -142,6 +136,39 @@ export const Stakeholders: React.FC = () => {
     sortByQuery: { direction: "asc", index: 1 },
   });
 
+  const fetchStakeholders = useCallback(() => {
+    return getStakeholders(
+      {
+        email: filtersValue.get(FilterKey.EMAIL),
+        displayName: filtersValue.get(FilterKey.DISPLAY_NAME),
+        jobFunction: filtersValue.get(FilterKey.JOB_FUNCTION),
+        stakeholderGroup: filtersValue.get(FilterKey.STAKEHOLDER_GROUP),
+      },
+      paginationQuery,
+      toSortByQuery(sortByQuery)
+    );
+  }, [filtersValue, paginationQuery, sortByQuery]);
+
+  const {
+    data: stakeholdersPage,
+    isFetching,
+    fetchError,
+    requestFetch: refreshTable,
+  } = useFetch<StakeholderPage>({
+    defaultIsFetching: true,
+    onFetch: fetchStakeholders,
+  });
+
+  const stakeholders = useMemo(() => {
+    return stakeholdersPage
+      ? stakeholderPageMapper(stakeholdersPage)
+      : undefined;
+  }, [stakeholdersPage]);
+
+  useEffect(() => {
+    refreshTable();
+  }, [filtersValue, paginationQuery, sortByQuery, refreshTable]);
+
   const {
     isItemSelected: isItemExpanded,
     toggleItemSelected: toggleItemExpanded,
@@ -149,32 +176,6 @@ export const Stakeholders: React.FC = () => {
     items: stakeholders?.data || [],
     isEqual: (a, b) => a.id === b.id,
   });
-
-  const refreshTable = useCallback(() => {
-    fetchStakeholders(
-      {
-        email: filtersValue.get(FilterKey.EMAIL),
-        displayName: filtersValue.get(FilterKey.DISPLAY_NAME),
-        jobFunction: filtersValue.get(FilterKey.JOB_FUNCTION),
-        stakeholderGroup: filtersValue.get(FilterKey.STAKEHOLDER_GROUP),
-      },
-      paginationQuery,
-      toSortByQuery(sortByQuery)
-    );
-  }, [filtersValue, paginationQuery, sortByQuery, fetchStakeholders]);
-
-  useEffect(() => {
-    fetchStakeholders(
-      {
-        email: filtersValue.get(FilterKey.EMAIL),
-        displayName: filtersValue.get(FilterKey.DISPLAY_NAME),
-        jobFunction: filtersValue.get(FilterKey.JOB_FUNCTION),
-        stakeholderGroup: filtersValue.get(FilterKey.STAKEHOLDER_GROUP),
-      },
-      paginationQuery,
-      toSortByQuery(sortByQuery)
-    );
-  }, [filtersValue, paginationQuery, sortByQuery, fetchStakeholders]);
 
   const columns: ICell[] = [
     {

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { AxiosResponse } from "axios";
 import { useTranslation } from "react-i18next";
 import { useSelectionState } from "@konveyor/lib-ui";
@@ -40,13 +40,23 @@ import {
 } from "shared/components";
 import {
   useTableControls,
-  useFetchStakeholderGroups,
+  useFetch,
   useDeleteStakeholderGroup,
 } from "shared/hooks";
 
 import { getAxiosErrorMessage } from "utils/utils";
-import { StakeholderGroupSortBy, StakeholderGroupSortByQuery } from "api/rest";
-import { StakeholderGroup, SortByQuery } from "api/models";
+
+import {
+  getStakeholderGroups,
+  StakeholderGroupSortBy,
+  StakeholderGroupSortByQuery,
+} from "api/rest";
+import {
+  StakeholderGroup,
+  SortByQuery,
+  StakeholderGroupPage,
+} from "api/models";
+import { stakeholderGroupPageMapper } from "api/apiUtils";
 
 import { NewStakeholderGroupModal } from "./components/new-stakeholder-group-modal";
 import { UpdateStakeholderGroupModal } from "./components/update-stakeholder-group-modal";
@@ -116,13 +126,6 @@ export const StakeholderGroups: React.FC = () => {
   const { deleteStakeholderGroup } = useDeleteStakeholderGroup();
 
   const {
-    stakeholderGroups,
-    isFetching,
-    fetchError,
-    fetchStakeholderGroups,
-  } = useFetchStakeholderGroups(true);
-
-  const {
     paginationQuery,
     sortByQuery,
     handlePaginationChange,
@@ -131,6 +134,38 @@ export const StakeholderGroups: React.FC = () => {
     sortByQuery: { direction: "asc", index: 1 },
   });
 
+  const fetchStakeholderGroups = useCallback(() => {
+    return getStakeholderGroups(
+      {
+        name: filtersValue.get(FilterKey.NAME),
+        description: filtersValue.get(FilterKey.DESCRIPTION),
+        stakeholder: filtersValue.get(FilterKey.STAKEHOLDER),
+      },
+      paginationQuery,
+      toSortByQuery(sortByQuery)
+    );
+  }, [filtersValue, paginationQuery, sortByQuery]);
+
+  const {
+    data: stakeholderGroupsPage,
+    isFetching,
+    fetchError,
+    requestFetch: refreshTable,
+  } = useFetch<StakeholderGroupPage>({
+    defaultIsFetching: true,
+    onFetch: fetchStakeholderGroups,
+  });
+
+  const stakeholderGroups = useMemo(() => {
+    return stakeholderGroupsPage
+      ? stakeholderGroupPageMapper(stakeholderGroupsPage)
+      : undefined;
+  }, [stakeholderGroupsPage]);
+
+  useEffect(() => {
+    refreshTable();
+  }, [filtersValue, paginationQuery, sortByQuery, refreshTable]);
+
   const {
     isItemSelected: isItemExpanded,
     toggleItemSelected: toggleItemExpanded,
@@ -138,30 +173,6 @@ export const StakeholderGroups: React.FC = () => {
     items: stakeholderGroups?.data || [],
     isEqual: (a, b) => a.id === b.id,
   });
-
-  const refreshTable = useCallback(() => {
-    fetchStakeholderGroups(
-      {
-        name: filtersValue.get(FilterKey.NAME),
-        description: filtersValue.get(FilterKey.DESCRIPTION),
-        stakeholder: filtersValue.get(FilterKey.STAKEHOLDER),
-      },
-      paginationQuery,
-      toSortByQuery(sortByQuery)
-    );
-  }, [filtersValue, paginationQuery, sortByQuery, fetchStakeholderGroups]);
-
-  useEffect(() => {
-    fetchStakeholderGroups(
-      {
-        name: filtersValue.get(FilterKey.NAME),
-        description: filtersValue.get(FilterKey.DESCRIPTION),
-        stakeholder: filtersValue.get(FilterKey.STAKEHOLDER),
-      },
-      paginationQuery,
-      toSortByQuery(sortByQuery)
-    );
-  }, [filtersValue, paginationQuery, sortByQuery, fetchStakeholderGroups]);
 
   const columns: ICell[] = [
     {

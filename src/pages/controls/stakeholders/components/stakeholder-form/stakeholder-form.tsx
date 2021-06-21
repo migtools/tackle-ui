@@ -19,16 +19,28 @@ import {
   OptionWithValue,
   MultiSelectFetchFormikField,
 } from "shared/components";
-import { useFetchStakeholderGroups, useFetchJobFunctions } from "shared/hooks";
+import { useFetch } from "shared/hooks";
 
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 import { createStakeholder, updateStakeholder } from "api/rest";
-import { JobFunction, Stakeholder, StakeholderGroup } from "api/models";
+import {
+  JobFunction,
+  JobFunctionPage,
+  Stakeholder,
+  StakeholderGroup,
+  StakeholderGroupPage,
+} from "api/models";
 import {
   getAxiosErrorMessage,
   getValidatedFromError,
   getValidatedFromErrorTouched,
 } from "utils/utils";
+import {
+  getAllJobFunctions,
+  getAllStakeholderGroups,
+  jobFunctionPageMapper,
+  stakeholderGroupPageMapper,
+} from "api/apiUtils";
 
 const jobFunctionToOption = (
   value: JobFunction
@@ -67,22 +79,40 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
   const [error, setError] = useState<AxiosError>();
 
   const {
-    jobFunctions,
+    data: jobFunctionsPage,
     isFetching: isFetchingJobFunctions,
     fetchError: fetchErrorJobFunctions,
-    fetchAllJobFunctions,
-  } = useFetchJobFunctions();
+    requestFetch: fetchAllJobFunctions,
+  } = useFetch<JobFunctionPage>({
+    defaultIsFetching: true,
+    onFetch: getAllJobFunctions,
+  });
+
+  const jobFunctions = useMemo(() => {
+    return jobFunctionsPage
+      ? jobFunctionPageMapper(jobFunctionsPage)
+      : undefined;
+  }, [jobFunctionsPage]);
 
   useEffect(() => {
     fetchAllJobFunctions();
   }, [fetchAllJobFunctions]);
 
   const {
-    stakeholderGroups,
+    data: stakeholderGroupsPage,
     isFetching: isFetchingGroups,
     fetchError: fetchErrorGroups,
-    fetchAllStakeholderGroups,
-  } = useFetchStakeholderGroups();
+    requestFetch: fetchAllStakeholderGroups,
+  } = useFetch<StakeholderGroupPage>({
+    defaultIsFetching: true,
+    onFetch: getAllStakeholderGroups,
+  });
+
+  const stakeholderGroups = useMemo(() => {
+    return stakeholderGroupsPage
+      ? stakeholderGroupPageMapper(stakeholderGroupsPage)
+      : undefined;
+  }, [stakeholderGroupsPage]);
 
   useEffect(() => {
     fetchAllStakeholderGroups();

@@ -20,16 +20,32 @@ import {
   MultiSelectFetchFormikField,
   OptionWithValue,
 } from "shared/components";
-import { useFetchBusinessServices, useFetchTagTypes } from "shared/hooks";
+import { useFetch } from "shared/hooks";
 
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 import { createApplication, TagTypeSortBy, updateApplication } from "api/rest";
-import { Application, BusinessService, Tag } from "api/models";
+import {
+  Application,
+  BusinessService,
+  BusinessServicePage,
+  Tag,
+  TagTypePage,
+} from "api/models";
 import {
   getAxiosErrorMessage,
   getValidatedFromError,
   getValidatedFromErrorTouched,
 } from "utils/utils";
+import {
+  bussinessServicePageMapper,
+  getAllBusinessServices,
+  getAllTagTypes,
+  tagTypePageMapper,
+} from "api/apiUtils";
+
+export const getAllTagTypesSortedByRank = () => {
+  return getAllTagTypes({ field: TagTypeSortBy.RANK });
+};
 
 const businesServiceToOption = (
   value: BusinessService
@@ -72,11 +88,20 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
   // Business services
 
   const {
-    businessServices,
+    data: businessServicesPage,
     isFetching: isFetchingBusinessServices,
     fetchError: fetchErrorBusinessServices,
-    fetchAllBusinessServices,
-  } = useFetchBusinessServices();
+    requestFetch: fetchAllBusinessServices,
+  } = useFetch<BusinessServicePage>({
+    defaultIsFetching: true,
+    onFetch: getAllBusinessServices,
+  });
+
+  const businessServices = useMemo(() => {
+    return businessServicesPage
+      ? bussinessServicePageMapper(businessServicesPage)
+      : undefined;
+  }, [businessServicesPage]);
 
   useEffect(() => {
     fetchAllBusinessServices();
@@ -85,14 +110,21 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
   // TagTypes
 
   const {
-    tagTypes,
+    data: tagTypesPage,
     isFetching: isFetchingTagTypes,
     fetchError: fetchErrorTagTypes,
-    fetchAllTagTypes,
-  } = useFetchTagTypes();
+    requestFetch: fetchAllTagTypes,
+  } = useFetch<TagTypePage>({
+    defaultIsFetching: true,
+    onFetch: getAllTagTypesSortedByRank,
+  });
+
+  const tagTypes = useMemo(() => {
+    return tagTypesPage ? tagTypePageMapper(tagTypesPage) : undefined;
+  }, [tagTypesPage]);
 
   useEffect(() => {
-    fetchAllTagTypes({ field: TagTypeSortBy.RANK });
+    fetchAllTagTypes();
   }, [fetchAllTagTypes]);
 
   // Tags

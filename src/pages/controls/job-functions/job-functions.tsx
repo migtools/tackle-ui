@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { AxiosResponse } from "axios";
 import { useTranslation } from "react-i18next";
 
@@ -30,15 +30,16 @@ import {
   NoDataEmptyState,
   SearchFilter,
 } from "shared/components";
-import {
-  useTableControls,
-  useDeleteJobFunction,
-  useFetchJobFunctions,
-} from "shared/hooks";
+import { useTableControls, useDeleteJobFunction, useFetch } from "shared/hooks";
 
 import { getAxiosErrorMessage } from "utils/utils";
-import { JobFunctionSortBy, JobFunctionSortByQuery } from "api/rest";
-import { SortByQuery, JobFunction } from "api/models";
+import {
+  getJobFunctions,
+  JobFunctionSortBy,
+  JobFunctionSortByQuery,
+} from "api/rest";
+import { SortByQuery, JobFunction, JobFunctionPage } from "api/models";
+import { jobFunctionPageMapper } from "api/apiUtils";
 
 import { NewJobFunctionModal } from "./components/new-job-function-modal";
 import { UpdateJobFunctionModal } from "./components/update-job-function-modal";
@@ -91,13 +92,6 @@ export const JobFunctions: React.FC = () => {
   const { deleteJobFunction } = useDeleteJobFunction();
 
   const {
-    jobFunctions,
-    isFetching,
-    fetchError,
-    fetchJobFunctions,
-  } = useFetchJobFunctions(true);
-
-  const {
     paginationQuery,
     sortByQuery,
     handlePaginationChange,
@@ -106,25 +100,35 @@ export const JobFunctions: React.FC = () => {
     sortByQuery: { direction: "asc", index: 0 },
   });
 
-  const refreshTable = useCallback(() => {
-    fetchJobFunctions(
+  const fetchJobFunctions = useCallback(() => {
+    return getJobFunctions(
       {
         role: filtersValue.get(FilterKey.NAME),
       },
       paginationQuery,
       toSortByQuery(sortByQuery)
     );
-  }, [filtersValue, paginationQuery, sortByQuery, fetchJobFunctions]);
+  }, [filtersValue, paginationQuery, sortByQuery]);
+
+  const {
+    data: jobFunctionsPage,
+    isFetching,
+    fetchError,
+    requestFetch: refreshTable,
+  } = useFetch<JobFunctionPage>({
+    defaultIsFetching: true,
+    onFetch: fetchJobFunctions,
+  });
+
+  const jobFunctions = useMemo(() => {
+    return jobFunctionsPage
+      ? jobFunctionPageMapper(jobFunctionsPage)
+      : undefined;
+  }, [jobFunctionsPage]);
 
   useEffect(() => {
-    fetchJobFunctions(
-      {
-        role: filtersValue.get(FilterKey.NAME),
-      },
-      paginationQuery,
-      toSortByQuery(sortByQuery)
-    );
-  }, [filtersValue, paginationQuery, sortByQuery, fetchJobFunctions]);
+    refreshTable();
+  }, [filtersValue, paginationQuery, sortByQuery, refreshTable]);
 
   //
 

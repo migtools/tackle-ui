@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useFormikContext } from "formik";
 
@@ -11,10 +11,18 @@ import {
   TextContent,
 } from "@patternfly/react-core";
 
-import { useFetchStakeholderGroups, useFetchStakeholders } from "shared/hooks";
+import { useFetch } from "shared/hooks";
 
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
 import { getValidatedFromError } from "utils/utils";
+
+import { StakeholderGroupPage, StakeholderPage } from "api/models";
+import {
+  getAllStakeholderGroups,
+  getAllStakeholders,
+  stakeholderGroupPageMapper,
+  stakeholderPageMapper,
+} from "api/apiUtils";
 
 import { IFormValues } from "../../form-utils";
 
@@ -27,23 +35,45 @@ export const StakeholdersForm: React.FC<StakeholdersFormProps> = () => {
   const { t } = useTranslation();
   const formik = useFormikContext<IFormValues>();
 
+  // Fetch stakeholders
+
   const {
-    stakeholders,
+    data: stakeholdersPage,
     isFetching: isFetchingStakeholders,
     fetchError: fetchErrorStakeholders,
-    fetchAllStakeholders,
-  } = useFetchStakeholders();
+    requestFetch: fetchAllStakeholders,
+  } = useFetch<StakeholderPage>({
+    defaultIsFetching: true,
+    onFetch: getAllStakeholders,
+  });
+
+  const stakeholders = useMemo(() => {
+    return stakeholdersPage
+      ? stakeholderPageMapper(stakeholdersPage)
+      : undefined;
+  }, [stakeholdersPage]);
 
   useEffect(() => {
     fetchAllStakeholders();
   }, [fetchAllStakeholders]);
 
+  // Fetch stakeholder groups
+
   const {
-    stakeholderGroups,
+    data: stakeholderGroupPage,
     isFetching: isFetchingStakeholderGroups,
     fetchError: fetchErrorStakeholderGroups,
-    fetchAllStakeholderGroups,
-  } = useFetchStakeholderGroups();
+    requestFetch: fetchAllStakeholderGroups,
+  } = useFetch<StakeholderGroupPage>({
+    defaultIsFetching: true,
+    onFetch: getAllStakeholderGroups,
+  });
+
+  const stakeholderGroups = useMemo(() => {
+    return stakeholderGroupPage
+      ? stakeholderGroupPageMapper(stakeholderGroupPage)
+      : undefined;
+  }, [stakeholderGroupPage]);
 
   useEffect(() => {
     fetchAllStakeholderGroups();
