@@ -140,14 +140,16 @@ export const colorHexToOptionWithValue = (
 
 // Simple dropdown
 
-export interface ISimpleOptionDropdown {
-  key: string;
+export interface ISimpleOptionDropdown<T> {
+  key: T;
   name: string;
 }
 
-export const toISimpleOptionDropdownWithValue = (
-  value: ISimpleOptionDropdown
-): OptionWithValue<ISimpleOptionDropdown> => ({
-  value,
-  toString: () => value.name,
-});
+export function toISimpleOptionDropdownWithValue<T>(
+  value: ISimpleOptionDropdown<T>
+): OptionWithValue<ISimpleOptionDropdown<T>> {
+  return {
+    value,
+    toString: () => value.name,
+  };
+}
