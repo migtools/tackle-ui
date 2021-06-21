@@ -8,10 +8,9 @@ describe("useFetch", () => {
   it("Initial value", async () => {
     // Use hook
     const { result, waitForNextUpdate } = renderHook(() =>
-      useFetch<number, string>({
+      useFetch<string>({
         defaultIsFetching: true,
         onFetch: () => axios.get("/myendpoint"),
-        mapper: (t: number) => t.toString(),
       })
     );
 
@@ -28,9 +27,8 @@ describe("useFetch", () => {
 
     // Use hook
     const { result, waitForNextUpdate } = renderHook(() =>
-      useFetch<number, string>({
+      useFetch<string>({
         onFetch: () => axios.get("/myendpoint"),
-        mapper: (t: number) => t.toString(),
       })
     );
 
@@ -53,17 +51,16 @@ describe("useFetch", () => {
 
   it("Fetch success", async () => {
     // Mock REST API
-    const responseData = 123;
+    const responseData = "Hello world!";
 
     new MockAdapter(axios).onGet("/myendpoint").reply(200, responseData);
 
     // Use hook
     const { result, waitForNextUpdate } = renderHook(() =>
-      useFetch<number, string>({
+      useFetch<string>({
         onFetch: () => {
           return axios.get("/myendpoint");
         },
-        mapper: (t: number) => "Hello world " + t,
       })
     );
 
@@ -80,7 +77,7 @@ describe("useFetch", () => {
     // Fetch finished
     await waitForNextUpdate();
     expect(result.current.isFetching).toBe(false);
-    expect(result.current.data).toBe("Hello world 123");
+    expect(result.current.data).toBe(responseData);
     expect(result.current.fetchError).toBeUndefined();
   });
 });

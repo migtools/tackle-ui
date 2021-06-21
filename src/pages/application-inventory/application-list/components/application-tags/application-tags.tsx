@@ -79,7 +79,7 @@ export const ApplicationTags: React.FC<ApplicationTagsProps> = ({
           .sort((a, b) => (a.rank || 0) - (b.rank || 0))
           .map((tagType) => {
             return (
-              <SplitItem>
+              <SplitItem key={tagType.id}>
                 <LabelGroup numLabels={10}>
                   {tags
                     .get(tagType.id!)
@@ -90,7 +90,9 @@ export const ApplicationTags: React.FC<ApplicationTagsProps> = ({
                       );
 
                       return (
-                        <Label color={colorLabel as any}>{tag.name}</Label>
+                        <Label key={tag.id} color={colorLabel as any}>
+                          {tag.name}
+                        </Label>
                       );
                     })}
                 </LabelGroup>

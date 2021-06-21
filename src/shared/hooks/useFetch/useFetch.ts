@@ -1,5 +1,5 @@
 import { useCallback, useReducer } from "react";
-import { AxiosError, AxiosPromise } from "axios";
+import { AxiosPromise } from "axios";
 import { ActionType, createAsyncAction, getType } from "typesafe-actions";
 
 export const {
@@ -10,12 +10,12 @@ export const {
   "useFetch/fetch/request",
   "useFetch/fetch/success",
   "useFetch/fetch/failure"
-)<void, any, AxiosError>();
+)<void, any, any>();
 
 type State = Readonly<{
   isFetching: boolean;
   data?: any;
-  fetchError?: AxiosError;
+  fetchError?: any;
   fetchCount: number;
 }>;
 
@@ -64,38 +64,47 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-export interface IArgs<T, R> {
+export interface IArgs<T> {
   defaultIsFetching?: boolean;
-  onFetch: () => AxiosPromise<T>;
-  mapper: (t: T) => R;
+  onFetch?: () => AxiosPromise<T>;
+  onFetchPromise?: () => Promise<T>;
 }
 
-export interface IState<R> {
-  data?: R;
+export interface IState<T> {
+  data?: T;
   isFetching: boolean;
-  fetchError?: AxiosError;
+  fetchError?: any;
   fetchCount: number;
   requestFetch: () => void;
 }
 
-export const useFetch = <T, R>({
+export const useFetch = <T>({
   defaultIsFetching = false,
   onFetch,
-  mapper,
-}: IArgs<T, R>): IState<R> => {
+  onFetchPromise,
+}: IArgs<T>): IState<T> => {
   const [state, dispatch] = useReducer(reducer, defaultIsFetching, initReducer);
 
   const fetchHandler = useCallback(() => {
     dispatch(fetchRequest());
 
-    onFetch()
-      .then(({ data }) => {
-        dispatch(fetchSuccess(mapper(data)));
-      })
-      .catch((error: AxiosError) => {
-        dispatch(fetchFailure(error));
+    let promise;
+    if (onFetch) {
+      promise = onFetch().then(({ data }) => {
+        dispatch(fetchSuccess(data));
       });
-  }, [onFetch, mapper]);
+    } else if (onFetchPromise) {
+      promise = onFetchPromise().then((data) => {
+        dispatch(fetchSuccess(data));
+      });
+    } else {
+      return;
+    }
+
+    promise.catch((error) => {
+      dispatch(fetchFailure(error));
+    });
+  }, [onFetch, onFetchPromise]);
 
   return {
     data: state.data,

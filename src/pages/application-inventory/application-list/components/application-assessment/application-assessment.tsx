@@ -7,17 +7,13 @@ import {
   StatusIconAssessment,
   StatusIconAssessmentType,
 } from "shared/components";
-import { Application, Assessment, BusinessService } from "api/models";
-import { RemoteAssessment } from "../remote-assessment";
-
-export interface ChildrenProps {
-  businessService?: BusinessService;
-  isFetching: boolean;
-  fetchError?: AxiosError;
-}
+import { Assessment } from "api/models";
 
 export interface ApplicationAssessmentProps {
-  application: Application;
+  assessment?: Assessment;
+  isFetching: boolean;
+  fetchError?: AxiosError;
+  fetchCount: number;
 }
 
 const getStatusIconFrom = (
@@ -36,30 +32,23 @@ const getStatusIconFrom = (
 };
 
 export const ApplicationAssessment: React.FC<ApplicationAssessmentProps> = ({
-  application,
+  assessment,
+  isFetching,
+  fetchError,
+  fetchCount,
 }) => {
   const { t } = useTranslation();
 
-  return (
-    <>
-      {application.id && (
-        <RemoteAssessment applicationId={application.id}>
-          {({ isFetching, fetchError, fetchCount, assessment }) => {
-            if (fetchError) {
-              return <EmptyTextMessage message={t("terms.notAvailable")} />;
-            }
-            if (isFetching || fetchCount === 0) {
-              return "";
-            }
+  if (fetchError) {
+    return <EmptyTextMessage message={t("terms.notAvailable")} />;
+  }
+  if (isFetching || fetchCount === 0) {
+    return <></>;
+  }
 
-            return assessment ? (
-              <StatusIconAssessment status={getStatusIconFrom(assessment)} />
-            ) : (
-              <StatusIconAssessment status="NotStarted" />
-            );
-          }}
-        </RemoteAssessment>
-      )}
-    </>
+  return assessment ? (
+    <StatusIconAssessment status={getStatusIconFrom(assessment)} />
+  ) : (
+    <StatusIconAssessment status="NotStarted" />
   );
 };

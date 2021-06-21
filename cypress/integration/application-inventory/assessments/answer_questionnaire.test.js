@@ -11,7 +11,10 @@ describe("Answer questionnaire", () => {
     let application;
 
     // Clean app inventory
-    cy.get("@tokens").then((tokens) => cy.tackleAppInventoryClean(tokens));
+    cy.get("@tokens").then((tokens) => {
+      cy.tackleControlsClean(tokens);
+      cy.tackleAppInventoryClean(tokens);
+    });
 
     // Create application
     cy.get("@tokens").then((tokens) => {
@@ -20,6 +23,14 @@ describe("Answer questionnaire", () => {
           application = data;
         });
       });
+    });
+
+    // Create stakeholderGroup
+    cy.get("@tokens").then((tokens) => {
+      const payload = {
+        name: `group-a`,
+      };
+      cy.createStakeholderGroup(payload, tokens);
     });
 
     // Create assessment
@@ -46,14 +57,29 @@ describe("Answer questionnaire", () => {
     cy.intercept("GET", "/api/application-inventory/application*").as(
       "getApplicationsApi"
     );
+    cy.intercept("GET", "/api/application-inventory/application/*").as(
+      "getApplicationApi"
+    );
+
+    cy.intercept("GET", "/api/controls/stakeholder-group*").as(
+      "getStakeholderGroupsApi"
+    );
 
     // Go to page
     cy.visit("/application-inventory/assessment/" + assessment.id);
   });
 
   it("Answer questionnaire", () => {
+    cy.wait("@getStakeholderGroupsApi");
+
     // First step
+    cy.get(".pf-c-wizard__footer button[cy-data='next']").should("be.disabled");
     cy.get(".pf-c-wizard__footer button[cy-data='back']").should("be.disabled");
+
+    cy.get(".pf-c-form__group-control input.pf-c-select__toggle-typeahead")
+      .eq(1)
+      .type("group-a")
+      .type("{enter}");
     cy.get(".pf-c-wizard__footer").find("button[cy-data='next']").click();
 
     // Category 1

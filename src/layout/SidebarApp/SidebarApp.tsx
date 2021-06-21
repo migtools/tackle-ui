@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Nav, NavItem, PageSidebar, NavList } from "@patternfly/react-core";
 
@@ -8,6 +8,7 @@ import { LayoutTheme } from "../LayoutUtils";
 
 export const SidebarApp: React.FC = () => {
   const { t } = useTranslation();
+  const { search } = useLocation();
 
   const renderPageNav = () => {
     return (
@@ -15,14 +16,14 @@ export const SidebarApp: React.FC = () => {
         <NavList title="Global">
           <NavItem>
             <NavLink
-              to={Paths.applicationInventory}
+              to={Paths.applicationInventory + search}
               activeClassName="pf-m-current"
             >
               {t("sidebar.applicationInventory")}
             </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink to={Paths.reports} activeClassName="pf-m-current">
+            <NavLink to={Paths.reports + search} activeClassName="pf-m-current">
               {t("sidebar.reports")}
             </NavLink>
           </NavItem>
@@ -32,9 +33,6 @@ export const SidebarApp: React.FC = () => {
             </NavLink>
           </NavItem>
         </NavList>
-        {/* <section className={styles.rhLogoSection}>
-          <img src={redHatLogo} alt="Red Hat" />
-        </section> */}
       </Nav>
     );
   };

@@ -10,7 +10,7 @@ import { CubesIcon } from "@patternfly/react-icons";
 
 export interface NoDataEmptyStateProps {
   title: string;
-  description: string;
+  description?: string;
 }
 
 export const NoDataEmptyState: React.FC<NoDataEmptyStateProps> = ({
@@ -23,7 +23,7 @@ export const NoDataEmptyState: React.FC<NoDataEmptyStateProps> = ({
       <Title headingLevel="h2" size="lg">
         {title}
       </Title>
-      <EmptyStateBody>{description}</EmptyStateBody>
+      {description && <EmptyStateBody>{description}</EmptyStateBody>}
     </EmptyState>
   );
 };

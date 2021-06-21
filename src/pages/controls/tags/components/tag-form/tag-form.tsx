@@ -81,7 +81,7 @@ export const TagForm: React.FC<TagFormProps> = ({ tag, onSaved, onCancel }) => {
       .trim()
       .required(t("validation.required"))
       .min(1, t("validation.minLength", { length: 1 }))
-      .max(120, t("validation.maxLength", { length: 120 })),
+      .max(40, t("validation.maxLength", { length: 40 })),
     tagType: mixed().required(t("validation.required")),
   });
 
@@ -90,7 +90,7 @@ export const TagForm: React.FC<TagFormProps> = ({ tag, onSaved, onCancel }) => {
     formikHelpers: FormikHelpers<FormValues>
   ) => {
     const payload: Tag = {
-      name: formValues.name,
+      name: formValues.name.trim(),
       tagType: formValues.tagType ? formValues.tagType.value : undefined,
     };
 
