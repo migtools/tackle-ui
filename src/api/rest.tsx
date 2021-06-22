@@ -608,7 +608,7 @@ export const getApplicationImportSummary = (
         field = "filename";
         break;
       case ApplicationImportSummarySortBy.STATUS:
-        field = "status";
+        field = "importStatus";
         break;
       default:
         throw new Error("Could not define SortBy field name");
