@@ -10,6 +10,9 @@ import {
   FormGroup,
 } from "@patternfly/react-core";
 
+import { useDispatch } from "react-redux";
+import { alertActions } from "store/alert";
+
 import { UPLOAD_FILE } from "api/rest";
 import { getAxiosErrorMessage } from "utils/utils";
 
@@ -24,6 +27,9 @@ export const ImportApplicationsForm: React.FC<ImportApplicationsFormProps> = ({
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<AxiosError>();
+
+  // Redux
+  const dispatch = useDispatch();
 
   const onSubmit = () => {
     if (!file) {
@@ -41,6 +47,8 @@ export const ImportApplicationsForm: React.FC<ImportApplicationsFormProps> = ({
     axios
       .post(UPLOAD_FILE, formData, config)
       .then((response) => {
+        dispatch(alertActions.addSuccess("Success! applications imported."));
+
         setIsSubmitting(false);
         onSaved(response);
       })
