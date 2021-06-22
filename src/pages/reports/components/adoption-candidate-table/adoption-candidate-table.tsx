@@ -86,7 +86,6 @@ export const AdoptionCandidateTable: React.FC = () => {
     toggleItemSelected: toggleApplicationSelected,
     selectAll: selectAllApplication,
     setSelectedItems: setSelectedRows,
-    selectMultiple: selectMultipleApplications,
   } = useContext(ApplicationSelectionContext);
 
   // Confidence
@@ -264,10 +263,7 @@ export const AdoptionCandidateTable: React.FC = () => {
               onSelectAll={selectAllApplication}
               onSelectNone={() => setSelectedRows([])}
               onSelectCurrentPage={() => {
-                selectMultipleApplications(
-                  pageItems.map((f) => f.application),
-                  true
-                );
+                setSelectedRows(pageItems.map((f) => f.application));
               }}
             />
           </ToolbarItem>
