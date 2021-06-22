@@ -102,7 +102,7 @@ export const ManageImportsDetails: React.FC = () => {
       [ENTITY_FIELD]: item,
       cells: [
         {
-          title: item.applicationName,
+          title: item["Application Name"],
         },
         {
           title: item.errorMessage,

@@ -115,14 +115,14 @@ export interface ApplicationImportSummary {
   id: number;
   filename: string;
   createUser: string;
-  createTime: number;
+  importtime: string;
   validCount: number;
   invalidCount: number;
   importStatus: ImportSummaryStatus;
 }
 
 export interface ApplicationImport {
-  applicationName: string;
+  "Application Name": string;
   errorMessage: string;
   isValid: boolean;
 }

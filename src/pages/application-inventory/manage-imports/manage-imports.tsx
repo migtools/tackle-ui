@@ -12,10 +12,11 @@ import {
 } from "@patternfly/react-core";
 import {
   cellWidth,
-  IActions,
+  IAction,
   ICell,
   IRow,
   IRowData,
+  ISeparator,
   sortable,
   truncate,
 } from "@patternfly/react-table";
@@ -209,7 +210,7 @@ export const ManageImports: React.FC = () => {
       [ENTITY_FIELD]: item,
       cells: [
         {
-          title: formatDate(new Date(item.createTime)),
+          title: formatDate(new Date(item.importtime)),
         },
         {
           title: item.createUser,
@@ -230,8 +231,14 @@ export const ManageImports: React.FC = () => {
     });
   });
 
-  const actions: IActions = [
-    {
+  const actionResolver = (rowData: IRowData): (IAction | ISeparator)[] => {
+    const row: ApplicationImportSummary = getRow(rowData);
+    if (!row) {
+      return [];
+    }
+
+    const actions: (IAction | ISeparator)[] = [];
+    actions.push({
       title: t("actions.delete"),
       onClick: (
         event: React.MouseEvent,
@@ -241,19 +248,24 @@ export const ManageImports: React.FC = () => {
         const row: ApplicationImportSummary = getRow(rowData);
         deleteRow(row);
       },
-    },
-    {
-      title: t("actions.viewErrorReport"),
-      onClick: (
-        event: React.MouseEvent,
-        rowIndex: number,
-        rowData: IRowData
-      ) => {
-        const row: ApplicationImportSummary = getRow(rowData);
-        viewRowDetails(row);
-      },
-    },
-  ];
+    });
+
+    if (row.importStatus === "Completed") {
+      actions.push({
+        title: t("actions.viewErrorReport"),
+        onClick: (
+          event: React.MouseEvent,
+          rowIndex: number,
+          rowData: IRowData
+        ) => {
+          const row: ApplicationImportSummary = getRow(rowData);
+          viewRowDetails(row);
+        },
+      });
+    }
+
+    return actions;
+  };
 
   // Row actions
   const deleteRow = (row: ApplicationImportSummary) => {
@@ -347,7 +359,7 @@ export const ManageImports: React.FC = () => {
             onSort={handleSortChange}
             cells={columns}
             rows={rows}
-            actions={actions}
+            actionResolver={actionResolver}
             isLoading={isFetching}
             loadingVariant="skeleton"
             fetchError={fetchError}
