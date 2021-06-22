@@ -181,6 +181,12 @@ export interface AssessmentQuestionRisk {
   applications: number[];
 }
 
+export interface AssessmentConfidence {
+  assessmentId: number;
+  applicationId: number;
+  confidence: number;
+}
+
 // Pagination
 
 export interface BusinessServicePage {

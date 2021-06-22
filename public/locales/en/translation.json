@@ -97,6 +97,7 @@
         "color": "Color",
         "comments": "Comments",
         "completed": "Completed",
+        "confidence": "Confidence",
         "controls": "Controls",
         "criticality": "Criticality",
         "date": "Date",
