@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { AxiosError } from "axios";
 import { useTranslation } from "react-i18next";
 
 import { ConditionalRender, EmptyTextMessage } from "shared/components";
@@ -26,51 +25,57 @@ export const ApplicationTags: React.FC<ApplicationTagsProps> = ({
 
   const [tagTypes, setTagTypes] = useState<Map<number, TagType>>(new Map()); // <tagTypeId, tagType>
   const [tags, setTags] = useState<Map<number, Tag[]>>(new Map()); // <tagTypeId, tags[]>
+  const [unknownTags, setUnknownTags] = useState(0);
 
   const [isFetching, setIsFetching] = useState(false);
-  const [fetchError, setFetchError] = useState<AxiosError>();
 
   useEffect(() => {
     if (application.tags) {
       setIsFetching(true);
 
-      Promise.all(application.tags.map((f) => getTagById(f)))
+      Promise.all(
+        application.tags
+          .map((f) => getTagById(f))
+          .map((p) => p.catch(() => null))
+      )
         .then((tags) => {
           const newTagTypes: Map<number, TagType> = new Map();
           const newTags: Map<number, Tag[]> = new Map();
+          const newUnknownTags = tags.filter((f) => f === null).length;
 
-          tags
-            .map((f) => f.data)
-            .forEach((e) => {
-              const tagType = e.tagType;
-              if (tagType) {
-                // Tag types
-                newTagTypes.set(tagType.id!, tagType);
+          const validResponses = tags.reduce((prev, current) => {
+            if (current) {
+              return [...prev, current.data];
+            } else {
+              return prev;
+            }
+          }, [] as Tag[]);
 
-                // Tags
-                newTags.set(tagType.id!, [
-                  ...(newTags.get(tagType.id!) || []),
-                  e,
-                ]);
-              }
-            });
+          validResponses.forEach((e) => {
+            const tagType = e.tagType;
+            if (tagType) {
+              // Tag types
+              newTagTypes.set(tagType.id!, tagType);
 
+              // Tags
+              newTags.set(tagType.id!, [
+                ...(newTags.get(tagType.id!) || []),
+                e,
+              ]);
+            }
+          });
+
+          setUnknownTags(newUnknownTags);
           setTagTypes(newTagTypes);
           setTags(newTags);
 
           setIsFetching(false);
-          setFetchError(undefined);
         })
-        .catch((error) => {
+        .catch(() => {
           setIsFetching(false);
-          setFetchError(error);
         });
     }
   }, [application]);
-
-  if (fetchError) {
-    return <EmptyTextMessage message={t("terms.notAvailable")} />;
-  }
 
   return (
     <ConditionalRender when={isFetching} then={<Spinner isSVG size="md" />}>
@@ -99,6 +104,15 @@ export const ApplicationTags: React.FC<ApplicationTagsProps> = ({
               </SplitItem>
             );
           })}
+        <SplitItem>
+          <LabelGroup>
+            {[...Array(unknownTags)].map((_, index) => (
+              <Label key={index} color="grey">
+                <EmptyTextMessage message={t("terms.unknown")} />
+              </Label>
+            ))}
+          </LabelGroup>
+        </SplitItem>
       </Split>
     </ConditionalRender>
   );
