@@ -23,6 +23,7 @@ import {
   AssessmentRisk,
   AssessmentQuestionRisk,
   ApplicationAdoptionPlan,
+  AssessmentConfidence,
 } from "./models";
 
 export const CONTROLS_BASE_URL = "controls";
@@ -615,6 +616,15 @@ export const getAssessmentIdentifiedRisks = (
 ): AxiosPromise<AssessmentQuestionRisk[]> => {
   return APIClient.post(
     `${ASSESSMENTS}/risks`,
+    applicationIds.map((f) => ({ applicationId: f }))
+  );
+};
+
+export const getAssessmentConfidence = (
+  applicationIds: number[]
+): AxiosPromise<AssessmentConfidence[]> => {
+  return APIClient.post(
+    `${ASSESSMENTS}/confidence`,
     applicationIds.map((f) => ({ applicationId: f }))
   );
 };
