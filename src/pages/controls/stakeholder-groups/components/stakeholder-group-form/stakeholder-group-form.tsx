@@ -15,10 +15,7 @@ import {
   TextInput,
 } from "@patternfly/react-core";
 
-import {
-  OptionWithValue,
-  MultiSelectFetchFormikField,
-} from "shared/components";
+import { MultiSelectFetchOptionValueFormikField } from "shared/components";
 import { useFetchStakeholders } from "shared/hooks";
 
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
@@ -29,18 +26,17 @@ import {
   getValidatedFromError,
   getValidatedFromErrorTouched,
 } from "utils/utils";
-
-const stakeholderToOption = (
-  value: Stakeholder
-): OptionWithValue<Stakeholder> => ({
-  value,
-  toString: () => value.displayName,
-});
+import {
+  isIModelEqual,
+  IStakeholderDropdown,
+  toIStakeholderDropdownOptionWithValue,
+  toIStakeholderDropdown,
+} from "utils/model-utils";
 
 export interface FormValues {
   name: string;
   description: string;
-  stakeholders?: OptionWithValue<Stakeholder>[];
+  stakeholders: IStakeholderDropdown[];
 }
 
 export interface StakeholderGroupFormProps {
@@ -69,12 +65,10 @@ export const StakeholderGroupForm: React.FC<StakeholderGroupFormProps> = ({
     fetchAllStakeholders();
   }, [fetchAllStakeholders]);
 
-  const stakeholdersInitialValue:
-    | OptionWithValue<Stakeholder>[]
-    | undefined = useMemo(() => {
+  const stakeholdersInitialValue: IStakeholderDropdown[] = useMemo(() => {
     return stakeholderGroup && stakeholderGroup.stakeholders
-      ? stakeholderGroup.stakeholders.map(stakeholderToOption)
-      : undefined;
+      ? stakeholderGroup.stakeholders.map(toIStakeholderDropdown)
+      : [];
   }, [stakeholderGroup]);
 
   const initialValues: FormValues = {
@@ -101,7 +95,7 @@ export const StakeholderGroupForm: React.FC<StakeholderGroupFormProps> = ({
     const payload: StakeholderGroup = {
       name: formValues.name.trim(),
       description: formValues.description.trim(),
-      stakeholders: formValues.stakeholders?.map((f) => f.value),
+      stakeholders: formValues.stakeholders as Stakeholder[],
     };
 
     let promise: AxiosPromise<StakeholderGroup>;
@@ -197,7 +191,7 @@ export const StakeholderGroupForm: React.FC<StakeholderGroupFormProps> = ({
           validated={getValidatedFromError(formik.errors.stakeholders)}
           helperTextInvalid={formik.errors.stakeholders}
         >
-          <MultiSelectFetchFormikField
+          <MultiSelectFetchOptionValueFormikField<IStakeholderDropdown>
             fieldConfig={{ name: "stakeholders" }}
             selectConfig={{
               variant: "typeaheadmulti",
@@ -208,15 +202,12 @@ export const StakeholderGroupForm: React.FC<StakeholderGroupFormProps> = ({
               }),
               menuAppendTo: () => document.body,
               maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
-              options: (stakeholders?.data || []).map(stakeholderToOption),
               isFetching: isFetchingStakeholders,
               fetchError: fetchErrorStakeholders,
             }}
-            isEqual={(a: any, b: any) => {
-              const option1 = a as OptionWithValue<Stakeholder>;
-              const option2 = b as OptionWithValue<Stakeholder>;
-              return option1.value.id === option2.value.id;
-            }}
+            options={(stakeholders?.data || []).map(toIStakeholderDropdown)}
+            toOptionWithValue={toIStakeholderDropdownOptionWithValue}
+            isEqual={isIModelEqual}
           />
         </FormGroup>
 
