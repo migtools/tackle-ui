@@ -47,7 +47,9 @@ export const ImportApplicationsForm: React.FC<ImportApplicationsFormProps> = ({
     axios
       .post(UPLOAD_FILE, formData, config)
       .then((response) => {
-        dispatch(alertActions.addSuccess("Success! applications imported."));
+        dispatch(
+          alertActions.addSuccess("Success! file saved to be processed.")
+        );
 
         setIsSubmitting(false);
         onSaved(response);
