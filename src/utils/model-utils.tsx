@@ -36,13 +36,14 @@ export const toIBusinessServiceDropdownOptionWithValue = (
 // Stakeholder dropdown
 
 export interface IStakeholderDropdown
-  extends Pick<Stakeholder, "id" | "displayName"> {}
+  extends Pick<Stakeholder, "id" | "displayName" | "email"> {}
 
 export const toIStakeholderDropdown = (
   value: Stakeholder
 ): IStakeholderDropdown => ({
   id: value.id,
   displayName: value.displayName,
+  email: value.email,
 });
 
 export const toIStakeholderDropdownOptionWithValue = (
@@ -50,6 +51,9 @@ export const toIStakeholderDropdownOptionWithValue = (
 ): OptionWithValue<IStakeholderDropdown> => ({
   value,
   toString: () => value.displayName,
+  props: {
+    description: value.email,
+  },
 });
 
 // Stakeholder group dropdown
