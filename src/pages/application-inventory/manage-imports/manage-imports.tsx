@@ -5,6 +5,8 @@ import { StatusIcon } from "@konveyor/lib-ui";
 
 import {
   ButtonVariant,
+  Flex,
+  FlexItem,
   PageSection,
   ToolbarChip,
 } from "@patternfly/react-core";
@@ -17,6 +19,7 @@ import {
   sortable,
   truncate,
 } from "@patternfly/react-table";
+import { InProgressIcon } from "@patternfly/react-icons";
 
 import { useDispatch } from "react-redux";
 import { alertActions } from "store/alert";
@@ -109,7 +112,7 @@ export const ManageImports: React.FC = () => {
     requestDelete: requestDeleteApplication,
   } = useDelete<ApplicationImportSummary>({
     onDelete: (t: ApplicationImportSummary) =>
-      deleteApplicationImportSummary(t.parentId),
+      deleteApplicationImportSummary(t.id),
   });
 
   // Toolbar filters
@@ -181,6 +184,27 @@ export const ManageImports: React.FC = () => {
 
   const rows: IRow[] = [];
   imports?.data.forEach((item) => {
+    let status;
+    if (item.importStatus === "Completed") {
+      status = <StatusIcon status="Ok" label={t("terms.completed")} />;
+    } else if (item.importStatus === "In Progress") {
+      status = (
+        <Flex
+          spaceItems={{ default: "spaceItemsSm" }}
+          alignItems={{ default: "alignItemsCenter" }}
+          flexWrap={{ default: "nowrap" }}
+          style={{ whiteSpace: "nowrap" }}
+        >
+          <FlexItem>
+            <InProgressIcon />
+          </FlexItem>
+          <FlexItem>{t("terms.inProgress")}</FlexItem>
+        </Flex>
+      );
+    } else {
+      status = <StatusIcon status="Error" label={t("terms.error")} />;
+    }
+
     rows.push({
       [ENTITY_FIELD]: item,
       cells: [
@@ -194,9 +218,7 @@ export const ManageImports: React.FC = () => {
           title: item.filename,
         },
         {
-          title: item.status === "Completed" && (
-            <StatusIcon status="Ok" label={t("terms.completed")} />
-          ),
+          title: status,
         },
         {
           title: item.validCount,
@@ -271,7 +293,7 @@ export const ManageImports: React.FC = () => {
   const viewRowDetails = (row: ApplicationImportSummary) => {
     history.push(
       formatPath(Paths.applicationInventory_manageImports_details, {
-        importId: row.parentId,
+        importId: row.id,
       })
     );
   };

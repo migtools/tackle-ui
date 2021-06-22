@@ -112,13 +112,13 @@ export interface ApplicationAdoptionPlan {
 }
 
 export interface ApplicationImportSummary {
-  parentId: number;
+  id: number;
   filename: string;
   createUser: string;
   createTime: number;
   validCount: number;
   invalidCount: number;
-  status: ImportSummaryStatus;
+  importStatus: ImportSummaryStatus;
 }
 
 export interface ApplicationImport {
