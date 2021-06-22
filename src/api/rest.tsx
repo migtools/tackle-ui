@@ -26,6 +26,7 @@ import {
   AssessmentConfidence,
   ApplicationImportSummaryPage,
   ApplicationImportPage,
+  ApplicationImportSummary,
 } from "./models";
 
 export const CONTROLS_BASE_URL = "controls";
@@ -626,6 +627,12 @@ export const getApplicationImportSummary = (
 
   const query: string[] = buildQuery(params);
   return APIClient.get(`${APP_IMPORT_SUMMARY}?${query.join("&")}`, { headers });
+};
+
+export const getApplicationImportSummaryById = (
+  id: number | string
+): AxiosPromise<ApplicationImportSummary> => {
+  return APIClient.get(`${APP_IMPORT_SUMMARY}/${id}`);
 };
 
 export const deleteApplicationImportSummary = (id: number): AxiosPromise => {

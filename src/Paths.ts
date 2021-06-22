@@ -36,3 +36,7 @@ export interface AssessmentRoute {
 export interface ReviewRoute {
   applicationId: string;
 }
+
+export interface ImportSummaryRoute {
+  importId: string;
+}

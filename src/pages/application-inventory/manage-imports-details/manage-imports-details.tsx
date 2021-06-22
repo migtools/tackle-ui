@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from "react";
+import { useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 
 import { PageSection } from "@patternfly/react-core";
@@ -18,9 +19,12 @@ import {
   PageHeader,
 } from "shared/components";
 
-import { Paths } from "Paths";
-import { getApplicationImport } from "api/rest";
-import { ApplicationImportPage } from "api/models";
+import { ImportSummaryRoute, Paths } from "Paths";
+import {
+  getApplicationImport,
+  getApplicationImportSummaryById,
+} from "api/rest";
+import { ApplicationImportPage, ApplicationImportSummary } from "api/models";
 import { applicationImportPageMapper } from "api/apiUtils";
 
 const ENTITY_FIELD = "entity";
@@ -28,6 +32,25 @@ const ENTITY_FIELD = "entity";
 export const ManageImportsDetails: React.FC = () => {
   // i18
   const { t } = useTranslation();
+
+  // Router
+  const { importId } = useParams<ImportSummaryRoute>();
+
+  const fetchApplicationImportSummary = useCallback(() => {
+    return getApplicationImportSummaryById(importId);
+  }, [importId]);
+
+  const {
+    data: applicationImportSummary,
+    requestFetch: refreshApplicationImportSummary,
+  } = useFetch<ApplicationImportSummary>({
+    defaultIsFetching: true,
+    onFetch: fetchApplicationImportSummary,
+  });
+
+  useEffect(() => {
+    refreshApplicationImportSummary();
+  }, [refreshApplicationImportSummary]);
 
   // Table data
   const {
@@ -103,7 +126,7 @@ export const ManageImportsDetails: React.FC = () => {
               path: Paths.applicationInventory_manageImports,
             },
             {
-              title: "filename.csv",
+              title: applicationImportSummary?.filename || "",
               path: "",
             },
           ]}
