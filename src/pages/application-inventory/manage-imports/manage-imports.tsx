@@ -210,7 +210,7 @@ export const ManageImports: React.FC = () => {
       [ENTITY_FIELD]: item,
       cells: [
         {
-          title: formatDate(new Date(item.importtime)),
+          title: item.importtime ? formatDate(new Date(item.importtime)) : "",
         },
         {
           title: item.createUser,
