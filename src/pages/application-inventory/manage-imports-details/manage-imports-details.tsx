@@ -63,7 +63,10 @@ export const ManageImportsDetails: React.FC = () => {
   } = useTableControls();
 
   const fetchApplicationImports = useCallback(() => {
-    return getApplicationImport({ summaryId: importId }, paginationQuery);
+    return getApplicationImport(
+      { summaryId: importId, isValid: false },
+      paginationQuery
+    );
   }, [importId, paginationQuery]);
 
   const {

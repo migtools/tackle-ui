@@ -115,7 +115,7 @@ export interface ApplicationImportSummary {
   id: number;
   filename: string;
   createUser: string;
-  importtime: string;
+  importTime: string;
   validCount: number;
   invalidCount: number;
   importStatus: ImportSummaryStatus;

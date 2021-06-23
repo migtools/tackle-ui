@@ -24,12 +24,18 @@ export const ImportApplicationsForm: React.FC<ImportApplicationsFormProps> = ({
   onSaved,
 }) => {
   const [file, setFile] = useState<File>();
+  const [isFileRejected, setIsFileRejected] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<AxiosError>();
 
   // Redux
   const dispatch = useDispatch();
+
+  // Actions
+  const handleFileRejected = () => {
+    setIsFileRejected(true);
+  };
 
   const onSubmit = () => {
     if (!file) {
@@ -63,7 +69,12 @@ export const ImportApplicationsForm: React.FC<ImportApplicationsFormProps> = ({
     <Form>
       {error && <Alert variant="danger" title={getAxiosErrorMessage(error)} />}
 
-      <FormGroup label="Upload your application file" fieldId="file">
+      <FormGroup
+        fieldId="file"
+        label="Upload your application file"
+        helperTextInvalid="You should select a CSV file."
+        validated={isFileRejected ? "error" : "default"}
+      >
         <FileUpload
           id="file"
           name="file"
@@ -72,10 +83,16 @@ export const ImportApplicationsForm: React.FC<ImportApplicationsFormProps> = ({
           onChange={(value, filename) => {
             if (filename && typeof value !== "string") {
               setFile(value);
+              setIsFileRejected(false);
             } else if (!filename) {
               setFile(undefined);
             }
           }}
+          dropzoneProps={{
+            accept: ".csv",
+            onDropRejected: handleFileRejected,
+          }}
+          validated={isFileRejected ? "error" : "default"}
         />
       </FormGroup>
       <ActionGroup>

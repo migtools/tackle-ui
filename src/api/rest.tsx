@@ -643,6 +643,7 @@ export const deleteApplicationImportSummary = (id: number): AxiosPromise => {
 export const getApplicationImport = (
   filters: {
     summaryId: string;
+    isValid?: boolean;
   },
   pagination: PageQuery
 ): AxiosPromise<ApplicationImportPage> => {
@@ -650,7 +651,8 @@ export const getApplicationImport = (
     page: pagination.page - 1,
     size: pagination.perPage,
 
-    // "importSummaryId": filters.summaryId,
+    "importSummary.id": filters.summaryId,
+    isValid: filters.isValid,
   };
 
   const query: string[] = buildQuery(params);
