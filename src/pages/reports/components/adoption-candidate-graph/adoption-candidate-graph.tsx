@@ -48,6 +48,14 @@ interface Point {
   application: Application;
 }
 
+interface FlatPoint {
+  x: number;
+  y: number;
+  size: number;
+  application: Application;
+  legend: LegendItem;
+}
+
 interface LegendItem {
   name: string;
   hexColor: string;
@@ -192,6 +200,26 @@ export const AdoptionCandidateGraph: React.FC = () => {
     }, defaultChartData);
   }, [confidences, applications]);
 
+  const flatChartPoints: FlatPoint[] = useMemo(() => {
+    return Object.keys(chartPoints)
+      .map((key, i) => {
+        const serie = chartPoints[key as ProposedAction];
+
+        const legendItem = serie.legendItem;
+        const datapoints = serie.datapoints;
+
+        const result: FlatPoint[] = datapoints.map((f) => {
+          const flatPoint: FlatPoint = { ...f, legend: legendItem };
+          return flatPoint;
+        });
+        return result;
+      })
+      .flatMap((f) => f)
+      .sort((a, b) => {
+        return b.size - a.size;
+      });
+  }, [chartPoints]);
+
   const chartLines = useMemo(() => {
     if (!dependencies) {
       return [];
@@ -321,35 +349,20 @@ export const AdoptionCandidateGraph: React.FC = () => {
                         padding={chartPadding}
                       />
                       <ChartGroup>
-                        {Object.keys(chartPoints)
-                          .filter((key) => {
-                            const serie = chartPoints[key as ProposedAction];
-                            return serie.datapoints.length > 0;
-                          })
-                          .map((key, i) => {
-                            const serie = chartPoints[key as ProposedAction];
-                            const legendItem = serie.legendItem;
-                            return (
-                              <ChartScatter
-                                key={"scatter-" + i}
-                                name={"scatter-" + i}
-                                data={serie.datapoints}
-                                labels={({ datum }) => {
-                                  return datum.application?.name;
-                                }}
-                                labelComponent={
-                                  <ChartTooltip
-                                    dy={({ datum }) => 0 - datum.size}
-                                  />
-                                }
-                                style={{
-                                  data: {
-                                    fill: legendItem.hexColor,
-                                  },
-                                }}
-                              />
-                            );
-                          })}
+                        <ChartScatter
+                          data={flatChartPoints}
+                          labels={({ datum }) => {
+                            return datum.application?.name;
+                          }}
+                          labelComponent={
+                            <ChartTooltip dy={({ datum }) => 0 - datum.size} />
+                          }
+                          style={{
+                            data: {
+                              fill: ({ datum }) => datum.legend.hexColor,
+                            },
+                          }}
+                        />
                       </ChartGroup>
                       {showDependencies &&
                         chartLines.map((line, i) => (
