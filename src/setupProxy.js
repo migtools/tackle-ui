@@ -15,7 +15,7 @@ module.exports = function (app) {
   app.use(
     "/api/application-inventory",
     createProxyMiddleware({
-      target: "http://localhost:8080",
+      target: "http://localhost:8082",
       changeOrigin: true,
       pathRewrite: {
         "^/api/application-inventory": "/application-inventory",
