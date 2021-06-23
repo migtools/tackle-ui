@@ -1,15 +1,16 @@
 import React, { useCallback, useEffect, useMemo } from "react";
 import { useParams } from "react-router";
 import { useTranslation } from "react-i18next";
+import { saveAs } from "file-saver";
 
-import { PageSection } from "@patternfly/react-core";
 import {
-  cellWidth,
-  ICell,
-  IRow,
-  sortable,
-  truncate,
-} from "@patternfly/react-table";
+  Button,
+  ButtonVariant,
+  PageSection,
+  ToolbarGroup,
+  ToolbarItem,
+} from "@patternfly/react-core";
+import { cellWidth, ICell, IRow, truncate } from "@patternfly/react-table";
 
 import { useFetch, useTableControls } from "shared/hooks";
 import {
@@ -23,6 +24,7 @@ import { ImportSummaryRoute, Paths } from "Paths";
 import {
   getApplicationImport,
   getApplicationImportSummaryById,
+  getApplicationSummaryCSV,
 } from "api/rest";
 import { ApplicationImportPage, ApplicationImportSummary } from "api/models";
 import { applicationImportPageMapper } from "api/apiUtils";
@@ -86,12 +88,12 @@ export const ManageImportsDetails: React.FC = () => {
   const columns: ICell[] = [
     {
       title: t("terms.application"),
-      transforms: [sortable, cellWidth(30)],
+      transforms: [cellWidth(30)],
       cellTransforms: [truncate],
     },
     {
       title: t("terms.message"),
-      transforms: [sortable, cellWidth(70)],
+      transforms: [cellWidth(70)],
       cellTransforms: [truncate],
     },
   ];
@@ -111,11 +113,20 @@ export const ManageImportsDetails: React.FC = () => {
     });
   });
 
+  //
+
+  const exportCSV = () => {
+    getApplicationSummaryCSV(importId).then((response) => {
+      const fileName = applicationImportSummary?.filename || "file.csv";
+      saveAs(new Blob([response.data]), fileName);
+    });
+  };
+
   return (
     <>
       <PageSection variant="light">
         <PageHeader
-          title="Application imports"
+          title="Error report"
           breadcrumbs={[
             {
               title: "Applications",
@@ -150,6 +161,22 @@ export const ManageImportsDetails: React.FC = () => {
             isLoading={isFetching}
             loadingVariant="skeleton"
             fetchError={fetchError}
+            toolbar={
+              <>
+                <ToolbarGroup variant="button-group">
+                  <ToolbarItem>
+                    <Button
+                      type="button"
+                      aria-label="export-csv"
+                      variant={ButtonVariant.primary}
+                      onClick={exportCSV}
+                    >
+                      {t("actions.export")}
+                    </Button>
+                  </ToolbarItem>
+                </ToolbarGroup>
+              </>
+            }
           />
         </ConditionalRender>
       </PageSection>

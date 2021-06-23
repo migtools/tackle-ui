@@ -48,6 +48,7 @@ export const REPORT = APP_INVENTORY_BASE_URL + "/report";
 export const UPLOAD_FILE = APP_INVENTORY_BASE_URL + "/file/upload";
 export const APP_IMPORT_SUMMARY = APP_INVENTORY_BASE_URL + "/import-summary";
 export const APP_IMPORT = APP_INVENTORY_BASE_URL + "/application-import";
+export const APP_IMPORT_CSV = APP_INVENTORY_BASE_URL + "/csv-export";
 
 export const ASSESSMENTS = PATHFINDER_BASE_URL + "/assessments";
 
@@ -650,6 +651,13 @@ export const getApplicationImport = (
 
   const query: string[] = buildQuery(params);
   return APIClient.get(`${APP_IMPORT}?${query.join("&")}`, { headers });
+};
+
+export const getApplicationSummaryCSV = (id: string): AxiosPromise => {
+  return APIClient.get(`${APP_IMPORT_CSV}?importSummaryId=${id}`, {
+    responseType: "arraybuffer",
+    headers: { Accept: "text/csv", responseType: "blob" },
+  });
 };
 
 //

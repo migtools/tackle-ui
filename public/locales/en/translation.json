@@ -12,6 +12,7 @@
         "delete": "Delete",
         "discardAssessment": "Discard assessment",
         "edit": "Edit",
+        "export": "Export",
         "manageDependencies": "Manage dependencies",
         "next": "Next",
         "review": "Review",
