@@ -131,7 +131,7 @@ export const ManageImports: React.FC = () => {
     sortByQuery,
     handlePaginationChange,
     handleSortChange,
-  } = useTableControls();
+  } = useTableControls({ sortByQuery: { index: 0, direction: "desc" } });
 
   const fetchApplicationImports = useCallback(() => {
     const filenameVal = filtersValue.get(FilterKey.FILE_NAME);
