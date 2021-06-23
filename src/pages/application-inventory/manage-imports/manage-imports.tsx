@@ -250,7 +250,7 @@ export const ManageImports: React.FC = () => {
       },
     });
 
-    if (row.importStatus === "Completed") {
+    if (row.importStatus === "Completed" && row.invalidCount > 0) {
       actions.push({
         title: t("actions.viewErrorReport"),
         onClick: (
