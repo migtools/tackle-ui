@@ -269,6 +269,14 @@ export const AdoptionCandidateGraph: React.FC = () => {
           />
         </StackItem>
         <StackItem isFilled>
+          <svg>
+            <defs>
+              <radialGradient id="radial_gradient">
+                <stop offset="10%" stopColor="red" />
+                <stop offset="95%" stopColor="gold" />
+              </radialGradient>
+            </defs>
+          </svg>
           <Measure bounds>
             {({ measureRef, contentRect }) => {
               const chartHeight = 600;
@@ -305,6 +313,9 @@ export const AdoptionCandidateGraph: React.FC = () => {
                       height={chartHeight}
                       width={chartWidth}
                       domain={{ x: [0, 100], y: [0, 10] }}
+                      style={{
+                        background: { fill: "url(#radial_gradient)" },
+                      }}
                     >
                       <ChartAxis
                         label="Confidence"
