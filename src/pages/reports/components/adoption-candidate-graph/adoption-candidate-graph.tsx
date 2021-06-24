@@ -269,14 +269,6 @@ export const AdoptionCandidateGraph: React.FC = () => {
           />
         </StackItem>
         <StackItem isFilled>
-          <svg>
-            <defs>
-              <radialGradient id="radial_gradient">
-                <stop offset="10%" stopColor="red" />
-                <stop offset="95%" stopColor="gold" />
-              </radialGradient>
-            </defs>
-          </svg>
           <Measure bounds>
             {({ measureRef, contentRect }) => {
               const chartHeight = 600;
@@ -314,7 +306,7 @@ export const AdoptionCandidateGraph: React.FC = () => {
                       width={chartWidth}
                       domain={{ x: [0, 100], y: [0, 10] }}
                       style={{
-                        background: { fill: "url(#radial_gradient)" },
+                        background: { fill: "url(#axis_gradient)" },
                       }}
                     >
                       <ChartAxis
@@ -322,15 +314,25 @@ export const AdoptionCandidateGraph: React.FC = () => {
                         showGrid
                         tickValues={[
                           0,
+                          5,
                           10,
+                          15,
                           20,
+                          25,
                           30,
+                          35,
                           40,
+                          45,
                           50,
+                          55,
                           60,
+                          65,
                           70,
+                          75,
                           80,
+                          85,
                           90,
+                          95,
                           100,
                         ]}
                         tickLabelComponent={<></>}
@@ -400,6 +402,33 @@ export const AdoptionCandidateGraph: React.FC = () => {
                           />
                         ))}
                     </Chart>
+
+                    <svg style={{ height: 0 }}>
+                      <defs>
+                        <linearGradient
+                          id="axis_gradient"
+                          x1="0%"
+                          y1="0%"
+                          x2="100%"
+                          y2="0%"
+                        >
+                          <stop
+                            offset="0%"
+                            style={{
+                              stopColor: "#ffffff",
+                              stopOpacity: 1,
+                            }}
+                          />
+                          <stop
+                            offset="100%"
+                            style={{
+                              stopColor: "#d8e7cf",
+                              stopOpacity: 1,
+                            }}
+                          />
+                        </linearGradient>
+                      </defs>
+                    </svg>
                   </div>
                 </div>
               );
