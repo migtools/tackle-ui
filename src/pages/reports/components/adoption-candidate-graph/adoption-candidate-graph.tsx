@@ -23,7 +23,11 @@ import {
   ChartThemeColor,
   ChartTooltip,
 } from "@patternfly/react-charts";
-import { global_palette_black_800 as black } from "@patternfly/react-tokens";
+import {
+  global_palette_black_800 as black,
+  chart_color_green_100 as green,
+  global_palette_white as white,
+} from "@patternfly/react-tokens";
 
 import { useFetch, useFetchApplicationDependencies } from "shared/hooks";
 import { ConditionalRender, StateError } from "shared/components";
@@ -37,25 +41,29 @@ import { CartesianSquare } from "./cartesian-square";
 import { Arrow } from "./arrow";
 
 interface Line {
-  from: Point;
-  to: Point;
+  from: LinePoint;
+  to: LinePoint;
 }
 
-interface Point {
+interface LinePoint {
   x: number;
   y: number;
   size: number;
   application: Application;
 }
 
-interface LegendItem {
+interface BubblePoint extends LinePoint {
+  legend: Legend;
+}
+
+interface Legend {
   name: string;
   hexColor: string;
 }
 
 interface Serie {
-  legendItem: LegendItem;
-  datapoints: Point[];
+  legend: Legend;
+  datapoints: LinePoint[];
 }
 
 type ProposedActionChartDataListType = {
@@ -64,42 +72,42 @@ type ProposedActionChartDataListType = {
 
 const defaultChartData: ProposedActionChartDataListType = {
   rehost: {
-    legendItem: {
+    legend: {
       name: PROPOSED_ACTION_LIST["rehost"].label,
       hexColor: PROPOSED_ACTION_LIST["rehost"].hexColor,
     },
     datapoints: [],
   },
   replatform: {
-    legendItem: {
+    legend: {
       name: PROPOSED_ACTION_LIST["replatform"].label,
       hexColor: PROPOSED_ACTION_LIST["replatform"].hexColor,
     },
     datapoints: [],
   },
   refactor: {
-    legendItem: {
+    legend: {
       name: PROPOSED_ACTION_LIST["refactor"].label,
       hexColor: PROPOSED_ACTION_LIST["refactor"].hexColor,
     },
     datapoints: [],
   },
   repurchase: {
-    legendItem: {
+    legend: {
       name: PROPOSED_ACTION_LIST["repurchase"].label,
       hexColor: PROPOSED_ACTION_LIST["repurchase"].hexColor,
     },
     datapoints: [],
   },
   retire: {
-    legendItem: {
+    legend: {
       name: PROPOSED_ACTION_LIST["retire"].label,
       hexColor: PROPOSED_ACTION_LIST["retire"].hexColor,
     },
     datapoints: [],
   },
   retain: {
-    legendItem: {
+    legend: {
       name: PROPOSED_ACTION_LIST["retain"].label,
       hexColor: PROPOSED_ACTION_LIST["retain"].hexColor,
     },
@@ -152,7 +160,7 @@ export const AdoptionCandidateGraph: React.FC = () => {
   }, [fetchAllDependencies]);
 
   // Chart data
-  const chartPoints: ProposedActionChartDataListType = useMemo(() => {
+  const legendAndPoints: ProposedActionChartDataListType = useMemo(() => {
     if (!confidences) {
       return defaultChartData;
     }
@@ -168,7 +176,7 @@ export const AdoptionCandidateGraph: React.FC = () => {
 
         // Create new datapoint
         const effortData = EFFORT_ESTIMATE_LIST[current.review.effortEstimate];
-        const datapoint: Point = {
+        const datapoint: LinePoint = {
           x: appConfidence.confidence,
           y: current.review.businessCriticality,
           size: effortData ? effortData.size : 0,
@@ -192,13 +200,31 @@ export const AdoptionCandidateGraph: React.FC = () => {
     }, defaultChartData);
   }, [confidences, applications]);
 
-  const chartLines = useMemo(() => {
+  const bubblePoints: BubblePoint[] = useMemo(() => {
+    return Object.keys(legendAndPoints)
+      .map((key) => {
+        const serie = legendAndPoints[key as ProposedAction];
+
+        const legend = serie.legend;
+        const datapoints = serie.datapoints;
+
+        const result: BubblePoint[] = datapoints.map((f) => {
+          const flatPoint: BubblePoint = { ...f, legend: legend };
+          return flatPoint;
+        });
+        return result;
+      })
+      .flatMap((f) => f)
+      .sort((a, b) => b.size - a.size);
+  }, [legendAndPoints]);
+
+  const lines = useMemo(() => {
     if (!dependencies) {
       return [];
     }
 
-    const points = Object.keys(chartPoints)
-      .map((key) => chartPoints[key as ProposedAction].datapoints)
+    const points = Object.keys(legendAndPoints)
+      .map((key) => legendAndPoints[key as ProposedAction].datapoints)
       .flatMap((f) => f);
 
     return dependencies.data.reduce((prev, current) => {
@@ -219,7 +245,7 @@ export const AdoptionCandidateGraph: React.FC = () => {
 
       return prev;
     }, [] as Line[]);
-  }, [chartPoints, dependencies]);
+  }, [legendAndPoints, dependencies]);
 
   if (fetchError) {
     return <StateError />;
@@ -269,9 +295,9 @@ export const AdoptionCandidateGraph: React.FC = () => {
                     <Chart
                       themeColor={ChartThemeColor.gray}
                       legendPosition="bottom-left"
-                      legendData={Object.keys(chartPoints).map((key) => {
-                        const serie = chartPoints[key as ProposedAction];
-                        const legend = serie.legendItem;
+                      legendData={Object.keys(legendAndPoints).map((key) => {
+                        const serie = legendAndPoints[key as ProposedAction];
+                        const legend = serie.legend;
                         return {
                           name: legend.name,
                           symbol: {
@@ -283,21 +309,34 @@ export const AdoptionCandidateGraph: React.FC = () => {
                       height={chartHeight}
                       width={chartWidth}
                       domain={{ x: [0, 100], y: [0, 10] }}
+                      style={{
+                        background: { fill: "url(#axis_gradient)" },
+                      }}
                     >
                       <ChartAxis
                         label="Confidence"
                         showGrid
                         tickValues={[
                           0,
+                          5,
                           10,
+                          15,
                           20,
+                          25,
                           30,
+                          35,
                           40,
+                          45,
                           50,
+                          55,
                           60,
+                          65,
                           70,
+                          75,
                           80,
+                          85,
                           90,
+                          95,
                           100,
                         ]}
                         tickLabelComponent={<></>}
@@ -321,38 +360,34 @@ export const AdoptionCandidateGraph: React.FC = () => {
                         padding={chartPadding}
                       />
                       <ChartGroup>
-                        {Object.keys(chartPoints)
-                          .filter((key) => {
-                            const serie = chartPoints[key as ProposedAction];
-                            return serie.datapoints.length > 0;
-                          })
-                          .map((key, i) => {
-                            const serie = chartPoints[key as ProposedAction];
-                            const legendItem = serie.legendItem;
-                            return (
-                              <ChartScatter
-                                key={"scatter-" + i}
-                                name={"scatter-" + i}
-                                data={serie.datapoints}
-                                labels={({ datum }) => {
-                                  return datum.application?.name;
-                                }}
-                                labelComponent={
-                                  <ChartTooltip
-                                    dy={({ datum }) => 0 - datum.size}
-                                  />
-                                }
-                                style={{
-                                  data: {
-                                    fill: legendItem.hexColor,
-                                  },
-                                }}
-                              />
-                            );
-                          })}
+                        <ChartScatter
+                          key={"scatter-1"}
+                          name={"scatter-1"}
+                          data={bubblePoints}
+                          labels={({ datum }) => {
+                            const point = datum as BubblePoint;
+                            return point.application.name;
+                          }}
+                          labelComponent={
+                            <ChartTooltip
+                              dy={({ datum }) => {
+                                const point = datum as BubblePoint;
+                                return 0 - point.size;
+                              }}
+                            />
+                          }
+                          style={{
+                            data: {
+                              fill: ({ datum }) => {
+                                const point = datum as BubblePoint;
+                                return point.legend.hexColor;
+                              },
+                            },
+                          }}
+                        />
                       </ChartGroup>
                       {showDependencies &&
-                        chartLines.map((line, i) => (
+                        lines.map((line, i) => (
                           <ChartLine
                             key={"line-" + i}
                             name={"line-" + i}
@@ -371,6 +406,33 @@ export const AdoptionCandidateGraph: React.FC = () => {
                           />
                         ))}
                     </Chart>
+
+                    <svg style={{ height: 0 }}>
+                      <defs>
+                        <linearGradient
+                          id="axis_gradient"
+                          x1="0%"
+                          y1="0%"
+                          x2="100%"
+                          y2="0%"
+                        >
+                          <stop
+                            offset="50%"
+                            style={{
+                              stopColor: white.value,
+                              stopOpacity: 1,
+                            }}
+                          />
+                          <stop
+                            offset="100%"
+                            style={{
+                              stopColor: green.value,
+                              stopOpacity: 0.5,
+                            }}
+                          />
+                        </linearGradient>
+                      </defs>
+                    </svg>
                   </div>
                 </div>
               );
