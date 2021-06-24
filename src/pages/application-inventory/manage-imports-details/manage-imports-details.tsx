@@ -12,6 +12,9 @@ import {
 } from "@patternfly/react-core";
 import { cellWidth, ICell, IRow, truncate } from "@patternfly/react-table";
 
+import { useDispatch } from "react-redux";
+import { alertActions } from "store/alert";
+
 import { useFetch, useTableControls } from "shared/hooks";
 import {
   AppPlaceholder,
@@ -28,6 +31,7 @@ import {
 } from "api/rest";
 import { ApplicationImportPage, ApplicationImportSummary } from "api/models";
 import { applicationImportPageMapper } from "api/apiUtils";
+import { getAxiosErrorMessage } from "utils/utils";
 
 const ENTITY_FIELD = "entity";
 
@@ -37,6 +41,9 @@ export const ManageImportsDetails: React.FC = () => {
 
   // Router
   const { importId } = useParams<ImportSummaryRoute>();
+
+  // Redux
+  const dispatch = useDispatch();
 
   const fetchApplicationImportSummary = useCallback(() => {
     return getApplicationImportSummaryById(importId);
@@ -119,10 +126,14 @@ export const ManageImportsDetails: React.FC = () => {
   //
 
   const exportCSV = () => {
-    getApplicationSummaryCSV(importId).then((response) => {
-      const fileName = applicationImportSummary?.filename || "file.csv";
-      saveAs(new Blob([response.data]), fileName);
-    });
+    getApplicationSummaryCSV(importId)
+      .then((response) => {
+        const fileName = applicationImportSummary?.filename || "file.csv";
+        saveAs(new Blob([response.data]), fileName);
+      })
+      .catch((error) => {
+        dispatch(alertActions.addDanger(getAxiosErrorMessage(error)));
+      });
   };
 
   return (
