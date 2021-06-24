@@ -1,14 +1,18 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useHistory } from "react-router";
 import { useTranslation } from "react-i18next";
 import { StatusIcon } from "@konveyor/lib-ui";
 
 import {
+  Button,
   ButtonVariant,
   Flex,
   FlexItem,
+  Modal,
   PageSection,
   ToolbarChip,
+  ToolbarGroup,
+  ToolbarItem,
 } from "@patternfly/react-core";
 import {
   cellWidth,
@@ -56,6 +60,8 @@ import {
 } from "api/models";
 import { applicationImportSummaryPageMapper } from "api/apiUtils";
 import { formatDate, getAxiosErrorMessage } from "utils/utils";
+
+import { ImportApplicationsForm } from "../application-list/components/import-applications-form";
 
 export enum FilterKey {
   FILE_NAME = "filename",
@@ -107,6 +113,12 @@ export const ManageImports: React.FC = () => {
 
   // Router
   const history = useHistory();
+
+  // Application import modal
+  const [
+    isApplicationImportModalOpen,
+    setIsApplicationImportModalOpen,
+  ] = useState(false);
 
   // Delete
   const {
@@ -379,9 +391,39 @@ export const ManageImports: React.FC = () => {
                 <ToolbarSearchFilter filters={filterOptions} />
               </AppTableToolbarToggleGroup>
             }
+            toolbar={
+              <>
+                <ToolbarGroup variant="button-group">
+                  <ToolbarItem>
+                    <Button
+                      type="button"
+                      aria-label="import-applications"
+                      variant={ButtonVariant.primary}
+                      onClick={() => setIsApplicationImportModalOpen(true)}
+                    >
+                      {t("actions.import")}
+                    </Button>
+                  </ToolbarItem>
+                </ToolbarGroup>
+              </>
+            }
           />
         </ConditionalRender>
       </PageSection>
+
+      <Modal
+        isOpen={isApplicationImportModalOpen}
+        variant="medium"
+        title="Import application file"
+        onClose={() => setIsApplicationImportModalOpen((current) => !current)}
+      >
+        <ImportApplicationsForm
+          onSaved={() => {
+            setIsApplicationImportModalOpen(false);
+            refreshTable();
+          }}
+        />
+      </Modal>
     </>
   );
 };

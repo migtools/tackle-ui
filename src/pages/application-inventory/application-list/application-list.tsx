@@ -684,7 +684,7 @@ export const ApplicationList: React.FC = () => {
                           component="button"
                           onClick={() => setIsApplicationImportModalOpen(true)}
                         >
-                          Import
+                          {t("actions.import")}
                         </DropdownItem>,
                         <DropdownItem
                           key="manage-application-imports"
