@@ -37,33 +37,29 @@ import { CartesianSquare } from "./cartesian-square";
 import { Arrow } from "./arrow";
 
 interface Line {
-  from: Point;
-  to: Point;
+  from: LinePoint;
+  to: LinePoint;
 }
 
-interface Point {
+interface LinePoint {
   x: number;
   y: number;
   size: number;
   application: Application;
 }
 
-interface FlatPoint {
-  x: number;
-  y: number;
-  size: number;
-  application: Application;
-  legend: LegendItem;
+interface BubblePoint extends LinePoint {
+  legend: Legend;
 }
 
-interface LegendItem {
+interface Legend {
   name: string;
   hexColor: string;
 }
 
 interface Serie {
-  legendItem: LegendItem;
-  datapoints: Point[];
+  legend: Legend;
+  datapoints: LinePoint[];
 }
 
 type ProposedActionChartDataListType = {
@@ -72,42 +68,42 @@ type ProposedActionChartDataListType = {
 
 const defaultChartData: ProposedActionChartDataListType = {
   rehost: {
-    legendItem: {
+    legend: {
       name: PROPOSED_ACTION_LIST["rehost"].label,
       hexColor: PROPOSED_ACTION_LIST["rehost"].hexColor,
     },
     datapoints: [],
   },
   replatform: {
-    legendItem: {
+    legend: {
       name: PROPOSED_ACTION_LIST["replatform"].label,
       hexColor: PROPOSED_ACTION_LIST["replatform"].hexColor,
     },
     datapoints: [],
   },
   refactor: {
-    legendItem: {
+    legend: {
       name: PROPOSED_ACTION_LIST["refactor"].label,
       hexColor: PROPOSED_ACTION_LIST["refactor"].hexColor,
     },
     datapoints: [],
   },
   repurchase: {
-    legendItem: {
+    legend: {
       name: PROPOSED_ACTION_LIST["repurchase"].label,
       hexColor: PROPOSED_ACTION_LIST["repurchase"].hexColor,
     },
     datapoints: [],
   },
   retire: {
-    legendItem: {
+    legend: {
       name: PROPOSED_ACTION_LIST["retire"].label,
       hexColor: PROPOSED_ACTION_LIST["retire"].hexColor,
     },
     datapoints: [],
   },
   retain: {
-    legendItem: {
+    legend: {
       name: PROPOSED_ACTION_LIST["retain"].label,
       hexColor: PROPOSED_ACTION_LIST["retain"].hexColor,
     },
@@ -160,7 +156,7 @@ export const AdoptionCandidateGraph: React.FC = () => {
   }, [fetchAllDependencies]);
 
   // Chart data
-  const chartPoints: ProposedActionChartDataListType = useMemo(() => {
+  const legendAndPoints: ProposedActionChartDataListType = useMemo(() => {
     if (!confidences) {
       return defaultChartData;
     }
@@ -176,7 +172,7 @@ export const AdoptionCandidateGraph: React.FC = () => {
 
         // Create new datapoint
         const effortData = EFFORT_ESTIMATE_LIST[current.review.effortEstimate];
-        const datapoint: Point = {
+        const datapoint: LinePoint = {
           x: appConfidence.confidence,
           y: current.review.businessCriticality,
           size: effortData ? effortData.size : 0,
@@ -200,33 +196,31 @@ export const AdoptionCandidateGraph: React.FC = () => {
     }, defaultChartData);
   }, [confidences, applications]);
 
-  const flatChartPoints: FlatPoint[] = useMemo(() => {
-    return Object.keys(chartPoints)
-      .map((key, i) => {
-        const serie = chartPoints[key as ProposedAction];
+  const bubblePoints: BubblePoint[] = useMemo(() => {
+    return Object.keys(legendAndPoints)
+      .map((key) => {
+        const serie = legendAndPoints[key as ProposedAction];
 
-        const legendItem = serie.legendItem;
+        const legend = serie.legend;
         const datapoints = serie.datapoints;
 
-        const result: FlatPoint[] = datapoints.map((f) => {
-          const flatPoint: FlatPoint = { ...f, legend: legendItem };
+        const result: BubblePoint[] = datapoints.map((f) => {
+          const flatPoint: BubblePoint = { ...f, legend: legend };
           return flatPoint;
         });
         return result;
       })
       .flatMap((f) => f)
-      .sort((a, b) => {
-        return b.size - a.size;
-      });
-  }, [chartPoints]);
+      .sort((a, b) => b.size - a.size);
+  }, [legendAndPoints]);
 
-  const chartLines = useMemo(() => {
+  const lines = useMemo(() => {
     if (!dependencies) {
       return [];
     }
 
-    const points = Object.keys(chartPoints)
-      .map((key) => chartPoints[key as ProposedAction].datapoints)
+    const points = Object.keys(legendAndPoints)
+      .map((key) => legendAndPoints[key as ProposedAction].datapoints)
       .flatMap((f) => f);
 
     return dependencies.data.reduce((prev, current) => {
@@ -247,7 +241,7 @@ export const AdoptionCandidateGraph: React.FC = () => {
 
       return prev;
     }, [] as Line[]);
-  }, [chartPoints, dependencies]);
+  }, [legendAndPoints, dependencies]);
 
   if (fetchError) {
     return <StateError />;
@@ -297,9 +291,9 @@ export const AdoptionCandidateGraph: React.FC = () => {
                     <Chart
                       themeColor={ChartThemeColor.gray}
                       legendPosition="bottom-left"
-                      legendData={Object.keys(chartPoints).map((key) => {
-                        const serie = chartPoints[key as ProposedAction];
-                        const legend = serie.legendItem;
+                      legendData={Object.keys(legendAndPoints).map((key) => {
+                        const serie = legendAndPoints[key as ProposedAction];
+                        const legend = serie.legend;
                         return {
                           name: legend.name,
                           symbol: {
@@ -350,22 +344,33 @@ export const AdoptionCandidateGraph: React.FC = () => {
                       />
                       <ChartGroup>
                         <ChartScatter
-                          data={flatChartPoints}
+                          key={"scatter-1"}
+                          name={"scatter-1"}
+                          data={bubblePoints}
                           labels={({ datum }) => {
-                            return datum.application?.name;
+                            const point = datum as BubblePoint;
+                            return point.application.name;
                           }}
                           labelComponent={
-                            <ChartTooltip dy={({ datum }) => 0 - datum.size} />
+                            <ChartTooltip
+                              dy={({ datum }) => {
+                                const point = datum as BubblePoint;
+                                return 0 - point.size;
+                              }}
+                            />
                           }
                           style={{
                             data: {
-                              fill: ({ datum }) => datum.legend.hexColor,
+                              fill: ({ datum }) => {
+                                const point = datum as BubblePoint;
+                                return point.legend.hexColor;
+                              },
                             },
                           }}
                         />
                       </ChartGroup>
                       {showDependencies &&
-                        chartLines.map((line, i) => (
+                        lines.map((line, i) => (
                           <ChartLine
                             key={"line-" + i}
                             name={"line-" + i}
