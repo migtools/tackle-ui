@@ -23,7 +23,11 @@ import {
   ChartThemeColor,
   ChartTooltip,
 } from "@patternfly/react-charts";
-import { global_palette_black_800 as black } from "@patternfly/react-tokens";
+import {
+  global_palette_black_800 as black,
+  chart_color_green_100 as green,
+  global_palette_white as white,
+} from "@patternfly/react-tokens";
 
 import { useFetch, useFetchApplicationDependencies } from "shared/hooks";
 import { ConditionalRender, StateError } from "shared/components";
@@ -413,17 +417,17 @@ export const AdoptionCandidateGraph: React.FC = () => {
                           y2="0%"
                         >
                           <stop
-                            offset="0%"
+                            offset="50%"
                             style={{
-                              stopColor: "#ffffff",
+                              stopColor: white.value,
                               stopOpacity: 1,
                             }}
                           />
                           <stop
                             offset="100%"
                             style={{
-                              stopColor: "#d8e7cf",
-                              stopOpacity: 1,
+                              stopColor: green.value,
+                              stopOpacity: 0.5,
                             }}
                           />
                         </linearGradient>
