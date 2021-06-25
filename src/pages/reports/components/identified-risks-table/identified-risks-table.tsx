@@ -114,14 +114,13 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = () => 
 
   const filterItem = useCallback(
     (item: ITableRowData) => {
-      let matchesFilter: boolean = true;
-
       // Application name
+      let applicationNameResult: boolean = true;
       const applicationNameFiltersText = (
         filtersValue.get(FilterKey.APPLICATION_NAME) || []
       ).map((f) => f.key);
       if (applicationNameFiltersText.length > 0) {
-        matchesFilter = applicationNameFiltersText.some((filterText) =>
+        applicationNameResult = applicationNameFiltersText.some((filterText) =>
           item.applications.some(
             (application) =>
               application.name
@@ -132,11 +131,12 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = () => 
       }
 
       // Category
+      let categoryResult: boolean = true;
       const categoryFiltersText = (
         filtersValue.get(FilterKey.CATEGORY) || []
       ).map((f) => f.key);
       if (categoryFiltersText.length > 0) {
-        matchesFilter = categoryFiltersText.some((filterText) => {
+        categoryResult = categoryFiltersText.some((filterText) => {
           return (
             item.category.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
           );
@@ -144,11 +144,12 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = () => 
       }
 
       // Question
+      let questionResult: boolean = true;
       const questionFiltersText = (
         filtersValue.get(FilterKey.QUESTION) || []
       ).map((f) => f.key);
       if (questionFiltersText.length > 0) {
-        matchesFilter = questionFiltersText.some((filterText) => {
+        questionResult = questionFiltersText.some((filterText) => {
           return (
             item.question.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
           );
@@ -156,18 +157,24 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = () => 
       }
 
       // Answer
+      let answerResult: boolean = true;
       const answerFiltersText = (filtersValue.get(FilterKey.ANSWER) || []).map(
         (f) => f.key
       );
       if (answerFiltersText.length > 0) {
-        matchesFilter = answerFiltersText.some((filterText) => {
+        answerResult = answerFiltersText.some((filterText) => {
           return (
             item.answer.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
           );
         });
       }
 
-      return matchesFilter;
+      return (
+        applicationNameResult &&
+        categoryResult &&
+        questionResult &&
+        answerResult
+      );
     },
     [filtersValue]
   );
