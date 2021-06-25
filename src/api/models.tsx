@@ -1,3 +1,5 @@
+import { boolean } from "yup";
+
 export interface PageQuery {
   page: number;
   perPage: number;
@@ -71,6 +73,8 @@ export type ProposedAction =
 
 export type EffortEstimate = "small" | "medium" | "large" | "extra_large";
 
+export type ImportSummaryStatus = "Completed" | "In Progress" | "Failed";
+
 export interface Application {
   id?: number;
   name: string;
@@ -105,6 +109,22 @@ export interface ApplicationAdoptionPlan {
   effort: number;
   decision: ProposedAction;
   effortEstimate: string;
+}
+
+export interface ApplicationImportSummary {
+  id: number;
+  filename: string;
+  createUser: string;
+  importTime: string;
+  validCount: number;
+  invalidCount: number;
+  importStatus: ImportSummaryStatus;
+}
+
+export interface ApplicationImport {
+  "Application Name": string;
+  errorMessage: string;
+  isValid: boolean;
 }
 
 // Pathfinder
@@ -221,6 +241,20 @@ export interface ApplicationPage {
 export interface ApplicationDependencyPage {
   _embedded: {
     "applications-dependency": ApplicationDependency[];
+  };
+  total_count: number;
+}
+
+export interface ApplicationImportSummaryPage {
+  _embedded: {
+    "import-summary": ApplicationImportSummary[];
+  };
+  total_count: number;
+}
+
+export interface ApplicationImportPage {
+  _embedded: {
+    "application-import": ApplicationImport[];
   };
   total_count: number;
 }

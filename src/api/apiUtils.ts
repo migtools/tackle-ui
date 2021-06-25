@@ -3,6 +3,10 @@ import {
   Application,
   ApplicationDependency,
   ApplicationDependencyPage,
+  ApplicationImport,
+  ApplicationImportPage,
+  ApplicationImportSummary,
+  ApplicationImportSummaryPage,
   ApplicationPage,
   BusinessService,
   BusinessServicePage,
@@ -137,6 +141,20 @@ export const applicationDependencyPageMapper = (
 ): PageRepresentation<ApplicationDependency> => ({
   meta: { count: page.total_count },
   data: page._embedded["applications-dependency"],
+});
+
+export const applicationImportSummaryPageMapper = (
+  page: ApplicationImportSummaryPage
+): PageRepresentation<ApplicationImportSummary> => ({
+  meta: { count: page.total_count },
+  data: page._embedded["import-summary"],
+});
+
+export const applicationImportPageMapper = (
+  page: ApplicationImportPage
+): PageRepresentation<ApplicationImport> => ({
+  meta: { count: page.total_count },
+  data: page._embedded["application-import"],
 });
 
 //

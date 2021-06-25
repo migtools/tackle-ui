@@ -7,6 +7,8 @@ import { AppPlaceholder } from "shared/components";
 const ApplicationList = lazy(() => import("./application-list"));
 const ApplicationAssessment = lazy(() => import("./application-assessment"));
 const ApplicationReview = lazy(() => import("./application-review"));
+const ManageImports = lazy(() => import("./manage-imports"));
+const ImportDetails = lazy(() => import("./manage-imports-details"));
 
 export const ApplicationInventory: React.FC = () => {
   const { search } = useLocation();
@@ -25,6 +27,15 @@ export const ApplicationInventory: React.FC = () => {
         <Route
           path={Paths.applicationInventory_review}
           component={ApplicationReview}
+        />
+        <Route
+          path={Paths.applicationInventory_manageImports}
+          component={ManageImports}
+          exact
+        />
+        <Route
+          path={Paths.applicationInventory_manageImports_details}
+          component={ImportDetails}
         />
 
         <Redirect
