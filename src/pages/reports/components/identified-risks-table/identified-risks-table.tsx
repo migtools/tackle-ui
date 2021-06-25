@@ -30,6 +30,9 @@ import { ApplicationSelectionContext } from "../../application-selection-context
 
 export enum FilterKey {
   APPLICATION_NAME = "application_name",
+  CATEGORY = "category",
+  QUESTION = "question",
+  ANSWER = "answer",
 }
 
 export interface ITableRowData {
@@ -113,6 +116,7 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = () => 
     (item: ITableRowData) => {
       let matchesFilter: boolean = true;
 
+      // Application name
       const applicationNameFiltersText = (
         filtersValue.get(FilterKey.APPLICATION_NAME) || []
       ).map((f) => f.key);
@@ -125,6 +129,42 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = () => 
                 .indexOf(filterText.toLowerCase()) !== -1
           )
         );
+      }
+
+      // Category
+      const categoryFiltersText = (
+        filtersValue.get(FilterKey.CATEGORY) || []
+      ).map((f) => f.key);
+      if (categoryFiltersText.length > 0) {
+        matchesFilter = categoryFiltersText.some((filterText) => {
+          return (
+            item.category.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
+          );
+        });
+      }
+
+      // Question
+      const questionFiltersText = (
+        filtersValue.get(FilterKey.QUESTION) || []
+      ).map((f) => f.key);
+      if (questionFiltersText.length > 0) {
+        matchesFilter = questionFiltersText.some((filterText) => {
+          return (
+            item.question.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
+          );
+        });
+      }
+
+      // Answer
+      const answerFiltersText = (filtersValue.get(FilterKey.ANSWER) || []).map(
+        (f) => f.key
+      );
+      if (answerFiltersText.length > 0) {
+        matchesFilter = answerFiltersText.some((filterText) => {
+          return (
+            item.answer.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
+          );
+        });
       }
 
       return matchesFilter;
@@ -149,6 +189,48 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = () => 
         <InputTextFilter
           onApplyFilter={(filterText) => {
             addFilter(FilterKey.APPLICATION_NAME, {
+              key: filterText,
+              node: filterText,
+            });
+          }}
+        />
+      ),
+    },
+    {
+      key: FilterKey.CATEGORY,
+      name: t("terms.category"),
+      input: (
+        <InputTextFilter
+          onApplyFilter={(filterText) => {
+            addFilter(FilterKey.CATEGORY, {
+              key: filterText,
+              node: filterText,
+            });
+          }}
+        />
+      ),
+    },
+    {
+      key: FilterKey.QUESTION,
+      name: t("terms.question"),
+      input: (
+        <InputTextFilter
+          onApplyFilter={(filterText) => {
+            addFilter(FilterKey.QUESTION, {
+              key: filterText,
+              node: filterText,
+            });
+          }}
+        />
+      ),
+    },
+    {
+      key: FilterKey.ANSWER,
+      name: t("terms.answer"),
+      input: (
+        <InputTextFilter
+          onApplyFilter={(filterText) => {
+            addFilter(FilterKey.ANSWER, {
               key: filterText,
               node: filterText,
             });
