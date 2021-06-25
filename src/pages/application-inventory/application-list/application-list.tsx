@@ -285,7 +285,7 @@ export const ApplicationList: React.FC = () => {
     { title: t("terms.businessService"), transforms: [cellWidth(20)] },
     { title: t("terms.assessment"), transforms: [cellWidth(10)] },
     { title: t("terms.review"), transforms: [sortable, cellWidth(10)] },
-    { title: t("terms.tags"), transforms: [sortable, cellWidth(10)] },
+    { title: t("terms.tagCount"), transforms: [sortable, cellWidth(10)] },
     {
       title: "",
       props: {
