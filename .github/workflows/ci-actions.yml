@@ -168,7 +168,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        browser: [chrome, firefox]
+        browser: [chrome]
     services:
       keycloak:
         image: quay.io/keycloak/keycloak:12.0.2
