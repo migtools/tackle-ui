@@ -281,7 +281,7 @@ jobs:
         with:
           working-directory: tackle-ui-tests
           record: false
-          start: npx node tackle-ui/server.js
+          start: npx node ../tackle-ui/server.js
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
           config: pageLoadTimeout=100000,chromeWebSecurity=false
