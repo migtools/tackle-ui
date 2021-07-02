@@ -119,7 +119,8 @@ jobs:
           -e QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://application-inventory-db:5432/application_inventory_db \
           -e QUARKUS_OIDC_AUTH_SERVER_URL=http://keycloak:8080/auth/realms/konveyor \
           -e QUARKUS_OIDC_CLIENT_ID=application-inventory-api \
-          -e QUARKUS_OIDC_CREDENTIALS_SECRET=secret quay.io/konveyor/tackle-application-inventory:latest-native
+          -e QUARKUS_OIDC_CREDENTIALS_SECRET=secret quay.io/konveyor/tackle-application-inventory:latest-native \
+          -e IO_TACKLE_APPLICATIONINVENTORY_SERVICES_CONTROLS_SERVICE=controls:8080
           sleep 5s && docker logs application-inventory
       - name: Pathfinder API
         run: |
@@ -147,6 +148,149 @@ jobs:
           browser: ${{ matrix.browser }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: e2e-screenshots-${{ matrix.os }}-${{ matrix.browser }}
+          path: cypress/screenshots
+      - uses: actions/upload-artifact@v1
+        if: always()
+        with:
+          name: e2e-videos-${{ matrix.os }}-${{ matrix.browser }}
+          path: cypress/videos
+      - uses: codecov/codecov-action@v1
+        with:
+          flags: e2etests
+
+  e2e-qe:
+    needs: [unit-test]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        browser: [chrome, firefox]
+    services:
+      keycloak:
+        image: quay.io/keycloak/keycloak:12.0.2
+        ports:
+          - 8180:8080
+        env:
+          KEYCLOAK_USER: admin
+          KEYCLOAK_PASSWORD: admin
+        options: >-
+          --health-cmd "curl --fail http://localhost:8080/auth || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      controls-db:
+        image: postgres:13.1
+        ports:
+          - 5433:5432
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: controls_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      application-inventory-db:
+        image: postgres:13.1
+        ports:
+          - 5434:5432
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: application_inventory_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      pathfinder-db:
+        image: postgres:13.1
+        ports:
+          - 5435:5432
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: pathfinder_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Checkout tackle-ui
+        uses: actions/checkout@v2
+        with:
+          path: tackle-ui
+      - name: Checkout tackle-ui-tests
+        uses: actions/checkout@v2
+        with:
+          repository: konveyor/tackle-ui-tests
+          path: tackle-ui-tests
+      - name: Keycloak Admin CLI
+        uses: carlosthe19916/keycloak-action@0.4
+        with:
+          server: http://keycloak:8080/auth
+          username: admin
+          password: admin
+          kcadm: create realms -f tackle-ui/konveyor-realm.json
+      - name: Controls API
+        run: |
+          docker run -d --name controls --network ${{ job.services.controls-db.network }} --network-alias controls -p 8081:8080 \
+          -e QUARKUS_HTTP_PORT=8080 \
+          -e QUARKUS_DATASOURCE_USERNAME=user \
+          -e QUARKUS_DATASOURCE_PASSWORD=password \
+          -e QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://controls-db:5432/controls_db \
+          -e QUARKUS_OIDC_AUTH_SERVER_URL=http://keycloak:8080/auth/realms/konveyor \
+          -e QUARKUS_OIDC_CLIENT_ID=controls-api \
+          -e QUARKUS_OIDC_CREDENTIALS_SECRET=secret quay.io/konveyor/tackle-controls:latest-native
+          sleep 5s && docker logs controls
+      - name: Application inventory API
+        run: |
+          docker run -d --name application-inventory --network ${{ job.services.application-inventory-db.network }} --network-alias application-inventory -p 8082:8080 \
+          -e QUARKUS_HTTP_PORT=8080 \
+          -e QUARKUS_DATASOURCE_USERNAME=user \
+          -e QUARKUS_DATASOURCE_PASSWORD=password \
+          -e QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://application-inventory-db:5432/application_inventory_db \
+          -e QUARKUS_OIDC_AUTH_SERVER_URL=http://keycloak:8080/auth/realms/konveyor \
+          -e QUARKUS_OIDC_CLIENT_ID=application-inventory-api \
+          -e QUARKUS_OIDC_CREDENTIALS_SECRET=secret quay.io/konveyor/tackle-application-inventory:latest-native \
+          -e IO_TACKLE_APPLICATIONINVENTORY_SERVICES_CONTROLS_SERVICE=controls:8080
+          sleep 5s && docker logs application-inventory
+      - name: Pathfinder API
+        run: |
+          docker run -d --name pathfinder --network ${{ job.services.pathfinder-db.network }} --network-alias pathfinder -p 8083:8080 \
+          -e QUARKUS_HTTP_PORT=8080 \
+          -e QUARKUS_DATASOURCE_USERNAME=user \
+          -e QUARKUS_DATASOURCE_PASSWORD=password \
+          -e QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://pathfinder-db:5432/pathfinder_db \
+          -e QUARKUS_OIDC_AUTH_SERVER_URL=http://keycloak:8080/auth/realms/konveyor \
+          -e QUARKUS_OIDC_CLIENT_ID=pathfinder-api \
+          -e QUARKUS_OIDC_CREDENTIALS_SECRET=secret quay.io/konveyor/tackle-pathfinder:latest-native
+          sleep 5s && docker logs pathfinder
+      - name: Build
+        run: |
+          yarn --cwd tackle-ui install
+          yarn --cwd tackle-ui build:instrumentation
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: tackle-ui-tests
+          record: false
+          start: npx node tackle-ui/server.js
+          wait-on: "http://localhost:3000"
+          wait-on-timeout: 120
+          config: pageLoadTimeout=100000,chromeWebSecurity=false
+          browser: ${{ matrix.browser }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CYPRESS_user: admin
+          CYPRESS_pass: admin
+          CYPRESS_tackleUrl: http://localhost:3000
       - uses: actions/upload-artifact@v1
         if: failure()
         with:
