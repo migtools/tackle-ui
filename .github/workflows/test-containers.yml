@@ -45,3 +45,4 @@ jobs:
               repo: context.repo.repo,
               body: '👋 Thanks for reporting!'
             })
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
