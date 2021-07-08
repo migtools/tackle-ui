@@ -15,6 +15,6 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Thanks for your contribution! \n Every commit will generate a new build in https://github.com/${{github.repository_owner}}/${{github.event.repository.name}}/actions/workflows/pr-build-container-images.yml and once the build finishes you should be able to use the container image ```docker pull docker.pkg.github.com/${{github.repository_owner}}/${{github.event.repository.name}}/tackle-ui``` \n To see the full set of container images generate visit https://github.com/${{github.repository_owner}}/${{github.event.repository.name}}/packages'
+              body: 'Thanks for your contribution! \n Every commit will generate a new build in https://github.com/${{github.repository_owner}}/${{github.event.repository.name}}/actions/workflows/pr-build-container-images.yml and once the build finishes you should be able to use the container image ```\n docker pull docker.pkg.github.com/${{github.repository_owner}}/${{github.event.repository.name}}/tackle-ui \n``` \n To see the full set of container images generate visit https://github.com/${{github.repository_owner}}/${{github.event.repository.name}}/packages'
             })
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
