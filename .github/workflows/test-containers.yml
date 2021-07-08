@@ -1,6 +1,6 @@
 name: Test containers
 
-on: [push, pull_request]
+on: [push, pull_request_target]
 
 jobs:
   container-images:
@@ -33,7 +33,7 @@ jobs:
           buildoptions: "--pull"
 
   comments:
-    if: ${{ github.event_name == 'pull_request' }}
+    if: ${{ github.event_name == 'pull_request_target' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v4
