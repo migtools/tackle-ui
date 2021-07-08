@@ -12,4 +12,4 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           pr-message: |-
-            congrats
+            congrats ${{ github.repository_owner }}/${{ github.event.repository.name }}/tackle-ui nada
