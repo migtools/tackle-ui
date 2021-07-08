@@ -1,6 +1,6 @@
 name: Test containers
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   container-images:
@@ -31,3 +31,13 @@ jobs:
           snapshot: false
           tags: "${{ steps.extract_branch.outputs.branch }}"
           buildoptions: "--pull"
+
+  comments:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment PR
+        uses: allthatjazzleo/actions-pull-request-add-comment@master
+        with:
+          message: "echo ${{ github.repository_owner }}/${{ github.event.repository.name }}/tackle-ui dynamic message"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
