@@ -20,6 +20,6 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '👋 Thanks for reporting!'
+              body: '👋 Thanks for reporting! ${{ github.repository_owner }}/${{ github.event.repository.name }}/tackle-ui'
             })
           repo-token: ${{ secrets.GITHUB_TOKEN }}
