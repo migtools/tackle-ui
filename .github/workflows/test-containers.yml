@@ -39,5 +39,5 @@ jobs:
       - name: Comment PR
         uses: allthatjazzleo/actions-pull-request-add-comment@master
         with:
-          message: "echo ${{ github.repository_owner }}/${{ github.event.repository.name }}/tackle-ui dynamic message"
+          message: "Example of message !"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
