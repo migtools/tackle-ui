@@ -46,7 +46,7 @@ jobs:
         run: kubectl create ns tackle
 
       - name: Deploy tackle
-        run: sleep 60s && kubectl create -f tackle/kubernetes/kubernetes-tackle.yaml -n tackle
+        run: sleep 60s && kubectl create -f tackle-ui/kubernetes/kubernetes-tackle.yaml -n tackle
 
       - name: Verify keycloak
         run: kubectl wait deployment/keycloak --for condition=available --timeout=-1s -n tackle
