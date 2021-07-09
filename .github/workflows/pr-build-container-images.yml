@@ -24,7 +24,7 @@ jobs:
         uses: elgohr/Publish-Docker-Github-Action@3.02
         with:
           registry: docker.pkg.github.com
-          name: ${{ github.repository_owner }}/${{ github.event.repository.name }}/tackle-ui
+          name: ${{ github.repository_owner }}/${{ github.event.repository.name }}/${{ github.event.repository.name }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           dockerfile: Dockerfile
