@@ -25,11 +25,22 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: tackle-ui
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Build JS
+        run: |
+          yarn --cwd tackle-ui install
+          yarn --cwd tackle-ui build
+      - name: Build container image
+        run: docker build -t tackle/tackle-ui:current-pr tackle-ui
+
       - name: Checkout tackle
         uses: actions/checkout@v2
         with:
           repository: konveyor/tackle
-          path: tackle      
+          path: tackle
       - name: Checkout tackle-ui-tests
         uses: actions/checkout@v2
         with:
@@ -64,16 +75,6 @@ jobs:
       - name: Verify tackle-ui
         run: kubectl wait deployment/tackle-ui --for condition=available --timeout=-1s -n tackle
 
-      - name: Use Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
-      - name: Build JS
-        run: |
-          yarn --cwd tackle-ui install
-          yarn --cwd tackle-ui build
-      - name: Build container image
-        run: docker build -t tackle/tackle-ui:current-pr tackle-ui
       - name: Set custom tackle-ui
         run: |
           kubectl patch deployment tackle-ui --patch '{"spec":{"template":{"spec":{"containers":[{"name":"tackle-ui","imagePullPolicy":"Never"}]}}}}' -n tackle
