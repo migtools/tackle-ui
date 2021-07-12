@@ -11,7 +11,7 @@ import {
 
 import { EmptyTextMessage } from "shared/components";
 
-import { DEFAULT_EFFORTS, DEFAULT_PROPOSED_ACTIONS } from "Constants";
+import { EFFORT_ESTIMATE_LIST, PROPOSED_ACTION_LIST } from "Constants";
 import { Application } from "api/models";
 
 import { ApplicationTags } from "../application-tags/application-tags";
@@ -32,10 +32,11 @@ export const ApplicationListExpandedArea: React.FC<IApplicationListExpandedAreaP
     ? {
         proposedAction: (
           <Label>
-            {DEFAULT_PROPOSED_ACTIONS.get(application.review.proposedAction)}
+            {PROPOSED_ACTION_LIST[application.review.proposedAction]?.label}
           </Label>
         ),
-        effortEstimate: DEFAULT_EFFORTS.get(application.review.effortEstimate),
+        effortEstimate:
+          EFFORT_ESTIMATE_LIST[application.review.effortEstimate]?.label,
         criticality: application.review.businessCriticality,
         workPriority: application.review.workPriority,
         comments: application.review.comments,

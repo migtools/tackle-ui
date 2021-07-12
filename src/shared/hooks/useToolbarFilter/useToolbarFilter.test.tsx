@@ -1,7 +1,5 @@
 import { ToolbarChip } from "@patternfly/react-core";
-import { IExtraColumnData, SortByDirection } from "@patternfly/react-table";
 import { renderHook, act } from "@testing-library/react-hooks";
-import { DEFAULT_PAGINATION } from "Constants";
 import { useToolbarFilter } from "./useToolbarFilter";
 
 describe("useToolbarFilter", () => {

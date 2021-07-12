@@ -20,6 +20,13 @@ import {
   TagType,
   Tag,
   Review,
+  AssessmentRisk,
+  AssessmentQuestionRisk,
+  ApplicationAdoptionPlan,
+  AssessmentConfidence,
+  ApplicationImportSummaryPage,
+  ApplicationImportPage,
+  ApplicationImportSummary,
 } from "./models";
 
 export const CONTROLS_BASE_URL = "controls";
@@ -37,6 +44,11 @@ export const APPLICATIONS = APP_INVENTORY_BASE_URL + "/application";
 export const APPLICATION_DEPENDENCY =
   APP_INVENTORY_BASE_URL + "/applications-dependency";
 export const REVIEW = APP_INVENTORY_BASE_URL + "/review";
+export const REPORT = APP_INVENTORY_BASE_URL + "/report";
+export const UPLOAD_FILE = APP_INVENTORY_BASE_URL + "/file/upload";
+export const APP_IMPORT_SUMMARY = APP_INVENTORY_BASE_URL + "/import-summary";
+export const APP_IMPORT = APP_INVENTORY_BASE_URL + "/application-import";
+export const APP_IMPORT_CSV = APP_INVENTORY_BASE_URL + "/csv-export";
 
 export const ASSESSMENTS = PATHFINDER_BASE_URL + "/assessments";
 
@@ -429,6 +441,7 @@ export const getTagById = (id: number | string): AxiosPromise<Tag> => {
 export enum ApplicationSortBy {
   NAME,
   TAGS,
+  REVIEW,
 }
 export interface ApplicationSortByQuery {
   field: ApplicationSortBy;
@@ -454,6 +467,9 @@ export const getApplications = (
         break;
       case ApplicationSortBy.TAGS:
         field = "tags.size()";
+        break;
+      case ApplicationSortBy.REVIEW:
+        field = "review.deleted,id";
         break;
       default:
         throw new Error("Could not define SortBy field name");
@@ -551,6 +567,105 @@ export const deleteReview = (id: number): AxiosPromise => {
   return APIClient.delete(`${REVIEW}/${id}`);
 };
 
+export const getApplicationAdoptionPlan = (
+  applicationIds: number[]
+): AxiosPromise<ApplicationAdoptionPlan[]> => {
+  return APIClient.post(
+    `${REPORT}/adoptionplan`,
+    applicationIds.map((f) => ({
+      applicationId: f,
+    }))
+  );
+};
+
+export enum ApplicationImportSummarySortBy {
+  DATE,
+  USER,
+  FILE_NAME,
+  STATUS,
+}
+export interface ApplicationImportSummarySortByQuery {
+  field: ApplicationImportSummarySortBy;
+  direction?: Direction;
+}
+
+export const getApplicationImportSummary = (
+  filters: {
+    filename?: string[];
+  },
+  pagination: PageQuery,
+  sortBy?: ApplicationImportSummarySortByQuery
+): AxiosPromise<ApplicationImportSummaryPage> => {
+  let sortByQuery: string | undefined = undefined;
+  if (sortBy) {
+    let field;
+    switch (sortBy.field) {
+      case ApplicationImportSummarySortBy.DATE:
+        field = "createTime";
+        break;
+      case ApplicationImportSummarySortBy.USER:
+        field = "createUser";
+        break;
+      case ApplicationImportSummarySortBy.FILE_NAME:
+        field = "filename";
+        break;
+      case ApplicationImportSummarySortBy.STATUS:
+        field = "importStatus";
+        break;
+      default:
+        throw new Error("Could not define SortBy field name");
+    }
+    sortByQuery = `${sortBy.direction === "desc" ? "-" : ""}${field}`;
+  }
+
+  const params = {
+    page: pagination.page - 1,
+    size: pagination.perPage,
+    sort: sortByQuery,
+
+    filename: filters.filename,
+  };
+
+  const query: string[] = buildQuery(params);
+  return APIClient.get(`${APP_IMPORT_SUMMARY}?${query.join("&")}`, { headers });
+};
+
+export const getApplicationImportSummaryById = (
+  id: number | string
+): AxiosPromise<ApplicationImportSummary> => {
+  return APIClient.get(`${APP_IMPORT_SUMMARY}/${id}`);
+};
+
+export const deleteApplicationImportSummary = (id: number): AxiosPromise => {
+  return APIClient.delete(`${APP_IMPORT_SUMMARY}/${id}`);
+};
+
+export const getApplicationImport = (
+  filters: {
+    summaryId: string;
+    isValid?: boolean;
+  },
+  pagination: PageQuery
+): AxiosPromise<ApplicationImportPage> => {
+  const params = {
+    page: pagination.page - 1,
+    size: pagination.perPage,
+
+    "importSummary.id": filters.summaryId,
+    isValid: filters.isValid,
+  };
+
+  const query: string[] = buildQuery(params);
+  return APIClient.get(`${APP_IMPORT}?${query.join("&")}`, { headers });
+};
+
+export const getApplicationSummaryCSV = (id: string): AxiosPromise => {
+  return APIClient.get(`${APP_IMPORT_CSV}?importSummaryId=${id}`, {
+    responseType: "arraybuffer",
+    headers: { Accept: "text/csv", responseType: "blob" },
+  });
+};
+
 //
 
 export const getAssessments = (filters: {
@@ -580,4 +695,31 @@ export const getAssessmentById = (
 
 export const deleteAssessment = (id: number): AxiosPromise => {
   return APIClient.delete(`${ASSESSMENTS}/${id}`);
+};
+
+export const getAssessmentLandscape = (
+  applicationIds: number[]
+): AxiosPromise<AssessmentRisk[]> => {
+  return APIClient.post(
+    `${ASSESSMENTS}/assessment-risk`,
+    applicationIds.map((f) => ({ applicationId: f }))
+  );
+};
+
+export const getAssessmentIdentifiedRisks = (
+  applicationIds: number[]
+): AxiosPromise<AssessmentQuestionRisk[]> => {
+  return APIClient.post(
+    `${ASSESSMENTS}/risks`,
+    applicationIds.map((f) => ({ applicationId: f }))
+  );
+};
+
+export const getAssessmentConfidence = (
+  applicationIds: number[]
+): AxiosPromise<AssessmentConfidence[]> => {
+  return APIClient.post(
+    `${ASSESSMENTS}/confidence`,
+    applicationIds.map((f) => ({ applicationId: f }))
+  );
 };

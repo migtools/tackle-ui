@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { ToolbarChip } from "@patternfly/react-core";
@@ -21,10 +21,10 @@ import {
   useTableFilter,
 } from "shared/hooks";
 
+import { RISK_LIST } from "Constants";
 import { Assessment, Question, QuestionnaireCategory, Risk } from "api/models";
 
 import { SelectRiskFilter } from "./components/select-risk-filter";
-import { DEFAULT_RISK_LABELS } from "Constants";
 
 enum FilterKey {
   RISK = "risk",
@@ -92,21 +92,34 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
       });
   }, [assessment]);
 
-  const compareToByColumn = (
-    a: ITableItem,
-    b: ITableItem,
-    columnIndex?: number
-  ) => {
-    const aData = DEFAULT_RISK_LABELS.get(a.riskValue);
-    const bData = DEFAULT_RISK_LABELS.get(b.riskValue);
+  const compareToByColumn = useCallback(
+    (a: ITableItem, b: ITableItem, columnIndex?: number) => {
+      switch (columnIndex) {
+        case 3: // Risk
+          return (
+            RISK_LIST[a.riskValue].sortFactor -
+            RISK_LIST[b.riskValue].sortFactor
+          );
+        default:
+          return 0;
+      }
+    },
+    []
+  );
 
-    switch (columnIndex) {
-      case 3: // Risk
-        return (aData?.order || 0) - (bData?.order || 0);
-      default:
-        return 0;
-    }
-  };
+  const filterItem = useCallback(
+    (item: ITableItem) => {
+      let result: boolean = true;
+
+      const risks = filtersValue.get(FilterKey.RISK)?.map((f) => f.key);
+      if (risks && risks.length > 0) {
+        result = risks.some((f) => f === item.riskValue);
+      }
+
+      return result;
+    },
+    [filtersValue]
+  );
 
   const {
     paginationQuery: pagination,
@@ -120,16 +133,7 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
     sortBy,
     compareToByColumn,
     pagination,
-    filterItem: (item) => {
-      let result: boolean = true;
-
-      const risks = filtersValue.get(FilterKey.RISK)?.map((f) => f.key);
-      if (risks && risks.length > 0) {
-        result = risks.some((f) => f === item.riskValue);
-      }
-
-      return result;
-    },
+    filterItem,
   });
 
   useEffect(() => {
@@ -203,9 +207,9 @@ export const ApplicationAssessmentSummaryTable: React.FC<IApplicationAssessmentS
       toolbarClearAllFilters={clearAllFilters}
       toolbarToggle={
         <AppTableToolbarToggleGroup
-          options={filters}
-          filtersValue={filtersValue}
-          onDeleteFilter={(key, value) => {
+          categories={filters}
+          chips={filtersValue}
+          onChange={(key, value) => {
             setFilter(key, value as ToolbarChip[]);
           }}
         >

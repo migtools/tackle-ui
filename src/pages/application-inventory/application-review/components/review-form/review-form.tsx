@@ -14,54 +14,52 @@ import {
   TextArea,
 } from "@patternfly/react-core";
 
-import { OptionWithValue, SingleSelectFormikField } from "shared/components";
+import { SingleSelectOptionValueFormikField } from "shared/components";
 
 import {
   DEFAULT_SELECT_MAX_HEIGHT,
-  DEFAULT_PROPOSED_ACTIONS,
-  DEFAULT_EFFORTS,
+  PROPOSED_ACTION_LIST,
+  EFFORT_ESTIMATE_LIST,
 } from "Constants";
 import {
   getValidatedFromError,
   getValidatedFromErrorTouched,
 } from "utils/utils";
 import { number } from "yup";
-import { Application, Review } from "api/models";
+import {
+  Application,
+  EffortEstimate,
+  ProposedAction,
+  Review,
+} from "api/models";
 import { createReview, updateReview } from "api/rest";
+import {
+  ISimpleOptionDropdown,
+  toISimpleOptionDropdownWithValue,
+} from "utils/model-utils";
 
-const actionOptions: SimpleOption[] = Array.from(
-  DEFAULT_PROPOSED_ACTIONS.keys()
-).map((key) => {
-  return {
-    key,
-    name: DEFAULT_PROPOSED_ACTIONS.get(key)!,
-  };
-});
+const actionOptions: SimpleOption<ProposedAction>[] = Object.entries(
+  PROPOSED_ACTION_LIST
+).map(([key, value]) => ({
+  key: key as ProposedAction,
+  name: value.label,
+}));
 
-const effortOptions: SimpleOption[] = Array.from(DEFAULT_EFFORTS.keys()).map(
-  (key) => {
-    return {
-      key,
-      name: DEFAULT_EFFORTS.get(key)!,
-    };
-  }
-);
+const effortOptions: SimpleOption<EffortEstimate>[] = Object.entries(
+  EFFORT_ESTIMATE_LIST
+).map(([key, value]) => ({
+  key: key as EffortEstimate,
+  name: value.label,
+}));
 
-interface SimpleOption {
-  key: string;
+interface SimpleOption<T> {
+  key: T;
   name: string;
 }
 
-const toOptionWithValue = (
-  value: SimpleOption
-): OptionWithValue<SimpleOption> => ({
-  value,
-  toString: () => value.name,
-});
-
 export interface FormValues {
-  action?: OptionWithValue<SimpleOption>;
-  effort?: OptionWithValue<SimpleOption>;
+  action: ISimpleOptionDropdown<ProposedAction> | null;
+  effort: ISimpleOptionDropdown<EffortEstimate> | null;
   criticality?: number;
   priority?: number;
   comments: string;
@@ -104,14 +102,19 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
     formValues: FormValues,
     formikHelpers: FormikHelpers<FormValues>
   ) => {
+    if (!formValues.effort || !formValues.action) {
+      console.log("Invalid form");
+      return;
+    }
+
     const payload: Review = {
       ...review,
-      proposedAction: formValues.action ? formValues.action.value.key : "",
-      effortEstimate: formValues.effort ? formValues.effort.value.key : "",
+      proposedAction: formValues.action.key,
+      effortEstimate: formValues.effort.key,
       businessCriticality: formValues.criticality || 0,
       workPriority: formValues.priority || 0,
       comments: formValues.comments.trim(),
-      application: application,
+      application: { ...application, review: undefined },
     };
 
     let promise: AxiosPromise<Review>;
@@ -135,28 +138,26 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
       });
   };
 
-  const actionInitialValue:
-    | OptionWithValue<SimpleOption>
-    | undefined = useMemo(() => {
-    let result: OptionWithValue<SimpleOption> | undefined;
+  const actionInitialValue: ISimpleOptionDropdown<ProposedAction> | null = useMemo(() => {
+    let result: ISimpleOptionDropdown<ProposedAction> | null = null;
     if (review) {
       const exists = actionOptions.find((f) => f.key === review.proposedAction);
-      result = toOptionWithValue(
-        exists || { key: review.proposedAction, name: t("terms.unknown") }
-      );
+      result = exists || {
+        key: review.proposedAction,
+        name: t("terms.unknown"),
+      };
     }
     return result;
   }, [review, t]);
 
-  const effortInitialValue:
-    | OptionWithValue<SimpleOption>
-    | undefined = useMemo(() => {
-    let result: OptionWithValue<SimpleOption> | undefined;
+  const effortInitialValue: ISimpleOptionDropdown<EffortEstimate> | null = useMemo(() => {
+    let result: ISimpleOptionDropdown<EffortEstimate> | null = null;
     if (review) {
       const exists = effortOptions.find((f) => f.key === review.effortEstimate);
-      result = toOptionWithValue(
-        exists || { key: review.effortEstimate, name: t("terms.unknown") }
-      );
+      result = exists || {
+        key: review.effortEstimate,
+        name: t("terms.unknown"),
+      };
     }
     return result;
   }, [review, t]);
@@ -184,7 +185,9 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
           validated={getValidatedFromError(formik.errors.action)}
           helperTextInvalid={formik.errors.action}
         >
-          <SingleSelectFormikField
+          <SingleSelectOptionValueFormikField<
+            ISimpleOptionDropdown<ProposedAction>
+          >
             fieldConfig={{ name: "action" }}
             selectConfig={{
               variant: "typeahead",
@@ -192,8 +195,9 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
               "aria-describedby": "action",
               placeholderText: t("terms.select"),
               maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
-              options: actionOptions.map(toOptionWithValue),
             }}
+            options={actionOptions}
+            toOptionWithValue={toISimpleOptionDropdownWithValue}
           />
         </FormGroup>
         <FormGroup
@@ -203,7 +207,9 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
           validated={getValidatedFromError(formik.errors.effort)}
           helperTextInvalid={formik.errors.effort}
         >
-          <SingleSelectFormikField
+          <SingleSelectOptionValueFormikField<
+            ISimpleOptionDropdown<EffortEstimate>
+          >
             fieldConfig={{ name: "effort" }}
             selectConfig={{
               variant: "typeahead",
@@ -211,8 +217,9 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
               "aria-describedby": "effort",
               placeholderText: t("terms.select"),
               maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
-              options: effortOptions.map(toOptionWithValue),
             }}
+            options={effortOptions}
+            toOptionWithValue={toISimpleOptionDropdownWithValue}
           />
         </FormGroup>
         <FormGroup

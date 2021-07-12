@@ -14,10 +14,7 @@ import {
   TextInput,
 } from "@patternfly/react-core";
 
-import {
-  SingleSelectFetchFormikField,
-  OptionWithValue,
-} from "shared/components";
+import { SingleSelectFetchOptionValueFormikField } from "shared/components";
 import { useFetchTagTypes } from "shared/hooks";
 
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
@@ -28,15 +25,15 @@ import {
   getValidatedFromError,
   getValidatedFromErrorTouched,
 } from "utils/utils";
-
-const tagTypeToOption = (value: TagType): OptionWithValue<TagType> => ({
-  value,
-  toString: () => value.name,
-});
+import {
+  ITagTypeDropdown,
+  toITagTypeDropdown,
+  toITagTypeDropdownOptionWithValue,
+} from "utils/model-utils";
 
 export interface FormValues {
   name: string;
-  tagType?: OptionWithValue<TagType>;
+  tagType: ITagTypeDropdown | null;
 }
 
 export interface TagFormProps {
@@ -60,10 +57,8 @@ export const TagForm: React.FC<TagFormProps> = ({ tag, onSaved, onCancel }) => {
     fetchAllTagTypes();
   }, [fetchAllTagTypes]);
 
-  const tagTypeInitialValue:
-    | OptionWithValue<TagType>
-    | undefined = useMemo(() => {
-    return tag && tag.tagType ? tagTypeToOption(tag.tagType) : undefined;
+  const tagTypeInitialValue: ITagTypeDropdown | null = useMemo(() => {
+    return tag && tag.tagType ? toITagTypeDropdown(tag.tagType) : null;
   }, [tag]);
 
   const initialValues: FormValues = {
@@ -86,7 +81,7 @@ export const TagForm: React.FC<TagFormProps> = ({ tag, onSaved, onCancel }) => {
   ) => {
     const payload: Tag = {
       name: formValues.name.trim(),
-      tagType: formValues.tagType ? formValues.tagType.value : undefined,
+      tagType: formValues.tagType as TagType,
     };
 
     let promise: AxiosPromise<Tag>;
@@ -161,7 +156,7 @@ export const TagForm: React.FC<TagFormProps> = ({ tag, onSaved, onCancel }) => {
           validated={getValidatedFromError(formik.errors.tagType)}
           helperTextInvalid={formik.errors.tagType}
         >
-          <SingleSelectFetchFormikField
+          <SingleSelectFetchOptionValueFormikField<ITagTypeDropdown>
             fieldConfig={{ name: "tagType" }}
             selectConfig={{
               variant: "single",
@@ -176,10 +171,11 @@ export const TagForm: React.FC<TagFormProps> = ({ tag, onSaved, onCancel }) => {
               }),
               menuAppendTo: () => document.body,
               maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
-              options: (tagTypes?.data || []).map(tagTypeToOption),
               fetchError: fetchErrorTagTypes,
               isFetching: isFetchingTagTypes,
             }}
+            options={(tagTypes?.data || []).map(toITagTypeDropdown)}
+            toOptionWithValue={toITagTypeDropdownOptionWithValue}
           />
         </FormGroup>
 

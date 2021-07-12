@@ -14,6 +14,9 @@ const stakeholderToOption = (
 ): OptionWithValue<Stakeholder> => ({
   value,
   toString: () => value.displayName,
+  props: {
+    description: value.email,
+  },
 });
 
 export interface IStakeholderSelectProps {
