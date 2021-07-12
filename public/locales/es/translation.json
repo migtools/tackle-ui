@@ -15,6 +15,7 @@
         "export": "Exportar",
         "import": "Importar",
         "manageDependencies": "Administrar dependencias",
+        "manageImports": "Administrar importaciones",
         "next": "Siguiente",
         "review": "Revisar",
         "save": "Guardar",
@@ -35,7 +36,7 @@
         "add": "Agregar {{what}}",
         "applicationAssessment": "Evaluación de la aplicación",
         "applicationInventory": "Inventario de aplicaciones",
-        "businessCriticality": "Business criticality (1=bajo, 10=alto)",
+        "businessCriticality": "Criticidad de negocio (1=bajo, 10=alto)",
         "editQuestion": "Editar {{what}}?",
         "manageDependenciesFor": "Administrar dependencias para {{what}}",
         "noDataStateBody": "Cree un(a) nuevo(a) {{what}} para empezar a ver datos acá",
@@ -43,7 +44,7 @@
         "Nquestions": "{{n}} preguntas",
         "selectMany": "Seleccione {{what}}",
         "selectOne": "Seleccione un(a) {{what}}",
-        "workPriority": "Work priority (1=bajo, 10=alto)"
+        "workPriority": "Prioridad de trabajo (1=bajo, 10=alto)"
     },
     "dialog": {
         "message": {
@@ -74,9 +75,12 @@
     "message": {
         "appNotAssesedTitle": "",
         "appNotAssessedBody": "",
+        "assessmentStakeholderHeader": "Seleccione a los integresados o grupo de interesados asociados a esta evaluación.",
         "couldNotFetchBody": "El recurso no existe o no tienes permiso para acceder al mismo",
         "couldNotFetchTitle": "No disponible",
+        "manageDependenciesInstructions": "Agrega aquí dependencias en el norte y sur para la aplicación seleccionada. Cualquier selección realizada será guardada automáticamente. Para deshacer cualquier cambio, debes de eliminar la aplicación de la caja de selección.",
         "overrideAssessmentConfirmation": "Esta aplicación ya fue evaluada ¿Deseas continuar?",
+        "reviewInstructions": "Utilice esta sección para proporcionar su evaluación del posible plan de migración / modernización y la estimación del esfuerzo.",
         "savingSelection": "Guardando selección"
     },
     "sidebar": {
@@ -86,12 +90,15 @@
     },
     "terms": {
         "accepted": "Aceptado",
+        "additionalNotesOrComments": "Notas adicionales o comentarios",
         "answer": "Respuesta",
         "application": "Applicación",
         "application(s)": "Aplicacion(es)",
         "applicationName": "Nombre de aplicación",
         "applications": "Applicaciones",
         "assessment": "Evaluación",
+        "assessmentNotes": "Notas de la evaluación",
+        "assessmentSummary": "Resumen de la evaluación",
         "businessCriticality": "Criticidad de negocio",
         "businessService": "Servicio de negocio",
         "businessServices": "Servicios de negocio",
@@ -136,7 +143,7 @@
         "rank": "Rango",
         "rejected": "Rechazado",
         "reports": "Reportes",
-        "review": "Revisar",
+        "review": "Revisión",
         "reviewComments": "Comentarios de la revisión",
         "risk": "Riesgo",
         "select": "Seleccione",
@@ -152,7 +159,7 @@
         "tag": "Etiqueta",
         "tag(s)": "Etiqueta(s)",
         "tagCount": "Número de etiquetas",
-        "tagName": "Nombde de etiqueta",
+        "tagName": "Nombre de etiqueta",
         "tags": "Etiquetas",
         "tagType": "Tipo de etiqueta",
         "tagTypes": "Tipos de etiqueta",
