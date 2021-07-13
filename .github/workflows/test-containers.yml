@@ -1,4 +1,4 @@
-name: PR build container images
+name: Test containers
 
 on: [push]
 
