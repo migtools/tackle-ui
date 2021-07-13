@@ -9,8 +9,9 @@ export const submitForm = () => {
 
 export const selectFilterToolbar = (filterIndex: number) => {
   // Select filter
-  cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("toggle");
+  cy.get(".pf-c-toolbar .pf-c-dropdown").first().pf4_dropdown("toggle");
   cy.get(".pf-c-toolbar .pf-c-dropdown")
+    .first()
     .pf4_dropdown("select", filterIndex)
     .click();
 };

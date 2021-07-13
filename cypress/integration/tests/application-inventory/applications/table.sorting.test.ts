@@ -93,7 +93,7 @@ describe("Sort applications", () => {
   });
 
   it("Sort by tags", () => {
-    const columnName = "Tags";
+    const columnName = "Tag count";
     application.openPage();
 
     // Asc
