@@ -15,6 +15,7 @@ import { EFFORT_ESTIMATE_LIST, PROPOSED_ACTION_LIST } from "Constants";
 import { Application } from "api/models";
 
 import { ApplicationTags } from "../application-tags/application-tags";
+import { ApplicationRisk } from "./application-risk";
 
 export interface IApplicationListExpandedAreaProps {
   application: Application;
@@ -28,6 +29,7 @@ export const ApplicationListExpandedArea: React.FC<IApplicationListExpandedAreaP
   const notYetReviewed = (
     <EmptyTextMessage message={t("terms.notYetReviewed")} />
   );
+
   const reviewToShown = application.review
     ? {
         proposedAction: (
@@ -46,6 +48,7 @@ export const ApplicationListExpandedArea: React.FC<IApplicationListExpandedAreaP
         effortEstimate: notYetReviewed,
         criticality: notYetReviewed,
         workPriority: notYetReviewed,
+        notYetReviewed: notYetReviewed,
         comments: notYetReviewed,
       };
 
@@ -87,6 +90,12 @@ export const ApplicationListExpandedArea: React.FC<IApplicationListExpandedAreaP
         <DescriptionListTerm>{t("terms.workPriority")}</DescriptionListTerm>
         <DescriptionListDescription cy-data="work-priority">
           {reviewToShown.workPriority}
+        </DescriptionListDescription>
+      </DescriptionListGroup>
+      <DescriptionListGroup>
+        <DescriptionListTerm>{t("terms.risk")}</DescriptionListTerm>
+        <DescriptionListDescription cy-data="risk">
+          <ApplicationRisk application={application} />
         </DescriptionListDescription>
       </DescriptionListGroup>
       <DescriptionListGroup>

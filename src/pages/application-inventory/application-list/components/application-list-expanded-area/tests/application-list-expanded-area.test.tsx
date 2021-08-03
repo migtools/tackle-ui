@@ -27,7 +27,7 @@ describe("ApplicationListExpandedArea", () => {
     expect(wrapper.find(ddQuery("review-comments")).text()).toBe(notReviewed);
   });
 
-  it("Should review values 'not yet reviewed'", () => {
+  it("Should shown values from Review", () => {
     const application: Application = {
       name: "anyApp",
       review: {
