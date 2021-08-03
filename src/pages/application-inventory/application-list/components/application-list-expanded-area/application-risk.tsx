@@ -30,7 +30,7 @@ export const ApplicationRisk: React.FC<IApplicationRiskProps> = ({
 
   useEffect(() => {
     fetchRisk();
-  }, [application]);
+  }, [fetchRisk, application]);
 
   return (
     <RiskLabel risk={applicationRisk ? applicationRisk.risk : "UNKNOWN"} />
