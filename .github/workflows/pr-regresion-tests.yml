@@ -75,11 +75,11 @@ jobs:
       - name: Verify tackle-ui
         run: kubectl wait deployment/tackle-ui --for condition=available --timeout=-1s -n tackle
 
-      - name: Set custom tackle-ui
-        run: |
-          kubectl patch deployment tackle-ui --patch '{"spec":{"template":{"spec":{"containers":[{"name":"tackle-ui","imagePullPolicy":"Never"}]}}}}' -n tackle
-          kubectl set image deployment/tackle-ui tackle-ui=tackle/tackle-ui:current-pr -n tackle
-          kubectl wait deployment/tackle-ui --for condition=available --timeout=-1s -n tackle
+      # - name: Set custom tackle-ui
+      #   run: |
+      #     kubectl patch deployment tackle-ui --patch '{"spec":{"template":{"spec":{"containers":[{"name":"tackle-ui","imagePullPolicy":"Never"}]}}}}' -n tackle
+      #     kubectl set image deployment/tackle-ui tackle-ui=tackle/tackle-ui:current-pr -n tackle
+      #     kubectl wait deployment/tackle-ui --for condition=available --timeout=-1s -n tackle
 
       - name: Wait for Ingress
         run: |
