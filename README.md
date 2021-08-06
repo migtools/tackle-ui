@@ -131,4 +131,3 @@ The image can be pushed running:
 ```shell
 podman push quay.io/$USERNAME/tackle-ui
 ```
-
