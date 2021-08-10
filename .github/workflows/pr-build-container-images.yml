@@ -23,7 +23,7 @@ jobs:
       - name: Push to GitHub Packages
         uses: elgohr/Publish-Docker-Github-Action@3.02
         with:
-          registry: docker.pkg.github.com
+          registry: ghcr.io
           name: ${{ github.repository_owner }}/${{ github.event.repository.name }}/tackle-ui
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
