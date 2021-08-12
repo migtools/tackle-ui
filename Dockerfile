@@ -17,4 +17,3 @@ ENTRYPOINT ["/entrypoint.sh"]
 
 # Run script uses standard ways to run the application
 CMD /usr/libexec/s2i/run
-
