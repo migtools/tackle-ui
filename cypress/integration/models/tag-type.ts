@@ -7,7 +7,7 @@ import {
 export interface ITagTypeFormValue {
   name: string;
   rank: number;
-  color: string;
+  color?: string;
 }
 
 export interface ITagFormValue {
