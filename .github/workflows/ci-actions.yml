@@ -190,6 +190,9 @@ jobs:
   test-container-images:
     needs: [container-images]
     runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:node14.17.0-chrome91-ff89
+      options: --user 1001 --shm-size=2g
     strategy:
       matrix:
         os: [ubuntu-latest]
