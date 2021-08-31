@@ -33,6 +33,9 @@ jobs:
   e2e:
     needs: [unit-test]
     runs-on: ${{ matrix.os }}
+    container:
+      image: cypress/browsers:node14.17.0-chrome91-ff89
+      options: --user 1001 --shm-size=2g
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -145,6 +148,7 @@ jobs:
           wait-on-timeout: 120
           config: pageLoadTimeout=100000
           browser: ${{ matrix.browser }}
+          spec: cypress/**/*.test.ts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/upload-artifact@v1
@@ -189,10 +193,7 @@ jobs:
 
   test-container-images:
     needs: [container-images]
-    runs-on: ubuntu-latest
-    container:
-      image: cypress/browsers:node14.17.0-chrome91-ff89
-      options: --user 1001 --shm-size=2g
+    runs-on: ubuntu-latest    
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -312,8 +313,7 @@ jobs:
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
           config: pageLoadTimeout=100000
-          browser: ${{ matrix.browser }}
-          spec: cypress/**/*.test.ts
+          browser: ${{ matrix.browser }}          
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_auth_base_url: http://localhost:3000/auth
