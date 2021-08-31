@@ -4,10 +4,10 @@
   "private": true,
   "dependencies": {
     "@konveyor/lib-ui": "^2.0.0",
-    "@patternfly/patternfly": "4.102.2",
-    "@patternfly/react-charts": "6.14.17",
-    "@patternfly/react-core": "4.115.2",
-    "@patternfly/react-table": "4.26.7",
+    "@patternfly/patternfly": "4.132.2",
+    "@patternfly/react-charts": "6.15.20",
+    "@patternfly/react-core": "4.152.4",
+    "@patternfly/react-table": "4.29.58",
     "@react-keycloak/web": "^3.4.0",
     "@redhat-cloud-services/frontend-components-notifications": "3.2.2",
     "@testing-library/jest-dom": "^5.11.4",
@@ -71,7 +71,7 @@
     ]
   },
   "devDependencies": {
-    "@cypress/code-coverage": "^3.9.7",
+    "@cypress/code-coverage": "^3.9.10",
     "@cypress/instrument-cra": "^1.4.0",
     "@storybook/addon-actions": "^6.1.14",
     "@storybook/addon-essentials": "^6.1.14",
