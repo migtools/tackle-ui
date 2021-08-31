@@ -308,7 +308,7 @@ jobs:
           record: false
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
-          config: pageLoadTimeout=100000,video=false
+          config: pageLoadTimeout=100000
           browser: ${{ matrix.browser }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -318,8 +318,8 @@ jobs:
         with:
           name: container-screenshots-${{ matrix.os }}-${{ matrix.browser }}
           path: cypress/screenshots
-      # - uses: actions/upload-artifact@v1
-      #   if: always()
-      #   with:
-      #     name: container-videos-${{ matrix.os }}-${{ matrix.browser }}
-      #     path: cypress/videos
+      - uses: actions/upload-artifact@v1
+        if: always()
+        with:
+          name: container-videos-${{ matrix.os }}-${{ matrix.browser }}
+          path: cypress/videos
