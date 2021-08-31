@@ -148,7 +148,6 @@ jobs:
           spec: cypress/**/*.test.ts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MOZ_FORCE_DISABLE_E10S: 1
       - uses: actions/upload-artifact@v1
         if: failure()
         with:
@@ -315,7 +314,6 @@ jobs:
           spec: cypress/**/*.test.ts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MOZ_FORCE_DISABLE_E10S: 1
           CYPRESS_auth_base_url: http://localhost:3000/auth
       - uses: actions/upload-artifact@v1
         if: failure()
