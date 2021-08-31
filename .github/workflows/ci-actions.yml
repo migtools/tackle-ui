@@ -310,6 +310,7 @@ jobs:
           wait-on-timeout: 120
           config: pageLoadTimeout=100000
           browser: ${{ matrix.browser }}
+          spec: cypress/**/*.test.ts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_auth_base_url: http://localhost:3000/auth
