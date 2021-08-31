@@ -1,9 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Test snapshot 1`] = `
-<Suspense
-  fallback={<AppPlaceholder />}
->
+<Fragment>
   <Page
     defaultManagedSidebarIsOpen={true}
     header={<HeaderApp />}
@@ -24,5 +22,5 @@ exports[`Test snapshot 1`] = `
       </SkipToContent>
     }
   />
-</Suspense>
+</Fragment>
 `;
