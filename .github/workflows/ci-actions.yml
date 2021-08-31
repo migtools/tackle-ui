@@ -33,9 +33,6 @@ jobs:
   e2e:
     needs: [unit-test]
     runs-on: ${{ matrix.os }}
-    container:
-      image: cypress/browsers:node14.17.0-chrome91-ff89
-      options: --user 1001 --shm-size=2g
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -151,6 +148,7 @@ jobs:
           spec: cypress/**/*.test.ts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MOZ_FORCE_DISABLE_E10S: 1
       - uses: actions/upload-artifact@v1
         if: failure()
         with:
