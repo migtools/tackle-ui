@@ -28,6 +28,7 @@ exports[`AppTable Renders without crashing 1`] = `
   dropdownPosition="right"
   expandId="expandable-toggle"
   gridBreakPoint="grid-md"
+  isNested={false}
   isStickyHeader={false}
   isTreeTable={false}
   ouiaSafe={true}
@@ -371,6 +372,6 @@ exports[`AppTable Renders without crashing 1`] = `
   variant={null}
 >
   <TableHeader />
-  <Component />
+  <TableBody />
 </Table>
 `;

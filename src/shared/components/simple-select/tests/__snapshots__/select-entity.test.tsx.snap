@@ -21,6 +21,7 @@ exports[`SimpleSelect Renders without crashing 1`] = `
   isCreatable={false}
   isDisabled={false}
   isGrouped={false}
+  isInputValuePersisted={false}
   isOpen={false}
   isPlain={false}
   menuAppendTo="inline"
@@ -51,6 +52,9 @@ exports[`SimpleSelect Renders without crashing 1`] = `
     isChecked={false}
     isDisabled={false}
     isFavorite={null}
+    isLastOptionBeforeFooter={[Function]}
+    isLoad={false}
+    isLoading={false}
     isNoResultsOption={false}
     isPlaceholder={false}
     isSelected={false}
@@ -58,6 +62,7 @@ exports[`SimpleSelect Renders without crashing 1`] = `
     keyHandler={[Function]}
     onClick={[Function]}
     sendRef={[Function]}
+    setViewMoreNextIndex={[Function]}
     value="uno"
   />
   <SelectOption
@@ -68,6 +73,9 @@ exports[`SimpleSelect Renders without crashing 1`] = `
     isChecked={false}
     isDisabled={false}
     isFavorite={null}
+    isLastOptionBeforeFooter={[Function]}
+    isLoad={false}
+    isLoading={false}
     isNoResultsOption={false}
     isPlaceholder={false}
     isSelected={false}
@@ -75,6 +83,7 @@ exports[`SimpleSelect Renders without crashing 1`] = `
     keyHandler={[Function]}
     onClick={[Function]}
     sendRef={[Function]}
+    setViewMoreNextIndex={[Function]}
     value="dos"
   />
 </Select>
