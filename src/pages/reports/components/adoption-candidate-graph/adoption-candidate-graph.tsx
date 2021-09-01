@@ -74,50 +74,52 @@ type ProposedActionChartDataListType = {
 export const AdoptionCandidateGraph: React.FC = () => {
   const { t } = useTranslation();
 
-  const defaultChartData: ProposedActionChartDataListType = {
-    rehost: {
-      legend: {
-        name: t(PROPOSED_ACTION_LIST["rehost"].i18Key),
-        hexColor: PROPOSED_ACTION_LIST["rehost"].hexColor,
+  const defaultChartData: ProposedActionChartDataListType = useMemo(() => {
+    return {
+      rehost: {
+        legend: {
+          name: t(PROPOSED_ACTION_LIST["rehost"].i18Key),
+          hexColor: PROPOSED_ACTION_LIST["rehost"].hexColor,
+        },
+        datapoints: [],
       },
-      datapoints: [],
-    },
-    replatform: {
-      legend: {
-        name: t(PROPOSED_ACTION_LIST["replatform"].i18Key),
-        hexColor: PROPOSED_ACTION_LIST["replatform"].hexColor,
+      replatform: {
+        legend: {
+          name: t(PROPOSED_ACTION_LIST["replatform"].i18Key),
+          hexColor: PROPOSED_ACTION_LIST["replatform"].hexColor,
+        },
+        datapoints: [],
       },
-      datapoints: [],
-    },
-    refactor: {
-      legend: {
-        name: t(PROPOSED_ACTION_LIST["refactor"].i18Key),
-        hexColor: PROPOSED_ACTION_LIST["refactor"].hexColor,
+      refactor: {
+        legend: {
+          name: t(PROPOSED_ACTION_LIST["refactor"].i18Key),
+          hexColor: PROPOSED_ACTION_LIST["refactor"].hexColor,
+        },
+        datapoints: [],
       },
-      datapoints: [],
-    },
-    repurchase: {
-      legend: {
-        name: t(PROPOSED_ACTION_LIST["repurchase"].i18Key),
-        hexColor: PROPOSED_ACTION_LIST["repurchase"].hexColor,
+      repurchase: {
+        legend: {
+          name: t(PROPOSED_ACTION_LIST["repurchase"].i18Key),
+          hexColor: PROPOSED_ACTION_LIST["repurchase"].hexColor,
+        },
+        datapoints: [],
       },
-      datapoints: [],
-    },
-    retire: {
-      legend: {
-        name: t(PROPOSED_ACTION_LIST["retire"].i18Key),
-        hexColor: PROPOSED_ACTION_LIST["retire"].hexColor,
+      retire: {
+        legend: {
+          name: t(PROPOSED_ACTION_LIST["retire"].i18Key),
+          hexColor: PROPOSED_ACTION_LIST["retire"].hexColor,
+        },
+        datapoints: [],
       },
-      datapoints: [],
-    },
-    retain: {
-      legend: {
-        name: t(PROPOSED_ACTION_LIST["retain"].i18Key),
-        hexColor: PROPOSED_ACTION_LIST["retain"].hexColor,
+      retain: {
+        legend: {
+          name: t(PROPOSED_ACTION_LIST["retain"].i18Key),
+          hexColor: PROPOSED_ACTION_LIST["retain"].hexColor,
+        },
+        datapoints: [],
       },
-      datapoints: [],
-    },
-  };
+    };
+  }, [t]);
 
   // Context
   const { selectedItems: applications } = useContext(
@@ -201,7 +203,7 @@ export const AdoptionCandidateGraph: React.FC = () => {
 
       return prev;
     }, defaultChartData);
-  }, [confidences, applications]);
+  }, [confidences, applications, defaultChartData]);
 
   const bubblePoints: BubblePoint[] = useMemo(() => {
     return Object.keys(legendAndPoints)

@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import Measure from "react-measure";
+import { useTranslation } from "react-i18next";
 
 import { Bullseye, Skeleton } from "@patternfly/react-core";
 import {
@@ -29,6 +30,8 @@ interface IChartData {
 }
 
 export const AdoptionPlan: React.FC = () => {
+  const { t } = useTranslation();
+
   // Context
   const { selectedItems: applications } = useContext(
     ApplicationSelectionContext
@@ -113,7 +116,9 @@ export const AdoptionPlan: React.FC = () => {
                   // themeColor={ChartThemeColor.multiOrdered}
                   containerComponent={
                     <ChartVoronoiContainer
-                      labels={({ datum }) => `Effort: ${datum.effort}`}
+                      labels={({ datum }) =>
+                        `${t("terms.effort")}: ${datum.effort}`
+                      }
                       constrainToVisibleArea
                     />
                   }
