@@ -504,7 +504,7 @@ export const Tags: React.FC = () => {
         // t('dialog.title.update')
         // t('dialog.title.new')
         // t('terms.tag')
-        title={t(`dialog.title.${tagTypeToUpdate ? "update" : "new"}`, {
+        title={t(`dialog.title.${tagToUpdate ? "update" : "new"}`, {
           what: t("terms.tag").toLowerCase(),
         })}
         variant={ModalVariant.medium}
