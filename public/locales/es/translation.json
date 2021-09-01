@@ -78,6 +78,12 @@
             "updateTagType": "Actualizar tipo de etiqueta"
         }
     },
+    "efforts": {
+        "extraLarge": "Extra grande",
+        "large": "Grande",
+        "medium": "Medio",
+        "small": "Pequeño"
+    },
     "message": {
         "appNotAssesedTitle": "",
         "appNotAssessedBody": "",

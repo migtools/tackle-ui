@@ -78,6 +78,12 @@
             "updateTagType": "Update tag type"
         }
     },
+    "efforts": {
+        "extraLarge": "Extra large",
+        "large": "Large",
+        "medium": "Medium",
+        "small": "Small"
+    },
     "message": {
         "appNotAssesedTitle": "Assessment has not been completed",
         "appNotAssessedBody": "In order to review an application it must be assessed first. Please assess the application",

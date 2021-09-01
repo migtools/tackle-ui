@@ -152,30 +152,35 @@ export const PROPOSED_ACTION_LIST: ProposedActionListType = {
 // Effort
 type EffortEstimateListType = {
   [key in EffortEstimate]: {
-    label: string;
+    i18Key: string;
     sortFactor: number;
     size: number;
   };
 };
 
+// t('efforts.small')
+// t('efforts.medium')
+// t('efforts.large')
+// t('efforts.extraLarge')
+
 export const EFFORT_ESTIMATE_LIST: EffortEstimateListType = {
   small: {
-    label: "Small",
+    i18Key: "efforts.small",
     sortFactor: 1,
     size: 10,
   },
   medium: {
-    label: "Medium",
+    i18Key: "efforts.medium",
     sortFactor: 2,
     size: 20,
   },
   large: {
-    label: "Large",
+    i18Key: "efforts.large",
     sortFactor: 3,
     size: 30,
   },
   extra_large: {
-    label: "Extra large",
+    i18Key: "efforts.extraLarge",
     sortFactor: 4,
     size: 40,
   },

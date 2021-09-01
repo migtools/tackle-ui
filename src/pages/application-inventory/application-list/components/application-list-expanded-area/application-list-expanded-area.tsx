@@ -39,8 +39,9 @@ export const ApplicationListExpandedArea: React.FC<IApplicationListExpandedAreaP
               : application.review.proposedAction}
           </Label>
         ),
-        effortEstimate:
-          EFFORT_ESTIMATE_LIST[application.review.effortEstimate]?.label,
+        effortEstimate: EFFORT_ESTIMATE_LIST[application.review.effortEstimate]
+          ? t(EFFORT_ESTIMATE_LIST[application.review.effortEstimate].i18Key)
+          : application.review.effortEstimate,
         criticality: application.review.businessCriticality,
         workPriority: application.review.workPriority,
         comments: application.review.comments,

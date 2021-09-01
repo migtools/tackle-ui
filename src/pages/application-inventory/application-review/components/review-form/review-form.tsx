@@ -38,13 +38,6 @@ import {
   toISimpleOptionDropdownWithValue,
 } from "utils/model-utils";
 
-const effortOptions: SimpleOption<EffortEstimate>[] = Object.entries(
-  EFFORT_ESTIMATE_LIST
-).map(([key, value]) => ({
-  key: key as EffortEstimate,
-  name: value.label,
-}));
-
 interface SimpleOption<T> {
   key: T;
   name: string;
@@ -77,6 +70,13 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
     PROPOSED_ACTION_LIST
   ).map(([key, value]) => ({
     key: key as ProposedAction,
+    name: t(value.i18Key),
+  }));
+
+  const effortOptions: SimpleOption<EffortEstimate>[] = Object.entries(
+    EFFORT_ESTIMATE_LIST
+  ).map(([key, value]) => ({
+    key: key as EffortEstimate,
     name: t(value.i18Key),
   }));
 
