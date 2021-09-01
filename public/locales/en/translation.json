@@ -91,6 +91,12 @@
         "selectOwnerFromStakeholdersList": "Select owner from list of stakeholders",
         "suggestedAdoptionPlanHelpText": "The suggested approach to migration based on effort, priority, and dependencies."
     },
+    "risks": {
+        "high": "High",
+        "low": "Low",
+        "medium": "Medium",
+        "unknown": "Unknown"
+    },
     "sidebar": {
         "applicationInventory": "Application inventory",
         "controls": "Controls",

@@ -47,7 +47,7 @@ export const DEFAULT_COLOR_PALETE = [
 // Risks
 type RiskListType = {
   [key in Risk]: {
-    label: string;
+    i18Key: string;
     hexColor: string;
     labelColor:
       | "blue"
@@ -61,27 +61,32 @@ type RiskListType = {
   };
 };
 
+// t('risks.low')
+// t('risks.medium')
+// t('risks.high')
+// t('risks.unknown')
+
 export const RISK_LIST: RiskListType = {
   GREEN: {
-    label: "Low",
+    i18Key: "risks.low",
     hexColor: "#68b240",
     labelColor: "green",
     sortFactor: 1,
   },
   AMBER: {
-    label: "Medium",
+    i18Key: "risks.medium",
     hexColor: "#f0ab0b",
     labelColor: "orange",
     sortFactor: 2,
   },
   RED: {
-    label: "High",
+    i18Key: "risks.high",
     hexColor: "#cb440d",
     labelColor: "red",
     sortFactor: 3,
   },
   UNKNOWN: {
-    label: "Unknown",
+    i18Key: "risks.unknown",
     hexColor: black.value,
     labelColor: "grey",
     sortFactor: 4,

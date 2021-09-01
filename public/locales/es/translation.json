@@ -91,6 +91,12 @@
         "selectOwnerFromStakeholdersList": "Seleccione un propietario de la lista de interesados",
         "suggestedAdoptionPlanHelpText": "El enfoque sugerido para la migración basado en el esfuerzo, la prioridad y las dependencias."
     },
+    "risks": {
+        "high": "Alto",
+        "low": "Bajo",
+        "medium": "Medio",
+        "unknown": "Desconocido"
+    },
     "sidebar": {
         "applicationInventory": "Inventario de aplicaciones",
         "controls": "Controles",
