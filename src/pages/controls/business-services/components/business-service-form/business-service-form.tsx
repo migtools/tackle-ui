@@ -197,7 +197,7 @@ export const BusinessServiceForm: React.FC<BusinessServiceFormProps> = ({
               variant: "typeahead",
               "aria-label": "owner",
               "aria-describedby": "owner",
-              placeholderText: "Select owner from list of stakeholders",
+              placeholderText: t("message.selectOwnerFromStakeholdersList"),
               menuAppendTo: () => document.body,
               maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
               fetchError: fetchErrorStakeholders,

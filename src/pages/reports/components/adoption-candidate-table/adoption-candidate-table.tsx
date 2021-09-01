@@ -198,10 +198,14 @@ export const AdoptionCandidateTable: React.FC = () => {
         {
           title: (
             <>
-              {item.application.review
-                ? EFFORT_ESTIMATE_LIST[item.application.review.effortEstimate]
-                    ?.label
-                : ""}
+              {item.application.review &&
+                (EFFORT_ESTIMATE_LIST[item.application.review.effortEstimate]
+                  ? t(
+                      EFFORT_ESTIMATE_LIST[
+                        item.application.review.effortEstimate
+                      ].i18Key
+                    )
+                  : item.application.review.effortEstimate)}
             </>
           ),
         },
