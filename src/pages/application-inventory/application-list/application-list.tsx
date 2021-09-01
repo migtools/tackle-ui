@@ -1,12 +1,13 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { AxiosResponse } from "axios";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import { useSelectionState } from "@konveyor/lib-ui";
 
 import {
   Button,
   ButtonVariant,
+  DropdownItem,
   Modal,
   PageSection,
   PageSectionVariants,
@@ -79,6 +80,8 @@ import ApplicationDependenciesForm from "./components/application-dependencies-f
 import { ApplicationAssessment } from "./components/application-assessment";
 import { ApplicationBusinessService } from "./components/application-business-service";
 import { ApplicationListExpandedArea } from "./components/application-list-expanded-area";
+import { ImportApplicationsForm } from "./components/import-applications-form";
+import { KebabDropdown } from "./components/kebab-dropdown/kebab-dropdown";
 
 const toSortByQuery = (
   sortBy?: SortByQuery
@@ -224,6 +227,12 @@ export const ApplicationList: React.FC = () => {
     close: closeDependenciesModal,
   } = useEntityModal<Application>();
 
+  // Application import modal
+  const [
+    isApplicationImportModalOpen,
+    setIsApplicationImportModalOpen,
+  ] = useState(false);
+
   // Table's assessments
   const {
     getData: getApplicationAssessment,
@@ -276,7 +285,7 @@ export const ApplicationList: React.FC = () => {
     { title: t("terms.businessService"), transforms: [cellWidth(20)] },
     { title: t("terms.assessment"), transforms: [cellWidth(10)] },
     { title: t("terms.review"), transforms: [sortable, cellWidth(10)] },
-    { title: t("terms.tags"), transforms: [sortable, cellWidth(10)] },
+    { title: t("terms.tagCount"), transforms: [sortable, cellWidth(10)] },
     {
       title: "",
       props: {
@@ -473,12 +482,20 @@ export const ApplicationList: React.FC = () => {
   const discardAssessmentRow = (row: Application) => {
     dispatch(
       confirmDialogActions.openDialog({
-        title: "Discard assessment?",
+        // t("terms.assessment")
+        title: t("dialog.title.discard", {
+          what: t("terms.assessment").toLowerCase(),
+        }),
         titleIconVariant: "warning",
         message: (
           <span>
-            The assessment for <strong>{row.name}</strong> will be discarded, as
-            well as the review result. Do you wish to continue?
+            <Trans
+              i18nKey="dialog.message.discardAssessment"
+              values={{ applicationName: row.name }}
+            >
+              The assessment for <strong>applicationName</strong> will be
+              discarded, as well as the review result. Do you wish to continue?
+            </Trans>
           </span>
         ),
         confirmBtnVariant: ButtonVariant.primary,
@@ -667,6 +684,29 @@ export const ApplicationList: React.FC = () => {
                       {t("actions.review")}
                     </Button>
                   </ToolbarItem>
+                  <ToolbarItem>
+                    <KebabDropdown
+                      dropdownItems={[
+                        <DropdownItem
+                          key="import-applications"
+                          component="button"
+                          onClick={() => setIsApplicationImportModalOpen(true)}
+                        >
+                          {t("actions.import")}
+                        </DropdownItem>,
+                        <DropdownItem
+                          key="manage-application-imports"
+                          onClick={() => {
+                            history.push(
+                              Paths.applicationInventory_manageImports
+                            );
+                          }}
+                        >
+                          {t("actions.manageImports")}
+                        </DropdownItem>,
+                      ]}
+                    />
+                  </ToolbarItem>
                 </ToolbarGroup>
               </>
             }
@@ -720,6 +760,20 @@ export const ApplicationList: React.FC = () => {
             onCancel={closeDependenciesModal}
           />
         )}
+      </Modal>
+
+      <Modal
+        isOpen={isApplicationImportModalOpen}
+        variant="medium"
+        title={t("dialog.title.importApplicationFile")}
+        onClose={() => setIsApplicationImportModalOpen((current) => !current)}
+      >
+        <ImportApplicationsForm
+          onSaved={() => {
+            setIsApplicationImportModalOpen(false);
+            refreshTable();
+          }}
+        />
       </Modal>
     </>
   );

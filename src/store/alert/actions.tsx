@@ -1,4 +1,4 @@
-import { addNotification } from "@redhat-cloud-services/frontend-components-notifications";
+import { addNotification } from "@redhat-cloud-services/frontend-components-notifications/redux";
 
 type Variant = "danger" | "success";
 

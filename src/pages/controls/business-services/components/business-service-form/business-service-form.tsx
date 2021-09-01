@@ -15,10 +15,7 @@ import {
   TextInput,
 } from "@patternfly/react-core";
 
-import {
-  SingleSelectFetchFormikField,
-  OptionWithValue,
-} from "shared/components";
+import { SingleSelectFetchOptionValueFormikField } from "shared/components";
 import { useFetchStakeholders } from "shared/hooks";
 
 import { DEFAULT_SELECT_MAX_HEIGHT } from "Constants";
@@ -29,18 +26,16 @@ import {
   getValidatedFromError,
   getValidatedFromErrorTouched,
 } from "utils/utils";
-
-const stakeholderToOption = (
-  value: Stakeholder
-): OptionWithValue<Stakeholder> => ({
-  value,
-  toString: () => value.displayName,
-});
+import {
+  IStakeholderDropdown,
+  toIStakeholderDropdownOptionWithValue,
+  toIStakeholderDropdown,
+} from "utils/model-utils";
 
 export interface FormValues {
   name: string;
   description: string;
-  owner?: OptionWithValue<Stakeholder>;
+  owner: IStakeholderDropdown | null;
 }
 
 export interface BusinessServiceFormProps {
@@ -69,12 +64,10 @@ export const BusinessServiceForm: React.FC<BusinessServiceFormProps> = ({
     fetchAllStakeholders();
   }, [fetchAllStakeholders]);
 
-  const ownerInitialValue:
-    | OptionWithValue<Stakeholder>
-    | undefined = useMemo(() => {
+  const ownerInitialValue: IStakeholderDropdown | null = useMemo(() => {
     return businessService && businessService.owner
-      ? stakeholderToOption(businessService.owner)
-      : undefined;
+      ? toIStakeholderDropdown(businessService.owner)
+      : null;
   }, [businessService]);
 
   const initialValues: FormValues = {
@@ -101,7 +94,7 @@ export const BusinessServiceForm: React.FC<BusinessServiceFormProps> = ({
     const payload: BusinessService = {
       name: formValues.name.trim(),
       description: formValues.description.trim(),
-      owner: formValues.owner ? formValues.owner.value : undefined,
+      owner: formValues.owner as Stakeholder,
     };
 
     let promise: AxiosPromise<BusinessService>;
@@ -198,19 +191,20 @@ export const BusinessServiceForm: React.FC<BusinessServiceFormProps> = ({
           validated={getValidatedFromError(formik.errors.owner)}
           helperTextInvalid={formik.errors.owner}
         >
-          <SingleSelectFetchFormikField
+          <SingleSelectFetchOptionValueFormikField<IStakeholderDropdown>
             fieldConfig={{ name: "owner" }}
             selectConfig={{
               variant: "typeahead",
               "aria-label": "owner",
               "aria-describedby": "owner",
-              placeholderText: "Select owner from list of stakeholders",
+              placeholderText: t("message.selectOwnerFromStakeholdersList"),
               menuAppendTo: () => document.body,
               maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
-              options: (stakeholders?.data || []).map(stakeholderToOption),
               fetchError: fetchErrorStakeholders,
               isFetching: isFetchingStakeholders,
             }}
+            options={(stakeholders?.data || []).map(toIStakeholderDropdown)}
+            toOptionWithValue={toIStakeholderDropdownOptionWithValue}
           />
         </FormGroup>
 

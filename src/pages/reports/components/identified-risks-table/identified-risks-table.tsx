@@ -30,6 +30,9 @@ import { ApplicationSelectionContext } from "../../application-selection-context
 
 export enum FilterKey {
   APPLICATION_NAME = "application_name",
+  CATEGORY = "category",
+  QUESTION = "question",
+  ANSWER = "answer",
 }
 
 export interface ITableRowData {
@@ -111,13 +114,13 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = () => 
 
   const filterItem = useCallback(
     (item: ITableRowData) => {
-      let matchesFilter: boolean = true;
-
+      // Application name
+      let applicationNameResult: boolean = true;
       const applicationNameFiltersText = (
         filtersValue.get(FilterKey.APPLICATION_NAME) || []
       ).map((f) => f.key);
       if (applicationNameFiltersText.length > 0) {
-        matchesFilter = applicationNameFiltersText.some((filterText) =>
+        applicationNameResult = applicationNameFiltersText.some((filterText) =>
           item.applications.some(
             (application) =>
               application.name
@@ -127,7 +130,51 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = () => 
         );
       }
 
-      return matchesFilter;
+      // Category
+      let categoryResult: boolean = true;
+      const categoryFiltersText = (
+        filtersValue.get(FilterKey.CATEGORY) || []
+      ).map((f) => f.key);
+      if (categoryFiltersText.length > 0) {
+        categoryResult = categoryFiltersText.some((filterText) => {
+          return (
+            item.category.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
+          );
+        });
+      }
+
+      // Question
+      let questionResult: boolean = true;
+      const questionFiltersText = (
+        filtersValue.get(FilterKey.QUESTION) || []
+      ).map((f) => f.key);
+      if (questionFiltersText.length > 0) {
+        questionResult = questionFiltersText.some((filterText) => {
+          return (
+            item.question.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
+          );
+        });
+      }
+
+      // Answer
+      let answerResult: boolean = true;
+      const answerFiltersText = (filtersValue.get(FilterKey.ANSWER) || []).map(
+        (f) => f.key
+      );
+      if (answerFiltersText.length > 0) {
+        answerResult = answerFiltersText.some((filterText) => {
+          return (
+            item.answer.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
+          );
+        });
+      }
+
+      return (
+        applicationNameResult &&
+        categoryResult &&
+        questionResult &&
+        answerResult
+      );
     },
     [filtersValue]
   );
@@ -149,6 +196,48 @@ export const IdentifiedRisksTable: React.FC<IIdentifiedRisksTableProps> = () => 
         <InputTextFilter
           onApplyFilter={(filterText) => {
             addFilter(FilterKey.APPLICATION_NAME, {
+              key: filterText,
+              node: filterText,
+            });
+          }}
+        />
+      ),
+    },
+    {
+      key: FilterKey.CATEGORY,
+      name: t("terms.category"),
+      input: (
+        <InputTextFilter
+          onApplyFilter={(filterText) => {
+            addFilter(FilterKey.CATEGORY, {
+              key: filterText,
+              node: filterText,
+            });
+          }}
+        />
+      ),
+    },
+    {
+      key: FilterKey.QUESTION,
+      name: t("terms.question"),
+      input: (
+        <InputTextFilter
+          onApplyFilter={(filterText) => {
+            addFilter(FilterKey.QUESTION, {
+              key: filterText,
+              node: filterText,
+            });
+          }}
+        />
+      ),
+    },
+    {
+      key: FilterKey.ANSWER,
+      name: t("terms.answer"),
+      input: (
+        <InputTextFilter
+          onApplyFilter={(filterText) => {
+            addFilter(FilterKey.ANSWER, {
               key: filterText,
               node: filterText,
             });
