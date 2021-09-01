@@ -38,20 +38,6 @@ import {
   toISimpleOptionDropdownWithValue,
 } from "utils/model-utils";
 
-const actionOptions: SimpleOption<ProposedAction>[] = Object.entries(
-  PROPOSED_ACTION_LIST
-).map(([key, value]) => ({
-  key: key as ProposedAction,
-  name: value.label,
-}));
-
-const effortOptions: SimpleOption<EffortEstimate>[] = Object.entries(
-  EFFORT_ESTIMATE_LIST
-).map(([key, value]) => ({
-  key: key as EffortEstimate,
-  name: value.label,
-}));
-
 interface SimpleOption<T> {
   key: T;
   name: string;
@@ -79,6 +65,20 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
   onCancel,
 }) => {
   const { t } = useTranslation();
+
+  const actionOptions: SimpleOption<ProposedAction>[] = useMemo(() => {
+    return Object.entries(PROPOSED_ACTION_LIST).map(([key, value]) => ({
+      key: key as ProposedAction,
+      name: t(value.i18Key),
+    }));
+  }, [t]);
+
+  const effortOptions: SimpleOption<EffortEstimate>[] = useMemo(() => {
+    return Object.entries(EFFORT_ESTIMATE_LIST).map(([key, value]) => ({
+      key: key as EffortEstimate,
+      name: t(value.i18Key),
+    }));
+  }, [t]);
 
   // Formik
 
@@ -148,7 +148,7 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
       };
     }
     return result;
-  }, [review, t]);
+  }, [review, actionOptions, t]);
 
   const effortInitialValue: ISimpleOptionDropdown<EffortEstimate> | null = useMemo(() => {
     let result: ISimpleOptionDropdown<EffortEstimate> | null = null;
@@ -160,7 +160,7 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
       };
     }
     return result;
-  }, [review, t]);
+  }, [review, effortOptions, t]);
 
   const formik = useFormik<FormValues>({
     enableReinitialize: true,

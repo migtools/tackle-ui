@@ -201,7 +201,7 @@ export const BusinessServiceForm: React.FC<BusinessServiceFormProps> = ({
               toggleAriaLabel: "owner",
               clearSelectionsAriaLabel: "owner",
               removeSelectionAriaLabel: "owner",
-              placeholderText: "Select owner from list of stakeholders",
+              placeholderText: t("message.selectOwnerFromStakeholdersList"),
               menuAppendTo: () => document.body,
               maxHeight: DEFAULT_SELECT_MAX_HEIGHT,
               fetchError: fetchErrorStakeholders,

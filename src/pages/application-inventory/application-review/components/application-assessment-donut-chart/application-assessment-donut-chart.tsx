@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { ChartDonut, ChartLegend } from "@patternfly/react-charts";
 
 import { global_palette_blue_300 as defaultColor } from "@patternfly/react-tokens";
@@ -56,28 +57,30 @@ export interface IApplicationAssessmentDonutChartProps {
 export const ApplicationAssessmentDonutChart: React.FC<IApplicationAssessmentDonutChartProps> = ({
   assessment,
 }) => {
+  const { t } = useTranslation();
+
   const charData: ChartData = useMemo(() => {
     return getChartDataFromCategories(assessment.questionnaire.categories);
   }, [assessment]);
 
   const chartDefinition = [
     {
-      x: RISK_LIST["GREEN"].label,
+      x: t(RISK_LIST["GREEN"].i18Key),
       y: charData.green,
       color: RISK_LIST["GREEN"].hexColor,
     },
     {
-      x: RISK_LIST["AMBER"].label,
+      x: t(RISK_LIST["AMBER"].i18Key),
       y: charData.amber,
       color: RISK_LIST["AMBER"].hexColor,
     },
     {
-      x: RISK_LIST["RED"].label,
+      x: t(RISK_LIST["RED"].i18Key),
       y: charData.red,
       color: RISK_LIST["RED"].hexColor,
     },
     {
-      x: RISK_LIST["UNKNOWN"].label,
+      x: t(RISK_LIST["UNKNOWN"].i18Key),
       y: charData.unknown,
       color: RISK_LIST["UNKNOWN"].hexColor,
     },
