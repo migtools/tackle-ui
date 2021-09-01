@@ -32,7 +32,11 @@ export const ApplicationListExpandedArea: React.FC<IApplicationListExpandedAreaP
     ? {
         proposedAction: (
           <Label>
-            {PROPOSED_ACTION_LIST[application.review.proposedAction]?.label}
+            {PROPOSED_ACTION_LIST[application.review.proposedAction]
+              ? t(
+                  PROPOSED_ACTION_LIST[application.review.proposedAction].i18Key
+                )
+              : application.review.proposedAction}
           </Label>
         ),
         effortEstimate:

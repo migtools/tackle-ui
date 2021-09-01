@@ -71,53 +71,53 @@ type ProposedActionChartDataListType = {
   [key in ProposedAction]: Serie;
 };
 
-const defaultChartData: ProposedActionChartDataListType = {
-  rehost: {
-    legend: {
-      name: PROPOSED_ACTION_LIST["rehost"].label,
-      hexColor: PROPOSED_ACTION_LIST["rehost"].hexColor,
-    },
-    datapoints: [],
-  },
-  replatform: {
-    legend: {
-      name: PROPOSED_ACTION_LIST["replatform"].label,
-      hexColor: PROPOSED_ACTION_LIST["replatform"].hexColor,
-    },
-    datapoints: [],
-  },
-  refactor: {
-    legend: {
-      name: PROPOSED_ACTION_LIST["refactor"].label,
-      hexColor: PROPOSED_ACTION_LIST["refactor"].hexColor,
-    },
-    datapoints: [],
-  },
-  repurchase: {
-    legend: {
-      name: PROPOSED_ACTION_LIST["repurchase"].label,
-      hexColor: PROPOSED_ACTION_LIST["repurchase"].hexColor,
-    },
-    datapoints: [],
-  },
-  retire: {
-    legend: {
-      name: PROPOSED_ACTION_LIST["retire"].label,
-      hexColor: PROPOSED_ACTION_LIST["retire"].hexColor,
-    },
-    datapoints: [],
-  },
-  retain: {
-    legend: {
-      name: PROPOSED_ACTION_LIST["retain"].label,
-      hexColor: PROPOSED_ACTION_LIST["retain"].hexColor,
-    },
-    datapoints: [],
-  },
-};
-
 export const AdoptionCandidateGraph: React.FC = () => {
   const { t } = useTranslation();
+
+  const defaultChartData: ProposedActionChartDataListType = {
+    rehost: {
+      legend: {
+        name: t(PROPOSED_ACTION_LIST["rehost"].i18Key),
+        hexColor: PROPOSED_ACTION_LIST["rehost"].hexColor,
+      },
+      datapoints: [],
+    },
+    replatform: {
+      legend: {
+        name: t(PROPOSED_ACTION_LIST["replatform"].i18Key),
+        hexColor: PROPOSED_ACTION_LIST["replatform"].hexColor,
+      },
+      datapoints: [],
+    },
+    refactor: {
+      legend: {
+        name: t(PROPOSED_ACTION_LIST["refactor"].i18Key),
+        hexColor: PROPOSED_ACTION_LIST["refactor"].hexColor,
+      },
+      datapoints: [],
+    },
+    repurchase: {
+      legend: {
+        name: t(PROPOSED_ACTION_LIST["repurchase"].i18Key),
+        hexColor: PROPOSED_ACTION_LIST["repurchase"].hexColor,
+      },
+      datapoints: [],
+    },
+    retire: {
+      legend: {
+        name: t(PROPOSED_ACTION_LIST["retire"].i18Key),
+        hexColor: PROPOSED_ACTION_LIST["retire"].hexColor,
+      },
+      datapoints: [],
+    },
+    retain: {
+      legend: {
+        name: t(PROPOSED_ACTION_LIST["retain"].i18Key),
+        hexColor: PROPOSED_ACTION_LIST["retain"].hexColor,
+      },
+      datapoints: [],
+    },
+  };
 
   // Context
   const { selectedItems: applications } = useContext(

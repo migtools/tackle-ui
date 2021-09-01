@@ -96,7 +96,7 @@ export const RISK_LIST: RiskListType = {
 // Proposed action
 type ProposedActionListType = {
   [key in ProposedAction]: {
-    label: string;
+    i18Key: string;
     hexColor: string;
     labelColor:
       | "blue"
@@ -109,34 +109,41 @@ type ProposedActionListType = {
   };
 };
 
+// t('proposedActions.rehost')
+// t('proposedActions.replatform')
+// t('proposedActions.refactor')
+// t('proposedActions.repurchase')
+// t('proposedActions.retire')
+// t('proposedActions.retain')
+
 export const PROPOSED_ACTION_LIST: ProposedActionListType = {
   rehost: {
-    label: "Rehost",
+    i18Key: "proposedActions.rehost",
     labelColor: "green",
     hexColor: green.value,
   },
   replatform: {
-    label: "Replatform",
+    i18Key: "proposedActions.replatform",
     labelColor: "orange",
     hexColor: orange.value,
   },
   refactor: {
-    label: "Refactor",
+    i18Key: "proposedActions.refactor",
     labelColor: "red",
     hexColor: "#cb440d",
   },
   repurchase: {
-    label: "Repurchase",
+    i18Key: "proposedActions.repurchase",
     labelColor: "purple",
     hexColor: purple.value,
   },
   retire: {
-    label: "Retire",
+    i18Key: "proposedActions.retire",
     labelColor: "cyan",
     hexColor: cyan.value,
   },
   retain: {
-    label: "Retain",
+    i18Key: "proposedActions.retain",
     labelColor: "blue",
     hexColor: blue.value,
   },

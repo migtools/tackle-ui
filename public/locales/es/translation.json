@@ -91,6 +91,14 @@
         "selectOwnerFromStakeholdersList": "Seleccione un propietario de la lista de interesados",
         "suggestedAdoptionPlanHelpText": "El enfoque sugerido para la migración basado en el esfuerzo, la prioridad y las dependencias."
     },
+    "proposedActions": {
+        "refactor": "Refactorizar",
+        "rehost": "Rehost",
+        "replatform": "Replatform",
+        "repurchase": "Readquirir",
+        "retain": "Conservar",
+        "retire": "Retirar"
+    },
     "risks": {
         "high": "Alto",
         "low": "Bajo",

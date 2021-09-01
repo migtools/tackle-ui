@@ -38,13 +38,6 @@ import {
   toISimpleOptionDropdownWithValue,
 } from "utils/model-utils";
 
-const actionOptions: SimpleOption<ProposedAction>[] = Object.entries(
-  PROPOSED_ACTION_LIST
-).map(([key, value]) => ({
-  key: key as ProposedAction,
-  name: value.label,
-}));
-
 const effortOptions: SimpleOption<EffortEstimate>[] = Object.entries(
   EFFORT_ESTIMATE_LIST
 ).map(([key, value]) => ({
@@ -79,6 +72,13 @@ export const ReviewForm: React.FC<IReviewFormProps> = ({
   onCancel,
 }) => {
   const { t } = useTranslation();
+
+  const actionOptions: SimpleOption<ProposedAction>[] = Object.entries(
+    PROPOSED_ACTION_LIST
+  ).map(([key, value]) => ({
+    key: key as ProposedAction,
+    name: t(value.i18Key),
+  }));
 
   // Formik
 

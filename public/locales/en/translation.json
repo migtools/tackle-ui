@@ -91,6 +91,14 @@
         "selectOwnerFromStakeholdersList": "Select owner from list of stakeholders",
         "suggestedAdoptionPlanHelpText": "The suggested approach to migration based on effort, priority, and dependencies."
     },
+    "proposedActions": {
+        "refactor": "Refactor",
+        "rehost": "Rehost",
+        "replatform": "Replatform",
+        "repurchase": "Repurchase",
+        "retain": "Retain",
+        "retire": "Retire"
+    },
     "risks": {
         "high": "High",
         "low": "Low",
