@@ -52,10 +52,13 @@
     "dialog": {
         "message": {
             "delete": "This action cannot be undone.",
+            "discardAssessment": "The assessment for <1>{{applicationName}}</1> will be discarded, as well as the review result. Do you wish to continue?",
             "leavePage": "Are you sure you want to leave this page? Be sure to save your changes, or they will be lost."
         },
         "title": {
             "delete": "Delete {{what}}?",
+            "discard": "Discard {{what}}?",
+            "importApplicationFile": "Import application file",
             "leavePage": "Leave page",
             "new": "New {{what}}",
             "newApplication": "New application",
@@ -84,7 +87,9 @@
         "manageDependenciesInstructions": "Add northbound and southbound dependencies for the selected application here. Note that any selections made will be saved automatically. To undo any changes, you must manually delete the applications from the dropdowns.",
         "overrideAssessmentConfirmation": "This application has already been assessed. Do you want to continue?",
         "reviewInstructions": "Use this section to provide your assessment of the possible migration/modernization plan and effort estimation.",
-        "savingSelection": "Saving selection"
+        "savingSelection": "Saving selection",
+        "selectOwnerFromStakeholdersList": "Select owner from list of stakeholders",
+        "suggestedAdoptionPlanHelpText": "The suggested approach to migration based on effort, priority, and dependencies."
     },
     "sidebar": {
         "applicationInventory": "Application inventory",
@@ -98,6 +103,7 @@
         "answer": "Answer",
         "application": "Application",
         "application(s)": "Application(s)",
+        "applicationImports": "Application imports",
         "applicationName": "Application name",
         "applications": "Applications",
         "assessment": "Assessment",
@@ -124,6 +130,7 @@
         "effortEstimate": "Effort estimate",
         "email": "Email",
         "error": "Error",
+        "errorReport": "Error report",
         "filename": "File name",
         "graphView": "Graph view",
         "group": "Group",
@@ -133,6 +140,7 @@
         "identifiedRisks": "Identified risks",
         "impactfulButMigratable": "Impactful but migratable",
         "impactfulButNotAdvisableToMove": "Impactful but not advisable to move",
+        "imports": "Imports",
         "inadvisable": "Inadvisable",
         "inProgress": "In-progress",
         "jobFunction": "Job function",
@@ -187,13 +195,15 @@
         "unassesed": "Unassesed",
         "unknown": "Unknown",
         "unsuitableForContainers": "Unsuitable for containers",
+        "uploadApplicationFile": "Upload your application file",
         "user": "User",
         "workPriority": "Work priority"
     },
     "toastr": {
         "success": {
             "added": "Success! {{what}} was added as a {{type}}.",
-            "assessmentDiscarded": "Success! Assessment discarded for {{application}}"
+            "assessmentDiscarded": "Success! Assessment discarded for {{application}}.",
+            "fileSavedToBeProcessed": "Success! file saved to be processed."
         }
     },
     "validation": {

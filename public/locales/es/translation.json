@@ -52,10 +52,13 @@
     "dialog": {
         "message": {
             "delete": "Esta acción no puede ser revertida.",
+            "discardAssessment": "La evaluación para <1>{{applicationName}}</1> será descartada, también los resultados de la revisión. ¿Deseas continuar?",
             "leavePage": "¿Estás seguro de querer salir de esta página? Asegúrate de guardar tus cambios o estos se perderán."
         },
         "title": {
             "delete": "¿Eliminar {{what}}?",
+            "discard": "¿Descartar {{what}}?",
+            "importApplicationFile": "Importar archivo con aplicaciones",
             "leavePage": "Salir de página",
             "new": "Nuevo(a) {{what}}",
             "newApplication": "Nueva aplicación",
@@ -78,13 +81,15 @@
     "message": {
         "appNotAssesedTitle": "",
         "appNotAssessedBody": "",
-        "assessmentStakeholderHeader": "Seleccione a los integresados o grupo de interesados asociados a esta evaluación.",
+        "assessmentStakeholderHeader": "Seleccione a los interesados o grupo de interesados asociados a esta evaluación.",
         "couldNotFetchBody": "El recurso no existe o no tienes permiso para acceder al mismo",
         "couldNotFetchTitle": "No disponible",
         "manageDependenciesInstructions": "Agrega aquí dependencias en el norte y sur para la aplicación seleccionada. Cualquier selección realizada será guardada automáticamente. Para deshacer cualquier cambio, debes de eliminar la aplicación de la caja de selección.",
         "overrideAssessmentConfirmation": "Esta aplicación ya fue evaluada ¿Deseas continuar?",
         "reviewInstructions": "Utilice esta sección para proporcionar su evaluación del posible plan de migración / modernización y la estimación del esfuerzo.",
-        "savingSelection": "Guardando selección"
+        "savingSelection": "Guardando selección",
+        "selectOwnerFromStakeholdersList": "Seleccione un propietario de la lista de interesados",
+        "suggestedAdoptionPlanHelpText": "El enfoque sugerido para la migración basado en el esfuerzo, la prioridad y las dependencias."
     },
     "sidebar": {
         "applicationInventory": "Inventario de aplicaciones",
@@ -98,6 +103,7 @@
         "answer": "Respuesta",
         "application": "Applicación",
         "application(s)": "Aplicación(es)",
+        "applicationImports": "Importaciones de aplicaciones",
         "applicationName": "Nombre de aplicación",
         "applications": "Applicaciones",
         "assessment": "Evaluación",
@@ -124,6 +130,7 @@
         "effortEstimate": "Esfuerzo estimado",
         "email": "Email",
         "error": "Error",
+        "errorReport": "Reporte de errores",
         "filename": "Nombre de archivo",
         "graphView": "Vista de gráfico",
         "group": "Grupo",
@@ -133,6 +140,7 @@
         "identifiedRisks": "Riesgos identificados",
         "impactfulButMigratable": "Impactante pero migrable",
         "impactfulButNotAdvisableToMove": "Impactante pero no recomendable para moverse",
+        "imports": "Importaciones",
         "inadvisable": "Desaconsejable",
         "inProgress": "En progreso",
         "jobFunction": "Función laboral",
@@ -187,13 +195,15 @@
         "unassesed": "No evaluado",
         "unknown": "Desconocido",
         "unsuitableForContainers": "No apto para contenedores",
+        "uploadApplicationFile": "Carga tu archivo con aplicaciones",
         "user": "Usuario",
         "workPriority": "Prioridad de trabajo"
     },
     "toastr": {
         "success": {
             "added": "Éxito! {{what}} fue creado como un {{type}}.",
-            "assessmentDiscarded": "Éxito! Evaluación de {{application}} desechada"
+            "assessmentDiscarded": "Éxito! Evaluación de {{application}} desechada.",
+            "fileSavedToBeProcessed": "Éxito! El archivo fue guardado para ser procesado."
         }
     },
     "validation": {

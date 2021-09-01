@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { AxiosResponse } from "axios";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import { useSelectionState } from "@konveyor/lib-ui";
 
 import {
@@ -482,12 +482,20 @@ export const ApplicationList: React.FC = () => {
   const discardAssessmentRow = (row: Application) => {
     dispatch(
       confirmDialogActions.openDialog({
-        title: "Discard assessment?",
+        // t("terms.assessment")
+        title: t("dialog.title.discard", {
+          what: t("terms.assessment").toLowerCase(),
+        }),
         titleIconVariant: "warning",
         message: (
           <span>
-            The assessment for <strong>{row.name}</strong> will be discarded, as
-            well as the review result. Do you wish to continue?
+            <Trans
+              i18nKey="dialog.message.discardAssessment"
+              values={{ applicationName: row.name }}
+            >
+              The assessment for <strong>applicationName</strong> will be
+              discarded, as well as the review result. Do you wish to continue?
+            </Trans>
           </span>
         ),
         confirmBtnVariant: ButtonVariant.primary,
@@ -757,7 +765,7 @@ export const ApplicationList: React.FC = () => {
       <Modal
         isOpen={isApplicationImportModalOpen}
         variant="medium"
-        title="Import application file"
+        title={t("dialog.title.importApplicationFile")}
         onClose={() => setIsApplicationImportModalOpen((current) => !current)}
       >
         <ImportApplicationsForm

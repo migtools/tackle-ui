@@ -317,7 +317,7 @@ export const AdoptionCandidateGraph: React.FC = () => {
                       }}
                     >
                       <ChartAxis
-                        label="Confidence"
+                        label={t("terms.confidence")}
                         showGrid
                         tickValues={[
                           0,

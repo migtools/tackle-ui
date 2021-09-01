@@ -220,8 +220,7 @@ export const Reports: React.FC = () => {
                           <Popover
                             bodyContent={
                               <div>
-                                The suggested approach to migration based on
-                                effort, priority, and dependencies.
+                                {t("message.suggestedAdoptionPlanHelpText")}
                               </div>
                             }
                             position="right"
