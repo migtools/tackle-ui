@@ -93,14 +93,14 @@ describe("Applications table", () => {
     cy.wait("@getApplicationsApi");
 
     // Asc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Tags");
+    cy.get(".pf-c-table").pf4_table_column_toggle("Tag count");
     cy.wait("@getApplicationsApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("application-a");
     cy.get(".pf-c-table").pf4_table_rows().eq(9).contains("application-j");
 
     // Desc
-    cy.get(".pf-c-table").pf4_table_column_toggle("Tags");
+    cy.get(".pf-c-table").pf4_table_column_toggle("Tag count");
     cy.wait("@getApplicationsApi");
 
     cy.get(".pf-c-table").pf4_table_rows().eq(0).contains("application-k");

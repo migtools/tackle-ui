@@ -130,8 +130,11 @@ describe("Application filtering table", () => {
   });
 
   it("By description", () => {
-    cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("toggle");
-    cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("select", 1).click();
+    cy.get(".pf-c-toolbar .pf-c-dropdown").eq(0).pf4_dropdown("toggle");
+    cy.get(".pf-c-toolbar .pf-c-dropdown")
+      .eq(0)
+      .pf4_dropdown("select", 1)
+      .click();
 
     // First filter
     cy.wait("@getApplicationsApi");
@@ -160,8 +163,8 @@ describe("Application filtering table", () => {
   });
 
   it("By business service", () => {
-    cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("toggle");
-    cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("select", 2).click();
+    cy.get(".pf-c-toolbar .pf-c-dropdown").eq(0).pf4_dropdown("toggle");
+    cy.get(".pf-c-toolbar .pf-c-dropdown").eq(0).pf4_dropdown("select", 2).click();
 
     // First filter
     cy.wait("@getApplicationsApi");
@@ -199,8 +202,8 @@ describe("Application filtering table", () => {
   });
 
   it("By tags", () => {
-    cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("toggle");
-    cy.get(".pf-c-toolbar .pf-c-dropdown").pf4_dropdown("select", 3).click();
+    cy.get(".pf-c-toolbar .pf-c-dropdown").eq(0).pf4_dropdown("toggle");
+    cy.get(".pf-c-toolbar .pf-c-dropdown").eq(0).pf4_dropdown("select", 3).click();
 
     // First filter
     cy.wait("@getApplicationsApi");

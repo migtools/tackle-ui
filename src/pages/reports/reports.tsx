@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import {
   Bullseye,
   Card,
+  CardActions,
   CardBody,
   CardExpandableContent,
   CardHeader,
@@ -17,6 +18,8 @@ import {
   StackItem,
   Text,
   TextContent,
+  ToggleGroup,
+  ToggleGroupItem,
   Toolbar,
   ToolbarChip,
   ToolbarContent,
@@ -42,12 +45,16 @@ import { Landscape } from "./components/landscape";
 import { AdoptionCandidateTable } from "./components/adoption-candidate-table";
 import { AdoptionPlan } from "./components/adoption-plan";
 import { IdentifiedRisksTable } from "./components/identified-risks-table";
+import { AdoptionCandidateGraph } from "./components/adoption-candidate-graph/adoption-candidate-graph";
 
 export const Reports: React.FC = () => {
   // i18
   const { t } = useTranslation();
 
   // Cards
+  const [isAdoptionCandidateTable, setIsAdoptionCandidateTable] = useState(
+    true
+  );
   const [isAdoptionPlanOpen, setAdoptionPlanOpen] = useState(false);
   const [isRiskCardOpen, setIsRiskCardOpen] = useState(false);
 
@@ -143,7 +150,7 @@ export const Reports: React.FC = () => {
                 <Card>
                   <CardHeader>
                     <TextContent>
-                      <Text component="h3">Current landscape</Text>
+                      <Text component="h3">{t("terms.currentLandscape")}</Text>
                     </TextContent>
                   </CardHeader>
                   <CardBody>
@@ -156,14 +163,40 @@ export const Reports: React.FC = () => {
               <StackItem>
                 <Card>
                   <CardHeader>
-                    <TextContent>
-                      <Text component="h3">
-                        Adoption candidate distribution
-                      </Text>
-                    </TextContent>
+                    <CardActions>
+                      <ToggleGroup>
+                        <ToggleGroupItem
+                          key={0}
+                          text={t("terms.tableView")}
+                          isSelected={isAdoptionCandidateTable}
+                          onChange={() => {
+                            setIsAdoptionCandidateTable(true);
+                          }}
+                        />
+                        <ToggleGroupItem
+                          key={1}
+                          text={t("terms.graphView")}
+                          isSelected={!isAdoptionCandidateTable}
+                          onChange={() => {
+                            setIsAdoptionCandidateTable(false);
+                          }}
+                        />
+                      </ToggleGroup>
+                    </CardActions>
+                    <CardTitle>
+                      <TextContent>
+                        <Text component="h3">
+                          {t("terms.adoptionCandidateDistribution")}
+                        </Text>
+                      </TextContent>
+                    </CardTitle>
                   </CardHeader>
                   <CardBody>
-                    <AdoptionCandidateTable />
+                    {isAdoptionCandidateTable ? (
+                      <AdoptionCandidateTable />
+                    ) : (
+                      <AdoptionCandidateGraph />
+                    )}
                   </CardBody>
                 </Card>
               </StackItem>
@@ -178,7 +211,7 @@ export const Reports: React.FC = () => {
                           <Bullseye style={{ marginTop: -3 }}>
                             <TextContent>
                               <Text component="h3">
-                                Suggested adoption plan
+                                {t("terms.suggestedAdoptionPlan")}
                               </Text>
                             </TextContent>
                           </Bullseye>
@@ -187,8 +220,7 @@ export const Reports: React.FC = () => {
                           <Popover
                             bodyContent={
                               <div>
-                                The suggested approach to migration based on
-                                effort, priority, and dependencies.
+                                {t("message.suggestedAdoptionPlanHelpText")}
                               </div>
                             }
                             position="right"
@@ -223,7 +255,9 @@ export const Reports: React.FC = () => {
                         <SplitItem>
                           <Bullseye>
                             <TextContent>
-                              <Text component="h3">Identified risks</Text>
+                              <Text component="h3">
+                                {t("terms.identifiedRisks")}
+                              </Text>
                             </TextContent>
                           </Bullseye>
                         </SplitItem>
