@@ -43,12 +43,16 @@ import {
 import {
   useTableControls,
   useFetchStakeholders,
-  useDeleteStakeholder,
+  useDelete,
   useEntityModal,
 } from "shared/hooks";
 
 import { getAxiosErrorMessage } from "utils/utils";
-import { StakeholderSortBy, StakeholderSortByQuery } from "api/rest";
+import {
+  deleteStakeholder,
+  StakeholderSortBy,
+  StakeholderSortByQuery,
+} from "api/rest";
 import { Stakeholder, SortByQuery } from "api/models";
 
 import { StakeholderForm } from "./components/stakeholder-form";
@@ -131,7 +135,9 @@ export const Stakeholders: React.FC = () => {
     close: closeStakeholderModal,
   } = useEntityModal<Stakeholder>();
 
-  const { deleteStakeholder } = useDeleteStakeholder();
+  const { requestDelete: requestDeleteStakeholder } = useDelete<Stakeholder>({
+    onDelete: (t: Stakeholder) => deleteStakeholder(t.id!),
+  });
 
   const {
     stakeholders,
@@ -290,7 +296,7 @@ export const Stakeholders: React.FC = () => {
         cancelBtnLabel: t("actions.cancel"),
         onConfirm: () => {
           dispatch(confirmDialogActions.processing());
-          deleteStakeholder(
+          requestDeleteStakeholder(
             row,
             () => {
               dispatch(confirmDialogActions.closeDialog());

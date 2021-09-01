@@ -34,13 +34,17 @@ import {
 } from "shared/components";
 import {
   useTableControls,
-  useDeleteJobFunction,
+  useDelete,
   useFetchJobFunctions,
   useEntityModal,
 } from "shared/hooks";
 
 import { getAxiosErrorMessage } from "utils/utils";
-import { JobFunctionSortBy, JobFunctionSortByQuery } from "api/rest";
+import {
+  deleteJobFunction,
+  JobFunctionSortBy,
+  JobFunctionSortByQuery,
+} from "api/rest";
 import { SortByQuery, JobFunction } from "api/models";
 
 import { JobFunctionForm } from "./components/job-function-form";
@@ -95,7 +99,9 @@ export const JobFunctions: React.FC = () => {
     close: closeJobFunctionModal,
   } = useEntityModal<JobFunction>();
 
-  const { deleteJobFunction } = useDeleteJobFunction();
+  const { requestDelete: requestDeleteJobFunction } = useDelete<JobFunction>({
+    onDelete: (t: JobFunction) => deleteJobFunction(t.id!),
+  });
 
   const {
     jobFunctions,
@@ -189,7 +195,7 @@ export const JobFunctions: React.FC = () => {
         cancelBtnLabel: t("actions.cancel"),
         onConfirm: () => {
           dispatch(confirmDialogActions.processing());
-          deleteJobFunction(
+          requestDeleteJobFunction(
             row,
             () => {
               dispatch(confirmDialogActions.closeDialog());
