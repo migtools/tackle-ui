@@ -81,6 +81,7 @@ services:
       QUARKUS_OIDC_AUTH_SERVER_URL: http://keycloak:8080/auth/realms/konveyor
       QUARKUS_OIDC_CLIENT_ID: application-inventory-api
       QUARKUS_OIDC_CREDENTIALS_SECRET: secret
+      IO_TACKLE_APPLICATIONINVENTORY_SERVICES_CONTROLS_SERVICE: controls:8080
     healthcheck:
       test:
         [

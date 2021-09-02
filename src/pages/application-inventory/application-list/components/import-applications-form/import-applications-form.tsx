@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { useTranslation } from "react-i18next";
 
 import {
   ActionGroup,
@@ -23,6 +24,8 @@ export interface ImportApplicationsFormProps {
 export const ImportApplicationsForm: React.FC<ImportApplicationsFormProps> = ({
   onSaved,
 }) => {
+  const { t } = useTranslation();
+
   const [file, setFile] = useState<File>();
   const [isFileRejected, setIsFileRejected] = useState(false);
 
@@ -54,7 +57,7 @@ export const ImportApplicationsForm: React.FC<ImportApplicationsFormProps> = ({
       .post(UPLOAD_FILE, formData, config)
       .then((response) => {
         dispatch(
-          alertActions.addSuccess("Success! file saved to be processed.")
+          alertActions.addSuccess(t("toastr.success.fileSavedToBeProcessed"))
         );
 
         setIsSubmitting(false);
@@ -71,7 +74,7 @@ export const ImportApplicationsForm: React.FC<ImportApplicationsFormProps> = ({
 
       <FormGroup
         fieldId="file"
-        label="Upload your application file"
+        label={t("terms.uploadApplicationFile")}
         helperTextInvalid="You should select a CSV file."
         validated={isFileRejected ? "error" : "default"}
       >
@@ -97,7 +100,7 @@ export const ImportApplicationsForm: React.FC<ImportApplicationsFormProps> = ({
       </FormGroup>
       <ActionGroup>
         <Button variant="primary" onClick={onSubmit} isDisabled={isSubmitting}>
-          Import
+          {t("actions.import")}
         </Button>
       </ActionGroup>
     </Form>
