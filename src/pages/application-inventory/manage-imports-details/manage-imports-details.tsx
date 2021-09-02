@@ -140,14 +140,14 @@ export const ManageImportsDetails: React.FC = () => {
     <>
       <PageSection variant="light">
         <PageHeader
-          title="Error report"
+          title={t("terms.errorReport")}
           breadcrumbs={[
             {
-              title: "Applications",
+              title: t("terms.applications"),
               path: Paths.applicationInventory_applicationList,
             },
             {
-              title: "Imports",
+              title: t("terms.imports"),
               path: Paths.applicationInventory_manageImports,
             },
             {
