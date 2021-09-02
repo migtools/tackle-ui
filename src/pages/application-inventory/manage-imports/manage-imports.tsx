@@ -373,14 +373,14 @@ export const ManageImports: React.FC = () => {
     <>
       <PageSection variant="light">
         <PageHeader
-          title="Application imports"
+          title={t("terms.applicationImports")}
           breadcrumbs={[
             {
-              title: "Applications",
+              title: t("terms.applications"),
               path: Paths.applicationInventory_applicationList,
             },
             {
-              title: "Application imports",
+              title: t("terms.applicationImports"),
               path: "",
             },
           ]}
@@ -443,7 +443,7 @@ export const ManageImports: React.FC = () => {
       <Modal
         isOpen={isApplicationImportModalOpen}
         variant="medium"
-        title="Import application file"
+        title={t("dialog.title.importApplicationFile")}
         onClose={() => setIsApplicationImportModalOpen((current) => !current)}
       >
         <ImportApplicationsForm

@@ -43,8 +43,12 @@ describe("ApplicationListExpandedArea", () => {
       <ApplicationListExpandedArea application={application} />
     );
 
-    expect(wrapper.find(ddQuery("proposed-action")).text()).toBe("Rehost");
-    expect(wrapper.find(ddQuery("effort-estimate")).text()).toBe("Small");
+    expect(wrapper.find(ddQuery("proposed-action")).text()).toBe(
+      "proposedActions.rehost"
+    );
+    expect(wrapper.find(ddQuery("effort-estimate")).text()).toBe(
+      "efforts.small"
+    );
     expect(wrapper.find(ddQuery("business-criticality")).text()).toBe("2");
     expect(wrapper.find(ddQuery("work-priority")).text()).toBe("3");
     expect(wrapper.find(ddQuery("review-comments")).text()).toBe(
