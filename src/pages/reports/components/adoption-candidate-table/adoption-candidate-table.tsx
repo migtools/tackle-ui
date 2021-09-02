@@ -41,24 +41,24 @@ const compareToByColumn = (
       return a.application.name.localeCompare(b.application.name);
     case 2: // Criticality
       return (
-        (a.application.review?.businessCriticality || -1) -
-        (b.application.review?.businessCriticality || -1)
+        (a.application.review?.businessCriticality ?? -1) -
+        (b.application.review?.businessCriticality ?? -1)
       );
     case 3: // Priority
       return (
-        (a.application.review?.workPriority || -1) -
-        (b.application.review?.workPriority || -1)
+        (a.application.review?.workPriority ?? -1) -
+        (b.application.review?.workPriority ?? -1)
       );
     case 4: // Confidence
-      return (a.confidence || -1) - (b.confidence || -1);
+      return (a.confidence ?? -1) - (b.confidence ?? -1);
     case 5: // Effort
       const aEffortSortFactor = a.application.review
         ? EFFORT_ESTIMATE_LIST[a.application.review.effortEstimate]
-            ?.sortFactor || 0
+            ?.sortFactor ?? 0
         : 0;
       const bEffortSortFactor = b.application.review
         ? EFFORT_ESTIMATE_LIST[b.application.review.effortEstimate]
-            ?.sortFactor || 0
+            ?.sortFactor ?? 0
         : 0;
       return aEffortSortFactor - bEffortSortFactor;
     default:
