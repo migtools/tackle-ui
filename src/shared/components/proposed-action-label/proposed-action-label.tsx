@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Label } from "@patternfly/react-core";
 
 import { PROPOSED_ACTION_LIST } from "Constants";
@@ -11,11 +12,13 @@ export interface IProposedActionLabelProps {
 export const ProposedActionLabel: React.FunctionComponent<IProposedActionLabelProps> = ({
   action,
 }: IProposedActionLabelProps) => {
+  const { t } = useTranslation();
+
   const data = PROPOSED_ACTION_LIST[action];
 
   return (
     <Label color={data ? data.labelColor : "grey"}>
-      {data ? data.label : action}
+      {data ? t(data.i18Key) : action}
     </Label>
   );
 };

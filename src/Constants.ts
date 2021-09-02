@@ -47,7 +47,7 @@ export const DEFAULT_COLOR_PALETE = [
 // Risks
 type RiskListType = {
   [key in Risk]: {
-    label: string;
+    i18Key: string;
     hexColor: string;
     labelColor:
       | "blue"
@@ -61,27 +61,32 @@ type RiskListType = {
   };
 };
 
+// t('risks.low')
+// t('risks.medium')
+// t('risks.high')
+// t('risks.unknown')
+
 export const RISK_LIST: RiskListType = {
   GREEN: {
-    label: "Low",
+    i18Key: "risks.low",
     hexColor: "#68b240",
     labelColor: "green",
     sortFactor: 1,
   },
   AMBER: {
-    label: "Medium",
+    i18Key: "risks.medium",
     hexColor: "#f0ab0b",
     labelColor: "orange",
     sortFactor: 2,
   },
   RED: {
-    label: "High",
+    i18Key: "risks.high",
     hexColor: "#cb440d",
     labelColor: "red",
     sortFactor: 3,
   },
   UNKNOWN: {
-    label: "Unknown",
+    i18Key: "risks.unknown",
     hexColor: black.value,
     labelColor: "grey",
     sortFactor: 4,
@@ -91,7 +96,7 @@ export const RISK_LIST: RiskListType = {
 // Proposed action
 type ProposedActionListType = {
   [key in ProposedAction]: {
-    label: string;
+    i18Key: string;
     hexColor: string;
     labelColor:
       | "blue"
@@ -104,34 +109,41 @@ type ProposedActionListType = {
   };
 };
 
+// t('proposedActions.rehost')
+// t('proposedActions.replatform')
+// t('proposedActions.refactor')
+// t('proposedActions.repurchase')
+// t('proposedActions.retire')
+// t('proposedActions.retain')
+
 export const PROPOSED_ACTION_LIST: ProposedActionListType = {
   rehost: {
-    label: "Rehost",
+    i18Key: "proposedActions.rehost",
     labelColor: "green",
     hexColor: green.value,
   },
   replatform: {
-    label: "Replatform",
+    i18Key: "proposedActions.replatform",
     labelColor: "orange",
     hexColor: orange.value,
   },
   refactor: {
-    label: "Refactor",
+    i18Key: "proposedActions.refactor",
     labelColor: "red",
     hexColor: "#cb440d",
   },
   repurchase: {
-    label: "Repurchase",
+    i18Key: "proposedActions.repurchase",
     labelColor: "purple",
     hexColor: purple.value,
   },
   retire: {
-    label: "Retire",
+    i18Key: "proposedActions.retire",
     labelColor: "cyan",
     hexColor: cyan.value,
   },
   retain: {
-    label: "Retain",
+    i18Key: "proposedActions.retain",
     labelColor: "blue",
     hexColor: blue.value,
   },
@@ -140,30 +152,35 @@ export const PROPOSED_ACTION_LIST: ProposedActionListType = {
 // Effort
 type EffortEstimateListType = {
   [key in EffortEstimate]: {
-    label: string;
+    i18Key: string;
     sortFactor: number;
     size: number;
   };
 };
 
+// t('efforts.small')
+// t('efforts.medium')
+// t('efforts.large')
+// t('efforts.extraLarge')
+
 export const EFFORT_ESTIMATE_LIST: EffortEstimateListType = {
   small: {
-    label: "Small",
+    i18Key: "efforts.small",
     sortFactor: 1,
     size: 10,
   },
   medium: {
-    label: "Medium",
+    i18Key: "efforts.medium",
     sortFactor: 2,
     size: 20,
   },
   large: {
-    label: "Large",
+    i18Key: "efforts.large",
     sortFactor: 3,
     size: 30,
   },
   extra_large: {
-    label: "Extra large",
+    i18Key: "efforts.extraLarge",
     sortFactor: 4,
     size: 40,
   },

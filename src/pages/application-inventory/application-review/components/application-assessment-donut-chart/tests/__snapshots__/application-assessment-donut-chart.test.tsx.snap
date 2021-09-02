@@ -23,19 +23,19 @@ exports[`AppTable Renders without crashing 1`] = `
     data={
       Array [
         Object {
-          "x": "Low",
+          "x": "risks.low",
           "y": 1,
         },
         Object {
-          "x": "Medium",
+          "x": "risks.medium",
           "y": 1,
         },
         Object {
-          "x": "High",
+          "x": "risks.high",
           "y": 1,
         },
         Object {
-          "x": "Unknown",
+          "x": "risks.unknown",
           "y": 2,
         },
       ]
@@ -55,16 +55,16 @@ exports[`AppTable Renders without crashing 1`] = `
         data={
           Array [
             Object {
-              "name": "Low: 1",
+              "name": "risks.low: 1",
             },
             Object {
-              "name": "Medium: 1",
+              "name": "risks.medium: 1",
             },
             Object {
-              "name": "High: 1",
+              "name": "risks.high: 1",
             },
             Object {
-              "name": "Unknown: 2",
+              "name": "risks.unknown: 2",
             },
           ]
         }
