@@ -16,6 +16,7 @@ export type ResourceType =
   | "Tag"
   | "Application"
   | "ApplicationsDependency"
+  | "ImportSummary"
   | "Assessment";
 
 const allResourceTypes: ResourceType[] = [
@@ -27,6 +28,7 @@ const allResourceTypes: ResourceType[] = [
   "Tag",
   "Application",
   "ApplicationsDependency",
+  "ImportSummary",
   // "Assessment",
 ];
 
@@ -69,6 +71,10 @@ const resourceTypeList: ResourceTypeList = {
   ApplicationsDependency: {
     baseUrl: `${applicationInventoryBaseUrl}/applications-dependency`,
     _embeddedField: "applications-dependency",
+  },
+  ImportSummary: {
+    baseUrl: `${applicationInventoryBaseUrl}/import-summary`,
+    _embeddedField: "import-summary",
   },
   Assessment: {
     baseUrl: `${pathfinderBaseUrl}/assessments`,
