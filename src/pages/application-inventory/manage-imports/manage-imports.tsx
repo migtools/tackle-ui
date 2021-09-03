@@ -6,10 +6,12 @@ import { StatusIcon } from "@konveyor/lib-ui";
 import {
   Button,
   ButtonVariant,
+  DropdownItem,
   Flex,
   FlexItem,
   Modal,
   PageSection,
+  Popover,
   ToolbarChip,
   ToolbarGroup,
   ToolbarItem,
@@ -44,6 +46,7 @@ import {
   InputTextFilter,
   PageHeader,
   ToolbarSearchFilter,
+  KebabDropdown,
 } from "shared/components";
 
 import { formatPath, Paths } from "Paths";
@@ -215,7 +218,34 @@ export const ManageImports: React.FC = () => {
         </Flex>
       );
     } else {
-      status = <StatusIcon status="Error" label={t("terms.error")} />;
+      status = (
+        <StatusIcon
+          status="Error"
+          label={
+            <Popover
+              position="right"
+              bodyContent={
+                <div>{t("message.importErrorCheckDocumentation")}</div>
+              }
+              footerContent={
+                <div>
+                  <a
+                    href="https://tackle-docs.konveyor.io/documentation/doc-installing-and-using-tackle/master/index.html#importing-applications_tackle"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {t("actions.checkDocumentation")}
+                  </a>
+                </div>
+              }
+            >
+              <Button variant={ButtonVariant.link} isInline>
+                {t("terms.error")}
+              </Button>
+            </Popover>
+          }
+        />
+      );
     }
 
     rows.push({
@@ -403,6 +433,20 @@ export const ManageImports: React.FC = () => {
                     >
                       {t("actions.import")}
                     </Button>
+                  </ToolbarItem>
+                  <ToolbarItem>
+                    <KebabDropdown
+                      dropdownItems={[
+                        <DropdownItem
+                          key="download-csv-sample"
+                          component={
+                            <a href="/sample_application_import.csv" download>
+                              {t("actions.downloadCsvTemplate")}
+                            </a>
+                          }
+                        />,
+                      ]}
+                    />
                   </ToolbarItem>
                 </ToolbarGroup>
               </>
