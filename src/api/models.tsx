@@ -171,6 +171,7 @@ export interface QuestionOption {
 
 export interface AssessmentRisk {
   assessmentId: number;
+  applicationId: number;
   risk: Risk;
 }
 
