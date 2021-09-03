@@ -42,6 +42,7 @@ import {
   ConditionalRender,
   NoDataEmptyState,
   StatusIconAssessment,
+  KebabDropdown,
 } from "shared/components";
 import {
   useTableControls,
@@ -81,7 +82,6 @@ import { ApplicationAssessment } from "./components/application-assessment";
 import { ApplicationBusinessService } from "./components/application-business-service";
 import { ApplicationListExpandedArea } from "./components/application-list-expanded-area";
 import { ImportApplicationsForm } from "./components/import-applications-form";
-import { KebabDropdown } from "./components/kebab-dropdown/kebab-dropdown";
 
 const toSortByQuery = (
   sortBy?: SortByQuery

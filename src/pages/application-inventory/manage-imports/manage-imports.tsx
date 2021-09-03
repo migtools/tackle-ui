@@ -6,6 +6,7 @@ import { StatusIcon } from "@konveyor/lib-ui";
 import {
   Button,
   ButtonVariant,
+  DropdownItem,
   Flex,
   FlexItem,
   Modal,
@@ -45,6 +46,7 @@ import {
   InputTextFilter,
   PageHeader,
   ToolbarSearchFilter,
+  KebabDropdown,
 } from "shared/components";
 
 import { formatPath, Paths } from "Paths";
@@ -223,10 +225,7 @@ export const ManageImports: React.FC = () => {
             <Popover
               position="right"
               bodyContent={
-                <div>
-                  Check the documentation to ensure your file is structured
-                  correctly.
-                </div>
+                <div>{t("message.importErrorCheckDocumentation")}</div>
               }
               footerContent={
                 <div>
@@ -235,12 +234,14 @@ export const ManageImports: React.FC = () => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    Check documentation
+                    {t("actions.checkDocumentation")}
                   </a>
                 </div>
               }
             >
-              <Button variant={ButtonVariant.link}>{t("terms.error")}</Button>
+              <Button variant={ButtonVariant.link} isInline>
+                {t("terms.error")}
+              </Button>
             </Popover>
           }
         />
@@ -432,6 +433,20 @@ export const ManageImports: React.FC = () => {
                     >
                       {t("actions.import")}
                     </Button>
+                  </ToolbarItem>
+                  <ToolbarItem>
+                    <KebabDropdown
+                      dropdownItems={[
+                        <DropdownItem
+                          key="download-csv-sample"
+                          component={
+                            <a href="/sample_application_import.csv" download>
+                              {t("actions.downloadCsvTemplate")}
+                            </a>
+                          }
+                        />,
+                      ]}
+                    />
                   </ToolbarItem>
                 </ToolbarGroup>
               </>

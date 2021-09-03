@@ -10,6 +10,7 @@ export { ConditionalRender } from "./conditional-render";
 export { ConfirmDialog } from "./confirm-dialog";
 export { EmptyTextMessage } from "./empty-text-message";
 export { InputTextFilter } from "./input-text-filter";
+export { KebabDropdown } from "./kebab-dropdown";
 export { NoDataEmptyState } from "./no-data-empty-state";
 export { NodeFetch } from "./node-fetch";
 export { PageHeader } from "./page-header";
