@@ -2,6 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 
 import {
+  cellWidth,
   IActions,
   ICell,
   IRow,
@@ -36,7 +37,7 @@ export const TagTable: React.FC<TabTableProps> = ({
   const columns: ICell[] = [
     {
       title: t("terms.tagName"),
-      transforms: [],
+      transforms: [cellWidth(100)],
       cellFormatters: [],
       props: {
         className: styles.columnPadding,
