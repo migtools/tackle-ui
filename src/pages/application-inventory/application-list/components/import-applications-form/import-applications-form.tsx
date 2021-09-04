@@ -99,7 +99,11 @@ export const ImportApplicationsForm: React.FC<ImportApplicationsFormProps> = ({
         />
       </FormGroup>
       <ActionGroup>
-        <Button variant="primary" onClick={onSubmit} isDisabled={isSubmitting}>
+        <Button
+          variant="primary"
+          onClick={onSubmit}
+          isDisabled={!file || isSubmitting}
+        >
           {t("actions.import")}
         </Button>
       </ActionGroup>

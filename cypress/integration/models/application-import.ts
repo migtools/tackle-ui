@@ -28,6 +28,12 @@ export class ApplicationImportPage {
     });
   }
 
+  protected verifyInitialFormStatus(): void {
+    cy.get("form.pf-c-form button.pf-m-primary")
+      .contains("Import")
+      .should("be.disabled");
+  }
+
   protected submitImportForm = () => {
     cy.get("form.pf-c-form button.pf-m-primary")
       .contains("Import")
@@ -42,7 +48,7 @@ export class ApplicationImportPage {
 
     cy.get("button[aria-label='import-applications']").click();
 
-    // verifyInitialFormStatus();
+    this.verifyInitialFormStatus();
     this.fillForm(formValue);
     this.submitImportForm();
 
