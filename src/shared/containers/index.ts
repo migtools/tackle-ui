@@ -1,3 +1,4 @@
+export { ApplicationDependenciesFormContainer } from "./application-dependencies-form";
 export { ChipBusinessService } from "./chip-business-service";
 export { ChipTag } from "./chip-tag";
 export { ConfirmDialogContainer } from "./confirm-dialog-container";

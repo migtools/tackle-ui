@@ -5,12 +5,12 @@ import {
   ApplicationDependenciesForm,
 } from "./application-dependencies-form";
 
-const Form: React.FC<ApplicationDependenciesFormProps> = ({ ...props }) => {
+export const ApplicationDependenciesFormContainer: React.FC<ApplicationDependenciesFormProps> = ({
+  ...props
+}) => {
   return (
     <FormContextProvider>
       <ApplicationDependenciesForm {...props} />
     </FormContextProvider>
   );
 };
-
-export default Form;
