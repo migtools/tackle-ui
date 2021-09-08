@@ -113,14 +113,16 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
         (f) => f.id === businessServiceId
       );
 
-      result = toIBusinessServiceDropdown({
-        id: businessServiceId,
-        name: businessService ? businessService.name : t("terms.notAvailable"),
-      });
+      if (businessService) {
+        result = toIBusinessServiceDropdown({
+          id: businessServiceId,
+          name: businessService.name,
+        });
+      }
     }
 
     return result;
-  }, [application, businessServices, t]);
+  }, [application, businessServices]);
 
   const tagsInitialValue = useMemo(() => {
     let result: ITagDropdown[] = [];

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
-import { ConditionalRender, EmptyTextMessage } from "shared/components";
+import { useDispatch } from "react-redux";
+import { unknownTagsActions } from "store/unknownTags";
+
+import { ConditionalRender } from "shared/components";
 
 import { Application, Tag, TagType } from "api/models";
 import { getTagById } from "api/rest";
@@ -21,11 +23,11 @@ export interface ApplicationTagsProps {
 export const ApplicationTags: React.FC<ApplicationTagsProps> = ({
   application,
 }) => {
-  const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const [tagTypes, setTagTypes] = useState<Map<number, TagType>>(new Map()); // <tagTypeId, tagType>
   const [tags, setTags] = useState<Map<number, Tag[]>>(new Map()); // <tagTypeId, tags[]>
-  const [unknownTags, setUnknownTags] = useState(0);
+  const [unknownTagIds, setUnknownTagIds] = useState<number[]>([]);
 
   const [isFetching, setIsFetching] = useState(false);
 
@@ -41,7 +43,6 @@ export const ApplicationTags: React.FC<ApplicationTagsProps> = ({
         .then((tags) => {
           const newTagTypes: Map<number, TagType> = new Map();
           const newTags: Map<number, Tag[]> = new Map();
-          const newUnknownTags = tags.filter((f) => f === null).length;
 
           const validResponses = tags.reduce((prev, current) => {
             if (current) {
@@ -50,6 +51,10 @@ export const ApplicationTags: React.FC<ApplicationTagsProps> = ({
               return prev;
             }
           }, [] as Tag[]);
+
+          const newUnknownTags = application.tags
+            ?.filter((e) => validResponses.findIndex((v) => `${v.id}` !== e))
+            .map((e) => Number(e));
 
           validResponses.forEach((e) => {
             const tagType = e.tagType;
@@ -65,7 +70,7 @@ export const ApplicationTags: React.FC<ApplicationTagsProps> = ({
             }
           });
 
-          setUnknownTags(newUnknownTags);
+          setUnknownTagIds(newUnknownTags || []);
           setTagTypes(newTagTypes);
           setTags(newTags);
 
@@ -76,6 +81,10 @@ export const ApplicationTags: React.FC<ApplicationTagsProps> = ({
         });
     }
   }, [application]);
+
+  useEffect(() => {
+    dispatch(unknownTagsActions.addUnknownTagIdsToRegistry(unknownTagIds));
+  }, [unknownTagIds, dispatch]);
 
   return (
     <ConditionalRender when={isFetching} then={<Spinner isSVG size="md" />}>
@@ -104,15 +113,6 @@ export const ApplicationTags: React.FC<ApplicationTagsProps> = ({
               </SplitItem>
             );
           })}
-        <SplitItem>
-          <LabelGroup>
-            {[...Array(unknownTags)].map((_, index) => (
-              <Label key={index} color="grey">
-                <EmptyTextMessage message={t("terms.unknown")} />
-              </Label>
-            ))}
-          </LabelGroup>
-        </SplitItem>
       </Split>
     </ConditionalRender>
   );

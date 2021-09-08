@@ -31,9 +31,11 @@ import {
 } from "@patternfly/react-table";
 import { PencilAltIcon, TagIcon } from "@patternfly/react-icons";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "store/rootReducer";
 import { alertActions } from "store/alert";
 import { confirmDialogActions } from "store/confirmDialog";
+import { unknownTagsSelectors } from "store/unknownTags";
 
 import {
   ApplicationToolbarToggleGroup,
@@ -130,6 +132,9 @@ export const ApplicationList: React.FC = () => {
 
   // Redux
   const dispatch = useDispatch();
+  const unknownTagIds = useSelector((state: RootState) =>
+    unknownTagsSelectors.unknownTagIds(state)
+  );
 
   // Router
   const history = useHistory();
@@ -341,7 +346,10 @@ export const ApplicationList: React.FC = () => {
         {
           title: (
             <>
-              <TagIcon /> {item.tags ? item.tags.length : 0}
+              <TagIcon />{" "}
+              {item.tags
+                ? item.tags.filter((e) => !unknownTagIds.has(Number(e))).length
+                : 0}
             </>
           ),
         },
