@@ -15,6 +15,7 @@ export interface PageHeaderProps {
   title: string;
   description?: React.ReactNode;
   breadcrumbs: { title: string; path: string | (() => void) }[];
+  btnActions?: React.ReactNode;
   menuActions: { label: string; callback: () => void }[];
   navItems?: { title: string; path: string }[];
 }
@@ -23,6 +24,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
   title,
   description,
   breadcrumbs,
+  btnActions,
   menuActions,
   navItems,
 }) => {
@@ -39,6 +41,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
               {description}
             </TextContent>
           </SplitItem>
+          {btnActions && <SplitItem>{btnActions}</SplitItem>}
           {menuActions.length > 0 && (
             <SplitItem>
               <MenuActions actions={menuActions} />
