@@ -53,7 +53,9 @@ export const ApplicationTags: React.FC<ApplicationTagsProps> = ({
           }, [] as Tag[]);
 
           const newUnknownTags = application.tags
-            ?.filter((e) => validResponses.findIndex((v) => `${v.id}` !== e))
+            ?.filter(
+              (e) => validResponses.findIndex((v) => `${v.id}` !== e) === -1
+            )
             .map((e) => Number(e));
 
           validResponses.forEach((e) => {
