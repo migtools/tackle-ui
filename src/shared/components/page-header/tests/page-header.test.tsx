@@ -1,6 +1,7 @@
 import React from "react";
 import { shallow } from "enzyme";
 import { PageHeader } from "../page-header";
+import { Button } from "@patternfly/react-core";
 
 describe("PageHeader", () => {
   it("Renders without crashing", () => {
@@ -17,6 +18,7 @@ describe("PageHeader", () => {
             path: "/companies/1",
           },
         ]}
+        btnActions={<Button>send email</Button>}
         menuActions={[
           {
             label: "Edit",
