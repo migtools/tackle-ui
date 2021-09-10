@@ -127,18 +127,15 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
   const tagsInitialValue = useMemo(() => {
     let result: ITagDropdown[] = [];
 
-    const notAvailable = t("terms.notAvailable");
     if (application && application.tags && tags) {
-      result = application.tags.map((t) => {
-        const exists = tags.find((f) => `${f.id}` === t);
-        return exists
-          ? toITagDropdown(exists)
-          : toITagDropdown({ id: Number(t), name: notAvailable });
-      });
+      result = application.tags.reduce((prev, current) => {
+        const exists = tags.find((f) => `${f.id}` === current);
+        return exists ? [...prev, toITagDropdown(exists)] : prev;
+      }, [] as ITagDropdown[]);
     }
 
     return result;
-  }, [application, tags, t]);
+  }, [application, tags]);
 
   const initialValues: FormValues = {
     name: application?.name || "",
