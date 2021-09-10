@@ -55,6 +55,7 @@ import {
   useDelete,
   useApplicationToolbarFilter,
 } from "shared/hooks";
+import { ApplicationDependenciesFormContainer } from "shared/containers";
 
 import { formatPath, Paths } from "Paths";
 import { ApplicationFilterKey } from "Constants";
@@ -78,7 +79,6 @@ import { applicationPageMapper } from "api/apiUtils";
 import { getAxiosErrorMessage } from "utils/utils";
 
 import { ApplicationForm } from "./components/application-form";
-import ApplicationDependenciesForm from "./components/application-dependencies-form";
 
 import { ApplicationAssessment } from "./components/application-assessment";
 import { ApplicationBusinessService } from "./components/application-business-service";
@@ -763,7 +763,7 @@ export const ApplicationList: React.FC = () => {
         onClose={closeDependenciesModal}
       >
         {applicationToManageDependencies && (
-          <ApplicationDependenciesForm
+          <ApplicationDependenciesFormContainer
             application={applicationToManageDependencies}
             onCancel={closeDependenciesModal}
           />

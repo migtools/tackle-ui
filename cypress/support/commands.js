@@ -25,9 +25,7 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 import "cypress-keycloak-commands";
+import "cypress-file-upload";
 
-import "./controlsCommands.js";
-import "./appInventoryCommands.js";
-import "./pathfinderCommands.js";
-
-import "./pf4Commands.js";
+import "./commands/pf4";
+import "./commands/api";

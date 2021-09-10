@@ -278,6 +278,10 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
               variant: "typeahead",
               "aria-label": "business-service",
               "aria-describedby": "business-service",
+              typeAheadAriaLabel: "business-service",
+              toggleAriaLabel: "business-service",
+              clearSelectionsAriaLabel: "business-service",
+              removeSelectionAriaLabel: "business-service",
               // t("terms.businessService")
               placeholderText: t("composed.selectOne", {
                 what: t("terms.businessService").toLowerCase(),
@@ -308,6 +312,10 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
               variant: "typeaheadmulti",
               "aria-label": "tags",
               "aria-describedby": "tags",
+              typeAheadAriaLabel: "tags",
+              toggleAriaLabel: "tags",
+              clearSelectionsAriaLabel: "tags",
+              removeSelectionAriaLabel: "tags",
               // t("terms.tag(s)")
               placeholderText: t("composed.selectOne", {
                 what: t("terms.tag(s)").toLowerCase(),
