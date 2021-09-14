@@ -1,5 +1,6 @@
 import React from "react";
 import { FieldHookConfig, useField } from "formik";
+import { useTranslation } from "react-i18next";
 
 import {
   OptionWithValue,
@@ -30,13 +31,24 @@ export const StakeholderGroupSelect: React.FC<IStakeholderGroupSelectProps> = ({
   stakeholderGroups,
 }) => {
   const [field, , helpers] = useField(fieldConfig);
+  const { t } = useTranslation();
+
+  const buildUnknownStakeholder = (id: number) => {
+    const result: StakeholderGroup = {
+      id,
+      name: t("terms.unknown"),
+    };
+    return result;
+  };
 
   return (
     <SimpleSelectFetch
       value={field.value
-        .map((id) => stakeholderGroups.find((f) => id === f.id))
-        .map((e) => (e ? stakeholderGroupToOption(e) : undefined))
-        .filter((e) => e !== undefined)}
+        .map((id) => {
+          const e = stakeholderGroups.find((f) => id === f.id);
+          return e || buildUnknownStakeholder(id);
+        })
+        .map(stakeholderGroupToOption)}
       options={stakeholderGroups.map(stakeholderGroupToOption)}
       onChange={(selection) => {
         const selectionWithValue = selection as OptionWithValue<StakeholderGroup>;
