@@ -38,7 +38,9 @@ export class TagTypePage {
     cy.get("input[name='rank']").clear().type(`${formValue.rank}`);
 
     if (formValue.color) {
-      cy.get("button[aria-label='color'].pf-c-select__toggle-button").click();
+      cy.get(
+        "button[aria-label='Options menu'].pf-c-select__toggle-button"
+      ).click();
       cy.get("ul[aria-label='color'].pf-c-select__menu > li > button")
         .contains(formValue.color)
         .click();
@@ -50,7 +52,7 @@ export class TagTypePage {
 
     if (formValue.tagType) {
       cy.get(
-        "button[aria-label='tag-type'].pf-c-select__toggle-button"
+        "button[aria-label='Options menu'].pf-c-select__toggle-button"
       ).click();
       cy.get("ul[aria-label='tag-type'].pf-c-select__menu > li > button")
         .contains(formValue.tagType)
