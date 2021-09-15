@@ -163,7 +163,7 @@ export const TagForm: React.FC<TagFormProps> = ({ tag, onSaved, onCancel }) => {
               "aria-label": "tag-type",
               "aria-describedby": "tag-type",
               typeAheadAriaLabel: "tag-type",
-              toggleAriaLabel: "tag-type",
+              toggleAriaLabel: "Options menu",
               clearSelectionsAriaLabel: "tag-type",
               removeSelectionAriaLabel: "tag-type",
               placeholderText: t("composed.selectOne", {
