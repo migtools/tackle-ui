@@ -30,7 +30,9 @@ export const Donut: React.FC<IDonutProps> = ({
           <ChartDonut
             ariaDesc="risk-donut-chart"
             title={value.toString()}
-            subTitle={`of ${total} applications`}
+            subTitle={t("composed.ofTotalApplications", {
+              count: total,
+            }).toLocaleLowerCase()}
             constrainToVisibleArea={true}
             data={[
               { x: riskLabel, y: value },

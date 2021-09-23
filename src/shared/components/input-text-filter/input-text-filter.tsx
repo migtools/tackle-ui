@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Button, InputGroup, TextInput } from "@patternfly/react-core";
 import { SearchIcon } from "@patternfly/react-icons";
@@ -10,6 +11,8 @@ export interface InputTextFilterProps {
 export const InputTextFilter: React.FC<InputTextFilterProps> = ({
   onApplyFilter,
 }) => {
+  const { t } = useTranslation();
+
   const [filterText, setFilterText] = useState("");
 
   const handleOnChangeFilterText = (value: string) => {
@@ -36,7 +39,7 @@ export const InputTextFilter: React.FC<InputTextFilterProps> = ({
         value={filterText}
         onChange={handleOnChangeFilterText}
         onKeyPress={handleOnSearchKeyPress}
-        placeholder="Filter..."
+        placeholder={t("terms.filter")}
         aria-label="filter-text"
       />
       <Button variant="control" aria-label="search" onClick={handleOnSearch}>
