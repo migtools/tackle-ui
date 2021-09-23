@@ -17,40 +17,48 @@ exports[`AppAboutModal 1`] = `
     <Text
       component="p"
     >
-      Tackle is a collection of tools that supports large-scale application modernization and migration projects to Kubernetes.
+      about.introduction
     </Text>
     <Text
       component="p"
     >
-      Tackle allows users to maintain their portfolio of applications with a full set of metadata and to assess their suitability for modernization leveraging a questionnaire based approach.
+      about.description
     </Text>
     <Text
       component="p"
     >
-      Tackle is a project within the
-       
-      <Text
-        component="a"
-        href="https://www.konveyor.io/"
-        target="_blank"
+      <Trans
+        i18nKey="about.bottom1"
       >
-        Konveyor community
-      </Text>
-      .
+        Tackle is a project within the
+         
+        <Text
+          component="a"
+          href="https://www.konveyor.io/"
+          target="_blank"
+        >
+          Konveyor community
+        </Text>
+        .
+      </Trans>
     </Text>
     <Text
       component="p"
     >
-      For more information please refer to
-       
-      <Text
-        component="a"
-        href="https://tackle-docs.konveyor.io/"
-        target="_blank"
+      <Trans
+        i18nKey="about.bottom2"
       >
-        Tackle documentation
-      </Text>
-      .
+        For more information please refer to
+         
+        <Text
+          component="a"
+          href="https://tackle-docs.konveyor.io/"
+          target="_blank"
+        >
+          Tackle documentation
+        </Text>
+        .
+      </Trans>
     </Text>
   </TextContent>
 </AboutModal>
