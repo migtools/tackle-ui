@@ -10,7 +10,7 @@ To translate Tackle UI into a new language you only need to create a new folder 
 | Spanish  | es          |
 | German   | de          |
 
-The folder `public/locales/{myLanguageCode}` must contain a file `translation.json` whose content corresponds to the new language to be translated.
+The folder `public/locales/{myLanguageCode}` must contain a file `translation.json` whose content corresponds to the new language to be translated. As a reference you can use the english version of the translation located at [public/locales/en/translation.json](https://github.com/konveyor/tackle-ui/blob/main/public/locales/en/translation.json)
 
 > As soon as you feel confident, please open a new Pull Request with your changes and make it part of the official repository.
 
