@@ -131,3 +131,7 @@ The image can be pushed running:
 ```shell
 podman push quay.io/$USERNAME/tackle-ui
 ```
+
+ # Internationalization
+
+ To contribute translating Tackle UI into a new language please red [Internationalization](./INTERNATIONALIZATION)
