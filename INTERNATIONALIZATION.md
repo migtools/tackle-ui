@@ -1,6 +1,6 @@
 # Internationalization
 
-To translate Tackle UI into a new language you only need to create a new file in `public/locales/{myLanguageCode}/translation.json`.
+To translate Tackle UI into a new language you only need to create a new file `public/locales/{myLanguageCode}/translation.json`. Where `myLanguageCode` can be any `ISO 639-1` code value.
 
 ## How to add a new language
 
