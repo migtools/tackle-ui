@@ -12,6 +12,7 @@
         "checkDocumentation": "Check documentation",
         "close": "Close",
         "continue": "Continue",
+        "copyAssessment": "Copy assessment",
         "create": "Create",
         "createNew": "Create new",
         "createTag": "Create tag",
@@ -68,6 +69,7 @@
             "leavePage": "Are you sure you want to leave this page? Be sure to save your changes, or they will be lost."
         },
         "title": {
+            "copyApplicationAssessmentFrom": "Copy {{what}} assessment",
             "delete": "Delete {{what}}?",
             "discard": "Discard {{what}}?",
             "importApplicationFile": "Import application file",

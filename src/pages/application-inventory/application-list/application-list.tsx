@@ -84,6 +84,7 @@ import { ApplicationAssessment } from "./components/application-assessment";
 import { ApplicationBusinessService } from "./components/application-business-service";
 import { ApplicationListExpandedArea } from "./components/application-list-expanded-area";
 import { ImportApplicationsForm } from "./components/import-applications-form";
+import { CopyAssessmentForm } from "./components/copy-assessment-form";
 
 const toSortByQuery = (
   sortBy?: SortByQuery
@@ -223,6 +224,14 @@ export const ApplicationList: React.FC = () => {
   const { requestDelete: requestDeleteApplication } = useDelete<Application>({
     onDelete: (t: Application) => deleteApplication(t.id!),
   });
+
+  // Copy assessment modal
+  const {
+    isOpen: isCopyAssessmentModalOpen,
+    data: applicationToCopyAssessmentFrom,
+    update: openCopyAssessmentModal,
+    close: closeCopyAssessmentModal,
+  } = useEntityModal<Application>();
 
   // Dependencies modal
   const {
@@ -388,7 +397,21 @@ export const ApplicationList: React.FC = () => {
 
     const actions: (IAction | ISeparator)[] = [];
 
-    if (getApplicationAssessment(row.id!)) {
+    const applicationAssessment = getApplicationAssessment(row.id!);
+    if (applicationAssessment?.status === "COMPLETE") {
+      actions.push({
+        title: t("actions.copyAssessment"),
+        onClick: (
+          event: React.MouseEvent,
+          rowIndex: number,
+          rowData: IRowData
+        ) => {
+          const row: Application = getRow(rowData);
+          openCopyAssessmentModal(row);
+        },
+      });
+    }
+    if (applicationAssessment) {
       actions.push({
         title: t("actions.discardAssessment"),
         onClick: (
@@ -752,6 +775,24 @@ export const ApplicationList: React.FC = () => {
           onSaved={onApplicationModalSaved}
           onCancel={closeApplicationModal}
         />
+      </Modal>
+
+      <Modal
+        isOpen={isCopyAssessmentModalOpen}
+        variant="large"
+        title={t("dialog.title.copyApplicationAssessmentFrom", {
+          what: applicationToCopyAssessmentFrom?.name,
+        })}
+        onClose={closeCopyAssessmentModal}
+      >
+        {applicationToCopyAssessmentFrom && (
+          <CopyAssessmentForm
+            application={applicationToCopyAssessmentFrom}
+            assessment={
+              getApplicationAssessment(applicationToCopyAssessmentFrom.id!)!
+            }
+          />
+        )}
       </Modal>
 
       <Modal

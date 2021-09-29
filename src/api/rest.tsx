@@ -27,6 +27,7 @@ import {
   ApplicationImportSummaryPage,
   ApplicationImportPage,
   ApplicationImportSummary,
+  CreateBulkCopy,
 } from "./models";
 
 export const CONTROLS_BASE_URL = "controls";
@@ -722,4 +723,8 @@ export const getAssessmentConfidence = (
     `${ASSESSMENTS}/confidence`,
     applicationIds.map((f) => ({ applicationId: f }))
   );
+};
+
+export const createBulkCopy = (bulk: CreateBulkCopy): AxiosPromise<void> => {
+  return APIClient.post(`${ASSESSMENTS}/bulk`, bulk);
 };

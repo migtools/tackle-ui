@@ -12,6 +12,7 @@
         "checkDocumentation": "Verificar documentación",
         "close": "Cerrar",
         "continue": "Continuar",
+        "copyAssessment": "Copiar evaluación",
         "create": "Crear",
         "createNew": "Crear nuevo",
         "createTag": "Crear etiqueta",
@@ -68,6 +69,7 @@
             "leavePage": "¿Estás seguro de querer salir de esta página? Asegúrate de guardar tus cambios o estos se perderán."
         },
         "title": {
+            "copyApplicationAssessmentFrom": "Copiar evaluación {{what}}",
             "delete": "¿Eliminar {{what}}?",
             "discard": "¿Descartar {{what}}?",
             "importApplicationFile": "Importar archivo con aplicaciones",

@@ -188,6 +188,11 @@ export interface AssessmentConfidence {
   confidence: number;
 }
 
+export interface CreateBulkCopy {
+  fromAssessmentId: number;
+  applications: { applicationId: number }[];
+}
+
 // Pagination
 
 export interface BusinessServicePage {
