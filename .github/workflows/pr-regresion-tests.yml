@@ -44,7 +44,7 @@ jobs:
 
   ks8:
     runs-on: ubuntu-latest
-    needs: [native-image]
+    needs: [container-image]
     strategy:
       matrix:
         tier: ["@tier1", "@tier2", "@tier3"]
