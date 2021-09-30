@@ -87,8 +87,8 @@ jobs:
 
       - name: Verify keycloak
         run: kubectl wait deployment/keycloak --for condition=available --timeout=-1s -n tackle
-      - name: Verify tackle-ui
-        run: kubectl wait deployment/tackle-ui --for condition=available --timeout=-1s -n tackle
+      - name: Verify tackle-controls
+        run: kubectl wait deployment/tackle-controls --for condition=available --timeout=-1s -n tackle
       - name: Verify tackle-application-inventory
         run: kubectl wait deployment/tackle-application-inventory --for condition=available --timeout=-1s -n tackle
       - name: Verify tackle-pathfinder
