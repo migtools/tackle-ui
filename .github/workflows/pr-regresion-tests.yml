@@ -46,8 +46,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [container-image]
     strategy:
+      fail-fast: false
       matrix:
-        tier: ["@tier1", "@tier2", "@tier3"]
+        tier: ["@tier1", "@tier2", "@tier3"]      
     steps:
       - name: Download container image
         uses: actions/download-artifact@v2
