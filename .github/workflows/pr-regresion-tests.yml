@@ -17,11 +17,8 @@ on:
       - ".github/ISSUE_TEMPLATE/**"
 
 jobs:
-  ks8:
+  container-image:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        browser: [chrome]
     steps:
       - name: Checkout tackle-ui
         uses: actions/checkout@v2
@@ -37,6 +34,28 @@ jobs:
           yarn --cwd tackle-ui build
       - name: Build container image
         run: docker build -t tackle/tackle-ui:current-pr tackle-ui
+      - name: Save container image
+        run: docker save -o tackle-ui.tar tackle/tackle-ui:current-pr
+      - name: Upload container image
+        uses: actions/upload-artifact@v2
+        with:
+          name: tackle-ui
+          path: tackle-ui.tar
+
+  ks8:
+    runs-on: ubuntu-latest
+    needs: [native-image]
+    strategy:
+      matrix:
+        tier: ["@tier1", "@tier2", "@tier3"]
+    steps:
+      - name: Download container image
+        uses: actions/download-artifact@v2
+        with:
+          name: tackle-ui
+          path: .
+      - name: Load container image
+        run: docker load -i tackle-ui.tar
 
       - name: Checkout tackle
         uses: actions/checkout@v2
@@ -68,8 +87,8 @@ jobs:
 
       - name: Verify keycloak
         run: kubectl wait deployment/keycloak --for condition=available --timeout=-1s -n tackle
-      - name: Verify tackle-controls
-        run: kubectl wait deployment/tackle-controls --for condition=available --timeout=-1s -n tackle
+      - name: Verify tackle-ui
+        run: kubectl wait deployment/tackle-ui --for condition=available --timeout=-1s -n tackle
       - name: Verify tackle-application-inventory
         run: kubectl wait deployment/tackle-application-inventory --for condition=available --timeout=-1s -n tackle
       - name: Verify tackle-pathfinder
@@ -103,11 +122,14 @@ jobs:
           record: false
           start: npx echo "Starting Minikube Cypress tests"
           config: pageLoadTimeout=100000,retries=2,video=false
-          browser: ${{ matrix.browser }}
+          browser: chrome
+          spec: |
+            **/*.test.ts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_user: tackle
           CYPRESS_pass: password
+          CYPRESS_grepTags: ${{ matrix.tier }}
       - uses: actions/upload-artifact@v1
         if: failure()
         with:
