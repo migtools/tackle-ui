@@ -1,5 +1,11 @@
 import React from "react";
-import { Pagination, PaginationVariant } from "@patternfly/react-core";
+import { useTranslation } from "react-i18next";
+
+import {
+  Pagination,
+  PaginationVariant,
+  ToggleTemplate,
+} from "@patternfly/react-core";
 
 export interface SimplePaginationProps {
   count: number;
@@ -22,6 +28,8 @@ export const SimplePagination: React.FC<SimplePaginationProps> = ({
   perPageOptions,
   onChange,
 }) => {
+  const { t } = useTranslation();
+
   const mapPerPageOptions = (options: number[]) => {
     return options.map((option) => ({
       title: String(option),
@@ -51,6 +59,13 @@ export const SimplePagination: React.FC<SimplePaginationProps> = ({
       widgetId="pagination-options-menu"
       variant={isTop ? PaginationVariant.top : PaginationVariant.bottom}
       perPageOptions={mapPerPageOptions(perPageOptions || [10, 20, 50, 100])}
+      titles={{
+        ofWord: t("terms.of").toLowerCase(),
+        perPageSuffix: t("terms.perPageSuffix").toLowerCase(),
+      }}
+      toggleTemplate={(props) => (
+        <ToggleTemplate {...props} ofWord={t("terms.of").toLowerCase()} />
+      )}
     />
   );
 };

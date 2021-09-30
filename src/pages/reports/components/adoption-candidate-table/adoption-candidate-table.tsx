@@ -17,18 +17,25 @@ import { useFetch, useTableControls, useTableFilter } from "shared/hooks";
 import {
   AppTableWithControls,
   ProposedActionLabel,
+  RiskLabel,
   ToolbarBulkSelector,
 } from "shared/components";
 
-import { EFFORT_ESTIMATE_LIST } from "Constants";
-import { Application, AssessmentConfidence } from "api/models";
-import { getAssessmentConfidence } from "api/rest";
+import { EFFORT_ESTIMATE_LIST, RISK_LIST } from "Constants";
+import {
+  Application,
+  AssessmentConfidence,
+  AssessmentRisk,
+  Risk,
+} from "api/models";
+import { getAssessmentConfidence, getAssessmentLandscape } from "api/rest";
 
 import { ApplicationSelectionContext } from "../../application-selection-context";
 
 export interface TableRowData {
   application: Application;
   confidence?: number;
+  risk: Risk;
 }
 
 export enum ColumnIndex {
@@ -69,6 +76,8 @@ export const compareToByColumn = (
             ?.sortFactor || 0
         : 0;
       return aEffortSortFactor - bEffortSortFactor;
+    case 6: // Risk
+      return RISK_LIST[a.risk].sortFactor - RISK_LIST[b.risk].sortFactor;
     default:
       return 0;
   }
@@ -103,18 +112,38 @@ export const AdoptionCandidateTable: React.FC = () => {
     );
   }, [allApplications]);
 
-  const { data: confidence, requestFetch: refreshChart } = useFetch<
+  const { data: confidence, requestFetch: refreshConfidence } = useFetch<
     AssessmentConfidence[]
   >({
     defaultIsFetching: true,
     onFetchPromise: fetchChartData,
   });
 
+  // Risk
+  const fetchRiskData = useCallback(() => {
+    if (allApplications.length > 0) {
+      return getAssessmentLandscape(allApplications.map((f) => f.id!)).then(
+        ({ data }) => data
+      );
+    } else {
+      return Promise.resolve([]);
+    }
+  }, [allApplications]);
+
+  const { data: risks, requestFetch: refreshRisks } = useFetch<
+    AssessmentRisk[]
+  >({
+    defaultIsFetching: true,
+    onFetchPromise: fetchRiskData,
+  });
+
+  // Start fetch
   useEffect(() => {
     if (allApplications.length > 0) {
-      refreshChart();
+      refreshConfidence();
+      refreshRisks();
     }
-  }, [allApplications, refreshChart]);
+  }, [allApplications, refreshConfidence, refreshRisks]);
 
   // Table data
   const allRows = useMemo(() => {
@@ -122,13 +151,16 @@ export const AdoptionCandidateTable: React.FC = () => {
       const confidenceData = confidence?.find(
         (e) => e.applicationId === app.id
       );
+      const riskData = risks?.find((e) => e.applicationId === app.id);
+
       const result: TableRowData = {
         application: app,
         confidence: confidenceData?.confidence,
+        risk: riskData ? riskData.risk : "UNKNOWN",
       };
       return result;
     });
-  }, [allApplications, confidence]);
+  }, [allApplications, confidence, risks]);
 
   // Table
   const {
@@ -173,12 +205,17 @@ export const AdoptionCandidateTable: React.FC = () => {
     },
     {
       title: t("terms.effort"),
-      transforms: [sortable, cellWidth(15)],
+      transforms: [sortable, cellWidth(10)],
+      cellTransforms: [],
+    },
+    {
+      title: t("terms.risk"),
+      transforms: [sortable, cellWidth(10)],
       cellTransforms: [],
     },
     {
       title: t("terms.decision"),
-      transforms: [cellWidth(15)],
+      transforms: [cellWidth(10)],
       cellTransforms: [],
     },
   ];
@@ -216,6 +253,9 @@ export const AdoptionCandidateTable: React.FC = () => {
                   : item.application.review.effortEstimate)}
             </>
           ),
+        },
+        {
+          title: <RiskLabel risk={item.risk} />,
         },
         {
           title: (

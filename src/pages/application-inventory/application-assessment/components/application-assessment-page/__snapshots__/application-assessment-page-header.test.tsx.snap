@@ -36,6 +36,7 @@ exports[`ApplicationAssessmentPageHeader Renders without crashing 1`] = `
           },
         ]
       }
+      btnActions={<React.Fragment />}
       description={
         <Text
           component="p"
@@ -207,6 +208,11 @@ exports[`ApplicationAssessmentPageHeader Renders without crashing 1`] = `
                       </TextContent>
                     </div>
                   </SplitItem>
+                  <SplitItem>
+                    <div
+                      className="pf-l-split__item"
+                    />
+                  </SplitItem>
                 </div>
               </Split>
             </div>
@@ -214,6 +220,48 @@ exports[`ApplicationAssessmentPageHeader Renders without crashing 1`] = `
         </div>
       </Stack>
     </PageHeader>
+    <Modal
+      actions={Array []}
+      appendTo={[Function]}
+      aria-describedby=""
+      aria-label=""
+      aria-labelledby=""
+      className=""
+      hasNoBodyWrapper={false}
+      isOpen={false}
+      onClose={[Function]}
+      ouiaSafe={true}
+      showClose={true}
+      title="composed.manageDependenciesFor"
+      titleIconVariant={null}
+      titleLabel=""
+      variant="medium"
+    >
+      <Portal
+        containerInfo={<div />}
+      >
+        <ModalContent
+          actions={Array []}
+          aria-describedby=""
+          aria-label=""
+          aria-labelledby=""
+          boxId="pf-modal-part-0"
+          className=""
+          descriptorId="pf-modal-part-2"
+          hasNoBodyWrapper={false}
+          isOpen={false}
+          labelId="pf-modal-part-1"
+          onClose={[Function]}
+          ouiaId="OUIA-Generated-Modal-medium-1"
+          ouiaSafe={true}
+          showClose={true}
+          title="composed.manageDependenciesFor"
+          titleIconVariant={null}
+          titleLabel=""
+          variant="medium"
+        />
+      </Portal>
+    </Modal>
   </ApplicationAssessmentPageHeader>
 </Provider>
 `;

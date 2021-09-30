@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useKeycloak } from "@react-keycloak/web";
 import {
   Dropdown,
@@ -9,6 +10,8 @@ import {
 } from "@patternfly/react-core";
 
 export const SSOMenu: React.FC = () => {
+  const { t } = useTranslation();
+
   const { keycloak } = useKeycloak();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -45,10 +48,10 @@ export const SSOMenu: React.FC = () => {
                 component="button"
                 onClick={() => keycloak.accountManagement()}
               >
-                User management
+                {t("actions.manageAccount")}
               </DropdownItem>
               <DropdownItem key="sso_logout" onClick={() => keycloak.logout()}>
-                Logout
+                {t("actions.logout")}
               </DropdownItem>
             </DropdownGroup>,
           ]}

@@ -34,6 +34,11 @@ exports[`PageHeader Renders without crashing 1`] = `
         </TextContent>
       </SplitItem>
       <SplitItem>
+        <Button>
+          send email
+        </Button>
+      </SplitItem>
+      <SplitItem>
         <MenuActions
           actions={
             Array [

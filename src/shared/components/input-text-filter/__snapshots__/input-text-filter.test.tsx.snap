@@ -6,7 +6,7 @@ exports[`InputTextFilter Renders without crashing 1`] = `
     aria-label="filter-text"
     onChange={[Function]}
     onKeyPress={[Function]}
-    placeholder="Filter..."
+    placeholder="terms.filter"
     type="text"
     value=""
   />

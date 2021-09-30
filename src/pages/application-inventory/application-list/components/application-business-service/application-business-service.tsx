@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect } from "react";
-import { useTranslation } from "react-i18next";
 
-import { EmptyTextMessage } from "shared/components";
 import { useFetch } from "shared/hooks";
 
 import { BusinessService } from "api/models";
@@ -14,8 +12,6 @@ export interface ApplicationBusinessServiceProps {
 export const ApplicationBusinessService: React.FC<ApplicationBusinessServiceProps> = ({
   id,
 }) => {
-  const { t } = useTranslation();
-
   const onFetchBusinessService = useCallback(() => {
     return getBusinessServiceById(id);
   }, [id]);
@@ -34,7 +30,7 @@ export const ApplicationBusinessService: React.FC<ApplicationBusinessServiceProp
   }, [refreshBusinessService]);
 
   if (fetchError) {
-    return <EmptyTextMessage message={t("terms.notAvailable")} />;
+    return <></>;
   }
 
   return <>{businessService?.name}</>;

@@ -1,12 +1,8 @@
 import React from "react";
 import { mount, shallow } from "enzyme";
-import { ApplicationListExpandedArea } from "../application-list-expanded-area";
+import { EmptyTextMessage } from "shared/components";
 import { Application } from "api/models";
-
-const notReviewed = "terms.notYetReviewed";
-const ddQuery = (cyKey: string) => {
-  return `dd[cy-data='${cyKey}'] > div`;
-};
+import { ApplicationListExpandedArea } from "../application-list-expanded-area";
 
 describe("ApplicationListExpandedArea", () => {
   it("Should shown 'not yet reviewed'", () => {
@@ -14,20 +10,30 @@ describe("ApplicationListExpandedArea", () => {
       name: "anyApp",
     };
 
-    const wrapper = mount(
+    const wrapper = shallow(
       <ApplicationListExpandedArea application={application} />
     );
 
-    expect(wrapper.find(ddQuery("proposed-action")).text()).toBe(notReviewed);
-    expect(wrapper.find(ddQuery("effort-estimate")).text()).toBe(notReviewed);
-    expect(wrapper.find(ddQuery("business-criticality")).text()).toBe(
-      notReviewed
-    );
-    expect(wrapper.find(ddQuery("work-priority")).text()).toBe(notReviewed);
-    expect(wrapper.find(ddQuery("review-comments")).text()).toBe(notReviewed);
+    const notReviewed = "terms.notYetReviewed";
+    expect(
+      wrapper.find({ "cy-data": "proposed-action" }).children().props().message
+    ).toBe(notReviewed);
+    expect(
+      wrapper.find({ "cy-data": "effort-estimate" }).children().props().message
+    ).toBe(notReviewed);
+    expect(
+      wrapper.find({ "cy-data": "business-criticality" }).children().props()
+        .message
+    ).toBe(notReviewed);
+    expect(
+      wrapper.find({ "cy-data": "work-priority" }).children().props().message
+    ).toBe(notReviewed);
+    expect(
+      wrapper.find({ "cy-data": "review-comments" }).children().props().message
+    ).toBe(notReviewed);
   });
 
-  it("Should review values 'not yet reviewed'", () => {
+  it("Should shown values from Review", () => {
     const application: Application = {
       name: "anyApp",
       review: {
@@ -39,20 +45,29 @@ describe("ApplicationListExpandedArea", () => {
       },
     };
 
-    const wrapper = mount(
+    const wrapper = shallow(
       <ApplicationListExpandedArea application={application} />
     );
 
-    expect(wrapper.find(ddQuery("proposed-action")).text()).toBe(
-      "proposedActions.rehost"
+    expect(
+      wrapper
+        .find({ "cy-data": "proposed-action" })
+        .children()
+        .children()
+        .text()
+    ).toBe("proposedActions.rehost");
+    expect(
+      wrapper.find({ "cy-data": "effort-estimate" }).children().text()
+    ).toBe("efforts.small");
+    expect(
+      wrapper.find({ "cy-data": "business-criticality" }).children().text()
+    ).toBe("2");
+    expect(wrapper.find({ "cy-data": "work-priority" }).children().text()).toBe(
+      "3"
     );
-    expect(wrapper.find(ddQuery("effort-estimate")).text()).toBe(
-      "efforts.small"
-    );
-    expect(wrapper.find(ddQuery("business-criticality")).text()).toBe("2");
-    expect(wrapper.find(ddQuery("work-priority")).text()).toBe("3");
-    expect(wrapper.find(ddQuery("review-comments")).text()).toBe(
-      "my review comments"
-    );
+    expect(wrapper.find({ "cy-data": "risk" }).children().length).toBe(1);
+    expect(
+      wrapper.find({ "cy-data": "review-comments" }).children().text()
+    ).toBe("my review comments");
   });
 });

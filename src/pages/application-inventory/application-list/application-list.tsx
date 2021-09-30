@@ -31,9 +31,11 @@ import {
 } from "@patternfly/react-table";
 import { PencilAltIcon, TagIcon } from "@patternfly/react-icons";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "store/rootReducer";
 import { alertActions } from "store/alert";
 import { confirmDialogActions } from "store/confirmDialog";
+import { unknownTagsSelectors } from "store/unknownTags";
 
 import {
   ApplicationToolbarToggleGroup,
@@ -42,6 +44,7 @@ import {
   ConditionalRender,
   NoDataEmptyState,
   StatusIconAssessment,
+  KebabDropdown,
 } from "shared/components";
 import {
   useTableControls,
@@ -52,6 +55,7 @@ import {
   useDelete,
   useApplicationToolbarFilter,
 } from "shared/hooks";
+import { ApplicationDependenciesFormContainer } from "shared/containers";
 
 import { formatPath, Paths } from "Paths";
 import { ApplicationFilterKey } from "Constants";
@@ -75,13 +79,11 @@ import { applicationPageMapper } from "api/apiUtils";
 import { getAxiosErrorMessage } from "utils/utils";
 
 import { ApplicationForm } from "./components/application-form";
-import ApplicationDependenciesForm from "./components/application-dependencies-form";
 
 import { ApplicationAssessment } from "./components/application-assessment";
 import { ApplicationBusinessService } from "./components/application-business-service";
 import { ApplicationListExpandedArea } from "./components/application-list-expanded-area";
 import { ImportApplicationsForm } from "./components/import-applications-form";
-import { KebabDropdown } from "./components/kebab-dropdown/kebab-dropdown";
 
 const toSortByQuery = (
   sortBy?: SortByQuery
@@ -130,6 +132,9 @@ export const ApplicationList: React.FC = () => {
 
   // Redux
   const dispatch = useDispatch();
+  const unknownTagIds = useSelector((state: RootState) =>
+    unknownTagsSelectors.unknownTagIds(state)
+  );
 
   // Router
   const history = useHistory();
@@ -341,7 +346,10 @@ export const ApplicationList: React.FC = () => {
         {
           title: (
             <>
-              <TagIcon /> {item.tags ? item.tags.length : 0}
+              <TagIcon />{" "}
+              {item.tags
+                ? item.tags.filter((e) => !unknownTagIds.has(Number(e))).length
+                : 0}
             </>
           ),
         },
@@ -755,7 +763,7 @@ export const ApplicationList: React.FC = () => {
         onClose={closeDependenciesModal}
       >
         {applicationToManageDependencies && (
-          <ApplicationDependenciesForm
+          <ApplicationDependenciesFormContainer
             application={applicationToManageDependencies}
             onCancel={closeDependenciesModal}
           />

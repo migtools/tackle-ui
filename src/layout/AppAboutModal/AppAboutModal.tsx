@@ -1,10 +1,13 @@
 import React from "react";
+import { useTranslation, Trans } from "react-i18next";
+
 import {
   AboutModal,
   TextContent,
   Text,
   TextVariants,
 } from "@patternfly/react-core";
+
 import brandImage from "images/tackle.png";
 
 export interface AppAboutModalProps {
@@ -16,6 +19,8 @@ export const AppAboutModal: React.FC<AppAboutModalProps> = ({
   isOpen,
   onClose,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <AboutModal
       isOpen={isOpen}
@@ -26,36 +31,33 @@ export const AppAboutModal: React.FC<AppAboutModalProps> = ({
       productName="Tackle"
     >
       <TextContent>
+        <Text component={TextVariants.p}>{t("about.introduction")}</Text>
+        <Text component={TextVariants.p}>{t("about.description")}</Text>
         <Text component={TextVariants.p}>
-          Tackle is a collection of tools that supports large-scale application
-          modernization and migration projects to Kubernetes.
+          <Trans i18nKey="about.bottom1">
+            Tackle is a project within the{" "}
+            <Text
+              component={TextVariants.a}
+              href="https://www.konveyor.io/"
+              target="_blank"
+            >
+              Konveyor community
+            </Text>
+            .
+          </Trans>
         </Text>
         <Text component={TextVariants.p}>
-          Tackle allows users to maintain their portfolio of applications with a
-          full set of metadata and to assess their suitability for modernization
-          leveraging a questionnaire based approach.
-        </Text>
-        <Text component={TextVariants.p}>
-          Tackle is a project within the{" "}
-          <Text
-            component={TextVariants.a}
-            href="https://www.konveyor.io/"
-            target="_blank"
-          >
-            Konveyor community
-          </Text>
-          .
-        </Text>
-        <Text component={TextVariants.p}>
-          For more information please refer to{" "}
-          <Text
-            component={TextVariants.a}
-            href="https://tackle-docs.konveyor.io/"
-            target="_blank"
-          >
-            Tackle documentation
-          </Text>
-          .
+          <Trans i18nKey="about.bottom2">
+            For more information please refer to{" "}
+            <Text
+              component={TextVariants.a}
+              href="https://tackle-docs.konveyor.io/"
+              target="_blank"
+            >
+              Tackle documentation
+            </Text>
+            .
+          </Trans>
         </Text>
       </TextContent>
     </AboutModal>
