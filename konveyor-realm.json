@@ -1715,8 +1715,12 @@
         }
       ]
     },
-    "internationalizationEnabled": false,
-    "supportedLocales": [],
+    "internationalizationEnabled": true,
+    "supportedLocales": [
+      "en",
+      "es"
+    ],
+    "defaultLocale": "en",
     "authenticationFlows": [
       {
         "id": "79af7e20-fd58-4dc2-9313-a7003f0cb1f7",
