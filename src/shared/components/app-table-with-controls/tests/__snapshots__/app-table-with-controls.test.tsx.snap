@@ -10,6 +10,7 @@ exports[`AppTableWithControls Renders adding toolbar 1`] = `
 >
   <Toolbar
     className="pf-m-toggle-group-container"
+    clearFiltersButtonText="actions.clearAllFilters"
     collapseListedFiltersBreakpoint="xl"
   >
     <ToolbarContent
@@ -87,6 +88,7 @@ exports[`AppTableWithControls Renders without crashing 1`] = `
 >
   <Toolbar
     className="pf-m-toggle-group-container"
+    clearFiltersButtonText="actions.clearAllFilters"
     collapseListedFiltersBreakpoint="xl"
   >
     <ToolbarContent

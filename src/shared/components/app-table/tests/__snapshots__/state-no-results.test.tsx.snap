@@ -11,10 +11,10 @@ exports[`StateNoResults Renders without crashing 1`] = `
     headingLevel="h2"
     size="lg"
   >
-    No results found
+    message.noResultsFoundTitle
   </Title>
   <EmptyStateBody>
-    No results match the filter criteria. Remove all filters or clear all filters to show results.
+    message.noResultsFoundBody
   </EmptyStateBody>
 </EmptyState>
 `;
