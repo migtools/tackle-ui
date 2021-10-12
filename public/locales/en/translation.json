@@ -13,8 +13,9 @@
         "clearAllFilters": "Clear all filters",
         "close": "Close",
         "continue": "Continue",
-        "copy": "",
+        "copy": "Copy",
         "copyAssessment": "Copy assessment",
+        "copyAssessmentAndReview": "Copy assessment and review",
         "create": "Create",
         "createNew": "Create new",
         "createTag": "Create tag",
@@ -71,6 +72,7 @@
             "leavePage": "Are you sure you want to leave this page? Be sure to save your changes, or they will be lost."
         },
         "title": {
+            "copyApplicationAssessmentAndReviewFrom": "Copy {{what}} assessment and review",
             "copyApplicationAssessmentFrom": "Copy {{what}} assessment",
             "delete": "Delete {{what}}?",
             "discard": "Discard {{what}}?",

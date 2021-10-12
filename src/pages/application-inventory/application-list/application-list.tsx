@@ -233,6 +233,14 @@ export const ApplicationList: React.FC = () => {
     close: closeCopyAssessmentModal,
   } = useEntityModal<Application>();
 
+  // Copy assessment and review modal
+  const {
+    isOpen: isCopyAssessmentAndReviewModalOpen,
+    data: applicationToCopyAssessmentAndReviewFrom,
+    update: openCopyAssessmentAndReviewModal,
+    close: closeCopyAssessmentAndReviewModal,
+  } = useEntityModal<Application>();
+
   // Dependencies modal
   const {
     isOpen: isDependenciesModalOpen,
@@ -408,6 +416,19 @@ export const ApplicationList: React.FC = () => {
         ) => {
           const row: Application = getRow(rowData);
           openCopyAssessmentModal(row);
+        },
+      });
+    }
+    if (row.review) {
+      actions.push({
+        title: t("actions.copyAssessmentAndReview"),
+        onClick: (
+          event: React.MouseEvent,
+          rowIndex: number,
+          rowData: IRowData
+        ) => {
+          const row: Application = getRow(rowData);
+          openCopyAssessmentAndReviewModal(row);
         },
       });
     }
@@ -791,6 +812,26 @@ export const ApplicationList: React.FC = () => {
             assessment={
               getApplicationAssessment(applicationToCopyAssessmentFrom.id!)!
             }
+          />
+        )}
+      </Modal>
+      <Modal
+        isOpen={isCopyAssessmentAndReviewModalOpen}
+        variant="large"
+        title={t("dialog.title.copyApplicationAssessmentAndReviewFrom", {
+          what: applicationToCopyAssessmentAndReviewFrom?.name,
+        })}
+        onClose={closeCopyAssessmentAndReviewModal}
+      >
+        {applicationToCopyAssessmentAndReviewFrom && (
+          <CopyAssessmentForm
+            application={applicationToCopyAssessmentAndReviewFrom}
+            assessment={
+              getApplicationAssessment(
+                applicationToCopyAssessmentAndReviewFrom.id!
+              )!
+            }
+            review={applicationToCopyAssessmentAndReviewFrom.review}
           />
         )}
       </Modal>
