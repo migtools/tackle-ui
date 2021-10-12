@@ -1,4 +1,6 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
+
 import {
   EmptyState,
   EmptyStateBody,
@@ -9,16 +11,15 @@ import {
 import { SearchIcon } from "@patternfly/react-icons";
 
 export const StateNoResults: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <EmptyState variant={EmptyStateVariant.small}>
       <EmptyStateIcon icon={SearchIcon} />
       <Title headingLevel="h2" size="lg">
-        No results found
+        {t("message.noResultsFoundTitle")}
       </Title>
-      <EmptyStateBody>
-        No results match the filter criteria. Remove all filters or clear all
-        filters to show results.
-      </EmptyStateBody>
+      <EmptyStateBody>{t("message.noResultsFoundBody")}</EmptyStateBody>
     </EmptyState>
   );
 };
