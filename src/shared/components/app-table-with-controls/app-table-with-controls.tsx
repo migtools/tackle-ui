@@ -28,6 +28,9 @@ export interface IAppTableWithControlsProps extends IAppTableProps {
     perPage: number;
   }) => void;
 
+  withoutTopPagination?: boolean;
+  withoutBottomPagination?: boolean;
+
   toolbarBulkSelector?: any;
   toolbarToggle?: any;
   toolbarActions?: any;
@@ -38,6 +41,9 @@ export const AppTableWithControls: React.FC<IAppTableWithControlsProps> = ({
   count,
   pagination,
   onPaginationChange,
+
+  withoutTopPagination,
+  withoutBottomPagination,
 
   toolbarBulkSelector,
   toolbarToggle,
@@ -64,25 +70,29 @@ export const AppTableWithControls: React.FC<IAppTableWithControlsProps> = ({
             </ToolbarToggleGroup>
           )}
           {toolbarActions}
-          <ToolbarItem
-            variant={ToolbarItemVariant.pagination}
-            alignment={{ default: "alignRight" }}
-          >
-            <SimplePagination
-              count={count}
-              params={pagination}
-              onChange={onPaginationChange}
-              isTop={true}
-            />
-          </ToolbarItem>
+          {!withoutTopPagination && (
+            <ToolbarItem
+              variant={ToolbarItemVariant.pagination}
+              alignment={{ default: "alignRight" }}
+            >
+              <SimplePagination
+                count={count}
+                params={pagination}
+                onChange={onPaginationChange}
+                isTop={true}
+              />
+            </ToolbarItem>
+          )}
         </ToolbarContent>
       </Toolbar>
       <AppTable {...rest} />
-      <SimplePagination
-        count={count}
-        params={pagination}
-        onChange={onPaginationChange}
-      />
+      {!withoutBottomPagination && (
+        <SimplePagination
+          count={count}
+          params={pagination}
+          onChange={onPaginationChange}
+        />
+      )}
     </div>
   );
 };

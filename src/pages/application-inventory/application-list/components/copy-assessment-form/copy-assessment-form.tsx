@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -14,13 +14,21 @@ import {
   ActionGroup,
   Button,
   ButtonVariant,
+  Card,
+  CardBody,
+  Checkbox,
+  Form,
+  FormGroup,
   ToolbarChip,
   ToolbarItem,
 } from "@patternfly/react-core";
+import { WarningTriangleIcon } from "@patternfly/react-icons";
+import { global_palette_gold_400 as gold } from "@patternfly/react-tokens";
 
 import {
   ApplicationToolbarToggleGroup,
   AppTableWithControls,
+  StatusIconAssessment,
   ToolbarBulkSelector,
 } from "shared/components";
 import {
@@ -43,7 +51,6 @@ import { ApplicationFilterKey } from "Constants";
 import {
   ApplicationSortBy,
   ApplicationSortByQuery,
-  createBulkCopy,
   getApplications,
   getAssessments,
 } from "api/rest";
@@ -61,14 +68,8 @@ const toSortByQuery = (
 
   let field: ApplicationSortBy;
   switch (sortBy.index) {
-    case 2:
+    case 1:
       field = ApplicationSortBy.NAME;
-      break;
-    case 6:
-      field = ApplicationSortBy.REVIEW;
-      break;
-    case 7:
-      field = ApplicationSortBy.TAGS;
       break;
     default:
       return undefined;
@@ -102,9 +103,14 @@ interface CopyAssessmentFormProps {
 export const CopyAssessmentForm: React.FC<CopyAssessmentFormProps> = ({
   application,
   assessment,
+  review,
 }) => {
   // i18
   const { t } = useTranslation();
+
+  // Confirmation dialog
+  const [requestConfirmation, setRequestConfirmation] = useState(false);
+  const [confirmationAccepted, setConfirmationAccepted] = useState(false);
 
   // Toolbar filters
   const {
@@ -122,7 +128,7 @@ export const CopyAssessmentForm: React.FC<CopyAssessmentFormProps> = ({
     handlePaginationChange,
     handleSortChange,
   } = useTableControls({
-    sortByQuery: { direction: "asc", index: 2 },
+    sortByQuery: { direction: "asc", index: 1 },
   });
 
   const fetchApplications = useCallback(() => {
@@ -194,17 +200,22 @@ export const CopyAssessmentForm: React.FC<CopyAssessmentFormProps> = ({
   const columns: ICell[] = [
     {
       title: t("terms.name"),
-      transforms: [sortable, cellWidth(45)],
+      transforms: [sortable, cellWidth(40)],
       cellTransforms: [truncate],
     },
     {
       title: t("terms.businessService"),
-      transforms: [sortable, cellWidth(35)],
+      transforms: [cellWidth(30)],
       cellTransforms: [truncate],
     },
     {
       title: t("terms.assessment"),
-      transforms: [sortable, cellWidth(20)],
+      transforms: [cellWidth(15)],
+      cellTransforms: [truncate],
+    },
+    {
+      title: t("terms.review"),
+      transforms: [cellWidth(15)],
       cellTransforms: [truncate],
     },
   ];
@@ -216,7 +227,7 @@ export const CopyAssessmentForm: React.FC<CopyAssessmentFormProps> = ({
     rows.push({
       [ENTITY_FIELD]: item,
       selected: isSelected,
-      disableCheckbox: item.id === application.id,
+      disableSelection: item.id === application.id,
       cells: [
         {
           title: item.name,
@@ -240,6 +251,13 @@ export const CopyAssessmentForm: React.FC<CopyAssessmentFormProps> = ({
             />
           ),
         },
+        {
+          title: item.review ? (
+            <StatusIconAssessment status="Completed" />
+          ) : (
+            <StatusIconAssessment status="NotStarted" />
+          ),
+        },
       ],
     });
   });
@@ -256,72 +274,129 @@ export const CopyAssessmentForm: React.FC<CopyAssessmentFormProps> = ({
     toggleRowSelected(row);
   };
 
+  // Confirmation checbox
+  useEffect(() => {
+    let selectedAnyAppWithAssessment = selectedRows.some((f) =>
+      getApplicationAssessment(f.id!)
+    );
+
+    if (review) {
+      const selectedAnyAppWithReview = selectedRows.some((f) => f.review);
+      selectedAnyAppWithAssessment =
+        selectedAnyAppWithAssessment || selectedAnyAppWithReview;
+    }
+
+    setRequestConfirmation(selectedAnyAppWithAssessment);
+  }, [review, selectedRows, getApplicationAssessment]);
+
+  useEffect(() => {
+    setConfirmationAccepted(false);
+  }, [requestConfirmation]);
+
   // Copy
   const onSubmit = () => {
-    createBulkCopy({
-      fromAssessmentId: assessment.id!,
-      applications: selectedRows.map((f) => ({ applicationId: f.id! })),
-    }).then(() => {
-      console.log("hello");
-    });
+    if (requestConfirmation) {
+    } else {
+    }
+
+    // createBulkCopy({
+    //   fromAssessmentId: assessment.id!,
+    //   applications: selectedRows.map((f) => ({ applicationId: f.id! })),
+    // }).then(() => {
+    //   console.log("hello");
+    // });
   };
 
   return (
-    <div>
-      <AppTableWithControls
-        variant="compact"
-        count={applications ? applications.meta.count : 0}
-        pagination={pagination}
-        sortBy={sortBy}
-        onPaginationChange={handlePaginationChange}
-        onSort={handleSortChange}
-        onSelect={selectRow}
-        canSelectAll={false}
-        cells={columns}
-        rows={rows}
-        isLoading={isFetching}
-        loadingVariant="skeleton"
-        fetchError={fetchError}
-        toolbarClearAllFilters={clearAllFilters}
-        filtersApplied={areFiltersPresent}
-        toolbarBulkSelector={
-          <ToolbarItem variant="bulk-select">
-            <ToolbarBulkSelector
-              areAllRowsSelected={areAllApplicationsSelected}
-              pageSize={applications?.data.length || 0}
-              totalItems={applications?.meta.count || 0}
-              totalSelectedRows={selectedRows.length}
-              onSelectNone={() => setSelectedRows([])}
-              onSelectCurrentPage={() => {
-                setSelectedRows(
-                  (applications ? applications.data : []).filter(
-                    (f) => f.id !== application.id
-                  )
-                );
-              }}
-            />
-          </ToolbarItem>
-        }
-        toolbarToggle={
-          <ApplicationToolbarToggleGroup
-            value={filtersValue as Map<ApplicationFilterKey, ToolbarChip[]>}
-            addFilter={addFilter}
-            setFilter={setFilter}
+    <Form>
+      <Card>
+        <CardBody style={{ padding: 0 }}>
+          <AppTableWithControls
+            variant="compact"
+            withoutBottomPagination
+            count={applications ? applications.meta.count : 0}
+            pagination={pagination}
+            sortBy={sortBy}
+            onPaginationChange={handlePaginationChange}
+            onSort={handleSortChange}
+            onSelect={selectRow}
+            canSelectAll={false}
+            cells={columns}
+            rows={rows}
+            isLoading={isFetching}
+            loadingVariant="skeleton"
+            fetchError={fetchError}
+            toolbarClearAllFilters={clearAllFilters}
+            filtersApplied={areFiltersPresent}
+            toolbarBulkSelector={
+              <ToolbarItem variant="bulk-select">
+                <ToolbarBulkSelector
+                  areAllRowsSelected={areAllApplicationsSelected}
+                  pageSize={applications?.data.length || 0}
+                  totalItems={applications?.meta.count || 0}
+                  totalSelectedRows={selectedRows.length}
+                  onSelectNone={() => setSelectedRows([])}
+                  onSelectCurrentPage={() => {
+                    setSelectedRows(
+                      (applications ? applications.data : []).filter(
+                        (f) => f.id !== application.id
+                      )
+                    );
+                  }}
+                />
+              </ToolbarItem>
+            }
+            toolbarToggle={
+              <ApplicationToolbarToggleGroup
+                value={filtersValue as Map<ApplicationFilterKey, ToolbarChip[]>}
+                addFilter={addFilter}
+                setFilter={setFilter}
+              />
+            }
           />
-        }
-      />
-
+        </CardBody>
+      </Card>
+      {requestConfirmation && (
+        <FormGroup
+          fieldId="confirm"
+          label="Copy and replace assessments?"
+          labelIcon={
+            <button
+              type="button"
+              aria-label="warning-icon"
+              onClick={(e) => e.preventDefault()}
+              aria-describedby="form-group-label-info"
+              className="pf-c-form__group-label-help"
+            >
+              <WarningTriangleIcon noVerticalAlign color={gold.value} />
+            </button>
+          }
+        >
+          <Checkbox
+            id="confirm"
+            name="confirm"
+            label="Yes, continue"
+            description="Some of the selected target applications have an in-progress or complete assessment. By continuing, the existing assessment(s) will be replaced by the copied assessment. Do you wish to continue?"
+            aria-label="Confirm"
+            isChecked={confirmationAccepted}
+            onChange={(isChecked) => setConfirmationAccepted(isChecked)}
+          />
+        </FormGroup>
+      )}
       <ActionGroup>
         <Button
           type="button"
           aria-label="copy"
           variant={ButtonVariant.primary}
           onClick={onSubmit}
-          isDisabled={selectedRows.length === 0}
+          isDisabled={
+            selectedRows.length === 0 ||
+            (requestConfirmation && !confirmationAccepted)
+          }
         >
           {t("actions.copy")}
         </Button>
       </ActionGroup>
-    </div>
+    </Form>
   );
 };
