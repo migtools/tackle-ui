@@ -12,6 +12,7 @@ export { useFetchStakeholders } from "./useFetchStakeholders";
 export { useFetchTagTypes } from "./useFetchTagTypes";
 export { useMultipleFetch } from "./useMultipleFetch";
 export { useQueryString } from "./useRouteAsState";
+export { useSelectionFromPageState } from "./useSelectionFromPageState";
 export { useToolbarFilter } from "./useToolbarFilter";
 export { useTableControls } from "./useTableControls";
 export { useTableFilter } from "./useTableFilter";

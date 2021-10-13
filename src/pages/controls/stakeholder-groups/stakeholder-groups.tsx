@@ -397,7 +397,7 @@ export const StakeholderGroups: React.FC = () => {
               />
             </AppTableToolbarToggleGroup>
           }
-          toolbar={
+          toolbarActions={
             <ToolbarGroup variant="button-group">
               <ToolbarItem>
                 <Button

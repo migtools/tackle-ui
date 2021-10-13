@@ -28,8 +28,9 @@ export interface IAppTableWithControlsProps extends IAppTableProps {
     perPage: number;
   }) => void;
 
-  toolbar?: any;
+  toolbarBulkSelector?: any;
   toolbarToggle?: any;
+  toolbarActions?: any;
   toolbarClearAllFilters?: () => void;
 }
 
@@ -38,8 +39,9 @@ export const AppTableWithControls: React.FC<IAppTableWithControlsProps> = ({
   pagination,
   onPaginationChange,
 
-  toolbar,
+  toolbarBulkSelector,
   toolbarToggle,
+  toolbarActions,
   toolbarClearAllFilters,
 
   ...rest
@@ -55,12 +57,13 @@ export const AppTableWithControls: React.FC<IAppTableWithControlsProps> = ({
         clearFiltersButtonText={t("actions.clearAllFilters")}
       >
         <ToolbarContent>
+          {toolbarBulkSelector}
           {toolbarToggle && (
             <ToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="xl">
               {toolbarToggle}
             </ToolbarToggleGroup>
           )}
-          {toolbar}
+          {toolbarActions}
           <ToolbarItem
             variant={ToolbarItemVariant.pagination}
             alignment={{ default: "alignRight" }}

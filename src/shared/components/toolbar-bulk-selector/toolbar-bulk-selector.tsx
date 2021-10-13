@@ -10,23 +10,23 @@ import {
 } from "@patternfly/react-core";
 
 export interface IToolbarBulkSelectorProps {
-  perPage: number;
+  pageSize: number;
   totalItems: number;
   totalSelectedRows: number;
   areAllRowsSelected: boolean;
-  onSelectAll: () => void;
   onSelectNone: () => void;
   onSelectCurrentPage: () => void;
+  onSelectAll?: () => void;
 }
 
 export const ToolbarBulkSelector: React.FC<IToolbarBulkSelectorProps> = ({
-  perPage,
+  pageSize,
   totalItems,
   areAllRowsSelected,
   totalSelectedRows,
-  onSelectAll,
   onSelectNone,
   onSelectCurrentPage,
+  onSelectAll,
 }) => {
   // i18
   const { t } = useTranslation();
@@ -41,22 +41,29 @@ export const ToolbarBulkSelector: React.FC<IToolbarBulkSelectorProps> = ({
     setIsOpen(isOpen);
   };
 
+  // Dropdowns
+  const dropdowns = [
+    <DropdownItem key="item-1" onClick={onSelectNone}>
+      {t("actions.selectNone")} (0 items)
+    </DropdownItem>,
+    <DropdownItem key="item-2" onClick={onSelectCurrentPage}>
+      {t("actions.selectPage")} ({pageSize} items)
+    </DropdownItem>,
+  ];
+  if (onSelectAll) {
+    dropdowns.push(
+      <DropdownItem key="item-3" onClick={onSelectAll}>
+        {t("actions.selectAll")} ({totalItems} items)
+      </DropdownItem>
+    );
+  }
+
   return (
     <Dropdown
       isOpen={isOpen}
       position={DropdownPosition.left}
       onSelect={onDropDownSelect}
-      dropdownItems={[
-        <DropdownItem key="item-1" onClick={onSelectNone}>
-          {t("actions.selectNone")} (0 items)
-        </DropdownItem>,
-        <DropdownItem key="item-2" onClick={onSelectCurrentPage}>
-          {t("actions.selectPage")} ({perPage} items)
-        </DropdownItem>,
-        <DropdownItem key="item-3" onClick={onSelectAll}>
-          {t("actions.selectAll")} ({totalItems} items)
-        </DropdownItem>,
-      ]}
+      dropdownItems={dropdowns}
       toggle={
         <DropdownToggle
           onToggle={onDropDownToggle}
@@ -73,7 +80,13 @@ export const ToolbarBulkSelector: React.FC<IToolbarBulkSelectorProps> = ({
                   : null
               }
               onClick={() => {
-                totalSelectedRows > 0 ? onSelectNone() : onSelectAll();
+                if (onSelectAll) {
+                  totalSelectedRows > 0 ? onSelectNone() : onSelectAll();
+                } else {
+                  totalSelectedRows > 0
+                    ? onSelectNone()
+                    : onSelectCurrentPage();
+                }
               }}
             ></DropdownToggleCheckbox>,
           ]}

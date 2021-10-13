@@ -309,7 +309,7 @@ export const AdoptionCandidateTable: React.FC = () => {
           <ToolbarItem variant="bulk-select">
             <ToolbarBulkSelector
               areAllRowsSelected={areAllApplicationsSelected}
-              perPage={pagination.perPage}
+              pageSize={pagination.perPage}
               totalItems={allApplications.length}
               totalSelectedRows={selectedApplications.length}
               onSelectAll={selectAllApplication}

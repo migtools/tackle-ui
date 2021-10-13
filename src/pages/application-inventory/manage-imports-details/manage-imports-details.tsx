@@ -175,7 +175,7 @@ export const ManageImportsDetails: React.FC = () => {
             isLoading={isFetching}
             loadingVariant="skeleton"
             fetchError={fetchError}
-            toolbar={
+            toolbarActions={
               <>
                 <ToolbarGroup variant="button-group">
                   <ToolbarItem>

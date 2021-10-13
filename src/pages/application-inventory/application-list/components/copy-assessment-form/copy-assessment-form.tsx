@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useSelectionState } from "@konveyor/lib-ui";
 
 import {
   cellWidth,
@@ -9,23 +8,27 @@ import {
   IRow,
   IRowData,
   sortable,
+  truncate,
 } from "@patternfly/react-table";
 import {
   ActionGroup,
   Button,
   ButtonVariant,
   ToolbarChip,
+  ToolbarItem,
 } from "@patternfly/react-core";
 
 import {
   ApplicationToolbarToggleGroup,
   AppTableWithControls,
+  ToolbarBulkSelector,
 } from "shared/components";
 import {
   useFetch,
   useMultipleFetch,
   useTableControls,
   useToolbarFilter,
+  useSelectionFromPageState,
 } from "shared/hooks";
 
 import {
@@ -114,8 +117,8 @@ export const CopyAssessmentForm: React.FC<CopyAssessmentFormProps> = ({
 
   // Table data
   const {
-    paginationQuery,
-    sortByQuery,
+    paginationQuery: pagination,
+    sortByQuery: sortBy,
     handlePaginationChange,
     handleSortChange,
   } = useTableControls({
@@ -134,10 +137,10 @@ export const CopyAssessmentForm: React.FC<CopyAssessmentFormProps> = ({
         businessService: serviceVal?.map((f) => f.key),
         tag: tagVal?.map((f) => f.key),
       },
-      paginationQuery,
-      toSortByQuery(sortByQuery)
+      pagination,
+      toSortByQuery(sortBy)
     );
-  }, [filtersValue, paginationQuery, sortByQuery]);
+  }, [filtersValue, pagination, sortBy]);
 
   const {
     data: page,
@@ -155,7 +158,7 @@ export const CopyAssessmentForm: React.FC<CopyAssessmentFormProps> = ({
 
   useEffect(() => {
     refreshTable();
-  }, [filtersValue, paginationQuery, sortByQuery, refreshTable]);
+  }, [filtersValue, pagination, sortBy, refreshTable]);
 
   // Table's assessments
   const {
@@ -176,11 +179,14 @@ export const CopyAssessmentForm: React.FC<CopyAssessmentFormProps> = ({
 
   // Select rows
   const {
+    selectedItems: selectedRows,
+    areAllSelected: areAllApplicationsSelected,
     isItemSelected: isRowSelected,
     toggleItemSelected: toggleRowSelected,
-    selectedItems: selectedRows,
-  } = useSelectionState<Application>({
-    items: applications?.data || [],
+    setSelectedItems: setSelectedRows,
+  } = useSelectionFromPageState<Application>({
+    pageItems: applications?.data || [],
+    totalItems: applications?.meta.count || 0,
     isEqual: (a, b) => a.id === b.id,
   });
 
@@ -188,18 +194,18 @@ export const CopyAssessmentForm: React.FC<CopyAssessmentFormProps> = ({
   const columns: ICell[] = [
     {
       title: t("terms.name"),
-      transforms: [sortable, cellWidth(40)],
-      cellFormatters: [],
+      transforms: [sortable, cellWidth(45)],
+      cellTransforms: [truncate],
     },
     {
       title: t("terms.businessService"),
-      transforms: [sortable, cellWidth(30)],
-      cellFormatters: [],
+      transforms: [sortable, cellWidth(35)],
+      cellTransforms: [truncate],
     },
     {
       title: t("terms.assessment"),
-      transforms: [sortable, cellWidth(30)],
-      cellFormatters: [],
+      transforms: [sortable, cellWidth(20)],
+      cellTransforms: [truncate],
     },
   ];
 
@@ -265,8 +271,8 @@ export const CopyAssessmentForm: React.FC<CopyAssessmentFormProps> = ({
       <AppTableWithControls
         variant="compact"
         count={applications ? applications.meta.count : 0}
-        pagination={paginationQuery}
-        sortBy={sortByQuery}
+        pagination={pagination}
+        sortBy={sortBy}
         onPaginationChange={handlePaginationChange}
         onSort={handleSortChange}
         onSelect={selectRow}
@@ -278,6 +284,24 @@ export const CopyAssessmentForm: React.FC<CopyAssessmentFormProps> = ({
         fetchError={fetchError}
         toolbarClearAllFilters={clearAllFilters}
         filtersApplied={areFiltersPresent}
+        toolbarBulkSelector={
+          <ToolbarItem variant="bulk-select">
+            <ToolbarBulkSelector
+              areAllRowsSelected={areAllApplicationsSelected}
+              pageSize={applications?.data.length || 0}
+              totalItems={applications?.meta.count || 0}
+              totalSelectedRows={selectedRows.length}
+              onSelectNone={() => setSelectedRows([])}
+              onSelectCurrentPage={() => {
+                setSelectedRows(
+                  (applications ? applications.data : []).filter(
+                    (f) => f.id !== application.id
+                  )
+                );
+              }}
+            />
+          </ToolbarItem>
+        }
         toolbarToggle={
           <ApplicationToolbarToggleGroup
             value={filtersValue as Map<ApplicationFilterKey, ToolbarChip[]>}

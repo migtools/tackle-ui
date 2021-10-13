@@ -694,7 +694,7 @@ export const ApplicationList: React.FC = () => {
                 setFilter={setFilter}
               />
             }
-            toolbar={
+            toolbarActions={
               <>
                 <ToolbarGroup variant="button-group">
                   <ToolbarItem>
