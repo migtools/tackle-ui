@@ -2179,10 +2179,10 @@
   dependencies:
     mkdirp "^1.0.4"
 
-"@patternfly/patternfly@4.132.2":
-  version "4.132.2"
-  resolved "https://registry.yarnpkg.com/@patternfly/patternfly/-/patternfly-4.132.2.tgz#6ec662e6b21a28302a52c5c1d702c9616d4cea04"
-  integrity sha512-66qBgIpwPPeTUMTUUO6Z73XApvNXxn3uFaXMeVa09viYGDKzEX3L1FIfc4VzVk2okhk/9KJIYYgxofeuGi5v6A==
+"@patternfly/patternfly@4.144.5":
+  version "4.144.5"
+  resolved "https://registry.yarnpkg.com/@patternfly/patternfly/-/patternfly-4.144.5.tgz#06221e0a439f84fdccef045c163b5c8a3f5b55cf"
+  integrity sha512-ivY8nD7cU1+IDuLYQt7180/a9JRMTcJNBoOistpCfdkI6c9m0+xdID6WSIUiiceYWhV0BhKx1jU5pVJc4kQPtw==
 
 "@patternfly/react-charts@6.15.20":
   version "6.15.20"
