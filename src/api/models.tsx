@@ -127,6 +127,13 @@ export interface ApplicationImport {
   isValid: boolean;
 }
 
+export interface BulkCopyReview {
+  id?: number;
+  sourceReview: number;
+  targetApplications: number[];
+  completed?: boolean;
+}
+
 // Pathfinder
 
 export type AssessmentStatus = "EMPTY" | "STARTED" | "COMPLETE";
@@ -188,9 +195,11 @@ export interface AssessmentConfidence {
   confidence: number;
 }
 
-export interface CreateBulkCopy {
+export interface BulkCopyAssessment {
+  bulkId?: number;
   fromAssessmentId: number;
   applications: { applicationId: number }[];
+  completed?: boolean;
 }
 
 // Pagination

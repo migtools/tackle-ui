@@ -64,6 +64,13 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
+const delay = (t: number) => new Promise((resolve) => setTimeout(resolve, t));
+
+export interface IWatch<T> {
+  continueIf: (t: T) => boolean;
+  delay?: number;
+}
+
 export interface IArgs<T> {
   defaultIsFetching?: boolean;
   onFetch?: () => AxiosPromise<T>;
@@ -75,7 +82,7 @@ export interface IState<T> {
   isFetching: boolean;
   fetchError?: any;
   fetchCount: number;
-  requestFetch: () => void;
+  requestFetch: (watch?: IWatch<T>) => void;
 }
 
 export const useFetch = <T>({
@@ -85,26 +92,39 @@ export const useFetch = <T>({
 }: IArgs<T>): IState<T> => {
   const [state, dispatch] = useReducer(reducer, defaultIsFetching, initReducer);
 
-  const fetchHandler = useCallback(() => {
-    dispatch(fetchRequest());
+  const fetchHandler = useCallback(
+    (watch?: IWatch<T>) => {
+      dispatch(fetchRequest());
 
-    let promise;
-    if (onFetch) {
-      promise = onFetch().then(({ data }) => {
-        dispatch(fetchSuccess(data));
-      });
-    } else if (onFetchPromise) {
-      promise = onFetchPromise().then((data) => {
-        dispatch(fetchSuccess(data));
-      });
-    } else {
-      return;
-    }
+      const watchFn = (data: T) => {
+        if (watch && watch.continueIf(data)) {
+          delay(watch?.delay || 1000).then(() => {
+            fetchHandler(watch);
+          });
+        }
+      };
 
-    promise.catch((error) => {
-      dispatch(fetchFailure(error));
-    });
-  }, [onFetch, onFetchPromise]);
+      let promise;
+      if (onFetch) {
+        promise = onFetch().then(({ data }) => {
+          dispatch(fetchSuccess(data));
+          watchFn(data);
+        });
+      } else if (onFetchPromise) {
+        promise = onFetchPromise().then((data) => {
+          dispatch(fetchSuccess(data));
+          watchFn(data);
+        });
+      } else {
+        return;
+      }
+
+      promise.catch((error) => {
+        dispatch(fetchFailure(error));
+      });
+    },
+    [onFetch, onFetchPromise]
+  );
 
   return {
     data: state.data,

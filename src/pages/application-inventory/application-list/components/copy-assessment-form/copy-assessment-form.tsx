@@ -25,6 +25,10 @@ import {
 import { WarningTriangleIcon } from "@patternfly/react-icons";
 import { global_palette_gold_400 as gold } from "@patternfly/react-tokens";
 
+import { useDispatch } from "react-redux";
+import { alertActions } from "store/alert";
+import { bulkCopyActions } from "store/bulkCopy";
+
 import {
   ApplicationToolbarToggleGroup,
   AppTableWithControls,
@@ -51,10 +55,13 @@ import { ApplicationFilterKey } from "Constants";
 import {
   ApplicationSortBy,
   ApplicationSortByQuery,
+  createBulkCopyAssessment,
+  createBulkCopyReview,
   getApplications,
   getAssessments,
 } from "api/rest";
 import { applicationPageMapper } from "api/apiUtils";
+import { getAxiosErrorMessage } from "utils/utils";
 
 import { ApplicationBusinessService } from "../application-business-service";
 import { ApplicationAssessment } from "../application-assessment";
@@ -98,15 +105,20 @@ interface CopyAssessmentFormProps {
   application: Application;
   assessment: Assessment;
   review?: Review;
+  onSaved: () => void;
 }
 
 export const CopyAssessmentForm: React.FC<CopyAssessmentFormProps> = ({
   application,
   assessment,
   review,
+  onSaved,
 }) => {
   // i18
   const { t } = useTranslation();
+
+  // Redux
+  const dispatch = useDispatch();
 
   // Confirmation dialog
   const [requestConfirmation, setRequestConfirmation] = useState(false);
@@ -295,16 +307,37 @@ export const CopyAssessmentForm: React.FC<CopyAssessmentFormProps> = ({
 
   // Copy
   const onSubmit = () => {
-    if (requestConfirmation) {
-    } else {
+    if (requestConfirmation && !confirmationAccepted) {
+      console.log("Accept confirmation to continue");
+      return;
     }
 
-    // createBulkCopy({
-    //   fromAssessmentId: assessment.id!,
-    //   applications: selectedRows.map((f) => ({ applicationId: f.id! })),
-    // }).then(() => {
-    //   console.log("hello");
-    // });
+    createBulkCopyAssessment({
+      fromAssessmentId: assessment.id!,
+      applications: selectedRows.map((f) => ({ applicationId: f.id! })),
+    })
+      .then((bulkAssessment) => {
+        const bulkReview = review
+          ? createBulkCopyReview({
+              sourceReview: review!.id!,
+              targetApplications: selectedRows.map((f) => f.id!),
+            })
+          : undefined;
+        return Promise.all([bulkAssessment, bulkReview]);
+      })
+      .then(([assessmentBulk, reviewBulk]) => {
+        dispatch(
+          bulkCopyActions.scheduleWatchBulk({
+            assessmentBulk: assessmentBulk.data.bulkId!,
+            reviewBulk: reviewBulk ? reviewBulk.data.id! : undefined,
+          })
+        );
+        onSaved();
+      })
+      .catch((error) => {
+        dispatch(alertActions.addDanger(getAxiosErrorMessage(error)));
+        onSaved();
+      });
   };
 
   return (

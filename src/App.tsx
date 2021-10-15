@@ -10,6 +10,7 @@ import NotificationsPortal from "@redhat-cloud-services/frontend-components-noti
 import "@redhat-cloud-services/frontend-components-notifications/index.css";
 
 import { ConfirmDialogContainer } from "./shared/containers/confirm-dialog-container";
+import { BulkCopyNotificationsContainer } from "./shared/containers/bulk-copy-notifications-container";
 
 const App: React.FC = () => {
   return (
@@ -19,6 +20,7 @@ const App: React.FC = () => {
       </DefaultLayout>
       <NotificationsPortal />
       <ConfirmDialogContainer />
+      <BulkCopyNotificationsContainer />
     </BrowserRouter>
   );
 };

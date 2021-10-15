@@ -36,6 +36,7 @@ import { RootState } from "store/rootReducer";
 import { alertActions } from "store/alert";
 import { confirmDialogActions } from "store/confirmDialog";
 import { unknownTagsSelectors } from "store/unknownTags";
+import { bulkCopySelectors } from "store/bulkCopy";
 
 import {
   ApplicationToolbarToggleGroup,
@@ -133,8 +134,13 @@ export const ApplicationList: React.FC = () => {
 
   // Redux
   const dispatch = useDispatch();
+
   const unknownTagIds = useSelector((state: RootState) =>
     unknownTagsSelectors.unknownTagIds(state)
+  );
+
+  const isWatchingBulkCopy = useSelector((state: RootState) =>
+    bulkCopySelectors.isWatching(state)
   );
 
   // Router
@@ -192,7 +198,13 @@ export const ApplicationList: React.FC = () => {
 
   useEffect(() => {
     refreshTable();
-  }, [filtersValue, paginationQuery, sortByQuery, refreshTable]);
+  }, [
+    filtersValue,
+    paginationQuery,
+    sortByQuery,
+    isWatchingBulkCopy,
+    refreshTable,
+  ]);
 
   // Create and update modal
   const {
@@ -812,6 +824,7 @@ export const ApplicationList: React.FC = () => {
             assessment={
               getApplicationAssessment(applicationToCopyAssessmentFrom.id!)!
             }
+            onSaved={closeCopyAssessmentModal}
           />
         )}
       </Modal>
@@ -832,6 +845,7 @@ export const ApplicationList: React.FC = () => {
               )!
             }
             review={applicationToCopyAssessmentAndReviewFrom.review}
+            onSaved={closeCopyAssessmentAndReviewModal}
           />
         )}
       </Modal>
