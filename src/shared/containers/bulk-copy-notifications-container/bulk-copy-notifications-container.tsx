@@ -103,6 +103,7 @@ export const BulkCopyNotificationsContainer: React.FC = () => {
     reviewBulkCopy,
     reviewBulkCopyId,
     dispatch,
+    t,
   ]);
 
   return <></>;
