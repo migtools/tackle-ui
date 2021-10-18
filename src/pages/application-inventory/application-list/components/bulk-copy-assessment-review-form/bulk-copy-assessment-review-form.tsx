@@ -101,14 +101,14 @@ const searchAppAssessment = (id: number) => {
   return result;
 };
 
-interface CopyAssessmentFormProps {
+interface BulkCopyAssessmentReviewFormProps {
   application: Application;
   assessment: Assessment;
   review?: Review;
   onSaved: () => void;
 }
 
-export const CopyAssessmentForm: React.FC<CopyAssessmentFormProps> = ({
+export const BulkCopyAssessmentReviewForm: React.FC<BulkCopyAssessmentReviewFormProps> = ({
   application,
   assessment,
   review,
@@ -123,6 +123,9 @@ export const CopyAssessmentForm: React.FC<CopyAssessmentFormProps> = ({
   // Confirmation dialog
   const [requestConfirmation, setRequestConfirmation] = useState(false);
   const [confirmationAccepted, setConfirmationAccepted] = useState(false);
+
+  // Subtmit state
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Toolbar filters
   const {
@@ -312,6 +315,8 @@ export const CopyAssessmentForm: React.FC<CopyAssessmentFormProps> = ({
       return;
     }
 
+    setIsSubmitting(true);
+
     createBulkCopyAssessment({
       fromAssessmentId: assessment.id!,
       applications: selectedRows.map((f) => ({ applicationId: f.id! })),
@@ -326,6 +331,8 @@ export const CopyAssessmentForm: React.FC<CopyAssessmentFormProps> = ({
         return Promise.all([bulkAssessment, bulkReview]);
       })
       .then(([assessmentBulk, reviewBulk]) => {
+        setIsSubmitting(false);
+
         dispatch(
           bulkCopyActions.scheduleWatchBulk({
             assessmentBulk: assessmentBulk.data.bulkId!,
@@ -335,6 +342,8 @@ export const CopyAssessmentForm: React.FC<CopyAssessmentFormProps> = ({
         onSaved();
       })
       .catch((error) => {
+        setIsSubmitting(false);
+
         dispatch(alertActions.addDanger(getAxiosErrorMessage(error)));
         onSaved();
       });
@@ -392,7 +401,11 @@ export const CopyAssessmentForm: React.FC<CopyAssessmentFormProps> = ({
       {requestConfirmation && (
         <FormGroup
           fieldId="confirm"
-          label="Copy and replace assessments?"
+          label={
+            review
+              ? t("message.copyAssessmentAndReviewQuestion")
+              : t("message.copyAssessmentQuestion")
+          }
           labelIcon={
             <button
               type="button"
@@ -408,8 +421,12 @@ export const CopyAssessmentForm: React.FC<CopyAssessmentFormProps> = ({
           <Checkbox
             id="confirm"
             name="confirm"
-            label="Yes, continue"
-            description="Some of the selected target applications have an in-progress or complete assessment. By continuing, the existing assessment(s) will be replaced by the copied assessment. Do you wish to continue?"
+            label={t("message.continueConfirmation")}
+            body={
+              review
+                ? t("message.copyAssessmentAndReviewBody")
+                : t("message.copyAssessmentBody")
+            }
             aria-label="Confirm"
             isChecked={confirmationAccepted}
             onChange={(isChecked) => setConfirmationAccepted(isChecked)}
@@ -424,7 +441,8 @@ export const CopyAssessmentForm: React.FC<CopyAssessmentFormProps> = ({
           onClick={onSubmit}
           isDisabled={
             selectedRows.length === 0 ||
-            (requestConfirmation && !confirmationAccepted)
+            (requestConfirmation && !confirmationAccepted) ||
+            isSubmitting
           }
         >
           {t("actions.copy")}

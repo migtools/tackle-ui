@@ -85,7 +85,7 @@ import { ApplicationAssessment } from "./components/application-assessment";
 import { ApplicationBusinessService } from "./components/application-business-service";
 import { ApplicationListExpandedArea } from "./components/application-list-expanded-area";
 import { ImportApplicationsForm } from "./components/import-applications-form";
-import { CopyAssessmentForm } from "./components/copy-assessment-form";
+import { BulkCopyAssessmentReviewForm } from "./components/bulk-copy-assessment-review-form";
 
 const toSortByQuery = (
   sortBy?: SortByQuery
@@ -819,7 +819,7 @@ export const ApplicationList: React.FC = () => {
         onClose={closeCopyAssessmentModal}
       >
         {applicationToCopyAssessmentFrom && (
-          <CopyAssessmentForm
+          <BulkCopyAssessmentReviewForm
             application={applicationToCopyAssessmentFrom}
             assessment={
               getApplicationAssessment(applicationToCopyAssessmentFrom.id!)!
@@ -837,7 +837,7 @@ export const ApplicationList: React.FC = () => {
         onClose={closeCopyAssessmentAndReviewModal}
       >
         {applicationToCopyAssessmentAndReviewFrom && (
-          <CopyAssessmentForm
+          <BulkCopyAssessmentReviewForm
             application={applicationToCopyAssessmentAndReviewFrom}
             assessment={
               getApplicationAssessment(

@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 import { useDispatch, useSelector } from "react-redux";
 import { alertActions } from "store/alert";
@@ -11,6 +12,9 @@ import { BulkCopyAssessment, BulkCopyReview } from "api/models";
 import { getBulkCopyAssessment, getBulkCopyReview } from "api/rest";
 
 export const BulkCopyNotificationsContainer: React.FC = () => {
+  // i18
+  const { t } = useTranslation();
+
   // Redux
   const dispatch = useDispatch();
 
@@ -87,7 +91,9 @@ export const BulkCopyNotificationsContainer: React.FC = () => {
     ) {
       dispatch(
         alertActions.addSuccess(
-          "Success! Assessment copied to selected applications"
+          reviewBulkCopyId
+            ? t("toastr.success.assessmentCopied")
+            : t("toastr.success.assessmentAndReviewCopied")
         )
       );
     }
