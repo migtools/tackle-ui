@@ -350,7 +350,7 @@ export const BulkCopyAssessmentReviewForm: React.FC<BulkCopyAssessmentReviewForm
   };
 
   return (
-    <Form>
+    <div className="pf-c-form">
       <Card>
         <CardBody style={{ padding: 0 }}>
           <AppTableWithControls
@@ -448,6 +448,6 @@ export const BulkCopyAssessmentReviewForm: React.FC<BulkCopyAssessmentReviewForm
           {t("actions.copy")}
         </Button>
       </ActionGroup>
-    </Form>
+    </div>
   );
 };

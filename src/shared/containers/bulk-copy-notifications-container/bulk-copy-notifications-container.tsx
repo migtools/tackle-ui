@@ -92,8 +92,8 @@ export const BulkCopyNotificationsContainer: React.FC = () => {
       dispatch(
         alertActions.addSuccess(
           reviewBulkCopyId
-            ? t("toastr.success.assessmentCopied")
-            : t("toastr.success.assessmentAndReviewCopied")
+            ? t("toastr.success.assessmentAndReviewCopied")
+            : t("toastr.success.assessmentCopied")
         )
       );
     }
