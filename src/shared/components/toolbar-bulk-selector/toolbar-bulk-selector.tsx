@@ -16,7 +16,10 @@ export interface IToolbarBulkSelectorProps {
   areAllRowsSelected: boolean;
   onSelectNone: () => void;
   onSelectCurrentPage: () => void;
-  onSelectAll?: () => void;
+  onSelectAll: () => void;
+
+  isFetching: boolean;
+  fetchError?: any;
 }
 
 export const ToolbarBulkSelector: React.FC<IToolbarBulkSelectorProps> = ({
@@ -27,6 +30,9 @@ export const ToolbarBulkSelector: React.FC<IToolbarBulkSelectorProps> = ({
   onSelectNone,
   onSelectCurrentPage,
   onSelectAll,
+
+  isFetching,
+  fetchError,
 }) => {
   // i18
   const { t } = useTranslation();
@@ -41,20 +47,13 @@ export const ToolbarBulkSelector: React.FC<IToolbarBulkSelectorProps> = ({
     setIsOpen(isOpen);
   };
 
-  // Dropdowns
-  const dropdowns = [
-    <DropdownItem key="item-1" onClick={onSelectNone}>
-      {t("actions.selectNone")} (0 items)
-    </DropdownItem>,
-    <DropdownItem key="item-2" onClick={onSelectCurrentPage}>
-      {t("actions.selectPage")} ({pageSize} items)
-    </DropdownItem>,
-  ];
-  if (onSelectAll) {
-    dropdowns.push(
-      <DropdownItem key="item-3" onClick={onSelectAll}>
-        {t("actions.selectAll")} ({totalItems} items)
-      </DropdownItem>
+  if (fetchError) {
+    return (
+      <Dropdown
+        toggle={<DropdownToggle isDisabled>Error</DropdownToggle>}
+        isOpen={false}
+        dropdownItems={[]}
+      />
     );
   }
 
@@ -63,15 +62,27 @@ export const ToolbarBulkSelector: React.FC<IToolbarBulkSelectorProps> = ({
       isOpen={isOpen}
       position={DropdownPosition.left}
       onSelect={onDropDownSelect}
-      dropdownItems={dropdowns}
+      dropdownItems={[
+        <DropdownItem key="item-1" onClick={onSelectNone}>
+          {t("actions.selectNone")} (0 items)
+        </DropdownItem>,
+        <DropdownItem key="item-2" onClick={onSelectCurrentPage}>
+          {t("actions.selectPage")} ({pageSize} items)
+        </DropdownItem>,
+        <DropdownItem key="item-3" onClick={onSelectAll}>
+          {t("actions.selectAll")} ({totalItems} items)
+        </DropdownItem>,
+      ]}
       toggle={
         <DropdownToggle
           onToggle={onDropDownToggle}
+          isDisabled={isFetching}
           splitButtonItems={[
             <DropdownToggleCheckbox
               id="toolbar-bulk-select"
               key="toolbar-bulk-select"
               aria-label="Select"
+              isDisabled={isFetching}
               isChecked={
                 areAllRowsSelected
                   ? true
@@ -80,13 +91,7 @@ export const ToolbarBulkSelector: React.FC<IToolbarBulkSelectorProps> = ({
                   : null
               }
               onClick={() => {
-                if (onSelectAll) {
-                  totalSelectedRows > 0 ? onSelectNone() : onSelectAll();
-                } else {
-                  totalSelectedRows > 0
-                    ? onSelectNone()
-                    : onSelectCurrentPage();
-                }
+                totalSelectedRows > 0 ? onSelectNone() : onSelectAll();
               }}
             ></DropdownToggleCheckbox>,
           ]}

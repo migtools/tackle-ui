@@ -40,6 +40,7 @@ import {
   useTableControls,
   useToolbarFilter,
   useSelectionFromPageState,
+  useFetchPagination,
 } from "shared/hooks";
 
 import {
@@ -119,11 +120,10 @@ export const BulkCopyAssessmentReviewForm: React.FC<BulkCopyAssessmentReviewForm
   // Redux
   const dispatch = useDispatch();
 
-  // Confirmation dialog
+  // Local state
   const [requestConfirmation, setRequestConfirmation] = useState(false);
   const [confirmationAccepted, setConfirmationAccepted] = useState(false);
 
-  // Subtmit state
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Toolbar filters
@@ -180,6 +180,55 @@ export const BulkCopyAssessmentReviewForm: React.FC<BulkCopyAssessmentReviewForm
     refreshTable();
   }, [filtersValue, pagination, sortBy, refreshTable]);
 
+  // Fetch all applications for SELECT ALL
+  const fetchAllApplications = useCallback(
+    (page: number, perPage: number) => {
+      const nameVal = filtersValue.get(ApplicationFilterKey.NAME);
+      const descriptionVal = filtersValue.get(ApplicationFilterKey.DESCRIPTION);
+      const serviceVal = filtersValue.get(
+        ApplicationFilterKey.BUSINESS_SERVICE
+      );
+      const tagVal = filtersValue.get(ApplicationFilterKey.TAG);
+      return getApplications(
+        {
+          name: nameVal?.map((f) => f.key),
+          description: descriptionVal?.map((f) => f.key),
+          businessService: serviceVal?.map((f) => f.key),
+          tag: tagVal?.map((f) => f.key),
+        },
+        { page, perPage }
+      );
+    },
+    [filtersValue]
+  );
+
+  const continueFetchingAllAppsIf = useCallback(
+    (page: ApplicationPage, currentPage: number, currentPageSize: number) => {
+      return page.total_count > currentPage * currentPageSize;
+    },
+    []
+  );
+
+  const allAppsResponseToArray = useCallback(
+    (page: ApplicationPage) => applicationPageMapper(page).data,
+    []
+  );
+
+  const {
+    data: allApps,
+    isFetching: isFetchingAllApps,
+    fetchError: fetchErrorAllApps,
+    requestFetch: refreshAllApps,
+  } = useFetchPagination<ApplicationPage, Application>({
+    requestFetch: fetchAllApplications,
+    continueIf: continueFetchingAllAppsIf,
+    toArray: allAppsResponseToArray,
+  });
+
+  useEffect(() => {
+    refreshAllApps(1, 1000);
+  }, [filtersValue, refreshAllApps]);
+
   // Table's assessments
   const {
     getData: getApplicationAssessment,
@@ -209,6 +258,10 @@ export const BulkCopyAssessmentReviewForm: React.FC<BulkCopyAssessmentReviewForm
     totalItems: applications?.meta.count || 0,
     isEqual: (a, b) => a.id === b.id,
   });
+
+  const filterInvalidRows = (rows?: Application[]) => {
+    return (rows ? rows : []).filter((f) => f.id !== application.id);
+  };
 
   // Table
   const columns: ICell[] = [
@@ -372,17 +425,20 @@ export const BulkCopyAssessmentReviewForm: React.FC<BulkCopyAssessmentReviewForm
             toolbarBulkSelector={
               <ToolbarItem variant="bulk-select">
                 <ToolbarBulkSelector
+                  isFetching={isFetchingAllApps}
+                  fetchError={fetchErrorAllApps}
                   areAllRowsSelected={areAllApplicationsSelected}
                   pageSize={applications?.data.length || 0}
                   totalItems={applications?.meta.count || 0}
                   totalSelectedRows={selectedRows.length}
                   onSelectNone={() => setSelectedRows([])}
                   onSelectCurrentPage={() => {
-                    setSelectedRows(
-                      (applications ? applications.data : []).filter(
-                        (f) => f.id !== application.id
-                      )
-                    );
+                    const rows = filterInvalidRows(applications?.data);
+                    setSelectedRows(rows);
+                  }}
+                  onSelectAll={() => {
+                    const rows = filterInvalidRows(allApps);
+                    setSelectedRows(rows);
                   }}
                 />
               </ToolbarItem>

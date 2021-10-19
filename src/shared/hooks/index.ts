@@ -4,6 +4,7 @@ export { useDelete } from "./useDelete";
 export { useFetchApplicationDependencies } from "./useFetchApplicationDependencies";
 export { useEntityModal } from "./useEntityModal";
 export { useFetch } from "./useFetch";
+export { useFetchPagination } from "./useFetchPagination";
 export { useFetchApplications } from "./useFetchApplications";
 export { useFetchBusinessServices } from "./useFetchBusinessServices";
 export { useFetchJobFunctions } from "./useFetchJobFunctions";
