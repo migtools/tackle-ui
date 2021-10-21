@@ -51,7 +51,7 @@ export const useSelectionFromPageState = <T>({
   };
 
   const selectAllPage = (isSelecting = true) =>
-    selectMultiple(isSelecting ? pageItems : [], isSelecting);
+    selectMultiple(pageItems, isSelecting);
   const areAllSelected = selectedItems.length === totalItems;
 
   return {
