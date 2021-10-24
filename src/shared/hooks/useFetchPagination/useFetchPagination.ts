@@ -67,8 +67,12 @@ const reducer = (state: State, action: Action): State => {
 export interface IArgs<T, U> {
   defaultIsFetching?: boolean;
   requestFetch: (page: number, pageSize: number) => AxiosPromise<T>;
-  continueIf: (t: T, currentPage: number, currentPageSize: number) => boolean;
-  toArray: (t: T) => U[];
+  continueIf: (
+    currentResponseData: T,
+    currentPage: number,
+    currentPageSize: number
+  ) => boolean;
+  toArray: (currentResponseData: T) => U[];
 }
 
 export interface IState<U> {

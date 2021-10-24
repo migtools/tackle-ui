@@ -2,7 +2,7 @@ import { renderHook, act } from "@testing-library/react-hooks";
 
 import { useSelectionFromPageState } from "./useSelectionFromPageState";
 
-describe("useSelectionState", () => {
+describe("useSelectionFromPageState", () => {
   it("updates state correctly when toggling an item", () => {
     const { result } = renderHook(() =>
       useSelectionFromPageState<string>({
