@@ -1,0 +1,1 @@
+export { useKcPermission } from "./useKcPermission";

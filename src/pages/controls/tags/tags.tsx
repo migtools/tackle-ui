@@ -32,10 +32,16 @@ import {
   NoDataEmptyState,
   SearchFilter,
   Color,
+  VisibilityByPermission,
 } from "shared/components";
-import { useTableControls, useFetchTagTypes, useDelete } from "shared/hooks";
+import {
+  useTableControls,
+  useFetchTagTypes,
+  useDelete,
+  useKcPermission,
+} from "shared/hooks";
 
-import { getAxiosErrorMessage } from "utils/utils";
+import { getAxiosErrorMessage, wrapInArrayWhen } from "utils/utils";
 import {
   deleteTag,
   deleteTagType,
@@ -93,9 +99,18 @@ const getRow = (rowData: IRowData): TagType => {
 };
 
 export const Tags: React.FC = () => {
+  // i18
   const { t } = useTranslation();
+
+  // Redux
   const dispatch = useDispatch();
 
+  // RBAC
+  const { isAllowed: isAllowedToWrite } = useKcPermission({
+    permissionsAllowed: ["controls:write"],
+  });
+
+  // Filters
   const filters = [
     {
       key: FilterKey.TAG_TYPE,
@@ -110,12 +125,14 @@ export const Tags: React.FC = () => {
     new Map([])
   );
 
+  // Create and update modal states
   const [isNewTagTypeModalOpen, setIsNewTagTypeModalOpen] = useState(false);
   const [rowToUpdate, setRowToUpdate] = useState<TagType>();
 
   const [isNewTagModalOpen, setIsNewTagModalOpen] = useState(false);
   const [tagToUpdate, setTagToUpdate] = useState<Tag>();
 
+  // Delete state
   const { requestDelete: requestDeleteTagType } = useDelete<TagType>({
     onDelete: (t: TagType) => deleteTagType(t.id!),
   });
@@ -123,6 +140,7 @@ export const Tags: React.FC = () => {
     onDelete: (t: Tag) => deleteTag(t.id!),
   });
 
+  // Table data
   const { tagTypes, isFetching, fetchError, fetchTagTypes } = useFetchTagTypes(
     true
   );
@@ -196,8 +214,7 @@ export const Tags: React.FC = () => {
     );
   };
 
-  //
-
+  // Table's rows and columns
   const columns: ICell[] = [
     {
       title: t("terms.tagType"),
@@ -213,12 +230,12 @@ export const Tags: React.FC = () => {
       title: t("terms.tagCount"),
       transforms: [sortable],
     },
-    {
+    ...wrapInArrayWhen(isAllowedToWrite, {
       title: "",
       props: {
         className: "pf-u-text-align-right",
       },
-    },
+    }),
   ];
 
   const rows: IRow[] = [];
@@ -240,14 +257,14 @@ export const Tags: React.FC = () => {
         {
           title: item.tags ? item.tags.length : 0,
         },
-        {
+        ...wrapInArrayWhen(isAllowedToWrite, {
           title: (
             <AppTableActionButtons
               onEdit={() => setRowToUpdate(item)}
               onDelete={() => deleteRow(item)}
             />
           ),
-        },
+        }),
       ],
     });
 
@@ -427,7 +444,6 @@ export const Tags: React.FC = () => {
           onCollapse={collapseRow}
           cells={columns}
           rows={rows}
-          // actions={actions}
           isLoading={isFetching}
           loadingVariant="skeleton"
           fetchError={fetchError}
@@ -451,28 +467,30 @@ export const Tags: React.FC = () => {
             </AppTableToolbarToggleGroup>
           }
           toolbar={
-            <ToolbarGroup variant="button-group">
-              <ToolbarItem>
-                <Button
-                  type="button"
-                  aria-label="create-tag"
-                  variant={ButtonVariant.primary}
-                  onClick={handleOnOpenCreateNewTagModal}
-                >
-                  {t("actions.createTag")}
-                </Button>
-              </ToolbarItem>
-              <ToolbarItem>
-                <Button
-                  type="button"
-                  aria-label="create-tag-type"
-                  variant={ButtonVariant.secondary}
-                  onClick={handleOnOpenCreateNewTagTypeModal}
-                >
-                  {t("actions.createTagType")}
-                </Button>
-              </ToolbarItem>
-            </ToolbarGroup>
+            <VisibilityByPermission permissionsAllowed={["controls:write"]}>
+              <ToolbarGroup variant="button-group">
+                <ToolbarItem>
+                  <Button
+                    type="button"
+                    aria-label="create-tag"
+                    variant={ButtonVariant.primary}
+                    onClick={handleOnOpenCreateNewTagModal}
+                  >
+                    {t("actions.createTag")}
+                  </Button>
+                </ToolbarItem>
+                <ToolbarItem>
+                  <Button
+                    type="button"
+                    aria-label="create-tag-type"
+                    variant={ButtonVariant.secondary}
+                    onClick={handleOnOpenCreateNewTagTypeModal}
+                  >
+                    {t("actions.createTagType")}
+                  </Button>
+                </ToolbarItem>
+              </ToolbarGroup>
+            </VisibilityByPermission>
           }
           noDataState={
             <NoDataEmptyState

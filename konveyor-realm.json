@@ -50,19 +50,19 @@
           "composites": {
             "client": {
               "tackle-api": [
-                "tag:write",
-                "business-metadata:write",
-                "application:write",
-                "application-import:write",
-                "application-assessment:write",                
-                "application-dependency:write"
+                "controls:write",
+                "inventory:application:write",
+                "inventory:application-import:write",
+                "inventory:application-dependency:write",
+                "inventory:application-review:write",
+                "pathfinder:assessment:write"
               ]
             }
           },
           "clientRole": false,
           "containerId": "konveyor",
           "attributes": {}
-        },      
+        },
         {
           "id": "f777a295-e6bc-45d5-8d84-e476a9021242",
           "name": "architect",
@@ -71,12 +71,12 @@
           "composites": {
             "client": {
               "tackle-api": [
-                "tag:write",
-                "business-metadata:write",
-                "application:write",
-                "application-import:write",
-                "application-assessment:write",                
-                "application-dependency:write"
+                "controls:write",
+                "inventory:application:write",
+                "inventory:application-import:write",
+                "inventory:application-dependency:write",
+                "inventory:application-review:write",
+                "pathfinder:assessment:write"
               ]
             }
           },
@@ -92,11 +92,10 @@
           "composites": {
             "client": {
               "tackle-api": [
-                "tag:read",
-                "business-metadata:read",
-                "application-import:read",
-                "application-assessment:write",
-                "application:read"
+                "controls:read",
+                "inventory:application:read",
+                "inventory:application-import:read",
+                "pathfinder:assessment:write"
               ]
             }
           },
@@ -112,11 +111,10 @@
           "composites": {
             "client": {
               "tackle-api": [
-                "tag:read",
-                "application-import:read",
-                "application-assessment:read",
-                "business-metadata:read",
-                "application:read"
+                "controls:read",
+                "inventory:application:read",
+                "inventory:application-import:read",
+                "pathfinder:assessment:read"
               ]
             }
           },
@@ -367,75 +365,21 @@
             "attributes": {}
           },
           {
-            "id": "f89d033f-1d90-4061-bfff-bf380aaa844a",
-            "name": "application:write",
-            "composite": true,
-            "composites": {
-              "client": {
-                "tackle-api": [
-                  "application:read"
-                ]
-              }
-            },
-            "clientRole": true,
-            "containerId": "a19ae9a3-c9c1-4f4a-b39a-1bd5851eee90",
-            "attributes": {}
-          },
-          {
-            "id": "67082935-a948-4395-a0c8-a851773ca1ba",
-            "name": "application-import:write",
-            "composite": true,
-            "composites": {
-              "client": {
-                "tackle-api": [
-                  "application-import:read"
-                ]
-              }
-            },
-            "clientRole": true,
-            "containerId": "a19ae9a3-c9c1-4f4a-b39a-1bd5851eee90",
-            "attributes": {}
-          },
-          {
-            "id": "caf1d234-b5e4-4cbe-8915-24a9a7cc7ab1",
-            "name": "application-assessment:read",
-            "composite": false,
-            "clientRole": true,
-            "containerId": "a19ae9a3-c9c1-4f4a-b39a-1bd5851eee90",
-            "attributes": {}
-          },
-          {
             "id": "691daa33-980e-419a-a63f-c86d07a03dae",
-            "name": "tag:read",
+            "name": "controls:read",
             "composite": false,
             "clientRole": true,
             "containerId": "a19ae9a3-c9c1-4f4a-b39a-1bd5851eee90",
             "attributes": {}
           },
           {
-            "id": "f0eb63c2-033f-447a-85bd-55c83f1e3619",
-            "name": "application-import:read",
+            "id": "574e82d1-9fc3-4166-bccd-f227afe02982",
+            "name": "controls:write",
             "composite": true,
             "composites": {
               "client": {
                 "tackle-api": [
-                  "application:read"
-                ]
-              }
-            },
-            "clientRole": true,
-            "containerId": "a19ae9a3-c9c1-4f4a-b39a-1bd5851eee90",
-            "attributes": {}
-          },
-          {
-            "id": "1045e9bb-130f-4bc9-bf35-f50d8e46722e",
-            "name": "application-assessment:write",
-            "composite": true,
-            "composites": {
-              "client": {
-                "tackle-api": [
-                  "application-assessment:read",
-                  "application:read"
+                  "controls:read"
                 ]
               }
             },
@@ -445,14 +389,13 @@
           },
           {
             "id": "5cf0b4ca-7e26-4f86-a3d3-6dab69243d33",
-            "name": "application:read",
+            "name": "inventory:application:read",
             "composite": true,
             "composites": {
               "client": {
                 "tackle-api": [
-                  "tag:read",
-                  "application-assessment:read",
-                  "business-metadata:read"
+                  "controls:read",
+                  "pathfinder:assessment:read"
                 ]
               }
             },
@@ -461,21 +404,43 @@
             "attributes": {}
           },
           {
-            "id": "3ed86dfd-d354-4d70-9467-a0b8270bb37c",
-            "name": "business-metadata:read",
-            "composite": false,
+            "id": "f89d033f-1d90-4061-bfff-bf380aaa844a",
+            "name": "inventory:application:write",
+            "composite": true,
+            "composites": {
+              "client": {
+                "tackle-api": [
+                  "inventory:application:read"
+                ]
+              }
+            },
             "clientRole": true,
             "containerId": "a19ae9a3-c9c1-4f4a-b39a-1bd5851eee90",
             "attributes": {}
           },
           {
-            "id": "574e82d1-9fc3-4166-bccd-f227afe02982",
-            "name": "tag:write",
+            "id": "f0eb63c2-033f-447a-85bd-55c83f1e3619",
+            "name": "inventory:application-import:read",
             "composite": true,
             "composites": {
               "client": {
                 "tackle-api": [
-                  "tag:read"
+                  "inventory:application:read"
+                ]
+              }
+            },
+            "clientRole": true,
+            "containerId": "a19ae9a3-c9c1-4f4a-b39a-1bd5851eee90",
+            "attributes": {}
+          },
+          {
+            "id": "67082935-a948-4395-a0c8-a851773ca1ba",
+            "name": "inventory:application-import:write",
+            "composite": true,
+            "composites": {
+              "client": {
+                "tackle-api": [
+                  "inventory:application-import:read"
                 ]
               }
             },
@@ -485,12 +450,12 @@
           },
           {
             "id": "d8a18018-8ce5-497f-b7e3-de7b1112ac39",
-            "name": "application-dependency:write",
+            "name": "inventory:application-dependency:write",
             "composite": true,
             "composites": {
               "client": {
                 "tackle-api": [
-                  "application:read"
+                  "inventory:application:read"
                 ]
               }
             },
@@ -499,13 +464,38 @@
             "attributes": {}
           },
           {
-            "id": "703d2149-4c71-47e9-922e-8643ffbff834",
-            "name": "business-metadata:write",
+            "id": "3ed86dfd-d354-4d70-9467-a0b8270bb37c",
+            "name": "inventory:application-review:write",
             "composite": true,
             "composites": {
               "client": {
                 "tackle-api": [
-                  "business-metadata:read"
+                  "inventory:application:read",
+                  "pathfinder:assessment:write"
+                ]
+              }
+            },
+            "clientRole": true,
+            "containerId": "a19ae9a3-c9c1-4f4a-b39a-1bd5851eee90",
+            "attributes": {}
+          },
+          {
+            "id": "caf1d234-b5e4-4cbe-8915-24a9a7cc7ab1",
+            "name": "pathfinder:assessment:read",
+            "composite": false,
+            "clientRole": true,
+            "containerId": "a19ae9a3-c9c1-4f4a-b39a-1bd5851eee90",
+            "attributes": {}
+          },
+          {
+            "id": "03f48fd4-de69-4baa-8177-cdab92d76209",
+            "name": "pathfinder:assessment:write",
+            "composite": true,
+            "composites": {
+              "client": {
+                "tackle-api": [
+                  "inventory:application:read",
+                  "pathfinder:assessment:read"
                 ]
               }
             },

@@ -37,14 +37,16 @@ import {
   SearchFilter,
   AppTableToolbarToggleGroup,
   NoDataEmptyState,
+  VisibilityByPermission,
 } from "shared/components";
 import {
   useTableControls,
   useFetchStakeholderGroups,
   useDelete,
+  useKcPermission,
 } from "shared/hooks";
 
-import { getAxiosErrorMessage } from "utils/utils";
+import { getAxiosErrorMessage, wrapInArrayWhen } from "utils/utils";
 import {
   deleteStakeholderGroup,
   StakeholderGroupSortBy,
@@ -93,9 +95,18 @@ const getRow = (rowData: IRowData): StakeholderGroup => {
 };
 
 export const StakeholderGroups: React.FC = () => {
+  // i18
   const { t } = useTranslation();
+
+  // Redux
   const dispatch = useDispatch();
 
+  // RBAC
+  const { isAllowed: isAllowedToWrite } = useKcPermission({
+    permissionsAllowed: ["controls:write"],
+  });
+
+  // Filters
   const filters = [
     {
       key: FilterKey.NAME,
@@ -114,15 +125,18 @@ export const StakeholderGroups: React.FC = () => {
     new Map([])
   );
 
+  // Create and update modal states
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
   const [rowToUpdate, setRowToUpdate] = useState<StakeholderGroup>();
 
+  // Delete state
   const {
     requestDelete: requestDeleteStakeholderGroup,
   } = useDelete<StakeholderGroup>({
     onDelete: (t: StakeholderGroup) => deleteStakeholderGroup(t.id!),
   });
 
+  // Table data
   const {
     stakeholderGroups,
     isFetching,
@@ -171,6 +185,7 @@ export const StakeholderGroups: React.FC = () => {
     );
   }, [filtersValue, paginationQuery, sortByQuery, fetchStakeholderGroups]);
 
+  // Table's rows and columns
   const columns: ICell[] = [
     {
       title: t("terms.name"),
@@ -182,12 +197,12 @@ export const StakeholderGroups: React.FC = () => {
       title: t("terms.memberCount"),
       transforms: [sortable],
     },
-    {
+    ...wrapInArrayWhen(isAllowedToWrite, {
       title: "",
       props: {
         className: "pf-u-text-align-right",
       },
-    },
+    }),
   ];
 
   const rows: IRow[] = [];
@@ -208,14 +223,14 @@ export const StakeholderGroups: React.FC = () => {
         {
           title: item.stakeholders ? item.stakeholders.length : 0,
         },
-        {
+        ...wrapInArrayWhen(isAllowedToWrite, {
           title: (
             <AppTableActionButtons
               onEdit={() => editRow(item)}
               onDelete={() => deleteRow(item)}
             />
           ),
-        },
+        }),
       ],
     });
 
@@ -398,18 +413,20 @@ export const StakeholderGroups: React.FC = () => {
             </AppTableToolbarToggleGroup>
           }
           toolbar={
-            <ToolbarGroup variant="button-group">
-              <ToolbarItem>
-                <Button
-                  type="button"
-                  aria-label="create-stakeholder-group"
-                  variant={ButtonVariant.primary}
-                  onClick={handleOnOpenCreateNewModal}
-                >
-                  {t("actions.createNew")}
-                </Button>
-              </ToolbarItem>
-            </ToolbarGroup>
+            <VisibilityByPermission permissionsAllowed={["controls:write"]}>
+              <ToolbarGroup variant="button-group">
+                <ToolbarItem>
+                  <Button
+                    type="button"
+                    aria-label="create-stakeholder-group"
+                    variant={ButtonVariant.primary}
+                    onClick={handleOnOpenCreateNewModal}
+                  >
+                    {t("actions.createNew")}
+                  </Button>
+                </ToolbarItem>
+              </ToolbarGroup>
+            </VisibilityByPermission>
           }
           noDataState={
             <NoDataEmptyState

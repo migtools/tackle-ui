@@ -61,3 +61,9 @@ export const formatDate = (value: Date, includeTime = true) => {
 
   return value.toLocaleDateString("en", options);
 };
+
+// Util functions
+
+export const wrapInArrayWhen = (when: boolean, obj: any) => {
+  return when ? [obj] : [];
+};

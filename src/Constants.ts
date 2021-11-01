@@ -194,3 +194,19 @@ export enum ApplicationFilterKey {
   BUSINESS_SERVICE = "business_service",
   TAG = "tag",
 }
+
+// Keycloak RBAC
+
+export const KC_API_CLIENT = "tackle-api";
+
+export type KcPermission =
+  | "controls:read"
+  | "controls:write"
+  | "inventory:application:read"
+  | "inventory:application:write"
+  | "inventory:application-import:read"
+  | "inventory:application-import:write"
+  | "inventory:application-dependency:write"
+  | "inventory:application-review:write"
+  | "pathfinder:assessment:read"
+  | "pathfinder:assessment:write";
