@@ -63,7 +63,7 @@ Start a database which will be used by `tackle-controls`:
 docker run -d -p 5432:5432 \
 -e POSTGRES_USER=username \
 -e POSTGRES_PASSWORD=password \
--e POSTGRES_DB=controls_db \
+-e POSTGRES_DB=db \
 postgres:13.1
 ```
 
@@ -76,8 +76,8 @@ Move your terminal to where you cloned `tackle-controls` and then:
 -Dquarkus.http.port=8080 \
 -Dquarkus.datasource.username=username \
 -Dquarkus.datasource.password=password \
--Dquarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/controls_db \
--Dquarkus.oidc.client-id=controls-api \
+-Dquarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/db \
+-Dquarkus.oidc.client-id=tackle-api \
 -Dquarkus.oidc.credentials.secret=secret \
 -Dquarkus.oidc.auth-server-url=http://localhost:8180/auth/realms/konveyor
 ```

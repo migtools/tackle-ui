@@ -23,11 +23,11 @@ services:
     ports:
       - 5433:5432
     environment:
-      POSTGRES_DB: controls_db
+      POSTGRES_DB: db
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user -d controls_db"]
+      test: ["CMD-SHELL", "pg_isready -U user -d db"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -40,9 +40,9 @@ services:
       QUARKUS_HTTP_PORT: 8080
       QUARKUS_DATASOURCE_USERNAME: user
       QUARKUS_DATASOURCE_PASSWORD: password
-      QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://controls-db:5432/controls_db
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://controls-db:5432/db
       QUARKUS_OIDC_AUTH_SERVER_URL: http://keycloak:8080/auth/realms/konveyor
-      QUARKUS_OIDC_CLIENT_ID: controls-api
+      QUARKUS_OIDC_CLIENT_ID: tackle-api
       QUARKUS_OIDC_CREDENTIALS_SECRET: secret
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/controls/q/health"]
@@ -60,11 +60,11 @@ services:
     ports:
       - 5434:5432
     environment:
-      POSTGRES_DB: application_inventory_db
+      POSTGRES_DB: db
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user -d application_inventory_db"]
+      test: ["CMD-SHELL", "pg_isready -U user -d db"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -77,9 +77,9 @@ services:
       QUARKUS_HTTP_PORT: 8080
       QUARKUS_DATASOURCE_USERNAME: user
       QUARKUS_DATASOURCE_PASSWORD: password
-      QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://application-inventory-db:5432/application_inventory_db
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://application-inventory-db:5432/db
       QUARKUS_OIDC_AUTH_SERVER_URL: http://keycloak:8080/auth/realms/konveyor
-      QUARKUS_OIDC_CLIENT_ID: application-inventory-api
+      QUARKUS_OIDC_CLIENT_ID: tackle-api
       QUARKUS_OIDC_CREDENTIALS_SECRET: secret
       IO_TACKLE_APPLICATIONINVENTORY_SERVICES_CONTROLS_SERVICE: controls:8080
     healthcheck:
@@ -104,11 +104,11 @@ services:
     ports:
       - 5435:5432
     environment:
-      POSTGRES_DB: pathfinder_db
+      POSTGRES_DB: db
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user -d pathfinder_db"]
+      test: ["CMD-SHELL", "pg_isready -U user -d db"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -121,9 +121,9 @@ services:
       QUARKUS_HTTP_PORT: 8080
       QUARKUS_DATASOURCE_USERNAME: user
       QUARKUS_DATASOURCE_PASSWORD: password
-      QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://pathfinder-db:5432/pathfinder_db
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://pathfinder-db:5432/db
       QUARKUS_OIDC_AUTH_SERVER_URL: http://keycloak:8080/auth/realms/konveyor
-      QUARKUS_OIDC_CLIENT_ID: pathfinder-api
+      QUARKUS_OIDC_CLIENT_ID: tackle-api
       QUARKUS_OIDC_CREDENTIALS_SECRET: secret
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/pathfinder/q/health"]
