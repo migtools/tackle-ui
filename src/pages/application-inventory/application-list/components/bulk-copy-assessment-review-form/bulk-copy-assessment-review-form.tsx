@@ -457,31 +457,25 @@ export const BulkCopyAssessmentReviewForm: React.FC<BulkCopyAssessmentReviewForm
         <FormGroup
           fieldId="confirm"
           label={
-            review
-              ? t("message.copyAssessmentAndReviewQuestion")
-              : t("message.copyAssessmentQuestion")
+            <>
+              <span aria-label="warning-icon">
+                <WarningTriangleIcon noVerticalAlign color={gold.value} />
+              </span>
+              &nbsp;&nbsp;
+              {review
+                ? t("message.copyAssessmentAndReviewQuestion")
+                : t("message.copyAssessmentQuestion")}
+            </>
           }
-          labelIcon={
-            <button
-              type="button"
-              aria-label="warning-icon"
-              onClick={(e) => e.preventDefault()}
-              aria-describedby="form-group-label-info"
-              className="pf-c-form__group-label-help"
-            >
-              <WarningTriangleIcon noVerticalAlign color={gold.value} />
-            </button>
-          }
+          isStack
         >
+          {review
+            ? t("message.copyAssessmentAndReviewBody")
+            : t("message.copyAssessmentBody")}
           <Checkbox
             id="confirm"
             name="confirm"
             label={t("message.continueConfirmation")}
-            body={
-              review
-                ? t("message.copyAssessmentAndReviewBody")
-                : t("message.copyAssessmentBody")
-            }
             aria-label="Confirm"
             isChecked={confirmationAccepted}
             onChange={(isChecked) => setConfirmationAccepted(isChecked)}
