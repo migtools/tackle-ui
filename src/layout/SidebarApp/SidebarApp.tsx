@@ -5,7 +5,6 @@ import { Nav, NavItem, PageSidebar, NavList } from "@patternfly/react-core";
 
 import { Paths } from "Paths";
 import { LayoutTheme } from "../LayoutUtils";
-import { useKcPermission } from "shared/hooks";
 import { VisibilityByPermission } from "shared/components";
 
 export const SidebarApp: React.FC = () => {
