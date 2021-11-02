@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from "react";
-import { Redirect, Route, Switch, useLocation } from "react-router-dom";
+import { Redirect, Switch, useLocation } from "react-router-dom";
 
 import { Paths } from "Paths";
 import { AppPlaceholder } from "shared/components";

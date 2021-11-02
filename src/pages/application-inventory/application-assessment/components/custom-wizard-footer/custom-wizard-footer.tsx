@@ -6,6 +6,7 @@ import {
   WizardContextConsumer,
   WizardFooter,
 } from "@patternfly/react-core";
+import { VisibilityByPermission } from "shared/components";
 
 export interface CustomWizardFooterProps {
   isFirstStep: boolean;
@@ -47,14 +48,18 @@ export const CustomWizardFooter: React.FC<CustomWizardFooterProps> = ({
                   >
                     {t("actions.save")}
                   </Button>
-                  <Button
-                    variant="primary"
-                    onClick={() => onSave(true)}
-                    isDisabled={!enableNext || isDisabled || isFormInvalid}
-                    cy-data="save-and-review"
+                  <VisibilityByPermission
+                    permissionsAllowed={["inventory:application-review:write"]}
                   >
-                    {t("actions.saveAndReview")}
-                  </Button>
+                    <Button
+                      variant="primary"
+                      onClick={() => onSave(true)}
+                      isDisabled={!enableNext || isDisabled || isFormInvalid}
+                      cy-data="save-and-review"
+                    >
+                      {t("actions.saveAndReview")}
+                    </Button>
+                  </VisibilityByPermission>
                 </>
               ) : (
                 <Button

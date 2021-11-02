@@ -104,25 +104,6 @@
           "attributes": {}
         },
         {
-          "id": "74c6b736-7934-44de-88c0-435c927ada01",
-          "name": "user",
-          "description": "User of Tackle",
-          "composite": true,
-          "composites": {
-            "client": {
-              "tackle-api": [
-                "controls:read",
-                "inventory:application:read",
-                "inventory:application-import:read",
-                "pathfinder:assessment:read"
-              ]
-            }
-          },
-          "clientRole": false,
-          "containerId": "konveyor",
-          "attributes": {}
-        },
-        {
           "id": "85aa1467-987b-4a71-a7e1-92dffc90323b",
           "name": "uma_authorization",
           "description": "${role_uma_authorization}",
@@ -593,7 +574,7 @@
     "defaultRoles": [
       "uma_authorization",
       "offline_access",
-      "user"
+      "migrator"
     ],
     "requiredCredentials": [
       "password"
@@ -688,7 +669,7 @@
         ],
         "requiredActions": [],
         "realmRoles": [
-          "user"
+          "migrator"
         ],
         "notBefore": 0,
         "groups": []
