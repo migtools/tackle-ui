@@ -21,7 +21,7 @@ import {
   ToolbarChip,
   ToolbarItem,
 } from "@patternfly/react-core";
-import { WarningTriangleIcon } from "@patternfly/react-icons";
+import { ExclamationTriangleIcon } from "@patternfly/react-icons";
 import { global_palette_gold_400 as gold } from "@patternfly/react-tokens";
 
 import { useDispatch } from "react-redux";
@@ -459,7 +459,7 @@ export const BulkCopyAssessmentReviewForm: React.FC<BulkCopyAssessmentReviewForm
           label={
             <>
               <span aria-label="warning-icon">
-                <WarningTriangleIcon noVerticalAlign color={gold.value} />
+                <ExclamationTriangleIcon noVerticalAlign color={gold.value} />
               </span>
               &nbsp;&nbsp;
               {review
