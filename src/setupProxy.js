@@ -4,7 +4,7 @@ module.exports = function (app) {
   app.use(
     "/api/controls",
     createProxyMiddleware({
-      target: "http://localhost:8087",
+      target: "http://localhost:8081",
       changeOrigin: true,
       pathRewrite: {
         "^/api/controls": "/controls",
@@ -15,7 +15,7 @@ module.exports = function (app) {
   app.use(
     "/api/application-inventory",
     createProxyMiddleware({
-      target: "http://localhost:8088",
+      target: "http://localhost:8082",
       changeOrigin: true,
       pathRewrite: {
         "^/api/application-inventory": "/application-inventory",
@@ -26,7 +26,7 @@ module.exports = function (app) {
   app.use(
     "/api/pathfinder",
     createProxyMiddleware({
-      target: "http://localhost:8089",
+      target: "http://localhost:8083",
       changeOrigin: true,
       pathRewrite: {
         "^/api/pathfinder": "/pathfinder",
