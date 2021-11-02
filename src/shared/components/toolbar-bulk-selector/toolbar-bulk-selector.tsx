@@ -10,23 +10,29 @@ import {
 } from "@patternfly/react-core";
 
 export interface IToolbarBulkSelectorProps {
-  perPage: number;
+  pageSize: number;
   totalItems: number;
   totalSelectedRows: number;
   areAllRowsSelected: boolean;
-  onSelectAll: () => void;
   onSelectNone: () => void;
   onSelectCurrentPage: () => void;
+  onSelectAll: () => void;
+
+  isFetching: boolean;
+  fetchError?: any;
 }
 
 export const ToolbarBulkSelector: React.FC<IToolbarBulkSelectorProps> = ({
-  perPage,
+  pageSize,
   totalItems,
   areAllRowsSelected,
   totalSelectedRows,
-  onSelectAll,
   onSelectNone,
   onSelectCurrentPage,
+  onSelectAll,
+
+  isFetching,
+  fetchError,
 }) => {
   // i18
   const { t } = useTranslation();
@@ -41,6 +47,16 @@ export const ToolbarBulkSelector: React.FC<IToolbarBulkSelectorProps> = ({
     setIsOpen(isOpen);
   };
 
+  if (fetchError) {
+    return (
+      <Dropdown
+        toggle={<DropdownToggle isDisabled>Error</DropdownToggle>}
+        isOpen={false}
+        dropdownItems={[]}
+      />
+    );
+  }
+
   return (
     <Dropdown
       isOpen={isOpen}
@@ -51,7 +67,7 @@ export const ToolbarBulkSelector: React.FC<IToolbarBulkSelectorProps> = ({
           {t("actions.selectNone")} (0 items)
         </DropdownItem>,
         <DropdownItem key="item-2" onClick={onSelectCurrentPage}>
-          {t("actions.selectPage")} ({perPage} items)
+          {t("actions.selectPage")} ({pageSize} items)
         </DropdownItem>,
         <DropdownItem key="item-3" onClick={onSelectAll}>
           {t("actions.selectAll")} ({totalItems} items)
@@ -60,11 +76,13 @@ export const ToolbarBulkSelector: React.FC<IToolbarBulkSelectorProps> = ({
       toggle={
         <DropdownToggle
           onToggle={onDropDownToggle}
+          isDisabled={isFetching}
           splitButtonItems={[
             <DropdownToggleCheckbox
               id="toolbar-bulk-select"
               key="toolbar-bulk-select"
               aria-label="Select"
+              isDisabled={isFetching}
               isChecked={
                 areAllRowsSelected
                   ? true

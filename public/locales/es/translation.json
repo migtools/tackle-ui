@@ -13,6 +13,9 @@
         "clearAllFilters": "Limpiar todos los filtros",
         "close": "Cerrar",
         "continue": "Continuar",
+        "copy": "Copiar",
+        "copyAssessment": "Copiar evaluación",
+        "copyAssessmentAndReview": "Copiar evaluación y revisión",
         "create": "Crear",
         "createNew": "Crear nuevo",
         "createTag": "Crear etiqueta",
@@ -69,6 +72,8 @@
             "leavePage": "¿Estás seguro de querer salir de esta página? Asegúrate de guardar tus cambios o estos se perderán."
         },
         "title": {
+            "copyApplicationAssessmentAndReviewFrom": "Copiar evaluación y revisión de {{what}}",
+            "copyApplicationAssessmentFrom": "Copiar evaluación {{what}}",
             "delete": "¿Eliminar {{what}}?",
             "discard": "¿Descartar {{what}}?",
             "importApplicationFile": "Importar archivo con aplicaciones",
@@ -98,9 +103,14 @@
         "small": "Pequeño"
     },
     "message": {
-        "appNotAssesedTitle": "",
-        "appNotAssessedBody": "",
+        "appNotAssesedTitle": "La evaluación no se ha completado",
+        "appNotAssessedBody": "Para revisar una aplicación, esta debe de ser evaluada primero. Por favor evalúe la aplicación",
         "assessmentStakeholderHeader": "Seleccione a los interesados o grupo de interesados asociados a esta evaluación.",
+        "continueConfirmation": "Si, continuar",
+        "copyAssessmentAndReviewBody": "Algunas de las aplicaciones de destino seleccionadas tienen una evaluación/revisión en curso o completa. Al continuar, las evaluaciones/revisiones existentes serán reemplazadas por la evaluación/revisión copiada. ¿Desea continuar?",
+        "copyAssessmentAndReviewQuestion": "¿Copiar evaluación y revisión?",
+        "copyAssessmentBody": "Algunas de las aplicaciones de destino seleccionadas tienen una evaluación en curso o completa. Al continuar, las evaluaciones existentes serán reemplazadas por la evaluación copiada. ¿Desea continuar?",
+        "copyAssessmentQuestion": "¿Copiar evaluación?",
         "couldNotFetchBody": "El recurso no existe o no tienes permiso para acceder al mismo",
         "couldNotFetchTitle": "No disponible",
         "importErrorCheckDocumentation": "Para estados de importación Error por favor verifica la documentación para asegurar la correcta estructura del archivo.",
@@ -243,6 +253,8 @@
     "toastr": {
         "success": {
             "added": "Éxito! {{what}} fue creado como un {{type}}.",
+            "assessmentAndReviewCopied": "Éxito! Evaluación y revisión copiada a las aplicaciones seleccionadas",
+            "assessmentCopied": "Éxito! Evaluación copiada a las aplicaciones seleccionadas",
             "assessmentDiscarded": "Éxito! Evaluación de {{application}} desechada.",
             "fileSavedToBeProcessed": "Éxito! El archivo fue guardado para ser procesado."
         }
