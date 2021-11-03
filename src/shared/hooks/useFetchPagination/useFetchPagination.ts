@@ -7,9 +7,9 @@ export const {
   success: fetchSuccess,
   failure: fetchFailure,
 } = createAsyncAction(
-  "useFetch/fetch/request",
-  "useFetch/fetch/success",
-  "useFetch/fetch/failure"
+  "useFetchPagination/fetch/request",
+  "useFetchPagination/fetch/success",
+  "useFetchPagination/fetch/failure"
 )<void, any, any>();
 
 type State = Readonly<{
@@ -64,66 +64,57 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-const delay = (t: number) => new Promise((resolve) => setTimeout(resolve, t));
-
-export interface IWatch<T> {
-  continueIf: (t: T) => boolean;
-  delay?: number;
-}
-
-export interface IArgs<T> {
+export interface IArgs<T, U> {
   defaultIsFetching?: boolean;
-  onFetch?: () => AxiosPromise<T>;
-  onFetchPromise?: () => Promise<T>;
+  requestFetch: (page: number, pageSize: number) => AxiosPromise<T>;
+  continueIf: (
+    currentResponseData: T,
+    currentPage: number,
+    currentPageSize: number
+  ) => boolean;
+  toArray: (currentResponseData: T) => U[];
 }
 
-export interface IState<T> {
-  data?: T;
+export interface IState<U> {
+  data?: U[];
   isFetching: boolean;
   fetchError?: any;
   fetchCount: number;
-  requestFetch: (watch?: IWatch<T>) => void;
+  requestFetch: (page: number, pageSize: number) => void;
 }
 
-export const useFetch = <T>({
+export const useFetchPagination = <T, U>({
   defaultIsFetching = false,
-  onFetch,
-  onFetchPromise,
-}: IArgs<T>): IState<T> => {
+  requestFetch,
+  continueIf,
+  toArray,
+}: IArgs<T, U>): IState<U> => {
   const [state, dispatch] = useReducer(reducer, defaultIsFetching, initReducer);
 
-  const fetchHandler = useCallback(
-    (watch?: IWatch<T>) => {
-      dispatch(fetchRequest());
-
-      const watchFn = (data: T) => {
-        if (watch && watch.continueIf(data)) {
-          delay(watch?.delay || 1000).then(() => {
-            fetchHandler(watch);
-          });
-        }
-      };
-
-      let promise;
-      if (onFetch) {
-        promise = onFetch().then(({ data }) => {
-          dispatch(fetchSuccess(data));
-          watchFn(data);
+  const executeFetch = useCallback(
+    (page: number, pageSize: number, acumulator: U[]) => {
+      requestFetch(page, pageSize)
+        .then(({ data }) => {
+          const totalData = [...acumulator, ...toArray(data)];
+          if (continueIf(data, page, pageSize)) {
+            executeFetch(page + 1, pageSize, totalData);
+          } else {
+            dispatch(fetchSuccess(totalData));
+          }
+        })
+        .catch((error) => {
+          dispatch(fetchFailure(error));
         });
-      } else if (onFetchPromise) {
-        promise = onFetchPromise().then((data) => {
-          dispatch(fetchSuccess(data));
-          watchFn(data);
-        });
-      } else {
-        return;
-      }
-
-      promise.catch((error) => {
-        dispatch(fetchFailure(error));
-      });
     },
-    [onFetch, onFetchPromise]
+    [requestFetch, continueIf, toArray]
+  );
+
+  const requestFetchHandler = useCallback(
+    (page: number, pageSize: number) => {
+      dispatch(fetchRequest());
+      executeFetch(page, pageSize, []);
+    },
+    [executeFetch]
   );
 
   return {
@@ -131,8 +122,8 @@ export const useFetch = <T>({
     isFetching: state.isFetching,
     fetchError: state.fetchError,
     fetchCount: state.fetchCount,
-    requestFetch: fetchHandler,
+    requestFetch: requestFetchHandler,
   };
 };
 
-export default useFetch;
+export default useFetchPagination;

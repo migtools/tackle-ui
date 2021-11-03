@@ -13,6 +13,9 @@
         "clearAllFilters": "Clear all filters",
         "close": "Close",
         "continue": "Continue",
+        "copy": "Copy",
+        "copyAssessment": "Copy assessment",
+        "copyAssessmentAndReview": "Copy assessment and review",
         "create": "Create",
         "createNew": "Create new",
         "createTag": "Create tag",
@@ -69,6 +72,8 @@
             "leavePage": "Are you sure you want to leave this page? Be sure to save your changes, or they will be lost."
         },
         "title": {
+            "copyApplicationAssessmentAndReviewFrom": "Copy {{what}} assessment and review",
+            "copyApplicationAssessmentFrom": "Copy {{what}} assessment",
             "delete": "Delete {{what}}?",
             "discard": "Discard {{what}}?",
             "importApplicationFile": "Import application file",
@@ -101,6 +106,11 @@
         "appNotAssesedTitle": "Assessment has not been completed",
         "appNotAssessedBody": "In order to review an application it must be assessed first. Please assess the application",
         "assessmentStakeholderHeader": "Select the stakeholder(s) or stakeholder group(s) associated with this assessment.",
+        "continueConfirmation": "Yes, continue",
+        "copyAssessmentAndReviewBody": "Some of the selected target applications have an in-progress or complete assessment/review. By continuing, the existing assessment(s)/review(s) will be replaced by the copied assessment/review. Do you wish to continue?",
+        "copyAssessmentAndReviewQuestion": "Copy assessment and review?",
+        "copyAssessmentBody": "Some of the selected target applications have an in-progress or complete assessment. By continuing, the existing assessment(s) will be replaced by the copied assessment. Do you wish to continue?",
+        "copyAssessmentQuestion": "Copy assessment?",
         "couldNotFetchBody": "Resource doesn't exists or you don't have access to it",
         "couldNotFetchTitle": "Not available",
         "importErrorCheckDocumentation": "For status Error imports please check the documentation to ensure your file is structured correctly.",
@@ -243,6 +253,8 @@
     "toastr": {
         "success": {
             "added": "Success! {{what}} was added as a {{type}}.",
+            "assessmentAndReviewCopied": "Success! Assessment and review copied to selected applications",
+            "assessmentCopied": "Success! Assessment copied to selected applications",
             "assessmentDiscarded": "Success! Assessment discarded for {{application}}.",
             "fileSavedToBeProcessed": "Success! file saved to be processed."
         }

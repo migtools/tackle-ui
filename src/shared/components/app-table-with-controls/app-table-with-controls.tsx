@@ -28,8 +28,12 @@ export interface IAppTableWithControlsProps extends IAppTableProps {
     perPage: number;
   }) => void;
 
-  toolbar?: any;
+  withoutTopPagination?: boolean;
+  withoutBottomPagination?: boolean;
+
+  toolbarBulkSelector?: any;
   toolbarToggle?: any;
+  toolbarActions?: any;
   toolbarClearAllFilters?: () => void;
 }
 
@@ -38,8 +42,12 @@ export const AppTableWithControls: React.FC<IAppTableWithControlsProps> = ({
   pagination,
   onPaginationChange,
 
-  toolbar,
+  withoutTopPagination,
+  withoutBottomPagination,
+
+  toolbarBulkSelector,
   toolbarToggle,
+  toolbarActions,
   toolbarClearAllFilters,
 
   ...rest
@@ -55,31 +63,36 @@ export const AppTableWithControls: React.FC<IAppTableWithControlsProps> = ({
         clearFiltersButtonText={t("actions.clearAllFilters")}
       >
         <ToolbarContent>
+          {toolbarBulkSelector}
           {toolbarToggle && (
             <ToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="xl">
               {toolbarToggle}
             </ToolbarToggleGroup>
           )}
-          {toolbar}
-          <ToolbarItem
-            variant={ToolbarItemVariant.pagination}
-            alignment={{ default: "alignRight" }}
-          >
-            <SimplePagination
-              count={count}
-              params={pagination}
-              onChange={onPaginationChange}
-              isTop={true}
-            />
-          </ToolbarItem>
+          {toolbarActions}
+          {!withoutTopPagination && (
+            <ToolbarItem
+              variant={ToolbarItemVariant.pagination}
+              alignment={{ default: "alignRight" }}
+            >
+              <SimplePagination
+                count={count}
+                params={pagination}
+                onChange={onPaginationChange}
+                isTop={true}
+              />
+            </ToolbarItem>
+          )}
         </ToolbarContent>
       </Toolbar>
       <AppTable {...rest} />
-      <SimplePagination
-        count={count}
-        params={pagination}
-        onChange={onPaginationChange}
-      />
+      {!withoutBottomPagination && (
+        <SimplePagination
+          count={count}
+          params={pagination}
+          onChange={onPaginationChange}
+        />
+      )}
     </div>
   );
 };

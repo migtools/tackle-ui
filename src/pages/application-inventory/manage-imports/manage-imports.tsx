@@ -422,7 +422,7 @@ export const ManageImports: React.FC = () => {
                 <ToolbarSearchFilter filters={filterOptions} />
               </AppTableToolbarToggleGroup>
             }
-            toolbar={
+            toolbarActions={
               <>
                 <ToolbarGroup variant="button-group">
                   <VisibilityByPermission

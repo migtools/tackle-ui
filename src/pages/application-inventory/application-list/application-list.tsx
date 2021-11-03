@@ -36,6 +36,7 @@ import { RootState } from "store/rootReducer";
 import { alertActions } from "store/alert";
 import { confirmDialogActions } from "store/confirmDialog";
 import { unknownTagsSelectors } from "store/unknownTags";
+import { bulkCopySelectors } from "store/bulkCopy";
 
 import {
   ApplicationToolbarToggleGroup,
@@ -86,6 +87,7 @@ import { ApplicationAssessment } from "./components/application-assessment";
 import { ApplicationBusinessService } from "./components/application-business-service";
 import { ApplicationListExpandedArea } from "./components/application-list-expanded-area";
 import { ImportApplicationsForm } from "./components/import-applications-form";
+import { BulkCopyAssessmentReviewForm } from "./components/bulk-copy-assessment-review-form";
 
 const toSortByQuery = (
   sortBy?: SortByQuery
@@ -134,8 +136,13 @@ export const ApplicationList: React.FC = () => {
 
   // Redux
   const dispatch = useDispatch();
+
   const unknownTagIds = useSelector((state: RootState) =>
     unknownTagsSelectors.unknownTagIds(state)
+  );
+
+  const isWatchingBulkCopy = useSelector((state: RootState) =>
+    bulkCopySelectors.isWatching(state)
   );
 
   // Router
@@ -204,7 +211,13 @@ export const ApplicationList: React.FC = () => {
 
   useEffect(() => {
     refreshTable();
-  }, [filtersValue, paginationQuery, sortByQuery, refreshTable]);
+  }, [
+    filtersValue,
+    paginationQuery,
+    sortByQuery,
+    isWatchingBulkCopy,
+    refreshTable,
+  ]);
 
   // Create and update modal
   const {
@@ -236,6 +249,22 @@ export const ApplicationList: React.FC = () => {
   const { requestDelete: requestDeleteApplication } = useDelete<Application>({
     onDelete: (t: Application) => deleteApplication(t.id!),
   });
+
+  // Copy assessment modal
+  const {
+    isOpen: isCopyAssessmentModalOpen,
+    data: applicationToCopyAssessmentFrom,
+    update: openCopyAssessmentModal,
+    close: closeCopyAssessmentModal,
+  } = useEntityModal<Application>();
+
+  // Copy assessment and review modal
+  const {
+    isOpen: isCopyAssessmentAndReviewModalOpen,
+    data: applicationToCopyAssessmentAndReviewFrom,
+    update: openCopyAssessmentAndReviewModal,
+    close: closeCopyAssessmentAndReviewModal,
+  } = useEntityModal<Application>();
 
   // Dependencies modal
   const {
@@ -400,6 +429,34 @@ export const ApplicationList: React.FC = () => {
     }
 
     const actions: (IAction | ISeparator)[] = [];
+
+    const applicationAssessment = getApplicationAssessment(row.id!);
+    if (applicationAssessment?.status === "COMPLETE") {
+      actions.push({
+        title: t("actions.copyAssessment"),
+        onClick: (
+          event: React.MouseEvent,
+          rowIndex: number,
+          rowData: IRowData
+        ) => {
+          const row: Application = getRow(rowData);
+          openCopyAssessmentModal(row);
+        },
+      });
+    }
+    if (row.review) {
+      actions.push({
+        title: t("actions.copyAssessmentAndReview"),
+        onClick: (
+          event: React.MouseEvent,
+          rowIndex: number,
+          rowData: IRowData
+        ) => {
+          const row: Application = getRow(rowData);
+          openCopyAssessmentAndReviewModal(row);
+        },
+      });
+    }
 
     if (
       isAllowedToWriteAssessmentAndReview &&
@@ -669,7 +726,7 @@ export const ApplicationList: React.FC = () => {
                 setFilter={setFilter}
               />
             }
-            toolbar={
+            toolbarActions={
               <>
                 <ToolbarGroup variant="button-group">
                   <VisibilityByPermission
@@ -789,6 +846,46 @@ export const ApplicationList: React.FC = () => {
           onSaved={onApplicationModalSaved}
           onCancel={closeApplicationModal}
         />
+      </Modal>
+
+      <Modal
+        isOpen={isCopyAssessmentModalOpen}
+        variant="large"
+        title={t("dialog.title.copyApplicationAssessmentFrom", {
+          what: applicationToCopyAssessmentFrom?.name,
+        })}
+        onClose={closeCopyAssessmentModal}
+      >
+        {applicationToCopyAssessmentFrom && (
+          <BulkCopyAssessmentReviewForm
+            application={applicationToCopyAssessmentFrom}
+            assessment={
+              getApplicationAssessment(applicationToCopyAssessmentFrom.id!)!
+            }
+            onSaved={closeCopyAssessmentModal}
+          />
+        )}
+      </Modal>
+      <Modal
+        isOpen={isCopyAssessmentAndReviewModalOpen}
+        variant="large"
+        title={t("dialog.title.copyApplicationAssessmentAndReviewFrom", {
+          what: applicationToCopyAssessmentAndReviewFrom?.name,
+        })}
+        onClose={closeCopyAssessmentAndReviewModal}
+      >
+        {applicationToCopyAssessmentAndReviewFrom && (
+          <BulkCopyAssessmentReviewForm
+            application={applicationToCopyAssessmentAndReviewFrom}
+            assessment={
+              getApplicationAssessment(
+                applicationToCopyAssessmentAndReviewFrom.id!
+              )!
+            }
+            review={applicationToCopyAssessmentAndReviewFrom.review}
+            onSaved={closeCopyAssessmentAndReviewModal}
+          />
+        )}
       </Modal>
 
       <Modal

@@ -42,7 +42,7 @@ describe("AppTableWithControls", () => {
         onSort={jest.fn()}
         cells={columns}
         isLoading={false}
-        toolbar={<p>This is an additional content to toolbar</p>}
+        toolbarActions={<p>This is an additional content to toolbar</p>}
         filtersApplied={false}
       />
     );

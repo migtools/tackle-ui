@@ -1,1 +1,1 @@
-export { ApplicationTags as UpdateApplicationModal } from "./application-tags";
+export { ApplicationTags } from "./application-tags";

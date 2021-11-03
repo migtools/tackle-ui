@@ -1,4 +1,5 @@
 export { ApplicationDependenciesFormContainer } from "./application-dependencies-form";
+export { BulkCopyNotificationsContainer } from "./bulk-copy-notifications-container";
 export { ChipBusinessService } from "./chip-business-service";
 export { ChipTag } from "./chip-tag";
 export { ConfirmDialogContainer } from "./confirm-dialog-container";

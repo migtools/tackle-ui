@@ -27,6 +27,8 @@ import {
   ApplicationImportSummaryPage,
   ApplicationImportPage,
   ApplicationImportSummary,
+  BulkCopyAssessment,
+  BulkCopyReview,
 } from "./models";
 
 export const CONTROLS_BASE_URL = "controls";
@@ -666,6 +668,16 @@ export const getApplicationSummaryCSV = (id: string): AxiosPromise => {
   });
 };
 
+export const createBulkCopyReview = (
+  bulk: BulkCopyReview
+): AxiosPromise<BulkCopyReview> => {
+  return APIClient.post<BulkCopyReview>(`${REVIEW}/bulk`, bulk);
+};
+
+export const getBulkCopyReview = (id: number): AxiosPromise<BulkCopyReview> => {
+  return APIClient.get<BulkCopyReview>(`${REVIEW}/bulk/${id}`);
+};
+
 //
 
 export const getAssessments = (filters: {
@@ -722,4 +734,16 @@ export const getAssessmentConfidence = (
     `${ASSESSMENTS}/confidence`,
     applicationIds.map((f) => ({ applicationId: f }))
   );
+};
+
+export const createBulkCopyAssessment = (
+  bulk: BulkCopyAssessment
+): AxiosPromise<BulkCopyAssessment> => {
+  return APIClient.post<BulkCopyAssessment>(`${ASSESSMENTS}/bulk`, bulk);
+};
+
+export const getBulkCopyAssessment = (
+  id: number
+): AxiosPromise<BulkCopyAssessment> => {
+  return APIClient.get<BulkCopyAssessment>(`${ASSESSMENTS}/bulk/${id}`);
 };
