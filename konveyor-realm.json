@@ -669,7 +669,7 @@
         ],
         "requiredActions": [],
         "realmRoles": [
-          "migrator"
+          "admin", "migrator"
         ],
         "notBefore": 0,
         "groups": []
