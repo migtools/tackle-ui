@@ -429,7 +429,7 @@ export const Stakeholders: React.FC = () => {
               />
             </AppTableToolbarToggleGroup>
           }
-          toolbar={
+          toolbarActions={
             <VisibilityByPermission permissionsAllowed={["controls:write"]}>
               <ToolbarGroup variant="button-group">
                 <ToolbarItem>
