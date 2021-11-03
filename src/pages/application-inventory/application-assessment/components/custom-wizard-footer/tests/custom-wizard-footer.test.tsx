@@ -12,6 +12,7 @@ describe("AppPlaceholder", () => {
         isFormInvalid={false}
         onSave={jest.fn()}
         onSaveAsDraft={jest.fn()}
+        showSaveAndReviewBtn={true}
       />
     );
 
@@ -28,6 +29,7 @@ describe("AppPlaceholder", () => {
         isFormInvalid={false}
         onSave={jest.fn()}
         onSaveAsDraft={jest.fn()}
+        showSaveAndReviewBtn={true}
       />
     );
 
@@ -43,6 +45,7 @@ describe("AppPlaceholder", () => {
         isFormInvalid={false}
         onSave={jest.fn()}
         onSaveAsDraft={jest.fn()}
+        showSaveAndReviewBtn={true}
       />
     );
 
@@ -60,6 +63,7 @@ describe("AppPlaceholder", () => {
         isFormInvalid={false}
         onSave={jest.fn()}
         onSaveAsDraft={jest.fn()}
+        showSaveAndReviewBtn={true}
       />
     );
 
@@ -78,6 +82,7 @@ describe("AppPlaceholder", () => {
         isFormInvalid={true}
         onSave={jest.fn()}
         onSaveAsDraft={jest.fn()}
+        showSaveAndReviewBtn={true}
       />
     );
 
@@ -98,6 +103,7 @@ describe("AppPlaceholder", () => {
         isFormInvalid={false}
         onSave={onSaveSpy}
         onSaveAsDraft={jest.fn()}
+        showSaveAndReviewBtn={true}
       />
     );
 
@@ -116,6 +122,7 @@ describe("AppPlaceholder", () => {
         isFormInvalid={false}
         onSave={jest.fn()}
         onSaveAsDraft={onSaveAsDraftSpy}
+        showSaveAndReviewBtn={true}
       />
     );
 

@@ -55,15 +55,25 @@ import { getAxiosErrorMessage } from "utils/utils";
 
 import { ApplicationAssessmentPage } from "./components/application-assessment-page";
 import { WizardStepNavDescription } from "./components/wizard-step-nav-description";
+import { useKcPermission } from "shared/hooks";
 
 export const ApplicationAssessment: React.FC = () => {
+  //i18
   const { t } = useTranslation();
 
+  // Redux
   const dispatch = useDispatch();
 
+  // RBAC
+  const { isAllowed: isAllowedToWriteReview } = useKcPermission({
+    permissionsAllowed: ["inventory:application-review:write"],
+  });
+
+  // URL
   const history = useHistory();
   const { assessmentId } = useParams<AssessmentRoute>();
 
+  // States
   const [currentStep, setCurrentStep] = useState(0);
 
   const [saveError, setSaveError] = useState<AxiosError>();
@@ -332,6 +342,7 @@ export const ApplicationAssessment: React.FC = () => {
       isLastStep={currentStep === sortedCategories.length}
       isDisabled={formik.isSubmitting || formik.isValidating}
       isFormInvalid={!formik.isValid}
+      showSaveAndReviewBtn={isAllowedToWriteReview}
       onSave={(review) => {
         const saveActionValue = review
           ? SAVE_ACTION_VALUE.SAVE_AND_REVIEW
