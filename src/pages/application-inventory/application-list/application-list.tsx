@@ -152,6 +152,9 @@ export const ApplicationList: React.FC = () => {
   const { isAllowed: isAllowedToWriteApp } = useKcPermission({
     permissionsAllowed: ["inventory:application:write"],
   });
+  const { isAllowed: isAllowedToWriteAssessment } = useKcPermission({
+    permissionsAllowed: ["pathfinder:assessment:write"],
+  });
   const { isAllowed: isAllowedToWriteAssessmentAndReview } = useKcPermission({
     permissionsAllowed: ["inventory:application-review:write"],
   });
@@ -431,7 +434,10 @@ export const ApplicationList: React.FC = () => {
     const actions: (IAction | ISeparator)[] = [];
 
     const applicationAssessment = getApplicationAssessment(row.id!);
-    if (applicationAssessment?.status === "COMPLETE") {
+    if (
+      isAllowedToWriteAssessment &&
+      applicationAssessment?.status === "COMPLETE"
+    ) {
       actions.push({
         title: t("actions.copyAssessment"),
         onClick: (
@@ -444,7 +450,7 @@ export const ApplicationList: React.FC = () => {
         },
       });
     }
-    if (row.review) {
+    if (isAllowedToWriteAssessmentAndReview && row.review) {
       actions.push({
         title: t("actions.copyAssessmentAndReview"),
         onClick: (
