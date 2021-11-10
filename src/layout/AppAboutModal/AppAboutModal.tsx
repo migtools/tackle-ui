@@ -6,6 +6,8 @@ import {
   TextContent,
   Text,
   TextVariants,
+  TextList,
+  TextListItem,
 } from "@patternfly/react-core";
 
 import brandImage from "images/tackle.png";
@@ -30,7 +32,7 @@ export const AppAboutModal: React.FC<AppAboutModalProps> = ({
       brandImageAlt="Logo"
       productName="Tackle"
     >
-      <TextContent>
+      <TextContent className="pf-u-py-xl">
         <Text component={TextVariants.p}>{t("about.introduction")}</Text>
         <Text component={TextVariants.p}>{t("about.description")}</Text>
         <Text component={TextVariants.p}>
@@ -59,6 +61,14 @@ export const AppAboutModal: React.FC<AppAboutModalProps> = ({
             .
           </Trans>
         </Text>
+      </TextContent>
+      <TextContent className="pf-u-py-xl">
+        <TextContent>
+          <TextList component="dl">
+            <TextListItem component="dt">{t("terms.version")}</TextListItem>
+            <TextListItem component="dd">1.1.0</TextListItem>
+          </TextList>
+        </TextContent>
       </TextContent>
     </AboutModal>
   );

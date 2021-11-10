@@ -248,6 +248,7 @@
         "unsuitableForContainers": "No apto para contenedores",
         "uploadApplicationFile": "Carga tu archivo con aplicaciones",
         "user": "Usuario",
+        "version": "Versión",
         "workPriority": "Prioridad de trabajo"
     },
     "toastr": {
