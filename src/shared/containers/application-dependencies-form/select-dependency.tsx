@@ -124,6 +124,7 @@ export const SelectDependency: React.FC<SelectDependencyProps> = ({
       options={options}
       isFetching={isFetching}
       fetchError={fetchError}
+      noResultsFoundText={t("message.noResultsFoundTitle")}
     />
   );
 };

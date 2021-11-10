@@ -248,6 +248,7 @@
         "unsuitableForContainers": "Unsuitable for containers",
         "uploadApplicationFile": "Upload your application file",
         "user": "User",
+        "version": "Version",
         "workPriority": "Work priority"
     },
     "toastr": {
