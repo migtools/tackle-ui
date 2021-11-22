@@ -6,6 +6,8 @@ import { useSelectionState } from "@konveyor/lib-ui";
 import {
   Button,
   ButtonVariant,
+  Modal,
+  ModalVariant,
   ToolbarChip,
   ToolbarGroup,
   ToolbarItem,
@@ -33,7 +35,12 @@ import {
   SearchFilter,
   Color,
 } from "shared/components";
-import { useTableControls, useFetchTagTypes, useDelete } from "shared/hooks";
+import {
+  useTableControls,
+  useFetchTagTypes,
+  useDelete,
+  useEntityModal,
+} from "shared/hooks";
 
 import { getAxiosErrorMessage } from "utils/utils";
 import {
@@ -44,11 +51,9 @@ import {
 } from "api/rest";
 import { SortByQuery, Tag, TagType } from "api/models";
 
-import { NewTagTypeModal } from "./components/new-tag-type-modal";
-import { UpdateTagTypeModal } from "./components/update-tag-type-modal";
-import { NewTagModal } from "./components/new-tag-modal";
-import { UpdateTagModal } from "./components/update-tag-modal";
 import { TagTable } from "./components/tag-table";
+import { TagTypeForm } from "./components/tag-type-form";
+import { TagForm } from "./components/tag-form";
 
 enum FilterKey {
   TAG_TYPE = "tagType",
@@ -110,11 +115,21 @@ export const Tags: React.FC = () => {
     new Map([])
   );
 
-  const [isNewTagTypeModalOpen, setIsNewTagTypeModalOpen] = useState(false);
-  const [rowToUpdate, setRowToUpdate] = useState<TagType>();
+  const {
+    isOpen: isTagTypeModalOpen,
+    data: tagTypeToUpdate,
+    create: openCreateTagTypeModal,
+    update: openUpdateTagTypeModal,
+    close: closeTagTypeModal,
+  } = useEntityModal<TagType>();
 
-  const [isNewTagModalOpen, setIsNewTagModalOpen] = useState(false);
-  const [tagToUpdate, setTagToUpdate] = useState<Tag>();
+  const {
+    isOpen: isTagModalOpen,
+    data: tagToUpdate,
+    create: openCreateTagModal,
+    update: openUpdateTagModal,
+    close: closeTagModal,
+  } = useEntityModal<Tag>();
 
   const { requestDelete: requestDeleteTagType } = useDelete<TagType>({
     onDelete: (t: TagType) => deleteTagType(t.id!),
@@ -167,6 +182,10 @@ export const Tags: React.FC = () => {
   }, [filtersValue, paginationQuery, sortByQuery, fetchTagTypes]);
 
   //
+
+  const editTagFromTable = (row: Tag) => {
+    openUpdateTagModal(row);
+  };
 
   const deleteTagFromTable = (row: Tag) => {
     dispatch(
@@ -243,7 +262,7 @@ export const Tags: React.FC = () => {
         {
           title: (
             <AppTableActionButtons
-              onEdit={() => setRowToUpdate(item)}
+              onEdit={() => editRow(item)}
               onDelete={() => deleteRow(item)}
             />
           ),
@@ -262,7 +281,7 @@ export const Tags: React.FC = () => {
               <div>
                 <TagTable
                   tagType={item}
-                  onEdit={setTagToUpdate}
+                  onEdit={editTagFromTable}
                   onDelete={deleteTagFromTable}
                 />
               </div>
@@ -284,6 +303,10 @@ export const Tags: React.FC = () => {
   ) => {
     const row = getRow(rowData);
     toggleItemExpanded(row);
+  };
+
+  const editRow = (row: TagType) => {
+    openUpdateTagTypeModal(row);
   };
 
   const deleteRow = (row: TagType) => {
@@ -352,64 +375,40 @@ export const Tags: React.FC = () => {
     );
   };
 
-  // Create Modal
+  // Create/update Modal
 
-  const handleOnOpenCreateNewTagTypeModal = () => {
-    setIsNewTagTypeModalOpen(true);
-  };
+  const handleOnTagTypeFormSaved = (response: AxiosResponse<TagType>) => {
+    if (!tagTypeToUpdate) {
+      dispatch(
+        alertActions.addSuccess(
+          // t('terms.tagType')
+          t("toastr.success.added", {
+            what: response.data.name,
+            type: t("terms.tagType").toLowerCase(),
+          })
+        )
+      );
+    }
 
-  const handleOnOpenCreateNewTagModal = () => {
-    setIsNewTagModalOpen(true);
-  };
-
-  const handleOnCreatedNewTagType = (response: AxiosResponse<TagType>) => {
-    setIsNewTagTypeModalOpen(false);
-    refreshTable();
-
-    dispatch(
-      alertActions.addSuccess(
-        t("toastr.success.added", {
-          what: response.data.name,
-          type: "tag type",
-        })
-      )
-    );
-  };
-
-  const handleOnCreatedNewTag = (response: AxiosResponse<Tag>) => {
-    setIsNewTagModalOpen(false);
-    refreshTable();
-
-    dispatch(
-      alertActions.addSuccess(
-        t("toastr.success.added", {
-          what: response.data.name,
-          type: "tag",
-        })
-      )
-    );
-  };
-
-  const handleOnCreateNewCancel = () => {
-    setIsNewTagTypeModalOpen(false);
-    setIsNewTagModalOpen(false);
-  };
-
-  // Update Modal
-
-  const handleOnTagTypeUpdated = () => {
-    setRowToUpdate(undefined);
+    closeTagTypeModal();
     refreshTable();
   };
 
-  const handleOnTagUpdated = () => {
-    setTagToUpdate(undefined);
-    refreshTable();
-  };
+  const handleOnTagFormSaved = (response: AxiosResponse<Tag>) => {
+    if (!tagToUpdate) {
+      dispatch(
+        alertActions.addSuccess(
+          // t('terms.tag')
+          t("toastr.success.added", {
+            what: response.data.name,
+            type: t("terms.tag").toLowerCase(),
+          })
+        )
+      );
+    }
 
-  const handleOnUpdatedCancel = () => {
-    setRowToUpdate(undefined);
-    setTagToUpdate(undefined);
+    closeTagModal();
+    refreshTable();
   };
 
   return (
@@ -457,7 +456,7 @@ export const Tags: React.FC = () => {
                   type="button"
                   aria-label="create-tag"
                   variant={ButtonVariant.primary}
-                  onClick={handleOnOpenCreateNewTagModal}
+                  onClick={openCreateTagModal}
                 >
                   {t("actions.createTag")}
                 </Button>
@@ -467,7 +466,7 @@ export const Tags: React.FC = () => {
                   type="button"
                   aria-label="create-tag-type"
                   variant={ButtonVariant.secondary}
-                  onClick={handleOnOpenCreateNewTagTypeModal}
+                  onClick={openCreateTagTypeModal}
                 >
                   {t("actions.createTagType")}
                 </Button>
@@ -491,27 +490,41 @@ export const Tags: React.FC = () => {
         />
       </ConditionalRender>
 
-      <NewTagTypeModal
-        isOpen={isNewTagTypeModalOpen}
-        onSaved={handleOnCreatedNewTagType}
-        onCancel={handleOnCreateNewCancel}
-      />
-      <UpdateTagTypeModal
-        tagType={rowToUpdate}
-        onSaved={handleOnTagTypeUpdated}
-        onCancel={handleOnUpdatedCancel}
-      />
+      <Modal
+        // t('dialog.title.update')
+        // t('dialog.title.new')
+        // t('terms.tagType')
+        title={t(`dialog.title.${tagTypeToUpdate ? "update" : "new"}`, {
+          what: t("terms.tagType").toLowerCase(),
+        })}
+        variant={ModalVariant.medium}
+        isOpen={isTagTypeModalOpen}
+        onClose={closeTagTypeModal}
+      >
+        <TagTypeForm
+          tagType={tagTypeToUpdate}
+          onSaved={handleOnTagTypeFormSaved}
+          onCancel={closeTagTypeModal}
+        />
+      </Modal>
 
-      <NewTagModal
-        isOpen={isNewTagModalOpen}
-        onSaved={handleOnCreatedNewTag}
-        onCancel={handleOnCreateNewCancel}
-      />
-      <UpdateTagModal
-        tag={tagToUpdate}
-        onSaved={handleOnTagUpdated}
-        onCancel={handleOnUpdatedCancel}
-      />
+      <Modal
+        // t('dialog.title.update')
+        // t('dialog.title.new')
+        // t('terms.tag')
+        title={t(`dialog.title.${tagToUpdate ? "update" : "new"}`, {
+          what: t("terms.tag").toLowerCase(),
+        })}
+        variant={ModalVariant.medium}
+        isOpen={isTagModalOpen}
+        onClose={closeTagModal}
+      >
+        <TagForm
+          tag={tagToUpdate}
+          onSaved={handleOnTagFormSaved}
+          onCancel={closeTagModal}
+        />
+      </Modal>
     </>
   );
 };
