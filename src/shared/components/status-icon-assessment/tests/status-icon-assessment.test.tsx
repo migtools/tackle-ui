@@ -4,9 +4,7 @@ import { StatusIconAssessment } from "../status-icon-assessment";
 
 describe("StatusIconAssessment", () => {
   it("Renders without crashing", () => {
-    const wrapper = shallow(
-      <StatusIconAssessment status="NotStarted" label="Not started yet" />
-    );
+    const wrapper = shallow(<StatusIconAssessment status="NotStarted" />);
     expect(wrapper).toMatchSnapshot();
   });
 });

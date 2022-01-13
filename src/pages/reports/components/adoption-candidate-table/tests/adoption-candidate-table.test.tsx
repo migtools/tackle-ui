@@ -21,21 +21,30 @@ describe("AdoptionCandidateTable", () => {
           name: "app0",
           review: { ...genericReview, businessCriticality: 0 },
         },
+        risk: "UNKNOWN",
       },
       {
         application: {
           name: "app1",
           review: { ...genericReview, businessCriticality: 1 },
         },
+        risk: "UNKNOWN",
       },
       {
         application: {
           name: "app2",
           review: { ...genericReview, businessCriticality: 2 },
         },
+        risk: "UNKNOWN",
       },
-      { application: { name: "appUndefined1", review: undefined } },
-      { application: { name: "appUndefined2", review: undefined } },
+      {
+        application: { name: "appUndefined1", review: undefined },
+        risk: "UNKNOWN",
+      },
+      {
+        application: { name: "appUndefined2", review: undefined },
+        risk: "UNKNOWN",
+      },
     ];
 
     // When
@@ -57,21 +66,30 @@ describe("AdoptionCandidateTable", () => {
           name: "app0",
           review: { ...genericReview, workPriority: 0 },
         },
+        risk: "UNKNOWN",
       },
       {
         application: {
           name: "app1",
           review: { ...genericReview, workPriority: 1 },
         },
+        risk: "UNKNOWN",
       },
       {
         application: {
           name: "app2",
           review: { ...genericReview, workPriority: 2 },
         },
+        risk: "UNKNOWN",
       },
-      { application: { name: "appUndefined1", review: undefined } },
-      { application: { name: "appUndefined2", review: undefined } },
+      {
+        application: { name: "appUndefined1", review: undefined },
+        risk: "UNKNOWN",
+      },
+      {
+        application: { name: "appUndefined2", review: undefined },
+        risk: "UNKNOWN",
+      },
     ];
 
     // When
@@ -88,11 +106,19 @@ describe("AdoptionCandidateTable", () => {
   it("Sort by confidence: confidence=zero is greater than confidence=undefined", () => {
     // Given
     const rows: TableRowData[] = [
-      { application: { name: "app0" }, confidence: 0 },
-      { application: { name: "app1" }, confidence: 1 },
-      { application: { name: "app2" }, confidence: 2 },
-      { application: { name: "appUndefined1" }, confidence: undefined },
-      { application: { name: "appUndefined2" }, confidence: undefined },
+      { application: { name: "app0" }, confidence: 0, risk: "UNKNOWN" },
+      { application: { name: "app1" }, confidence: 1, risk: "UNKNOWN" },
+      { application: { name: "app2" }, confidence: 2, risk: "UNKNOWN" },
+      {
+        application: { name: "appUndefined1" },
+        confidence: undefined,
+        risk: "UNKNOWN",
+      },
+      {
+        application: { name: "appUndefined2" },
+        confidence: undefined,
+        risk: "UNKNOWN",
+      },
     ];
 
     // When
