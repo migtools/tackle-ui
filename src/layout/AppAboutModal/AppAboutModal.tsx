@@ -66,7 +66,7 @@ export const AppAboutModal: React.FC<AppAboutModalProps> = ({
         <TextContent>
           <TextList component="dl">
             <TextListItem component="dt">{t("terms.version")}</TextListItem>
-            <TextListItem component="dd">1.1.0</TextListItem>
+            <TextListItem component="dd">1.2.0</TextListItem>
           </TextList>
         </TextContent>
       </TextContent>
