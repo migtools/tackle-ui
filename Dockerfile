@@ -1,5 +1,16 @@
+# Builder image
+FROM registry.access.redhat.com/ubi8/nodejs-14 as builder
+COPY build build
+COPY entrypoint.sh .
+COPY server .
+RUN npm install
+
 # Runner image
-FROM registry.access.redhat.com/ubi8/nginx-118
+FROM registry.access.redhat.com/ubi8/nodejs-14-minimal
+
+# Add tar package to allow copying files with kubectl scp
+USER root
+RUN microdnf -y install tar && microdnf clean all
 USER 1001
 
 LABEL name="konveyor/tackle-ui" \
@@ -18,8 +29,7 @@ LABEL name="konveyor/tackle-ui" \
       io.openshift.min-cpu="100m" \
       io.openshift.min-memory="350Mi"
 
-COPY build .
-COPY nginx.conf.template .
-COPY entrypoint.sh /usr/bin/entrypoint.sh
+COPY --from=builder /opt/app-root/src /opt/app-root/src
+COPY --from=builder /opt/app-root/src/entrypoint.sh /usr/bin/entrypoint.sh
 
 ENTRYPOINT ["/usr/bin/entrypoint.sh"]

@@ -1,10 +1,11 @@
 const express = require("express");
 const path = require("path");
-const app = express(), bodyParser = require("body-parser");
+const app = express(),
+  bodyParser = require("body-parser");
 
-const setupProxy = require('./src/setupProxy');
+const setupProxy = require("./setupProxy");
 
-port = 3000;
+const port = 8080;
 
 setupProxy(app);
 
