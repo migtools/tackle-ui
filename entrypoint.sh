@@ -44,4 +44,4 @@ fi
 
 echo "Container started"
 
-exec "$@"
+exec nginx -g "daemon off;" 
