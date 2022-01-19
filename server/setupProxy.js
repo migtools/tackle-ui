@@ -6,6 +6,7 @@ module.exports = function (app) {
     createProxyMiddleware({
       target: "http://tackle-keycloak-sso:8080",
       changeOrigin: true,
+      logLevel: process.env.DEBUG ? "debug" : "info",
     })
   );
 
@@ -17,6 +18,7 @@ module.exports = function (app) {
       pathRewrite: {
         "^/api/controls": "/controls",
       },
+      logLevel: process.env.DEBUG ? "debug" : "info",
     })
   );
 
@@ -28,6 +30,7 @@ module.exports = function (app) {
       pathRewrite: {
         "^/api/application-inventory": "/application-inventory",
       },
+      logLevel: process.env.DEBUG ? "debug" : "info",
     })
   );
 
@@ -39,6 +42,7 @@ module.exports = function (app) {
       pathRewrite: {
         "^/api/pathfinder": "/pathfinder",
       },
+      logLevel: process.env.DEBUG ? "debug" : "info",
     })
   );
 };

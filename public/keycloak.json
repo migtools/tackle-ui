@@ -1,6 +1,6 @@
 {
-  "realm": "konveyor",
-  "auth-server-url": "http://localhost:8180/auth/",
+  "realm": "tackle",
+  "auth-server-url": "/auth",
   "resource": "tackle-ui",
   "public-client": true
 }

@@ -9,15 +9,16 @@ RUN npm install
 FROM registry.access.redhat.com/ubi8/nodejs-14-minimal
 
 # Add tar package to allow copying files with kubectl scp
+# Add ps package to allow liveness probe for k8s cluster
 USER root
-RUN microdnf -y install tar && microdnf clean all
+RUN microdnf -y install tar procps-ng && microdnf clean all
 USER 1001
 
 LABEL name="konveyor/tackle-ui" \
       description="Konveyor for Tackle - User Interface" \
       help="For more information visit https://konveyor.io" \
       license="Apache License 2.0" \
-      maintainer="gdubreui@redhat.com" \
+      maintainer="cferiavi@redhat.com,mrizzi@redhat.com,gdubreui@redhat.com" \
       summary="Konveyor for Tackle - User Interface" \
       url="https://quay.io/gildub/tackle-ui" \
       usage="podman run -p 80 -v konveyor/tackle-ui:latest" \
@@ -31,5 +32,7 @@ LABEL name="konveyor/tackle-ui" \
 
 COPY --from=builder /opt/app-root/src /opt/app-root/src
 COPY --from=builder /opt/app-root/src/entrypoint.sh /usr/bin/entrypoint.sh
+
+ENV DEBUG=1
 
 ENTRYPOINT ["/usr/bin/entrypoint.sh"]

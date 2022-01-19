@@ -34,7 +34,8 @@ fi
 
 # if [ -f ./build/keycloak.json.template ]; then
 #   echo "---> Processing keycloak.json.template configuration file..."
-#   envsubst '${SSO_REALM} ${SSO_CLIENT_ID}' < ./build/keycloak.json.template > ./build/keycloak.json
+#   cp ./build/keycloak.json.template ./build/keycloak.json
+#   # envsubst '${SSO_REALM} ${SSO_CLIENT_ID}' < ./build/keycloak.json.template > ./build/keycloak.json
 # fi
 
 exec node server.js
