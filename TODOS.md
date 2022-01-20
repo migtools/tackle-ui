@@ -1,6 +1,6 @@
 * [ x ] Replace Nginx with Express
 * [ x ] Remove unused Storybooks
-* Eject create-react-app tooling and use fresh PF-react-seed
+* [ x ] Eject create-react-app tooling
 * Replace yarn with npm
 * Bump nodejs version to latest LTS 16
 * Replace Redux with React Query 

@@ -2,47 +2,92 @@
   "name": "tackle-ui",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@konveyor/lib-ui": "^5.2.0",
-    "@patternfly/patternfly": "4.164.2",
-    "@patternfly/react-charts": "6.34.1",
-    "@patternfly/react-core": "4.181.1",
-    "@patternfly/react-table": "4.50.1",
-    "@patternfly/react-tokens": "4.11.2",
-    "@react-keycloak/web": "^3.4.0",
-    "@redhat-cloud-services/frontend-components-notifications": "3.2.2",
-    "axios": "^0.21.1",
-    "file-saver": "^2.0.5",
-    "formik": "^2.2.6",
-    "i18next": "^19.8.4",
-    "i18next-http-backend": "^1.0.22",
-    "keycloak-js": "12.0.2",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "react-i18next": "^11.8.5",
-    "react-measure": "^2.5.2",
-    "react-redux": "^7.2.2",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "5.0.0",
-    "redux": "^4.0.5",
-    "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.3.0",
-    "typesafe-actions": "^5.1.0",
-    "web-vitals": "^0.2.4",
-    "yup": "^0.32.8"
-  },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "extract": "i18next --config i18next-parser.config.js",
     "start": "react-scripts -r @cypress/instrument-cra start",
-    "build": "react-scripts build",
-    "build:dev": "GENERATE_SOURCEMAP=true react-scripts build",
+    "build": "node scripts/build.js",
+    "build:dev": "GENERATE_SOURCEMAP=true node scripts/build.js",
     "build:instrumentation": "CYPRESS_INSTRUMENT_PRODUCTION=true react-scripts -r @cypress/instrument-cra build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "test": "node scripts/test.js",
     "ui:start": "node server.js"
+  },
+  "dependencies": {
+    "@babel/core": "^7.16.0",
+    "@konveyor/lib-ui": "^5.2.0",
+    "@patternfly/patternfly": "4.164.2",
+    "@patternfly/react-charts": "6.34.1",
+    "@patternfly/react-core": "4.181.1",
+    "@patternfly/react-table": "4.50.1",
+    "@patternfly/react-tokens": "4.11.2",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
+    "@react-keycloak/web": "^3.4.0",
+    "@redhat-cloud-services/frontend-components-notifications": "3.2.2",
+    "@svgr/webpack": "^5.5.0",
+    "axios": "^0.21.1",
+    "babel-jest": "^27.4.2",
+    "babel-loader": "^8.2.3",
+    "babel-plugin-named-asset-import": "^0.3.8",
+    "babel-preset-react-app": "^10.0.1",
+    "bfj": "^7.0.2",
+    "browserslist": "^4.18.1",
+    "camelcase": "^6.2.1",
+    "case-sensitive-paths-webpack-plugin": "^2.4.0",
+    "css-loader": "^6.5.1",
+    "css-minimizer-webpack-plugin": "^3.2.0",
+    "dotenv": "^10.0.0",
+    "dotenv-expand": "^5.1.0",
+    "eslint": "^8.3.0",
+    "eslint-config-react-app": "^7.0.0",
+    "eslint-webpack-plugin": "^3.1.1",
+    "file-loader": "^6.2.0",
+    "file-saver": "^2.0.5",
+    "formik": "^2.2.6",
+    "fs-extra": "^10.0.0",
+    "html-webpack-plugin": "^5.5.0",
+    "i18next": "^19.8.4",
+    "i18next-http-backend": "^1.0.22",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^27.4.3",
+    "jest-resolve": "^27.4.2",
+    "jest-watch-typeahead": "^1.0.0",
+    "keycloak-js": "12.0.2",
+    "mini-css-extract-plugin": "^2.4.5",
+    "postcss": "^8.4.4",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-loader": "^6.2.1",
+    "postcss-normalize": "^10.0.1",
+    "postcss-preset-env": "^7.0.1",
+    "prompts": "^2.4.2",
+    "react": "17.0.2",
+    "react-app-polyfill": "^3.0.0",
+    "react-dev-utils": "^12.0.0",
+    "react-dom": "17.0.2",
+    "react-i18next": "^11.8.5",
+    "react-measure": "^2.5.2",
+    "react-redux": "^7.2.2",
+    "react-refresh": "^0.11.0",
+    "react-router-dom": "^5.2.0",
+    "redux": "^4.0.5",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0",
+    "resolve": "^1.20.0",
+    "resolve-url-loader": "^4.0.0",
+    "sass-loader": "^12.3.0",
+    "semver": "^7.3.5",
+    "source-map-loader": "^3.0.0",
+    "style-loader": "^3.3.1",
+    "tailwindcss": "^3.0.2",
+    "terser-webpack-plugin": "^5.2.5",
+    "typesafe-actions": "^5.1.0",
+    "web-vitals": "^0.2.4",
+    "webpack": "^5.64.4",
+    "webpack-dev-server": "^4.6.0",
+    "webpack-manifest-plugin": "^4.0.2",
+    "workbox-webpack-plugin": "^6.4.1",
+    "yup": "^0.32.8"
   },
   "eslintConfig": {
     "extends": [
@@ -99,11 +144,58 @@
     "typescript": "4.0.3"
   },
   "jest": {
+    "roots": [
+      "<rootDir>/src"
+    ],
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
       "!<rootDir>/node_modules/",
       "!src/**/*.stories.*"
-    ]
+    ],
+    "setupFiles": [
+      "react-app-polyfill/jsdom"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/setupTests.ts"
+    ],
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
+      "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
+    ],
+    "testEnvironment": "jsdom",
+    "transform": {
+      "^.+\\.(js|jsx|mjs|cjs|ts|tsx)$": "<rootDir>/config/jest/babelTransform.js",
+      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
+      "^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$",
+      "^.+\\.module\\.(css|sass|scss)$"
+    ],
+    "modulePaths": [
+      "/home/gildub/github.com/gildub/tackle-ui/src"
+    ],
+    "moduleNameMapper": {
+      "^react-native$": "react-native-web",
+      "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
+    },
+    "moduleFileExtensions": [
+      "web.js",
+      "js",
+      "web.ts",
+      "ts",
+      "web.tsx",
+      "tsx",
+      "json",
+      "web.jsx",
+      "jsx",
+      "node"
+    ],
+    "watchPlugins": [
+      "jest-watch-typeahead/filename",
+      "jest-watch-typeahead/testname"
+    ],
+    "resetMocks": true
   },
   "husky": {
     "hooks": {
@@ -118,5 +210,10 @@
   },
   "nyc": {
     "exclude": "src/reportWebVitals.ts"
+  },
+  "babel": {
+    "presets": [
+      "react-app"
+    ]
   }
 }
