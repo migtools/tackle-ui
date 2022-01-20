@@ -6,3 +6,4 @@
 * Replace Redux with React Query 
 * Remove Formik with konveyor/lib-ui (which is already used in some places)
 * Organize monorepo
+* Address test issues blocking pkgs update for @konveyor/lib-ui, @patternfly/*, react and react-dom 
