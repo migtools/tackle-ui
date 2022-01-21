@@ -14,8 +14,8 @@ jobs:
           node-version: 12.x
       - name: Build
         run: |
-          yarn install
-          yarn build
+          npm install
+          npm build
       - name: Extract branch name
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"

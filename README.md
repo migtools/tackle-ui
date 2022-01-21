@@ -30,13 +30,13 @@ docker-compose up
 Install the npm dependencies:
 
 ```shell
-yarn install
+npm install
 ```
 
 Start the UI:
 
 ```shell
-yarn start
+npm start
 ```
 
 You should be able to open http://localhost:3000 and start working on the UI.
@@ -114,7 +114,7 @@ docker-compose up
 You can start the UI using:
 
 ```shell
-yarn start
+npm start
 ```
 
 You should be able to open http://localhost:3000 and start working on the UI; notice that this time the UI will point to the custom `tackle-controls` service you started rather than the service comming from `docker-compose.yml`.
@@ -123,7 +123,7 @@ You should be able to open http://localhost:3000 and start working on the UI; no
 
 To build a container image for the UI based on local code, execute the following commands:
 ```shell
-yarn build
+npm build
 podman build -t quay.io/$USERNAME/tackle-ui .
 ```
 consider replacing `podman` with `docker` if you have the latter installed and `quay.io` registry with the one you're using.  

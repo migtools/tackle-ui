@@ -21,11 +21,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Build
-        run: |
-          yarn install
-          yarn build
+        run:
+          npm install
+          npm run build
       - name: Test
-        run: yarn test --coverage --watchAll=false
+        run: npm test --coverage --watchAll=false
       - uses: codecov/codecov-action@v1
         with:
           flags: unitests
@@ -136,13 +136,13 @@ jobs:
           sleep 5s && docker logs pathfinder
       - name: Build
         run: |
-          yarn install
-          yarn build:instrumentation
+          npm install
+          npm build:instrumentation
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
           record: false
-          start: yarn run ui:start
+          start: npm run ui:start
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
           config: pageLoadTimeout=100000
@@ -176,8 +176,8 @@ jobs:
           node-version: 12.x
       - name: Build
         run: |
-          yarn install
-          yarn build
+          npm install
+          npm build
       - name: Push to Quay.io
         uses: elgohr/Publish-Docker-Github-Action@3.02
         with:
