@@ -1,5 +1,4 @@
 import React from "react";
-import { shallow } from "enzyme";
 import { ApplicationAssessmentPageHeader } from "./application-assessment-page-header";
 import { Assessment } from "api/models";
 import { mountWithRedux } from "store/reducerUtils";
