@@ -1,4 +1,4 @@
 *
-!build/*
 !entrypoint.sh
-!server/*
+!/pkg/client/dist/*
+!/pkg/server/*

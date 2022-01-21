@@ -1,8 +1,8 @@
 # Builder image
 FROM registry.access.redhat.com/ubi8/nodejs-14 as builder
-COPY build build
+COPY pkg/client/dist/ ./dist/
+COPY pkg/server .
 COPY entrypoint.sh .
-COPY server .
 RUN npm install
 
 # Runner image
