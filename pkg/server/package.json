@@ -3,10 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "http-proxy-middleware": "^1.0.6",
-    "express": "^4.17.1"
-  },
-  "devDependencies": {
+    "express": "^4.17.2",
+    "http-proxy-middleware": "^2.0.2"
   },
   "scripts": {
     "start": "node server.js"
