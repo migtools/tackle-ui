@@ -38,4 +38,5 @@ fi
 #   # envsubst '${SSO_REALM} ${SSO_CLIENT_ID}' < ./build/keycloak.json.template > ./build/keycloak.json
 # fi
 
+cd server
 exec node index.js

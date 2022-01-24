@@ -1,18 +1,17 @@
 # Builder image
 FROM registry.access.redhat.com/ubi8/nodejs-16 as builder
-COPY pkg/client/dist/ ./dist/
-COPY pkg/server .
+COPY pkg/client/dist/ ./client/dist/
+COPY pkg/server ./server/
 COPY entrypoint.sh .
-RUN npm install
+RUN cd ./server && npm install
 
 # Runner image
 FROM registry.access.redhat.com/ubi8/nodejs-16-minimal
 
-# TODO Troubleshoot why this is failing on nodejs-16 latest:
 # Add ps package to allow liveness probe for k8s cluster
 # Add tar package to allow copying files with kubectl scp
-# USER 0
-# RUN microdnf -y install tar procps-ng && microdnf clean all
+USER 0
+RUN microdnf -y install tar procps-ng && microdnf clean all
 
 USER 1001
 
