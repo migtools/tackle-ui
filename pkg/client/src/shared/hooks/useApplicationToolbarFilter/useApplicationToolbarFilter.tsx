@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-
+import React, { useEffect } from "react";
 import { ToolbarChip } from "@patternfly/react-core";
 
 import { useQueryString, useToolbarFilter } from "shared/hooks";
