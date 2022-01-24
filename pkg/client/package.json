@@ -12,7 +12,7 @@
     "build:dev": "GENERATE_SOURCEMAP=true node scripts/build.js",
     "build:instrumentation": "CYPRESS_INSTRUMENT_PRODUCTION=true react-scripts -r @cypress/instrument-cra build",
     "test": "node scripts/test.js",
-    "ui:start": "node server.js"
+    "ui:start": "node ../server/index.js"
   },
   "dependencies": {
     "@babel/core": "^7.16.0",
