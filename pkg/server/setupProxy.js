@@ -4,7 +4,7 @@ module.exports = function (app) {
   app.use(
     "/auth",
     createProxyMiddleware({
-      target: process.env.SSO_SERVER_URL,
+      target: process.env.SSO_SERVER_URL || "http://localhost:9001",
       changeOrigin: true,
       logLevel: process.env.DEBUG ? "debug" : "info",
     })
@@ -13,7 +13,7 @@ module.exports = function (app) {
   app.use(
     "/api/controls",
     createProxyMiddleware({
-      target: process.env.CONTROLS_API_URL,
+      target: process.env.CONTROLS_API_URL || "http://localhost:9002",
       changeOrigin: true,
       pathRewrite: {
         "^/api/controls": "/controls",
@@ -25,7 +25,8 @@ module.exports = function (app) {
   app.use(
     "/api/application-inventory",
     createProxyMiddleware({
-      target: process.env.APPLICATION_INVENTORY_API_URL,
+      target:
+        process.env.APPLICATION_INVENTORY_API_URL || "http://localhost:9002",
       changeOrigin: true,
       pathRewrite: {
         "^/api/application-inventory": "/application-inventory",
@@ -37,7 +38,7 @@ module.exports = function (app) {
   app.use(
     "/api/pathfinder",
     createProxyMiddleware({
-      target: process.env.PATHFINDER_API_URL,
+      target: process.env.PATHFINDER_API_URL || "http://localhost:9003",
       changeOrigin: true,
       pathRewrite: {
         "^/api/pathfinder": "/pathfinder",

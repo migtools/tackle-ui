@@ -19,6 +19,19 @@ Tackle UI requires the following services in order to work properly:
 - [tackle-pathfinder](https://github.com/konveyor/tackle-pathfinder)
 - [keycloak](https://www.keycloak.org/)
 
+When deployed through konveyor/tackle-operator the above services endpoints are automatically assigned to the tackle-ui image throught the following environment variables.
+- APPLICATION_INVENTORY_API_URL
+- CONTROLS_API_URL
+- PATHFINDER_API_URL
+- SSO_SERVER_URL
+
+Meanwhile for development or troubleshooting they can be assigned to a different endpoint using environment variables
+If those env variables are not defined the endpoints will fallback to the following default values:
+- SSO_SERVER_URL: "http://localhost:21000"
+- CONTROLS_API_URL: "http://localhost:22000"
+- APPLICATION_INVENTORY_API_URL: "http://localhost:22000"
+- PATHFINDER_API_URL: "http://localhost:23000"
+
 You can start all services using `docker-compose.yml`:
 
 ```shell
