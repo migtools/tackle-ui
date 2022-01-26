@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow } from "enzyme";
-import { AdIcon } from "@patternfly/react-icons";
+import { AdIcon } from "@patternfly/react-icons/dist/esm/icons/ad-icon";
 
 import { SimpleEmptyState } from "../simple-empty-state";
 

@@ -21,7 +21,7 @@ import {
   ToolbarChip,
   ToolbarItem,
 } from "@patternfly/react-core";
-import { ExclamationTriangleIcon } from "@patternfly/react-icons";
+import { ExclamationTriangleIcon } from "@patternfly/react-icons/dist/esm/icons/exclamation-triangle-icon";
 import { global_palette_gold_400 as gold } from "@patternfly/react-tokens";
 
 import { useDispatch } from "react-redux";

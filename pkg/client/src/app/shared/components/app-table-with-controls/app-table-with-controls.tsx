@@ -9,7 +9,7 @@ import {
   ToolbarToggleGroup,
 } from "@patternfly/react-core";
 
-import { FilterIcon } from "@patternfly/react-icons";
+import { FilterIcon } from "@patternfly/react-icons/dist/esm/icons/filter-icon";
 
 import { AppTable, IAppTableProps } from "../app-table/app-table";
 import { SimplePagination } from "../simple-pagination";

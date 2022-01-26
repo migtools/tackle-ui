@@ -26,7 +26,7 @@ import {
   sortable,
   truncate,
 } from "@patternfly/react-table";
-import { InProgressIcon } from "@patternfly/react-icons";
+import { InProgressIcon } from "@patternfly/react-icons/dist/esm/icons/in-progress-icon";
 
 import { useDispatch } from "react-redux";
 import { alertActions } from "app/store/alert";

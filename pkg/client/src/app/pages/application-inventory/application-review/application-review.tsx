@@ -18,7 +18,8 @@ import {
   Text,
   TextContent,
 } from "@patternfly/react-core";
-import { BanIcon, InfoCircleIcon } from "@patternfly/react-icons";
+import { BanIcon } from "@patternfly/react-icons/dist/esm/icons/ban-icon";
+import { InfoCircleIcon } from "@patternfly/react-icons/dist/esm/icons/info-circle-icon";
 
 import {
   AppPlaceholder,

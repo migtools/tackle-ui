@@ -2,11 +2,9 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 
 import { Flex, FlexItem, SpinnerProps } from "@patternfly/react-core";
-import {
-  CheckCircleIcon,
-  TimesCircleIcon,
-  InProgressIcon,
-} from "@patternfly/react-icons";
+import { CheckCircleIcon } from "@patternfly/react-icons/dist/esm/icons/check-circle-icon";
+import { TimesCircleIcon } from "@patternfly/react-icons/dist/esm/icons/times-circle-icon";
+import { InProgressIcon } from "@patternfly/react-icons/dist/esm/icons/in-progress-icon";
 import { SVGIconProps } from "@patternfly/react-icons/dist/js/createIcon";
 import {
   global_disabled_color_200 as disabledColor,

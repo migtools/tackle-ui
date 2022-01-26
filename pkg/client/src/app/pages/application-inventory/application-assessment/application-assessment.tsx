@@ -16,7 +16,7 @@ import {
   Wizard,
   WizardStep,
 } from "@patternfly/react-core";
-import { BanIcon } from "@patternfly/react-icons";
+import { BanIcon } from "@patternfly/react-icons/dist/esm/icons/ban-icon";
 
 import {
   ConditionalRender,
