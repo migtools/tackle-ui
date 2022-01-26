@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { Modal, ModalVariant } from "@patternfly/react-core";
 
-import { BusinessService } from "app/api/models";
+import { BusinessService } from "@app/api/models";
 
 import { BusinessServiceForm } from "../business-service-form";
 

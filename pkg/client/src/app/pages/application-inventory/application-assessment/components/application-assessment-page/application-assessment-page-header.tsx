@@ -5,15 +5,15 @@ import { useTranslation } from "react-i18next";
 import { Button, ButtonVariant, Modal, Text } from "@patternfly/react-core";
 
 import { useDispatch } from "react-redux";
-import { confirmDialogActions } from "app/store/confirmDialog";
+import { confirmDialogActions } from "@app/store/confirmDialog";
 
-import { PageHeader } from "app/shared/components";
-import { useEntityModal } from "app/shared/hooks";
-import { ApplicationDependenciesFormContainer } from "app/shared/containers";
+import { PageHeader } from "@app/shared/components";
+import { useEntityModal } from "@app/shared/hooks";
+import { ApplicationDependenciesFormContainer } from "@app/shared/containers";
 
-import { Paths } from "app/Paths";
-import { Application, Assessment } from "app/api/models";
-import { getApplicationById } from "app/api/rest";
+import { Paths } from "@app/Paths";
+import { Application, Assessment } from "@app/api/models";
+import { getApplicationById } from "@app/api/rest";
 
 export interface IApplicationAssessmentPageHeaderProps {
   assessment?: Assessment;

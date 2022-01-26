@@ -2,8 +2,8 @@ import { useCallback, useReducer } from "react";
 import { AxiosError } from "axios";
 import { ActionType, createAsyncAction, getType } from "typesafe-actions";
 
-import { getApplicationDependencies } from "app/api/rest";
-import { PageRepresentation, ApplicationDependency } from "app/api/models";
+import { getApplicationDependencies } from "@app/api/rest";
+import { PageRepresentation, ApplicationDependency } from "@app/api/models";
 
 export const {
   request: fetchRequest,

@@ -3,12 +3,12 @@ import { useTranslation } from "react-i18next";
 
 import { Skeleton, Split, SplitItem } from "@patternfly/react-core";
 
-import { ConditionalRender, StateError } from "app/shared/components";
-import { useFetch } from "app/shared/hooks";
+import { ConditionalRender, StateError } from "@app/shared/components";
+import { useFetch } from "@app/shared/hooks";
 
-import { RISK_LIST } from "app/Constants";
-import { AssessmentRisk } from "app/api/models";
-import { getAssessmentLandscape } from "app/api/rest";
+import { RISK_LIST } from "@app/Constants";
+import { AssessmentRisk } from "@app/api/models";
+import { getAssessmentLandscape } from "@app/api/rest";
 
 import { ApplicationSelectionContext } from "../../application-selection-context";
 import { NoApplicationSelectedEmptyState } from "../no-application-selected-empty-state";

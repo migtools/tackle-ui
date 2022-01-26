@@ -29,15 +29,15 @@ import {
 import { InProgressIcon } from "@patternfly/react-icons/dist/esm/icons/in-progress-icon";
 
 import { useDispatch } from "react-redux";
-import { alertActions } from "app/store/alert";
-import { confirmDialogActions } from "app/store/confirmDialog";
+import { alertActions } from "@app/store/alert";
+import { confirmDialogActions } from "@app/store/confirmDialog";
 
 import {
   useApplicationToolbarFilter,
   useDelete,
   useFetch,
   useTableControls,
-} from "app/shared/hooks";
+} from "@app/shared/hooks";
 import {
   AppPlaceholder,
   AppTableToolbarToggleGroup,
@@ -47,22 +47,22 @@ import {
   PageHeader,
   ToolbarSearchFilter,
   KebabDropdown,
-} from "app/shared/components";
+} from "@app/shared/components";
 
-import { formatPath, Paths } from "app/Paths";
+import { formatPath, Paths } from "@app/Paths";
 import {
   ApplicationImportSummarySortBy,
   ApplicationImportSummarySortByQuery,
   deleteApplicationImportSummary,
   getApplicationImportSummary,
-} from "app/api/rest";
+} from "@app/api/rest";
 import {
   ApplicationImportSummary,
   ApplicationImportSummaryPage,
   SortByQuery,
-} from "app/api/models";
-import { applicationImportSummaryPageMapper } from "app/api/apiUtils";
-import { formatDate, getAxiosErrorMessage } from "app/utils/utils";
+} from "@app/api/models";
+import { applicationImportSummaryPageMapper } from "@app/api/apiUtils";
+import { formatDate, getAxiosErrorMessage } from "@app/utils/utils";
 
 import { ImportApplicationsForm } from "../application-list/components/import-applications-form";
 

@@ -1,8 +1,8 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import { AppPageSection, PageHeader } from "app/shared/components";
-import { Paths } from "app/Paths";
+import { AppPageSection, PageHeader } from "@app/shared/components";
+import { Paths } from "@app/Paths";
 
 export const EditCompanyHeader: React.FC = () => {
   const { t } = useTranslation();

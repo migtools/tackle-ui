@@ -5,8 +5,8 @@ import {
   OptionWithValue,
   ISimpleSelectFetchProps,
   SimpleSelectFetch,
-} from "app/shared/components";
-import { Stakeholder } from "app/api/models";
+} from "@app/shared/components";
+import { Stakeholder } from "@app/api/models";
 
 const stakeholderToOption = (
   value: Stakeholder

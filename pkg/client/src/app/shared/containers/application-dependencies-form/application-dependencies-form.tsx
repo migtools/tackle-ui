@@ -12,17 +12,17 @@ import {
   TextContent,
 } from "@patternfly/react-core";
 
-import { OptionWithValue } from "app/shared/components";
+import { OptionWithValue } from "@app/shared/components";
 import {
   useFetchApplicationDependencies,
   useFetchApplications,
-} from "app/shared/hooks";
+} from "@app/shared/hooks";
 
-import { Application, ApplicationDependency } from "app/api/models";
+import { Application, ApplicationDependency } from "@app/api/models";
 
 import { FormContext } from "./form-context";
 import { SelectDependency } from "./select-dependency";
-import { getAxiosErrorMessage } from "app/utils/utils";
+import { getAxiosErrorMessage } from "@app/utils/utils";
 
 const northToStringFn = (value: ApplicationDependency) => value.from.name;
 const southToStringFn = (value: ApplicationDependency) => value.to.name;

@@ -14,29 +14,29 @@ import {
   TextArea,
 } from "@patternfly/react-core";
 
-import { SingleSelectOptionValueFormikField } from "app/shared/components";
+import { SingleSelectOptionValueFormikField } from "@app/shared/components";
 
 import {
   DEFAULT_SELECT_MAX_HEIGHT,
   PROPOSED_ACTION_LIST,
   EFFORT_ESTIMATE_LIST,
-} from "app/Constants";
+} from "@app/Constants";
 import {
   getValidatedFromError,
   getValidatedFromErrorTouched,
-} from "app/utils/utils";
+} from "@app/utils/utils";
 import { number } from "yup";
 import {
   Application,
   EffortEstimate,
   ProposedAction,
   Review,
-} from "app/api/models";
-import { createReview, updateReview } from "app/api/rest";
+} from "@app/api/models";
+import { createReview, updateReview } from "@app/api/rest";
 import {
   ISimpleOptionDropdown,
   toISimpleOptionDropdownWithValue,
-} from "app/utils/model-utils";
+} from "@app/utils/model-utils";
 
 interface SimpleOption<T> {
   key: T;

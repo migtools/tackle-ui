@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { InputGroup } from "@patternfly/react-core";
-import { SimpleFilterDropdown } from "app/shared/components";
+import { SimpleFilterDropdown } from "@app/shared/components";
 
 interface FilterOption {
   key: string;

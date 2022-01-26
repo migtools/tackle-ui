@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { Field } from "formik";
 import { Radio, Stack, StackItem } from "@patternfly/react-core";
 
-import { Question } from "app/api/models";
+import { Question } from "@app/api/models";
 import { getQuestionFieldName } from "../../../form-utils";
 
 export interface MultiInputSelectionProps {

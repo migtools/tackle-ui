@@ -3,7 +3,7 @@ import { Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
 import { renderHook, act } from "@testing-library/react-hooks";
 import { useApplicationToolbarFilter } from "./useApplicationToolbarFilter";
-import { ApplicationFilterKey } from "app/Constants";
+import { ApplicationFilterKey } from "@app/Constants";
 
 describe("useApplicationToolbarFilter", () => {
   it("Empty filter", () => {

@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
 
 import { useDispatch } from "react-redux";
-import { alertActions } from "app/store/alert";
+import { alertActions } from "@app/store/alert";
 
 import {
   Bullseye,
@@ -25,19 +25,19 @@ import {
   AppPlaceholder,
   ConditionalRender,
   SimpleEmptyState,
-} from "app/shared/components";
-import { useAssessApplication } from "app/shared/hooks";
+} from "@app/shared/components";
+import { useAssessApplication } from "@app/shared/hooks";
 
-import { formatPath, Paths, ReviewRoute } from "app/Paths";
+import { formatPath, Paths, ReviewRoute } from "@app/Paths";
 
 import {
   getApplicationById,
   getAssessmentById,
   getAssessments,
   getReviewId,
-} from "app/api/rest";
-import { Application, Assessment, Review } from "app/api/models";
-import { getAxiosErrorMessage } from "app/utils/utils";
+} from "@app/api/rest";
+import { Application, Assessment, Review } from "@app/api/models";
+import { getAxiosErrorMessage } from "@app/utils/utils";
 
 import { ApplicationReviewPage } from "./components/application-review-page";
 import { ApplicationDetails } from "./components/application-details";

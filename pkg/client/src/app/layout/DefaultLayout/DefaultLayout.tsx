@@ -1,6 +1,6 @@
 import React from "react";
 import { Page, SkipToContent } from "@patternfly/react-core";
-import { AppPlaceholder } from "app/shared/components";
+import { AppPlaceholder } from "@app/shared/components";
 import { HeaderApp } from "../HeaderApp";
 import { SidebarApp } from "../SidebarApp";
 

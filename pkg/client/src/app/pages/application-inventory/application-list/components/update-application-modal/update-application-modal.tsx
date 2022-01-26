@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { Modal, ModalVariant } from "@patternfly/react-core";
 
-import { Application } from "app/api/models";
+import { Application } from "@app/api/models";
 
 import { ApplicationForm } from "../application-form";
 

@@ -6,7 +6,7 @@ import reportWebVitals from "./app/reportWebVitals";
 import { Provider } from "react-redux";
 import configureStore from "./app/store";
 
-import { initApi, initInterceptors } from "app/axios-config";
+import { initApi, initInterceptors } from "@app/axios-config";
 
 import { ReactKeycloakProvider } from "@react-keycloak/web";
 import keycloak from "./app/keycloak";

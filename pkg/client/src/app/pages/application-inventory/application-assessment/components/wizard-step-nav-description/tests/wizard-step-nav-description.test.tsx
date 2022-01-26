@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow } from "enzyme";
-import { QuestionnaireCategory } from "app/api/models";
+import { QuestionnaireCategory } from "@app/api/models";
 import { WizardStepNavDescription } from "../wizard-step-nav-description";
 
 describe("WizardStepNavDescription", () => {

@@ -3,7 +3,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Nav, NavItem, PageSidebar, NavList } from "@patternfly/react-core";
 
-import { Paths } from "app/Paths";
+import { Paths } from "@app/Paths";
 import { LayoutTheme } from "../LayoutUtils";
 
 export const SidebarApp: React.FC = () => {

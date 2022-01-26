@@ -13,22 +13,22 @@ import {
 } from "@patternfly/react-table";
 import { Label, ToolbarItem } from "@patternfly/react-core";
 
-import { useFetch, useTableControls, useTableFilter } from "app/shared/hooks";
+import { useFetch, useTableControls, useTableFilter } from "@app/shared/hooks";
 import {
   AppTableWithControls,
   ProposedActionLabel,
   RiskLabel,
   ToolbarBulkSelector,
-} from "app/shared/components";
+} from "@app/shared/components";
 
-import { EFFORT_ESTIMATE_LIST, RISK_LIST } from "app/Constants";
+import { EFFORT_ESTIMATE_LIST, RISK_LIST } from "@app/Constants";
 import {
   Application,
   AssessmentConfidence,
   AssessmentRisk,
   Risk,
-} from "app/api/models";
-import { getAssessmentConfidence, getAssessmentLandscape } from "app/api/rest";
+} from "@app/api/models";
+import { getAssessmentConfidence, getAssessmentLandscape } from "@app/api/rest";
 
 import { ApplicationSelectionContext } from "../../application-selection-context";
 

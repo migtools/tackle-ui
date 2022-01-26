@@ -1,4 +1,4 @@
-import { Review } from "app/api/models";
+import { Review } from "@app/api/models";
 import {
   TableRowData,
   ColumnIndex,

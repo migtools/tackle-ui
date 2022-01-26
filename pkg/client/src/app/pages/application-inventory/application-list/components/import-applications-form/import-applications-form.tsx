@@ -12,10 +12,10 @@ import {
 } from "@patternfly/react-core";
 
 import { useDispatch } from "react-redux";
-import { alertActions } from "app/store/alert";
+import { alertActions } from "@app/store/alert";
 
-import { UPLOAD_FILE } from "app/api/rest";
-import { getAxiosErrorMessage } from "app/utils/utils";
+import { UPLOAD_FILE } from "@app/api/rest";
+import { getAxiosErrorMessage } from "@app/utils/utils";
 
 export interface ImportApplicationsFormProps {
   onSaved: (response: AxiosResponse) => void;

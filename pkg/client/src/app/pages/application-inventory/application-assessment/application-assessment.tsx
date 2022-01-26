@@ -5,8 +5,8 @@ import { FormikHelpers, FormikProvider, useFormik } from "formik";
 import { AxiosError } from "axios";
 
 import { useDispatch } from "react-redux";
-import { alertActions } from "app/store/alert";
-import { confirmDialogActions } from "app/store/confirmDialog";
+import { alertActions } from "@app/store/alert";
+import { confirmDialogActions } from "@app/store/confirmDialog";
 
 import {
   Alert,
@@ -22,20 +22,20 @@ import {
   ConditionalRender,
   SimpleEmptyState,
   AppPlaceholder,
-} from "app/shared/components";
+} from "@app/shared/components";
 
-import { AssessmentRoute, formatPath, Paths } from "app/Paths";
+import { AssessmentRoute, formatPath, Paths } from "@app/Paths";
 import {
   Assessment,
   AssessmentStatus,
   Question,
   QuestionnaireCategory,
-} from "app/api/models";
+} from "@app/api/models";
 import {
   getApplicationById,
   getAssessmentById,
   patchAssessment,
-} from "app/api/rest";
+} from "@app/api/rest";
 
 import { CustomWizardFooter } from "./components/custom-wizard-footer";
 
@@ -51,7 +51,7 @@ import {
   SAVE_ACTION_KEY,
   SAVE_ACTION_VALUE,
 } from "./form-utils";
-import { getAxiosErrorMessage } from "app/utils/utils";
+import { getAxiosErrorMessage } from "@app/utils/utils";
 
 import { ApplicationAssessmentPage } from "./components/application-assessment-page";
 import { WizardStepNavDescription } from "./components/wizard-step-nav-description";

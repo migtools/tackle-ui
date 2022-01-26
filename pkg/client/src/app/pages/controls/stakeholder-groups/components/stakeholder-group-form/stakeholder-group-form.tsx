@@ -15,23 +15,23 @@ import {
   TextInput,
 } from "@patternfly/react-core";
 
-import { MultiSelectFetchOptionValueFormikField } from "app/shared/components";
-import { useFetchStakeholders } from "app/shared/hooks";
+import { MultiSelectFetchOptionValueFormikField } from "@app/shared/components";
+import { useFetchStakeholders } from "@app/shared/hooks";
 
-import { DEFAULT_SELECT_MAX_HEIGHT } from "app/Constants";
-import { createStakeholderGroup, updateStakeholderGroup } from "app/api/rest";
-import { Stakeholder, StakeholderGroup } from "app/api/models";
+import { DEFAULT_SELECT_MAX_HEIGHT } from "@app/Constants";
+import { createStakeholderGroup, updateStakeholderGroup } from "@app/api/rest";
+import { Stakeholder, StakeholderGroup } from "@app/api/models";
 import {
   getAxiosErrorMessage,
   getValidatedFromError,
   getValidatedFromErrorTouched,
-} from "app/utils/utils";
+} from "@app/utils/utils";
 import {
   isIModelEqual,
   IStakeholderDropdown,
   toIStakeholderDropdownOptionWithValue,
   toIStakeholderDropdown,
-} from "app/utils/model-utils";
+} from "@app/utils/model-utils";
 
 export interface FormValues {
   name: string;

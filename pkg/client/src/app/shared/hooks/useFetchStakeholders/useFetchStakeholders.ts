@@ -6,8 +6,8 @@ import {
   getStakeholders,
   StakeholderSortBy,
   StakeholderSortByQuery,
-} from "app/api/rest";
-import { PageRepresentation, Stakeholder, PageQuery } from "app/api/models";
+} from "@app/api/rest";
+import { PageRepresentation, Stakeholder, PageQuery } from "@app/api/models";
 
 export const {
   request: fetchRequest,

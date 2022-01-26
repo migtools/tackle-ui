@@ -4,8 +4,8 @@ import { ChartDonut, ChartLegend } from "@patternfly/react-charts";
 
 import { global_palette_blue_300 as defaultColor } from "@patternfly/react-tokens";
 
-import { RISK_LIST } from "app/Constants";
-import { Assessment, QuestionnaireCategory } from "app/api/models";
+import { RISK_LIST } from "@app/Constants";
+import { Assessment, QuestionnaireCategory } from "@app/api/models";
 
 export interface ChartData {
   red: number;

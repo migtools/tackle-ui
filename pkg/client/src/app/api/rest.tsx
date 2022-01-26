@@ -1,5 +1,5 @@
 import { AxiosPromise } from "axios";
-import { APIClient } from "app/axios-config";
+import { APIClient } from "@app/axios-config";
 
 import {
   PageQuery,

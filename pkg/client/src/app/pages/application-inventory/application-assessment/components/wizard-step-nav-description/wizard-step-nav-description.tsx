@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 
 import { Text, TextContent } from "@patternfly/react-core";
-import { QuestionnaireCategory } from "app/api/models";
+import { QuestionnaireCategory } from "@app/api/models";
 
 export interface IWizardStepNavDescriptionProps {
   category: QuestionnaireCategory;

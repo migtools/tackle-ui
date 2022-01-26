@@ -1,8 +1,8 @@
 import React, { lazy, Suspense } from "react";
 import { Redirect, Route, Switch, useLocation } from "react-router-dom";
 
-import { Paths } from "app/Paths";
-import { AppPlaceholder } from "app/shared/components";
+import { Paths } from "@app/Paths";
+import { AppPlaceholder } from "@app/shared/components";
 
 const ApplicationList = lazy(() => import("./application-list"));
 const ApplicationAssessment = lazy(() => import("./application-assessment"));

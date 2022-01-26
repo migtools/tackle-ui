@@ -20,8 +20,8 @@ import {
 } from "@patternfly/react-table";
 
 import { useDispatch } from "react-redux";
-import { alertActions } from "app/store/alert";
-import { confirmDialogActions } from "app/store/confirmDialog";
+import { alertActions } from "@app/store/alert";
+import { confirmDialogActions } from "@app/store/confirmDialog";
 
 import {
   AppPlaceholder,
@@ -32,21 +32,21 @@ import {
   NoDataEmptyState,
   SearchFilter,
   Color,
-} from "app/shared/components";
+} from "@app/shared/components";
 import {
   useTableControls,
   useFetchTagTypes,
   useDelete,
-} from "app/shared/hooks";
+} from "@app/shared/hooks";
 
-import { getAxiosErrorMessage } from "app/utils/utils";
+import { getAxiosErrorMessage } from "@app/utils/utils";
 import {
   deleteTag,
   deleteTagType,
   TagTypeSortBy,
   TagTypeSortByQuery,
-} from "app/api/rest";
-import { SortByQuery, Tag, TagType } from "app/api/models";
+} from "@app/api/rest";
+import { SortByQuery, Tag, TagType } from "@app/api/models";
 
 import { NewTagTypeModal } from "./components/new-tag-type-modal";
 import { UpdateTagTypeModal } from "./components/update-tag-type-modal";

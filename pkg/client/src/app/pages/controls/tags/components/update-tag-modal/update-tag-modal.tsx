@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { Modal, ModalVariant } from "@patternfly/react-core";
 
-import { Tag } from "app/api/models";
+import { Tag } from "@app/api/models";
 
 import { TagForm } from "../tag-form";
 

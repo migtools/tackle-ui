@@ -1,8 +1,8 @@
 import { useCallback, useState } from "react";
 import { AxiosError } from "axios";
 
-import { createAssessment, getAssessments } from "app/api/rest";
-import { Application, Assessment } from "app/api/models";
+import { createAssessment, getAssessments } from "@app/api/rest";
+import { Application, Assessment } from "@app/api/models";
 
 export interface IState {
   inProgress: boolean;

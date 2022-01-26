@@ -14,22 +14,22 @@ import {
   TextInput,
 } from "@patternfly/react-core";
 
-import { SingleSelectFetchOptionValueFormikField } from "app/shared/components";
-import { useFetchTagTypes } from "app/shared/hooks";
+import { SingleSelectFetchOptionValueFormikField } from "@app/shared/components";
+import { useFetchTagTypes } from "@app/shared/hooks";
 
-import { DEFAULT_SELECT_MAX_HEIGHT } from "app/Constants";
-import { createTag, updateTag } from "app/api/rest";
-import { Tag, TagType } from "app/api/models";
+import { DEFAULT_SELECT_MAX_HEIGHT } from "@app/Constants";
+import { createTag, updateTag } from "@app/api/rest";
+import { Tag, TagType } from "@app/api/models";
 import {
   getAxiosErrorMessage,
   getValidatedFromError,
   getValidatedFromErrorTouched,
-} from "app/utils/utils";
+} from "@app/utils/utils";
 import {
   ITagTypeDropdown,
   toITagTypeDropdown,
   toITagTypeDropdownOptionWithValue,
-} from "app/utils/model-utils";
+} from "@app/utils/model-utils";
 
 export interface FormValues {
   name: string;

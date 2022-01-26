@@ -3,11 +3,11 @@ import { useTranslation } from "react-i18next";
 
 import { SelectVariant, ToolbarChip } from "@patternfly/react-core";
 
-import { SimpleSelectFetch, OptionWithValue } from "app/shared/components";
-import { useFetchBusinessServices } from "app/shared/hooks";
+import { SimpleSelectFetch, OptionWithValue } from "@app/shared/components";
+import { useFetchBusinessServices } from "@app/shared/hooks";
 
-import { BusinessService } from "app/api/models";
-import { DEFAULT_SELECT_MAX_HEIGHT } from "app/Constants";
+import { BusinessService } from "@app/api/models";
+import { DEFAULT_SELECT_MAX_HEIGHT } from "@app/Constants";
 
 const businessServiceToToolbarChip = (value: BusinessService): ToolbarChip => ({
   key: `${value.id}`,

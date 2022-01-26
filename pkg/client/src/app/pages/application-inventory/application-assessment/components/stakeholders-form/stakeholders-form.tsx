@@ -14,10 +14,10 @@ import {
 import {
   useFetchStakeholderGroups,
   useFetchStakeholders,
-} from "app/shared/hooks";
+} from "@app/shared/hooks";
 
-import { DEFAULT_SELECT_MAX_HEIGHT } from "app/Constants";
-import { getValidatedFromError } from "app/utils/utils";
+import { DEFAULT_SELECT_MAX_HEIGHT } from "@app/Constants";
+import { getValidatedFromError } from "@app/utils/utils";
 
 import { IFormValues } from "../../form-utils";
 

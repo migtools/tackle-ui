@@ -1,7 +1,7 @@
 import React from "react";
 import { mount, shallow } from "enzyme";
-import { EmptyTextMessage } from "app/shared/components";
-import { Application } from "app/api/models";
+import { EmptyTextMessage } from "@app/shared/components";
+import { Application } from "@app/api/models";
 import { ApplicationListExpandedArea } from "../application-list-expanded-area";
 
 describe("ApplicationListExpandedArea", () => {

@@ -6,12 +6,12 @@ import {
   getStakeholderGroups,
   StakeholderGroupSortBy,
   StakeholderGroupSortByQuery,
-} from "app/api/rest";
+} from "@app/api/rest";
 import {
   PageRepresentation,
   StakeholderGroup,
   PageQuery,
-} from "app/api/models";
+} from "@app/api/models";
 
 export const {
   request: fetchRequest,

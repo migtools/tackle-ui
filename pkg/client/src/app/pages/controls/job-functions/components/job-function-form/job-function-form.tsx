@@ -14,13 +14,13 @@ import {
   TextInput,
 } from "@patternfly/react-core";
 
-import { createJobFunction, updateJobFunction } from "app/api/rest";
-import { JobFunction } from "app/api/models";
+import { createJobFunction, updateJobFunction } from "@app/api/rest";
+import { JobFunction } from "@app/api/models";
 import {
   getAxiosErrorMessage,
   getValidatedFromError,
   getValidatedFromErrorTouched,
-} from "app/utils/utils";
+} from "@app/utils/utils";
 
 export interface FormValues {
   name: string;

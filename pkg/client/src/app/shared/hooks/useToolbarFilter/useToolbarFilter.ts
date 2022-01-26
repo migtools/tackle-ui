@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ToolbarChip } from "@patternfly/react-core";
-import { getToolbarChipKey } from "app/utils/utils";
+import { getToolbarChipKey } from "@app/utils/utils";
 
 // Hook
 

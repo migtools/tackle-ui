@@ -2,8 +2,8 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { renderHook, act } from "@testing-library/react-hooks";
 import { useFetchApplicationDependencies } from "./useFetchApplicationDependencies";
-import { ApplicationDependencyPage } from "app/api/models";
-import { APPLICATION_DEPENDENCY } from "app/api/rest";
+import { ApplicationDependencyPage } from "@app/api/models";
+import { APPLICATION_DEPENDENCY } from "@app/api/rest";
 
 describe("useFetchApplicationDependencies", () => {
   it("Fetch all", async () => {

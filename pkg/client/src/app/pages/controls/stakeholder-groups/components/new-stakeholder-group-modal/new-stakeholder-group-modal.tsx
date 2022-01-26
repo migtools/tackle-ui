@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { Modal, ModalVariant } from "@patternfly/react-core";
 
-import { StakeholderGroup } from "app/api/models";
+import { StakeholderGroup } from "@app/api/models";
 
 import { StakeholderGroupForm } from "../stakeholder-group-form";
 

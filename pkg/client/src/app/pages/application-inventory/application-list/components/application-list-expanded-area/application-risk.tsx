@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect } from "react";
 
-import { RiskLabel } from "app/shared/components";
-import { useFetch } from "app/shared/hooks";
+import { RiskLabel } from "@app/shared/components";
+import { useFetch } from "@app/shared/hooks";
 
-import { Application, AssessmentRisk } from "app/api/models";
-import { getAssessmentLandscape } from "app/api/rest";
+import { Application, AssessmentRisk } from "@app/api/models";
+import { getAssessmentLandscape } from "@app/api/rest";
 
 export interface IApplicationRiskProps {
   application: Application;

@@ -17,20 +17,20 @@ import {
 import {
   SingleSelectFetchOptionValueFormikField,
   MultiSelectFetchOptionValueFormikField,
-} from "app/shared/components";
+} from "@app/shared/components";
 import {
   useFetchStakeholderGroups,
   useFetchJobFunctions,
-} from "app/shared/hooks";
+} from "@app/shared/hooks";
 
-import { DEFAULT_SELECT_MAX_HEIGHT } from "app/Constants";
-import { createStakeholder, updateStakeholder } from "app/api/rest";
-import { JobFunction, Stakeholder, StakeholderGroup } from "app/api/models";
+import { DEFAULT_SELECT_MAX_HEIGHT } from "@app/Constants";
+import { createStakeholder, updateStakeholder } from "@app/api/rest";
+import { JobFunction, Stakeholder, StakeholderGroup } from "@app/api/models";
 import {
   getAxiosErrorMessage,
   getValidatedFromError,
   getValidatedFromErrorTouched,
-} from "app/utils/utils";
+} from "@app/utils/utils";
 import {
   IJobFunctionDropdown,
   toIJobFunctionDropdownOptionWithValue,
@@ -39,7 +39,7 @@ import {
   toIStakeholderGroupDropdownOptionWithValue,
   toIStakeholderGroupDropdown,
   isIModelEqual,
-} from "app/utils/model-utils";
+} from "@app/utils/model-utils";
 
 export interface FormValues {
   email: string;

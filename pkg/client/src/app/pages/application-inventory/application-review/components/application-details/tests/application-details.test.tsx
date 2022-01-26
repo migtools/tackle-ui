@@ -2,7 +2,7 @@ import React from "react";
 import { shallow } from "enzyme";
 
 import { ApplicationDetails } from "../application-details";
-import { Application, Assessment } from "app/api/models";
+import { Application, Assessment } from "@app/api/models";
 
 describe("AppTable", () => {
   it("Renders without crashing", () => {

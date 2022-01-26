@@ -14,20 +14,20 @@ import {
   AppTableToolbarToggleGroup,
   AppTableWithControls,
   RiskLabel,
-} from "app/shared/components";
+} from "@app/shared/components";
 import {
   useToolbarFilter,
   useTableControls,
   useTableFilter,
-} from "app/shared/hooks";
+} from "@app/shared/hooks";
 
-import { RISK_LIST } from "app/Constants";
+import { RISK_LIST } from "@app/Constants";
 import {
   Assessment,
   Question,
   QuestionnaireCategory,
   Risk,
-} from "app/api/models";
+} from "@app/api/models";
 
 import { SelectRiskFilter } from "./components/select-risk-filter";
 

@@ -1,4 +1,4 @@
-import { QuestionnaireCategory, Question } from "app/api/models";
+import { QuestionnaireCategory, Question } from "@app/api/models";
 
 export const COMMENTS_KEY = "comments";
 export const QUESTIONS_KEY = "questions";

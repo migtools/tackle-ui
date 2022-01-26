@@ -6,8 +6,8 @@ import { ToolbarChip } from "@patternfly/react-core";
 import {
   SelectBusinessServiceFilter,
   SelectTagFilter,
-} from "app/shared/containers";
-import { ApplicationFilterKey } from "app/Constants";
+} from "@app/shared/containers";
+import { ApplicationFilterKey } from "@app/Constants";
 
 import { AppTableToolbarToggleGroup } from "../app-table-toolbar-toggle-group";
 import { ToolbarSearchFilter } from "../toolbar-search-filter";

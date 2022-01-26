@@ -6,8 +6,8 @@ import {
   getJobFunctions,
   JobFunctionSortBy,
   JobFunctionSortByQuery,
-} from "app/api/rest";
-import { PageRepresentation, JobFunction, PageQuery } from "app/api/models";
+} from "@app/api/rest";
+import { PageRepresentation, JobFunction, PageQuery } from "@app/api/models";
 
 export const {
   request: fetchRequest,

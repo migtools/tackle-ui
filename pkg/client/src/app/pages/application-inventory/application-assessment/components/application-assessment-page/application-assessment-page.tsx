@@ -1,6 +1,6 @@
 import React from "react";
 import { PageSection, PageSectionTypes } from "@patternfly/react-core";
-import { Assessment } from "app/api/models";
+import { Assessment } from "@app/api/models";
 
 import { ApplicationAssessmentPageHeader } from "./application-assessment-page-header";
 

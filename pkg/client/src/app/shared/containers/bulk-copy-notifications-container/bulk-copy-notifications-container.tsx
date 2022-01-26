@@ -2,14 +2,14 @@ import React, { useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useDispatch, useSelector } from "react-redux";
-import { alertActions } from "app/store/alert";
-import { RootState } from "app/store/rootReducer";
-import { bulkCopySelectors, bulkCopyActions } from "app/store/bulkCopy";
+import { alertActions } from "@app/store/alert";
+import { RootState } from "@app/store/rootReducer";
+import { bulkCopySelectors, bulkCopyActions } from "@app/store/bulkCopy";
 
-import { useFetch } from "app/shared/hooks";
+import { useFetch } from "@app/shared/hooks";
 
-import { BulkCopyAssessment, BulkCopyReview } from "app/api/models";
-import { getBulkCopyAssessment, getBulkCopyReview } from "app/api/rest";
+import { BulkCopyAssessment, BulkCopyReview } from "@app/api/models";
+import { getBulkCopyAssessment, getBulkCopyReview } from "@app/api/rest";
 
 export const BulkCopyNotificationsContainer: React.FC = () => {
   // i18

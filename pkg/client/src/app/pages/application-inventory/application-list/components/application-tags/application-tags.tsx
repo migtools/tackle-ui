@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 
 import { useDispatch } from "react-redux";
-import { unknownTagsActions } from "app/store/unknownTags";
+import { unknownTagsActions } from "@app/store/unknownTags";
 
-import { ConditionalRender } from "app/shared/components";
+import { ConditionalRender } from "@app/shared/components";
 
-import { Application, Tag, TagType } from "app/api/models";
-import { getTagById } from "app/api/rest";
+import { Application, Tag, TagType } from "@app/api/models";
+import { getTagById } from "@app/api/rest";
 import {
   Label,
   LabelGroup,
@@ -14,7 +14,7 @@ import {
   Split,
   SplitItem,
 } from "@patternfly/react-core";
-import { DEFAULT_COLOR_LABELS } from "app/Constants";
+import { DEFAULT_COLOR_LABELS } from "@app/Constants";
 
 export interface ApplicationTagsProps {
   application: Application;

@@ -1,7 +1,7 @@
 import React from "react";
 import { mount } from "enzyme";
 import { Toolbar, ToolbarChip, ToolbarContent } from "@patternfly/react-core";
-import { ApplicationFilterKey } from "app/Constants";
+import { ApplicationFilterKey } from "@app/Constants";
 import { ApplicationToolbarToggleGroup } from "../application-toolbar-toggle-group";
 
 describe("ApplicationToolbarToggleGroup", () => {

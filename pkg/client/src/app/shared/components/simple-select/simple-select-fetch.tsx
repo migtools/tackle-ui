@@ -3,7 +3,7 @@ import { AxiosError } from "axios";
 
 import { WarningTriangleIcon } from "@patternfly/react-icons/dist/esm/icons/warning-triangle-icon";
 
-import { getAxiosErrorMessage } from "app/utils/utils";
+import { getAxiosErrorMessage } from "@app/utils/utils";
 import { ISimpleSelectProps, SimpleSelect } from "./simple-select";
 
 export interface ISimpleSelectFetchProps

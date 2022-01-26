@@ -6,8 +6,8 @@ import {
   EmptyTextMessage,
   StatusIconAssessment,
   StatusIconAssessmentType,
-} from "app/shared/components";
-import { Assessment } from "app/api/models";
+} from "@app/shared/components";
+import { Assessment } from "@app/api/models";
 
 export interface ApplicationAssessmentProps {
   assessment?: Assessment;

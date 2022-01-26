@@ -10,7 +10,7 @@ import {
   ListItem,
 } from "@patternfly/react-core";
 
-import { Application, Assessment } from "app/api/models";
+import { Application, Assessment } from "@app/api/models";
 
 export interface IApplicationDetailsProps {
   application: Application;

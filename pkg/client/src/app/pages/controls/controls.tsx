@@ -2,8 +2,8 @@ import React, { lazy, Suspense } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { PageSection } from "@patternfly/react-core";
 
-import { Paths } from "app/Paths";
-import { AppPlaceholder } from "app/shared/components";
+import { Paths } from "@app/Paths";
+import { AppPlaceholder } from "@app/shared/components";
 
 import { EditCompanyHeader } from "./controls-header";
 

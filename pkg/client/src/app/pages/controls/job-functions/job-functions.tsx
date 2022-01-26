@@ -18,8 +18,8 @@ import {
 } from "@patternfly/react-table";
 
 import { useDispatch } from "react-redux";
-import { alertActions } from "app/store/alert";
-import { confirmDialogActions } from "app/store/confirmDialog";
+import { alertActions } from "@app/store/alert";
+import { confirmDialogActions } from "@app/store/confirmDialog";
 
 import {
   AppPlaceholder,
@@ -29,20 +29,20 @@ import {
   AppTableToolbarToggleGroup,
   NoDataEmptyState,
   SearchFilter,
-} from "app/shared/components";
+} from "@app/shared/components";
 import {
   useTableControls,
   useDelete,
   useFetchJobFunctions,
-} from "app/shared/hooks";
+} from "@app/shared/hooks";
 
-import { getAxiosErrorMessage } from "app/utils/utils";
+import { getAxiosErrorMessage } from "@app/utils/utils";
 import {
   deleteJobFunction,
   JobFunctionSortBy,
   JobFunctionSortByQuery,
-} from "app/api/rest";
-import { SortByQuery, JobFunction } from "app/api/models";
+} from "@app/api/rest";
+import { SortByQuery, JobFunction } from "@app/api/models";
 
 import { NewJobFunctionModal } from "./components/new-job-function-modal";
 import { UpdateJobFunctionModal } from "./components/update-job-function-modal";

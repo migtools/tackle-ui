@@ -7,8 +7,8 @@ import {
   StakeholderGroup,
   Tag,
   TagType,
-} from "app/api/models";
-import { Color, OptionWithValue } from "app/shared/components";
+} from "@app/api/models";
+import { Color, OptionWithValue } from "@app/shared/components";
 
 interface IModel {
   id?: string | number;

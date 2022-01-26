@@ -33,11 +33,11 @@ import { TagIcon } from "@patternfly/react-icons/dist/esm/icons/tag-icon";
 import { PencilAltIcon } from "@patternfly/react-icons/dist/esm/icons/pencil-alt-icon";
 
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "app/store/rootReducer";
-import { alertActions } from "app/store/alert";
-import { confirmDialogActions } from "app/store/confirmDialog";
-import { unknownTagsSelectors } from "app/store/unknownTags";
-import { bulkCopySelectors } from "app/store/bulkCopy";
+import { RootState } from "@app/store/rootReducer";
+import { alertActions } from "@app/store/alert";
+import { confirmDialogActions } from "@app/store/confirmDialog";
+import { unknownTagsSelectors } from "@app/store/unknownTags";
+import { bulkCopySelectors } from "@app/store/bulkCopy";
 
 import {
   ApplicationToolbarToggleGroup,
@@ -47,7 +47,7 @@ import {
   NoDataEmptyState,
   StatusIconAssessment,
   KebabDropdown,
-} from "app/shared/components";
+} from "@app/shared/components";
 import {
   useTableControls,
   useAssessApplication,
@@ -56,18 +56,18 @@ import {
   useEntityModal,
   useDelete,
   useApplicationToolbarFilter,
-} from "app/shared/hooks";
-import { ApplicationDependenciesFormContainer } from "app/shared/containers";
+} from "@app/shared/hooks";
+import { ApplicationDependenciesFormContainer } from "@app/shared/containers";
 
-import { formatPath, Paths } from "app/Paths";
-import { ApplicationFilterKey } from "app/Constants";
+import { formatPath, Paths } from "@app/Paths";
+import { ApplicationFilterKey } from "@app/Constants";
 
 import {
   Application,
   ApplicationPage,
   Assessment,
   SortByQuery,
-} from "app/api/models";
+} from "@app/api/models";
 import {
   ApplicationSortBy,
   ApplicationSortByQuery,
@@ -76,9 +76,9 @@ import {
   deleteReview,
   getApplications,
   getAssessments,
-} from "app/api/rest";
-import { applicationPageMapper } from "app/api/apiUtils";
-import { getAxiosErrorMessage } from "app/utils/utils";
+} from "@app/api/rest";
+import { applicationPageMapper } from "@app/api/apiUtils";
+import { getAxiosErrorMessage } from "@app/utils/utils";
 
 import { ApplicationForm } from "./components/application-form";
 

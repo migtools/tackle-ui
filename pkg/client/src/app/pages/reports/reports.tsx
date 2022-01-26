@@ -26,19 +26,19 @@ import {
 } from "@patternfly/react-core";
 import { HelpIcon } from "@patternfly/react-icons/dist/esm/icons/help-icon";
 
-import { useApplicationToolbarFilter, useFetch } from "app/shared/hooks";
+import { useApplicationToolbarFilter, useFetch } from "@app/shared/hooks";
 import {
   ApplicationToolbarToggleGroup,
   AppPlaceholder,
   ConditionalRender,
   StateError,
-} from "app/shared/components";
+} from "@app/shared/components";
 
-import { ApplicationFilterKey } from "app/Constants";
+import { ApplicationFilterKey } from "@app/Constants";
 
-import { ApplicationSortBy, getApplications } from "app/api/rest";
-import { Application, ApplicationPage } from "app/api/models";
-import { applicationPageMapper, fetchAllPages } from "app/api/apiUtils";
+import { ApplicationSortBy, getApplications } from "@app/api/rest";
+import { Application, ApplicationPage } from "@app/api/models";
+import { applicationPageMapper, fetchAllPages } from "@app/api/apiUtils";
 
 import { ApplicationSelectionContextProvider } from "./application-selection-context";
 import { Landscape } from "./components/landscape";

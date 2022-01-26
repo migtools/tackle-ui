@@ -10,7 +10,7 @@ import {
   TextListItem,
 } from "@patternfly/react-core";
 
-import brandImage from "app/images/tackle.png";
+import brandImage from "@app/images/tackle.png";
 
 export interface AppAboutModalProps {
   isOpen: boolean;

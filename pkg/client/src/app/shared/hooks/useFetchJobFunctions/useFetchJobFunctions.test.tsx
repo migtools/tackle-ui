@@ -2,8 +2,8 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { renderHook, act } from "@testing-library/react-hooks";
 import { useFetchJobFunctions } from "./useFetchJobFunctions";
-import { JobFunctionPage } from "app/api/models";
-import { JOB_FUNCTIONS } from "app/api/rest";
+import { JobFunctionPage } from "@app/api/models";
+import { JOB_FUNCTIONS } from "@app/api/rest";
 
 describe("useFetchJobFunctions", () => {
   it("Fetch all", async () => {

@@ -18,21 +18,21 @@ import {
 import {
   SingleSelectFetchOptionValueFormikField,
   MultiSelectFetchOptionValueFormikField,
-} from "app/shared/components";
-import { useFetchBusinessServices, useFetchTagTypes } from "app/shared/hooks";
+} from "@app/shared/components";
+import { useFetchBusinessServices, useFetchTagTypes } from "@app/shared/hooks";
 
-import { DEFAULT_SELECT_MAX_HEIGHT } from "app/Constants";
+import { DEFAULT_SELECT_MAX_HEIGHT } from "@app/Constants";
 import {
   createApplication,
   TagTypeSortBy,
   updateApplication,
-} from "app/api/rest";
-import { Application, Tag } from "app/api/models";
+} from "@app/api/rest";
+import { Application, Tag } from "@app/api/models";
 import {
   getAxiosErrorMessage,
   getValidatedFromError,
   getValidatedFromErrorTouched,
-} from "app/utils/utils";
+} from "@app/utils/utils";
 import {
   IBusinessServiceDropdown,
   isIModelEqual,
@@ -41,7 +41,7 @@ import {
   toIBusinessServiceDropdownOptionWithValue,
   toITagDropdown,
   toITagDropdownOptionWithValue,
-} from "app/utils/model-utils";
+} from "@app/utils/model-utils";
 
 export interface FormValues {
   name: string;

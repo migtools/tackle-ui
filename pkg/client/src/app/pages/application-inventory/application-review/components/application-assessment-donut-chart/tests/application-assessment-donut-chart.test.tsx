@@ -6,7 +6,7 @@ import {
   ApplicationAssessmentDonutChart,
   getChartDataFromCategories,
 } from "../application-assessment-donut-chart";
-import { Assessment } from "app/api/models";
+import { Assessment } from "@app/api/models";
 
 describe("AppTable", () => {
   const assessment: Assessment = {

@@ -65,6 +65,7 @@
 // "forceConsistentCasingInFileNames": true  /* Disallow inconsistently-cased references to the same file. */
 {
   "compilerOptions": {
+    "outDir": "dist",
     "target": "es5",
     "lib": [
       "dom",
@@ -84,7 +85,11 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
-    "baseUrl": "src"
+    "baseUrl": ".",
+    "paths": {
+      "@app/*": ["src/app/*"],
+      "@assets/*": ["node_modules/@patternfly/react-core/dist/styles/assets/*"]
+    },
   },
   "include": ["./src/**/*.ts", "./src/**/*.tsx", "./src/**/*.jsx", "./src/**/*.js"],
 }

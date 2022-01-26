@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 
-import { AppPlaceholder } from "app/shared/components";
+import { AppPlaceholder } from "@app/shared/components";
 import { Paths } from "./Paths";
 
 const ApplicationInventory = lazy(

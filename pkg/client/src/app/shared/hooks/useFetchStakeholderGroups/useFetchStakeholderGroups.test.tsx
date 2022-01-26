@@ -2,8 +2,8 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { renderHook, act } from "@testing-library/react-hooks";
 import { useFetchStakeholderGroups } from "./useFetchStakeholderGroups";
-import { StakeholderGroupPage } from "app/api/models";
-import { STAKEHOLDER_GROUPS } from "app/api/rest";
+import { StakeholderGroupPage } from "@app/api/models";
+import { STAKEHOLDER_GROUPS } from "@app/api/rest";
 
 describe("useFetchStakeholderGroups", () => {
   it("Fetch error due to no REST API found", async () => {

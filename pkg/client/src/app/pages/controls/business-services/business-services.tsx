@@ -18,8 +18,8 @@ import {
 } from "@patternfly/react-table";
 
 import { useDispatch } from "react-redux";
-import { alertActions } from "app/store/alert";
-import { confirmDialogActions } from "app/store/confirmDialog";
+import { alertActions } from "@app/store/alert";
+import { confirmDialogActions } from "@app/store/confirmDialog";
 
 import {
   AppPlaceholder,
@@ -29,20 +29,20 @@ import {
   AppTableActionButtons,
   AppTableToolbarToggleGroup,
   NoDataEmptyState,
-} from "app/shared/components";
+} from "@app/shared/components";
 import {
   useTableControls,
   useFetchBusinessServices,
   useDelete,
-} from "app/shared/hooks";
+} from "@app/shared/hooks";
 
-import { BusinessService, SortByQuery } from "app/api/models";
+import { BusinessService, SortByQuery } from "@app/api/models";
 import {
   BusinessServiceSortBy,
   BusinessServiceSortByQuery,
   deleteBusinessService,
-} from "app/api/rest";
-import { getAxiosErrorMessage } from "app/utils/utils";
+} from "@app/api/rest";
+import { getAxiosErrorMessage } from "@app/utils/utils";
 
 import { NewBusinessServiceModal } from "./components/new-business-service-modal";
 import { UpdateBusinessServiceModal } from "./components/update-business-service-modal";

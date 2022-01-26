@@ -1,13 +1,13 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { RootState } from "app/store/rootReducer";
+import { RootState } from "@app/store/rootReducer";
 
-import { ConfirmDialog } from "app/shared/components";
+import { ConfirmDialog } from "@app/shared/components";
 import {
   confirmDialogActions,
   confirmDialogSelectors,
-} from "app/store/confirmDialog";
+} from "@app/store/confirmDialog";
 
 export const ConfirmDialogContainer: React.FC = () => {
   const dispatch = useDispatch();

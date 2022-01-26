@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next";
 import { Button, InputGroup, TextInput } from "@patternfly/react-core";
 import { SearchIcon } from "@patternfly/react-icons/dist/esm/icons/search-icon";
 
-import { SimpleFilterDropdown } from "app/shared/components";
-import { DropdownOption } from "app/shared/components/simple-filter-dropdown/simple-filter-dropdown";
+import { SimpleFilterDropdown } from "@app/shared/components";
+import { DropdownOption } from "@app/shared/components/simple-filter-dropdown/simple-filter-dropdown";
 
 interface FilterOption {
   key: string;

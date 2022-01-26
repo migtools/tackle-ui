@@ -30,16 +30,16 @@ import {
   global_palette_white as white,
 } from "@patternfly/react-tokens";
 
-import { useFetch, useFetchApplicationDependencies } from "app/shared/hooks";
-import { ConditionalRender, StateError } from "app/shared/components";
+import { useFetch, useFetchApplicationDependencies } from "@app/shared/hooks";
+import { ConditionalRender, StateError } from "@app/shared/components";
 
-import { EFFORT_ESTIMATE_LIST, PROPOSED_ACTION_LIST } from "app/Constants";
-import { getAssessmentConfidence } from "app/api/rest";
+import { EFFORT_ESTIMATE_LIST, PROPOSED_ACTION_LIST } from "@app/Constants";
+import { getAssessmentConfidence } from "@app/api/rest";
 import {
   Application,
   AssessmentConfidence,
   ProposedAction,
-} from "app/api/models";
+} from "@app/api/models";
 
 import { ApplicationSelectionContext } from "../../application-selection-context";
 import { CartesianSquare } from "./cartesian-square";

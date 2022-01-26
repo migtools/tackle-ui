@@ -2,8 +2,8 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { renderHook, act } from "@testing-library/react-hooks";
 import { useFetchApplications } from "./useFetchApplications";
-import { ApplicationPage } from "app/api/models";
-import { APPLICATIONS } from "app/api/rest";
+import { ApplicationPage } from "@app/api/models";
+import { APPLICATIONS } from "@app/api/rest";
 
 describe("useFetchApplications", () => {
   it("Fetch error due to no REST API found", async () => {

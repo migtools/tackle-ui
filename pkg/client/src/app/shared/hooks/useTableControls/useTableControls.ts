@@ -2,8 +2,8 @@ import { useCallback, useReducer } from "react";
 import { ActionType, createAction, getType } from "typesafe-actions";
 import { IExtraColumnData, SortByDirection } from "@patternfly/react-table";
 
-import { DEFAULT_PAGINATION } from "app/Constants";
-import { PageQuery, SortByQuery } from "app/api/models";
+import { DEFAULT_PAGINATION } from "@app/Constants";
+import { PageQuery, SortByQuery } from "@app/api/models";
 
 interface PaginationAction {
   page: number;

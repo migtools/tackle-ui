@@ -15,20 +15,20 @@ import {
   TextInput,
 } from "@patternfly/react-core";
 
-import { SingleSelectOptionValueFormikField } from "app/shared/components";
+import { SingleSelectOptionValueFormikField } from "@app/shared/components";
 
 import {
   DEFAULT_SELECT_MAX_HEIGHT,
   DEFAULT_COLOR_PALETE as DEFAULT_COLOR_PALETTE,
-} from "app/Constants";
-import { createTagType, updateTagType } from "app/api/rest";
-import { TagType } from "app/api/models";
+} from "@app/Constants";
+import { createTagType, updateTagType } from "@app/api/rest";
+import { TagType } from "@app/api/models";
 import {
   getAxiosErrorMessage,
   getValidatedFromError,
   getValidatedFromErrorTouched,
-} from "app/utils/utils";
-import { colorHexToOptionWithValue } from "app/utils/model-utils";
+} from "@app/utils/utils";
+import { colorHexToOptionWithValue } from "@app/utils/model-utils";
 
 export interface FormValues {
   name: string;

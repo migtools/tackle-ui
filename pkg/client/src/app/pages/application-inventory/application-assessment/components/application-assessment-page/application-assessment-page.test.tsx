@@ -1,7 +1,7 @@
 import React from "react";
 import { shallow } from "enzyme";
 import { ApplicationAssessmentPage } from "./application-assessment-page";
-import { Assessment } from "app/api/models";
+import { Assessment } from "@app/api/models";
 
 describe("ApplicationAssessmentPage", () => {
   const assessment: Assessment = {

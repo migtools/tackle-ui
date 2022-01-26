@@ -13,28 +13,28 @@ import {
 import { cellWidth, ICell, IRow, truncate } from "@patternfly/react-table";
 
 import { useDispatch } from "react-redux";
-import { alertActions } from "app/store/alert";
+import { alertActions } from "@app/store/alert";
 
-import { useFetch, useTableControls } from "app/shared/hooks";
+import { useFetch, useTableControls } from "@app/shared/hooks";
 import {
   AppPlaceholder,
   AppTableWithControls,
   ConditionalRender,
   PageHeader,
-} from "app/shared/components";
+} from "@app/shared/components";
 
-import { ImportSummaryRoute, Paths } from "app/Paths";
+import { ImportSummaryRoute, Paths } from "@app/Paths";
 import {
   getApplicationImport,
   getApplicationImportSummaryById,
   getApplicationSummaryCSV,
-} from "app/api/rest";
+} from "@app/api/rest";
 import {
   ApplicationImportPage,
   ApplicationImportSummary,
-} from "app/api/models";
-import { applicationImportPageMapper } from "app/api/apiUtils";
-import { getAxiosErrorMessage } from "app/utils/utils";
+} from "@app/api/models";
+import { applicationImportPageMapper } from "@app/api/apiUtils";
+import { getAxiosErrorMessage } from "@app/utils/utils";
 
 const ENTITY_FIELD = "entity";
 

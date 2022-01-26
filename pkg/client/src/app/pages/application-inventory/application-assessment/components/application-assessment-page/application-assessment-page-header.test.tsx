@@ -1,7 +1,7 @@
 import React from "react";
 import { ApplicationAssessmentPageHeader } from "./application-assessment-page-header";
-import { Assessment } from "app/api/models";
-import { mountWithRedux } from "app/store/reducerUtils";
+import { Assessment } from "@app/api/models";
+import { mountWithRedux } from "@app/store/reducerUtils";
 
 describe("ApplicationAssessmentPageHeader", () => {
   const assessment: Assessment = {

@@ -25,15 +25,15 @@ import { ExclamationTriangleIcon } from "@patternfly/react-icons/dist/esm/icons/
 import { global_palette_gold_400 as gold } from "@patternfly/react-tokens";
 
 import { useDispatch } from "react-redux";
-import { alertActions } from "app/store/alert";
-import { bulkCopyActions } from "app/store/bulkCopy";
+import { alertActions } from "@app/store/alert";
+import { bulkCopyActions } from "@app/store/bulkCopy";
 
 import {
   ApplicationToolbarToggleGroup,
   AppTableWithControls,
   StatusIconAssessment,
   ToolbarBulkSelector,
-} from "app/shared/components";
+} from "@app/shared/components";
 import {
   useFetch,
   useMultipleFetch,
@@ -41,7 +41,7 @@ import {
   useToolbarFilter,
   useSelectionFromPageState,
   useFetchPagination,
-} from "app/shared/hooks";
+} from "@app/shared/hooks";
 
 import {
   Application,
@@ -49,9 +49,9 @@ import {
   Assessment,
   Review,
   SortByQuery,
-} from "app/api/models";
+} from "@app/api/models";
 
-import { ApplicationFilterKey } from "app/Constants";
+import { ApplicationFilterKey } from "@app/Constants";
 import {
   ApplicationSortBy,
   ApplicationSortByQuery,
@@ -59,9 +59,9 @@ import {
   createBulkCopyReview,
   getApplications,
   getAssessments,
-} from "app/api/rest";
-import { applicationPageMapper } from "app/api/apiUtils";
-import { getAxiosErrorMessage } from "app/utils/utils";
+} from "@app/api/rest";
+import { applicationPageMapper } from "@app/api/apiUtils";
+import { getAxiosErrorMessage } from "@app/utils/utils";
 
 import { ApplicationBusinessService } from "../application-business-service";
 import { ApplicationAssessment } from "../application-assessment";

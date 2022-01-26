@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelectionState, ISelectionState } from "@konveyor/lib-ui";
-import { Application } from "app/api/models";
+import { Application } from "@app/api/models";
 
 interface IApplicationSelectionContext extends ISelectionState<Application> {
   allItems: Application[];

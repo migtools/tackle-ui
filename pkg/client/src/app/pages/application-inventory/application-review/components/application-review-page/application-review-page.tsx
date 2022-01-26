@@ -3,9 +3,9 @@ import { useTranslation } from "react-i18next";
 
 import { PageSection, Text } from "@patternfly/react-core";
 
-import { PageHeader } from "app/shared/components";
+import { PageHeader } from "@app/shared/components";
 
-import { Paths } from "app/Paths";
+import { Paths } from "@app/Paths";
 
 export const ApplicationReviewPage: React.FC = ({ children }) => {
   const { t } = useTranslation();

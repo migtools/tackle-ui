@@ -2,14 +2,14 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
 
-import { OptionWithValue, SimpleSelectFetch } from "app/shared/components";
+import { OptionWithValue, SimpleSelectFetch } from "@app/shared/components";
 
-import { DEFAULT_SELECT_MAX_HEIGHT } from "app/Constants";
+import { DEFAULT_SELECT_MAX_HEIGHT } from "@app/Constants";
 import {
   createApplicationDependency,
   deleteApplicationDependency,
-} from "app/api/rest";
-import { ApplicationDependency } from "app/api/models";
+} from "@app/api/rest";
+import { ApplicationDependency } from "@app/api/models";
 
 const isEqual = (
   a: OptionWithValue<ApplicationDependency>,

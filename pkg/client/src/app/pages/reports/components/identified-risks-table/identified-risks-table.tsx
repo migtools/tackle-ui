@@ -15,16 +15,16 @@ import {
   useFetch,
   useTableControls,
   useTableFilter,
-} from "app/shared/hooks";
+} from "@app/shared/hooks";
 import {
   AppTableToolbarToggleGroup,
   AppTableWithControls,
   InputTextFilter,
   ToolbarSearchFilter,
-} from "app/shared/components";
+} from "@app/shared/components";
 
-import { Application, AssessmentQuestionRisk } from "app/api/models";
-import { getAssessmentIdentifiedRisks } from "app/api/rest";
+import { Application, AssessmentQuestionRisk } from "@app/api/models";
+import { getAssessmentIdentifiedRisks } from "@app/api/rest";
 
 import { ApplicationSelectionContext } from "../../application-selection-context";
 

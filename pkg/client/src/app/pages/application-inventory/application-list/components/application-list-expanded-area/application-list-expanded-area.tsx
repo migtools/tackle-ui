@@ -9,10 +9,10 @@ import {
   Label,
 } from "@patternfly/react-core";
 
-import { EmptyTextMessage } from "app/shared/components";
+import { EmptyTextMessage } from "@app/shared/components";
 
-import { EFFORT_ESTIMATE_LIST, PROPOSED_ACTION_LIST } from "app/Constants";
-import { Application } from "app/api/models";
+import { EFFORT_ESTIMATE_LIST, PROPOSED_ACTION_LIST } from "@app/Constants";
+import { Application } from "@app/api/models";
 
 import { ApplicationTags } from "../application-tags";
 import { ApplicationRisk } from "./application-risk";

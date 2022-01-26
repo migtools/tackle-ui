@@ -1,6 +1,6 @@
 import { IExtraColumnData, SortByDirection } from "@patternfly/react-table";
 import { renderHook, act } from "@testing-library/react-hooks";
-import { DEFAULT_PAGINATION } from "app/Constants";
+import { DEFAULT_PAGINATION } from "@app/Constants";
 import { useTableControls } from "./useTableControls";
 
 describe("useTableControls", () => {

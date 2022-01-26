@@ -1,5 +1,5 @@
 import { renderHook } from "@testing-library/react-hooks";
-import { PageQuery } from "app/api/models";
+import { PageQuery } from "@app/api/models";
 
 import { useTableFilter } from "./useTableFilter";
 

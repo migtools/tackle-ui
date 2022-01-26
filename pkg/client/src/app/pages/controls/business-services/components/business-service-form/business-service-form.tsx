@@ -15,22 +15,22 @@ import {
   TextInput,
 } from "@patternfly/react-core";
 
-import { SingleSelectFetchOptionValueFormikField } from "app/shared/components";
-import { useFetchStakeholders } from "app/shared/hooks";
+import { SingleSelectFetchOptionValueFormikField } from "@app/shared/components";
+import { useFetchStakeholders } from "@app/shared/hooks";
 
-import { DEFAULT_SELECT_MAX_HEIGHT } from "app/Constants";
-import { createBusinessService, updateBusinessService } from "app/api/rest";
-import { BusinessService, Stakeholder } from "app/api/models";
+import { DEFAULT_SELECT_MAX_HEIGHT } from "@app/Constants";
+import { createBusinessService, updateBusinessService } from "@app/api/rest";
+import { BusinessService, Stakeholder } from "@app/api/models";
 import {
   getAxiosErrorMessage,
   getValidatedFromError,
   getValidatedFromErrorTouched,
-} from "app/utils/utils";
+} from "@app/utils/utils";
 import {
   IStakeholderDropdown,
   toIStakeholderDropdownOptionWithValue,
   toIStakeholderDropdown,
-} from "app/utils/model-utils";
+} from "@app/utils/model-utils";
 
 export interface FormValues {
   name: string;

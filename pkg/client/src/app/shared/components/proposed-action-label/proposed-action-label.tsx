@@ -2,8 +2,8 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Label } from "@patternfly/react-core";
 
-import { PROPOSED_ACTION_LIST } from "app/Constants";
-import { ProposedAction } from "app/api/models";
+import { PROPOSED_ACTION_LIST } from "@app/Constants";
+import { ProposedAction } from "@app/api/models";
 
 export interface IProposedActionLabelProps {
   action: ProposedAction;

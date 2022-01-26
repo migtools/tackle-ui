@@ -26,8 +26,8 @@ import {
 } from "@patternfly/react-table";
 
 import { useDispatch } from "react-redux";
-import { alertActions } from "app/store/alert";
-import { confirmDialogActions } from "app/store/confirmDialog";
+import { alertActions } from "@app/store/alert";
+import { confirmDialogActions } from "@app/store/confirmDialog";
 
 import {
   AppPlaceholder,
@@ -37,20 +37,20 @@ import {
   SearchFilter,
   AppTableToolbarToggleGroup,
   NoDataEmptyState,
-} from "app/shared/components";
+} from "@app/shared/components";
 import {
   useTableControls,
   useFetchStakeholders,
   useDelete,
-} from "app/shared/hooks";
+} from "@app/shared/hooks";
 
-import { getAxiosErrorMessage } from "app/utils/utils";
+import { getAxiosErrorMessage } from "@app/utils/utils";
 import {
   deleteStakeholder,
   StakeholderSortBy,
   StakeholderSortByQuery,
-} from "app/api/rest";
-import { Stakeholder, SortByQuery } from "app/api/models";
+} from "@app/api/rest";
+import { Stakeholder, SortByQuery } from "@app/api/models";
 
 import { NewStakeholderModal } from "./components/new-stakeholder-modal";
 import { UpdateStakeholderModal } from "./components/update-stakeholder-modal";

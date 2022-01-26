@@ -6,8 +6,12 @@ import {
   getBusinessServices,
   BusinessServiceSortByQuery,
   BusinessServiceSortBy,
-} from "app/api/rest";
-import { PageRepresentation, BusinessService, PageQuery } from "app/api/models";
+} from "@app/api/rest";
+import {
+  PageRepresentation,
+  BusinessService,
+  PageQuery,
+} from "@app/api/models";
 
 export const {
   request: fetchRequest,

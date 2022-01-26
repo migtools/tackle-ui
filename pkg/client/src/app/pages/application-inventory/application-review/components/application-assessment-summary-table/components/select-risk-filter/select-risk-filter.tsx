@@ -4,11 +4,11 @@ import { useTranslation } from "react-i18next";
 import { SelectVariant, ToolbarChip } from "@patternfly/react-core";
 import { FilterIcon } from "@patternfly/react-icons/dist/esm/icons/filter-icon";
 
-import { OptionWithValue, SimpleSelect } from "app/shared/components";
+import { OptionWithValue, SimpleSelect } from "@app/shared/components";
 
-import { RISK_LIST, DEFAULT_SELECT_MAX_HEIGHT } from "app/Constants";
-import { Risk } from "app/api/models";
-import { getToolbarChipKey } from "app/utils/utils";
+import { RISK_LIST, DEFAULT_SELECT_MAX_HEIGHT } from "@app/Constants";
+import { Risk } from "@app/api/models";
+import { getToolbarChipKey } from "@app/utils/utils";
 
 export interface ISelectRiskFilterProps {
   value?: ToolbarChip[];
