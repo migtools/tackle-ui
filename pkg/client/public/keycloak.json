@@ -1,6 +1,0 @@
-{
-  "realm": "tackle",
-  "auth-server-url": "/auth",
-  "resource": "tackle-ui",
-  "public-client": true
-}
