@@ -1,0 +1,41 @@
+import React from "react";
+import { NavLink, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { Nav, NavItem, PageSidebar, NavList } from "@patternfly/react-core";
+
+import { Paths } from "app/Paths";
+import { LayoutTheme } from "../LayoutUtils";
+
+export const SidebarApp: React.FC = () => {
+  const { t } = useTranslation();
+  const { search } = useLocation();
+
+  const renderPageNav = () => {
+    return (
+      <Nav id="nav-primary" aria-label="Nav" theme={LayoutTheme}>
+        <NavList title="Global">
+          <NavItem>
+            <NavLink
+              to={Paths.applicationInventory + search}
+              activeClassName="pf-m-current"
+            >
+              {t("sidebar.applicationInventory")}
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink to={Paths.reports + search} activeClassName="pf-m-current">
+              {t("sidebar.reports")}
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink to={Paths.controls} activeClassName="pf-m-current">
+              {t("sidebar.controls")}
+            </NavLink>
+          </NavItem>
+        </NavList>
+      </Nav>
+    );
+  };
+
+  return <PageSidebar nav={renderPageNav()} theme={LayoutTheme} />;
+};

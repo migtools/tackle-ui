@@ -1,18 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
+import App from "./app/App";
+import reportWebVitals from "./app/reportWebVitals";
 
 import { Provider } from "react-redux";
-import configureStore from "./store";
+import configureStore from "./app/store";
 
-import { initApi, initInterceptors } from "axios-config";
+import { initApi, initInterceptors } from "app/axios-config";
 
 import { ReactKeycloakProvider } from "@react-keycloak/web";
-import keycloak from "./keycloak";
+import keycloak from "./app/keycloak";
 
-import i18n from "./i18n";
-import { NinjaErrorBoundary } from "./ninja-error-boundary";
+import i18n from "./app/i18n";
+import { NinjaErrorBoundary } from "./app/ninja-error-boundary";
 
 import "./index.css";
 
