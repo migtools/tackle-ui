@@ -240,6 +240,7 @@ export const ApplicationAssessment: React.FC = () => {
           stakeholderGroups: errorMsg,
         };
       }
+      return;
     },
   });
 
