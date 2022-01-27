@@ -13,7 +13,7 @@ import {
 } from "@patternfly/react-table";
 
 import { Tag, TagType } from "@app/api/models";
-import styles from "./tag-table.module.css";
+import "./tag-table.css";
 
 const ENTITY_FIELD = "entity";
 
@@ -40,7 +40,7 @@ export const TagTable: React.FC<TabTableProps> = ({
       transforms: [cellWidth(100)],
       cellFormatters: [],
       props: {
-        className: styles.columnPadding,
+        className: "columnPadding",
       },
     },
   ];
@@ -103,7 +103,8 @@ export const TagTable: React.FC<TabTableProps> = ({
       cells={columns}
       rows={rows}
       actions={actions}
-      className={styles.actionColumnPadding}
+      // TODO non existent class ?
+      // className={actionColumnPadding}
     >
       <TableHeader />
       <TableBody />

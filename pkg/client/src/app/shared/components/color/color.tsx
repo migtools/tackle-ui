@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Split, SplitItem } from "@patternfly/react-core";
 
 import { DEFAULT_COLOR_LABELS } from "@app/Constants";
-import styles from "./color.module.css";
+import "./color.css";
 
 export interface ColorProps {
   hex: string;
@@ -19,7 +19,7 @@ export const Color: React.FC<ColorProps> = ({ hex }) => {
     <Split hasGutter>
       <SplitItem>
         <div
-          className={styles.color}
+          className="color"
           style={{ backgroundColor: hex }}
           cy-data="color-box"
         ></div>
