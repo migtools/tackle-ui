@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter } from "react-router-dom";
 
 import { AppRoutes } from "./Routes";
-import "./App.scss";
+import "./App.css";
 
 import { DefaultLayout } from "./layout";
 

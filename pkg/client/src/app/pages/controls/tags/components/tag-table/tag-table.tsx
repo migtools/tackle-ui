@@ -13,7 +13,7 @@ import {
 } from "@patternfly/react-table";
 
 import { Tag, TagType } from "@app/api/models";
-import styles from "./tag-table.module.scss";
+import styles from "./tag-table.module.css";
 
 const ENTITY_FIELD = "entity";
 

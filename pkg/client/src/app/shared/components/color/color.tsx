@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Split, SplitItem } from "@patternfly/react-core";
 
 import { DEFAULT_COLOR_LABELS } from "@app/Constants";
-import styles from "./color.module.scss";
+import styles from "./color.module.css";
 
 export interface ColorProps {
   hex: string;
