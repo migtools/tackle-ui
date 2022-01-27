@@ -2,7 +2,9 @@ import React from "react";
 import { BrowserRouter } from "react-router-dom";
 
 import { AppRoutes } from "./Routes";
-import "./App.css";
+
+import "@patternfly/patternfly/patternfly.css";
+import "@patternfly/patternfly/patternfly-addons.css";
 
 import { DefaultLayout } from "./layout";
 
