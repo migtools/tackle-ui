@@ -12,6 +12,7 @@ export enum Paths {
   base = "/",
   notFound = "/not-found",
 
+  // Developer perspective
   applicationInventory = "/application-inventory",
   applicationInventory_applicationList = "/application-inventory/application-list",
   applicationInventory_manageImports = "/application-inventory/application-imports",
@@ -27,6 +28,15 @@ export enum Paths {
   controls_stakeholderGroups = "/controls/stakeholder-groups",
   controls_jobFunctions = "/controls/job-functions",
   controls_tags = "/controls/tags",
+
+  // Administrator perspective
+  credentials = "/credentials",
+  repositories = "/repositories",
+  repositories_git = "/repositories/git",
+  repositories_svn = "/repositories/svn",
+  repositories_maven = "/repositories/maven",
+
+  proxy = "/proxy",
 }
 
 export interface AssessmentRoute {
