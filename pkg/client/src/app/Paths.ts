@@ -30,13 +30,12 @@ export enum Paths {
   controls_tags = "/controls/tags",
 
   // Administrator perspective
-  credentials = "/credentials",
+  identities = "/identities",
   repositories = "/repositories",
   repositories_git = "/repositories/git",
   repositories_svn = "/repositories/svn",
   repositories_maven = "/repositories/maven",
-
-  proxy = "/proxy",
+  proxies = "/proxies",
 }
 
 export interface AssessmentRoute {

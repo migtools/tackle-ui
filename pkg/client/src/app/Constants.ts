@@ -199,3 +199,12 @@ export enum ApplicationFilterKey {
   BUSINESS_SERVICE = "business_service",
   TAG = "tag",
 }
+
+// Identity toolbar
+
+export enum IdentityFilterKey {
+  NAME = "name",
+  DESCRIPTION = "description",
+  KIND = "kind",
+  CREATEDBY = "createdby",
+}

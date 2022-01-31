@@ -202,6 +202,16 @@ export interface BulkCopyAssessment {
   completed?: boolean;
 }
 
+// Identities
+
+export interface Identity {
+  id?: number;
+  name: string;
+  description?: string;
+  type: string;
+  createdBy: string;
+}
+
 // Pagination
 
 export interface BusinessServicePage {
@@ -270,6 +280,12 @@ export interface ApplicationImportSummaryPage {
 export interface ApplicationImportPage {
   _embedded: {
     "application-import": ApplicationImport[];
+  };
+  total_count: number;
+}
+export interface IdentityPage {
+  _embedded: {
+    Identity: Identity[];
   };
   total_count: number;
 }

@@ -10,6 +10,7 @@ import {
   ApplicationPage,
   BusinessService,
   BusinessServicePage,
+  CredentialPage,
   JobFunction,
   JobFunctionPage,
   PageRepresentation,
@@ -155,6 +156,15 @@ export const applicationImportPageMapper = (
 ): PageRepresentation<ApplicationImport> => ({
   meta: { count: page.total_count },
   data: page._embedded["application-import"],
+});
+
+//
+
+export const credentialPageMapper = (
+  page: CredentialPage
+): PageRepresentation<Credential> => ({
+  meta: { count: page.total_count },
+  data: page._embedded.credential,
 });
 
 //

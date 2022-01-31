@@ -29,6 +29,7 @@ import {
   ApplicationImportSummary,
   BulkCopyAssessment,
   BulkCopyReview,
+  CredentialPage,
 } from "./models";
 
 export const CONTROLS_BASE_URL = "controls";
@@ -53,6 +54,8 @@ export const APP_IMPORT = APP_INVENTORY_BASE_URL + "/application-import";
 export const APP_IMPORT_CSV = APP_INVENTORY_BASE_URL + "/csv-export";
 
 export const ASSESSMENTS = PATHFINDER_BASE_URL + "/assessments";
+
+export const IDENTITIES = APP_INVENTORY_BASE_URL + "/identities";
 
 const headers = { Accept: "application/hal+json" };
 
@@ -746,4 +749,62 @@ export const getBulkCopyAssessment = (
   id: number
 ): AxiosPromise<BulkCopyAssessment> => {
   return APIClient.get<BulkCopyAssessment>(`${ASSESSMENTS}/bulk/${id}`);
+};
+
+// Identities
+
+export enum IdentitySortBy {
+  NAME,
+  KIND,
+  CREATEDBY,
+}
+export interface IdentitySortByQuery {
+  field: IdentitySortBy;
+  direction?: Direction;
+}
+
+export const getIdentities = (
+  filters: {
+    name?: string[];
+    description?: string[];
+    kind?: string[];
+    createdBy?: string[];
+  },
+  pagination: PageQuery,
+  sortBy?: IdentitySortByQuery
+): AxiosPromise<CredentialPage> => {
+  let sortByQuery: string | undefined = undefined;
+  if (sortBy) {
+    let field;
+    switch (sortBy.field) {
+      case IdentitySortBy.NAME:
+        field = "name";
+        break;
+      case IdentitySortBy.KIND:
+        field = "type.size()";
+        break;
+      case IdentitySortBy.CREATEDBY:
+        field = "review.deleted,id";
+        break;
+      default:
+        throw new Error("Could not define SortBy field name");
+    }
+    sortByQuery = `${sortBy.direction === "desc" ? "-" : ""}${field}`;
+  }
+
+  const params = {
+    page: pagination.page - 1,
+    size: pagination.perPage,
+    sort: sortByQuery,
+
+    name: filters.name,
+    description: filters.description,
+    kind: filters.kind,
+    createdBy: filters.createdBy,
+  };
+
+  const query: string[] = buildQuery(params);
+  return APIClient.get(`${IDENTITIES}?${query.join("&")}`, {
+    headers,
+  });
 };

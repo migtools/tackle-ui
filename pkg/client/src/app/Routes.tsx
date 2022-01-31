@@ -9,6 +9,9 @@ const ApplicationInventory = lazy(
 );
 const Reports = lazy(() => import("./pages/reports"));
 const Controls = lazy(() => import("./pages/controls"));
+const Identities = lazy(() => import("./pages/identities"));
+const Repositories = lazy(() => import("./pages/repositories"));
+const Proxies = lazy(() => import("./pages/proxies"));
 
 export const AppRoutes = () => {
   const routes = [
@@ -19,6 +22,10 @@ export const AppRoutes = () => {
     },
     { component: Reports, path: Paths.reports, exact: false },
     { component: Controls, path: Paths.controls, exact: false },
+
+    { component: Identities, path: Paths.identities, exact: false },
+    { component: Repositories, path: Paths.repositories, exact: false },
+    { component: Proxies, path: Paths.proxies, exact: false },
   ];
 
   return (

@@ -68,7 +68,6 @@ export const SidebarApp: React.FC = () => {
           aria-label="Select user perspective"
           selections={selected}
           isOpen={isOpen}
-          // aria-labelledby={titleId}
           onSelect={onSelect}
           onToggle={onToggle}
         >
@@ -104,8 +103,8 @@ export const SidebarApp: React.FC = () => {
           <Nav id="nav-admin" aria-label="NavAdmin" theme={LayoutTheme}>
             <NavList title="Admin">
               <NavItem>
-                <NavLink to={Paths.credentials} activeClassName="pf-m-current">
-                  Credentials
+                <NavLink to={Paths.identities} activeClassName="pf-m-current">
+                  {t("terms.credentials")}
                 </NavLink>
               </NavItem>
               <NavExpandable
@@ -140,7 +139,7 @@ export const SidebarApp: React.FC = () => {
                 </NavItem>
               </NavExpandable>
               <NavItem>
-                <NavLink to={Paths.proxy} activeClassName="pf-m-current">
+                <NavLink to={Paths.proxies} activeClassName="pf-m-current">
                   Proxy
                 </NavLink>
               </NavItem>
