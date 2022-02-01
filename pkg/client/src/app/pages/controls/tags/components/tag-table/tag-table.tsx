@@ -103,8 +103,6 @@ export const TagTable: React.FC<TabTableProps> = ({
       cells={columns}
       rows={rows}
       actions={actions}
-      // TODO non existent class ?
-      // className={actionColumnPadding}
     >
       <TableHeader />
       <TableBody />
