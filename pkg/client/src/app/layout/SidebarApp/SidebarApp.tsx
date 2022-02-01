@@ -17,6 +17,8 @@ import DevIcon from "@patternfly/react-icons/dist/esm/icons/code-icon";
 import { Paths } from "@app/Paths";
 import { LayoutTheme } from "../LayoutUtils";
 
+import "./SidebarApp.css";
+
 export const SidebarApp: React.FC = () => {
   const { t } = useTranslation();
   const { search } = useLocation();
@@ -28,6 +30,7 @@ export const SidebarApp: React.FC = () => {
   const onDevClick = () => {
     console.log("Dev Selected");
   };
+
   const options = [
     <SelectOption
       key="dev"
@@ -64,6 +67,7 @@ export const SidebarApp: React.FC = () => {
       <>
         <Select
           toggleIcon={isDevIcon ? <DevIcon /> : <AdminIcon />}
+          className="userview"
           variant={SelectVariant.single}
           aria-label="Select user perspective"
           selections={selected}
