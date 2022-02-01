@@ -8,8 +8,8 @@ import "@patternfly/patternfly/patternfly-addons.css";
 
 import { DefaultLayout } from "./layout";
 
-// import NotificationsPortal from "@redhat-cloud-services/frontend-components-notifications/NotificationPortal";
-// import "@redhat-cloud-services/frontend-components-notifications/index.css";
+import NotificationsPortal from "@redhat-cloud-services/frontend-components-notifications/NotificationPortal";
+import "@redhat-cloud-services/frontend-components-notifications/index.css";
 
 import { ConfirmDialogContainer } from "./shared/containers/confirm-dialog-container";
 import { BulkCopyNotificationsContainer } from "./shared/containers/bulk-copy-notifications-container";
@@ -20,7 +20,7 @@ const App: React.FC = () => {
       <DefaultLayout>
         <AppRoutes />
       </DefaultLayout>
-      {/* <NotificationsPortal /> */}
+      <NotificationsPortal />
       <ConfirmDialogContainer />
       <BulkCopyNotificationsContainer />
     </BrowserRouter>
