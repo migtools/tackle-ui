@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo } from "react";
 import {
-  ApplicationToolbarToggleGroup,
   AppPlaceholder,
   AppTableWithControls,
   ConditionalRender,
@@ -39,7 +38,7 @@ import {
   IdentitySortByQuery,
 } from "@app/api/rest";
 import { IdentityFilterKey } from "@app/Constants";
-import { useDispatch } from "react-redux";
+import { IdentityToolbarToggleGroup } from "./identity-toolbar-toggle-group";
 
 const toSortByQuery = (
   sortBy?: SortByQuery
@@ -176,13 +175,13 @@ export const Identities: React.FunctionComponent = () => {
             fetchError={fetchError}
             toolbarClearAllFilters={clearAllFilters}
             filtersApplied={areFiltersPresent}
-            // toolbarToggle={
-            //   <IdentityToolbarToggleGroup
-            //     value={filtersValue as Map<IdentityFilterKey, ToolbarChip[]>}
-            //     addFilter={addFilter}
-            //     setFilter={setFilter}
-            //   />
-            // }
+            toolbarToggle={
+              <IdentityToolbarToggleGroup
+                value={filtersValue as Map<IdentityFilterKey, ToolbarChip[]>}
+                addFilter={addFilter}
+                setFilter={setFilter}
+              />
+            }
             toolbarActions={
               <>
                 <ToolbarGroup variant="button-group">
