@@ -29,7 +29,7 @@ import {
   ApplicationImportSummary,
   BulkCopyAssessment,
   BulkCopyReview,
-  CredentialPage,
+  IdentityPage,
 } from "./models";
 
 export const CONTROLS_BASE_URL = "controls";
@@ -772,7 +772,7 @@ export const getIdentities = (
   },
   pagination: PageQuery,
   sortBy?: IdentitySortByQuery
-): AxiosPromise<CredentialPage> => {
+): AxiosPromise<IdentityPage> => {
   let sortByQuery: string | undefined = undefined;
   if (sortBy) {
     let field;

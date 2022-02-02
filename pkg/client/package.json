@@ -15,7 +15,7 @@
     "ui:start": "node ../server/index.js"
   },
   "dependencies": {
-    "@konveyor/lib-ui": "^2.0.0",
+    "@konveyor/lib-ui": "^4.0.4",
     "@patternfly/patternfly": "4.132.2",
     "@patternfly/react-charts": "6.15.20",
     "@patternfly/react-core": "4.152.4",
@@ -64,6 +64,7 @@
     "@types/react-router-dom": "^5.1.7",
     "@types/redux-logger": "^3.0.8",
     "@types/yup": "^0.29.11",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
     "axios-mock-adapter": "^1.19.0",
     "babel-jest": "^27.4.6",
     "babel-loader": "^8.2.3",
@@ -81,7 +82,6 @@
     "dotenv": "^10.0.0",
     "dotenv-expand": "^5.1.0",
     "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.6",
     "eslint": "^8.7.0",
     "eslint-config-react-app": "^7.0.0",
     "eslint-webpack-plugin": "^3.1.1",

@@ -25,7 +25,7 @@ import {
   sortable,
 } from "@patternfly/react-table";
 
-import { credentialPageMapper } from "@app/api/apiUtils";
+import { IdentityPageMapper } from "@app/api/apiUtils";
 import { IdentityPage, SortByQuery } from "@app/api/models";
 import {
   useApplicationToolbarFilter,
@@ -121,7 +121,7 @@ export const Identities: React.FunctionComponent = () => {
   });
 
   const identities = useMemo(() => {
-    return page ? credentialPageMapper(page) : undefined;
+    return page ? IdentityPageMapper(page) : undefined;
   }, [page]);
 
   React.useEffect(() => {
