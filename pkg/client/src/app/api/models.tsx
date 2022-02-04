@@ -133,6 +133,13 @@ export interface BulkCopyReview {
   targetApplications: number[];
   completed?: boolean;
 }
+export interface Identity {
+  id?: number;
+  name: string;
+  description?: string;
+  kind: string;
+  createUser: string;
+}
 
 // Pathfinder
 
@@ -200,16 +207,6 @@ export interface BulkCopyAssessment {
   fromAssessmentId: number;
   applications: { applicationId: number }[];
   completed?: boolean;
-}
-
-// Identities
-
-export interface Identity {
-  id?: number;
-  name: string;
-  description?: string;
-  type: string;
-  createdBy: string;
 }
 
 // Pagination
@@ -285,7 +282,7 @@ export interface ApplicationImportPage {
 }
 export interface IdentityPage {
   _embedded: {
-    Identity: Identity[];
+    identity: Identity[];
   };
   total_count: number;
 }

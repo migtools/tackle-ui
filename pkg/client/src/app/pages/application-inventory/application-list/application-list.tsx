@@ -87,6 +87,7 @@ import { ApplicationBusinessService } from "./components/application-business-se
 import { ApplicationListExpandedArea } from "./components/application-list-expanded-area";
 import { ImportApplicationsForm } from "./components/import-applications-form";
 import { BulkCopyAssessmentReviewForm } from "./components/bulk-copy-assessment-review-form";
+import { ApplicationsIdentityForm } from "./components/ApplicationsIdentityForm";
 
 const toSortByQuery = (
   sortBy?: SortByQuery
@@ -264,6 +265,10 @@ export const ApplicationList: React.FC = () => {
 
   // Application import modal
   const [isApplicationImportModalOpen, setIsApplicationImportModalOpen] =
+    useState(false);
+
+  // Application identity modal
+  const [isApplicationCredsModalOpenset, setIsApplicationCredsModalOpen] =
     useState(false);
 
   // Table's assessments
@@ -765,6 +770,13 @@ export const ApplicationList: React.FC = () => {
                         >
                           {t("actions.manageImports")}
                         </DropdownItem>,
+                        <DropdownItem
+                          key="manage-application-credentials"
+                          isDisabled={selectedRows.length < 1}
+                          onClick={() => setIsApplicationCredsModalOpen(true)}
+                        >
+                          {t("actions.manageCredentials")}
+                        </DropdownItem>,
                       ]}
                     />
                   </ToolbarItem>
@@ -874,6 +886,22 @@ export const ApplicationList: React.FC = () => {
             setIsApplicationImportModalOpen(false);
             refreshTable();
           }}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={isApplicationCredsModalOpenset}
+        variant="medium"
+        title={t("actions.manageCredentials")}
+        onClose={() => setIsApplicationCredsModalOpen((current) => !current)}
+      >
+        <ApplicationsIdentityForm
+          selectedApplications={selectedRows}
+          onSaved={() => {
+            setIsApplicationCredsModalOpen(false);
+            refreshTable();
+          }}
+          onCancel={() => setIsApplicationCredsModalOpen(false)}
         />
       </Modal>
     </>

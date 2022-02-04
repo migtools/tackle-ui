@@ -28,6 +28,7 @@
         "import": "Import",
         "logout": "Logout",
         "manageAccount": "User management",
+        "manageCredentials": "Manage credentials",
         "manageDependencies": "Manage dependencies",
         "manageImports": "Manage imports",
         "next": "Next",

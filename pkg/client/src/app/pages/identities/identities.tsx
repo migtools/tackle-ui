@@ -56,7 +56,7 @@ const toSortByQuery = (
       field = IdentitySortBy.KIND;
       break;
     case 7:
-      field = IdentitySortBy.CREATEDBY;
+      field = IdentitySortBy.CREATEUSER;
       break;
     default:
       return undefined;
@@ -97,13 +97,13 @@ export const Identities: React.FunctionComponent = () => {
     const nameVal = filtersValue.get(IdentityFilterKey.NAME);
     const descriptionVal = filtersValue.get(IdentityFilterKey.DESCRIPTION);
     const kindVal = filtersValue.get(IdentityFilterKey.KIND);
-    const createdByVal = filtersValue.get(IdentityFilterKey.CREATEDBY);
+    const createUserVal = filtersValue.get(IdentityFilterKey.CREATEUSER);
     return getIdentities(
       {
         name: nameVal?.map((f) => f.key),
         description: descriptionVal?.map((f) => f.key),
         kind: kindVal?.map((f) => f.key),
-        createdBy: createdByVal?.map((f) => f.key),
+        createdBy: createUserVal?.map((f) => f.key),
       },
       paginationQuery,
       toSortByQuery(sortByQuery)
@@ -119,6 +119,9 @@ export const Identities: React.FunctionComponent = () => {
     defaultIsFetching: true,
     onFetch: fetchIdentities,
   });
+
+  console.log(`page: ${page}`);
+  console.log(`isFetching: ${isFetching}`);
 
   const identities = useMemo(() => {
     return page ? IdentityPageMapper(page) : undefined;

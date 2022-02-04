@@ -165,7 +165,7 @@ export const IdentityPageMapper = (
   page: IdentityPage
 ): PageRepresentation<Identity> => ({
   meta: { count: page.total_count },
-  data: page._embedded[""],
+  data: page._embedded["identity"],
 });
 
 //

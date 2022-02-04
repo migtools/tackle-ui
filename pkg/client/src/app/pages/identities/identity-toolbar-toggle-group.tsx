@@ -66,13 +66,13 @@ export const IdentityToolbarToggleGroup: React.FC<
       ),
     },
     {
-      key: IdentityFilterKey.CREATEDBY,
+      key: IdentityFilterKey.CREATEUSER,
       name: t("terms.createdBy"),
       input: (
         <SelectTagFilter
-          value={value.get(IdentityFilterKey.CREATEDBY)}
+          value={value.get(IdentityFilterKey.CREATEUSER)}
           onApplyFilter={(values) =>
-            setFilter(IdentityFilterKey.CREATEDBY, values)
+            setFilter(IdentityFilterKey.CREATEUSER, values)
           }
         />
       ),

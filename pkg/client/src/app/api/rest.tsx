@@ -55,7 +55,7 @@ export const APP_IMPORT_CSV = APP_INVENTORY_BASE_URL + "/csv-export";
 
 export const ASSESSMENTS = PATHFINDER_BASE_URL + "/assessments";
 
-export const IDENTITIES = APP_INVENTORY_BASE_URL + "/identities";
+export const IDENTITIES = "/identities";
 
 const headers = { Accept: "application/hal+json" };
 
@@ -756,7 +756,7 @@ export const getBulkCopyAssessment = (
 export enum IdentitySortBy {
   NAME,
   KIND,
-  CREATEDBY,
+  CREATEUSER,
 }
 export interface IdentitySortByQuery {
   field: IdentitySortBy;
@@ -783,7 +783,7 @@ export const getIdentities = (
       case IdentitySortBy.KIND:
         field = "type.size()";
         break;
-      case IdentitySortBy.CREATEDBY:
+      case IdentitySortBy.CREATEUSER:
         field = "review.deleted,id";
         break;
       default:

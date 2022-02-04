@@ -206,5 +206,5 @@ export enum IdentityFilterKey {
   NAME = "name",
   DESCRIPTION = "description",
   KIND = "kind",
-  CREATEDBY = "createdby",
+  CREATEUSER = "createuser",
 }

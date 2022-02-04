@@ -28,6 +28,7 @@
         "import": "Importar",
         "logout": "Cerrar sesión",
         "manageAccount": "Administrar cuenta",
+        "manageCredentials": "Administrar credenciales",
         "manageDependencies": "Administrar dependencias",
         "manageImports": "Administrar importaciones",
         "next": "Siguiente",
