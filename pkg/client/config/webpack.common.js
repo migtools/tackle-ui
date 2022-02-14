@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const Dotenv = require("dotenv-webpack");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
-const BG_IMAGES_DIRNAME = "bgimages";
+const BG_IMAGES_DIRNAME = "images";
 // const ASSET_PATH = process.env.ASSET_PATH || "/";
 
 module.exports = (env) => {
