@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { getIdentities } from "@app/api/rest";
 import {
   Button,
   Checkbox,
@@ -28,13 +29,54 @@ import {
   FilterCategory,
 } from "@app/shared/components/FilterToolbar";
 import { NoDataEmptyState } from "@app/shared/components";
-import { Identity } from "@app/api/models";
+import { IdentitiesPage, Identity } from "@app/api/models";
 import { useFilterState } from "@app/shared/hooks/useFilterState";
 import { usePaginationState } from "@app/shared/hooks/usePaginationState";
 import { useSortState } from "@app/shared/hooks/useSortState";
+import { useFetch } from "@app/shared/hooks/useFetch";
+import { IdentityPageMapper } from "@app/api/apiUtils";
 
 export const Identities: React.FunctionComponent = () => {
   const { t } = useTranslation();
+
+  /** fetch identities
+   *
+   *
+   *
+   *
+   */
+
+  const fetchIdentities = useCallback(() => {
+    return getIdentities();
+    /**
+     * TODO: update deps array when filter values change
+     */
+  }, []);
+
+  const {
+    data: page,
+    isFetching,
+    fetchError,
+    requestFetch: refreshTable,
+  } = useFetch<IdentitiesPage>({
+    defaultIsFetching: true,
+    onFetch: fetchIdentities,
+  });
+
+  const identities = useMemo(() => {
+    return page ? IdentityPageMapper(page) : undefined;
+  }, [page]);
+
+  useEffect(() => {
+    refreshTable();
+    console.log("what is data", page);
+  }, [
+    // filtersValue,
+    // paginationQuery,
+    // sortByQuery,
+    // isWatchingBulkCopy,
+    refreshTable,
+  ]);
 
   const filterCategories: FilterCategory<Identity>[] = [
     {
@@ -60,12 +102,12 @@ export const Identities: React.FunctionComponent = () => {
       },
     },
   ];
-  const identities: Identity[] = [];
+  // const identities: Identity[] = [];
 
-  const { filterValues, setFilterValues, filteredItems } = useFilterState(
-    identities,
-    filterCategories
-  );
+  // const { filterValues, setFilterValues, filteredItems } = useFilterState(
+  //   identities,
+  //   filterCategories
+  // );
   const getSortValues = (identity: Identity) => [
     "", // Expand/collapse column
     identity.name,
@@ -73,12 +115,12 @@ export const Identities: React.FunctionComponent = () => {
     "", // Action column
   ];
 
-  const { sortBy, onSort, sortedItems } = useSortState(
-    filteredItems,
-    getSortValues
-  );
-  const { currentPageItems, setPageNumber, paginationProps } =
-    usePaginationState(sortedItems, 10);
+  // const { sortBy, onSort, sortedItems } = useSortState(
+  //   filteredItems,
+  //   getSortValues
+  // );
+  // const { currentPageItems, setPageNumber, paginationProps } =
+  //   usePaginationState(sortedItems, 10);
 
   const columns: ICell[] = [
     {
@@ -106,7 +148,8 @@ export const Identities: React.FunctionComponent = () => {
         </TextContent>
       </PageSection>
       <PageSection>
-        <FilterToolbar<Identity>
+        <>{identities?.data}</>
+        {/* <FilterToolbar<Identity>
           filterCategories={filterCategories}
           filterValues={filterValues}
           setFilterValues={setFilterValues}
@@ -116,6 +159,7 @@ export const Identities: React.FunctionComponent = () => {
                 <Button
                   isSmall
                   // onClick={() => history.push("/credentials/create")}
+                  onClick={() => console.log("ping")}
                   variant="primary"
                   id="create-credential-button"
                 >
@@ -131,9 +175,8 @@ export const Identities: React.FunctionComponent = () => {
               widgetId="plans-table-pagination-top"
             />
           }
-        />
-
-        {identities.length > 0 ? (
+        /> */}
+        {/* {identities?.data.length > 0 ? (
           <Table
             aria-label="Credentials table"
             // className="credential-table"
@@ -156,12 +199,12 @@ export const Identities: React.FunctionComponent = () => {
               }) + "."
             }
           />
-        )}
-        <Pagination
+        )} */}
+        {/* <Pagination
           {...paginationProps}
           widgetId="plans-table-pagination-bottom"
           variant="bottom"
-        />
+        /> */}
       </PageSection>
     </>
   );

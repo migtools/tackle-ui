@@ -280,9 +280,13 @@ export interface ApplicationImportPage {
   };
   total_count: number;
 }
-export interface IdentityPage {
-  _embedded: {
-    identity: Identity[];
-  };
-  total_count: number;
+// export interface IdentityPage {
+//   _embedded: {
+//     identity: Identity[];
+//   };
+//   total_count: number;
+// }
+
+export interface IdentitiesPage {
+  identities: Identity[];
 }

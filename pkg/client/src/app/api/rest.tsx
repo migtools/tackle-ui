@@ -29,11 +29,15 @@ import {
   ApplicationImportSummary,
   BulkCopyAssessment,
   BulkCopyReview,
-  IdentityPage,
+  IdentitiesPage,
 } from "./models";
 
+// Tackle hub api
 export const CONTROLS_BASE_URL = "controls";
 export const APP_INVENTORY_BASE_URL = "application-inventory";
+
+// Tackle hub api ^^
+
 export const PATHFINDER_BASE_URL = "pathfinder";
 
 export const BUSINESS_SERVICES = CONTROLS_BASE_URL + "/business-service";
@@ -57,7 +61,9 @@ export const ASSESSMENTS = PATHFINDER_BASE_URL + "/assessments";
 
 export const IDENTITIES = "/identities";
 
+//remove hal formatting
 const headers = { Accept: "application/hal+json" };
+//remove hal formatting
 
 type Direction = "asc" | "desc";
 
@@ -749,4 +755,35 @@ export const getBulkCopyAssessment = (
   id: number
 ): AxiosPromise<BulkCopyAssessment> => {
   return APIClient.get<BulkCopyAssessment>(`${ASSESSMENTS}/bulk/${id}`);
+};
+
+// Identities
+
+// export enum IdentitySortBy {
+//   NAME,
+//   KIND,
+//   CREATEUSER,
+// }
+// export interface IdentitySortByQuery {
+//   field: IdentitySortBy;
+//   direction?: Direction;
+// }
+
+export const getIdentities = (): AxiosPromise<IdentitiesPage> => {
+  // const params = {
+  //   page: pagination.page - 1,
+  //   size: pagination.perPage,
+  //   sort: sortByQuery,
+
+  //   name: filters.name,
+  //   description: filters.description,
+  //   kind: filters.kind,
+  //   createdBy: filters.createdBy,
+  // };
+
+  // const query: string[] = buildQuery(params);
+  // return APIClient.get(`${IDENTITIES}?${query.join("&")}`, {
+  return APIClient.get(`${IDENTITIES}`, {
+    headers,
+  });
 };
