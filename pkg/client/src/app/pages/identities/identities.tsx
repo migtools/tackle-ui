@@ -1,135 +1,84 @@
-import React, { useCallback, useMemo } from "react";
-import {
-  AppPlaceholder,
-  AppTableWithControls,
-  ConditionalRender,
-  NoDataEmptyState,
-} from "@app/shared/components";
+import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   Button,
-  ButtonVariant,
+  Checkbox,
   PageSection,
   PageSectionVariants,
+  Pagination,
   Text,
   TextContent,
-  ToolbarChip,
-  ToolbarGroup,
   ToolbarItem,
 } from "@patternfly/react-core";
-import { useTranslation } from "react-i18next";
 import {
   cellWidth,
   expandable,
   ICell,
   IRow,
   sortable,
+  Table,
+  TableBody,
+  TableHeader,
 } from "@patternfly/react-table";
+import spacing from "@patternfly/react-styles/css/utilities/Spacing/spacing";
 
-import { IdentityPageMapper } from "@app/api/apiUtils";
-import { IdentityPage, SortByQuery } from "@app/api/models";
 import {
-  useApplicationToolbarFilter,
-  useFetch,
-  useTableControls,
-} from "@app/shared/hooks";
-import {
-  getIdentities,
-  IdentitySortBy,
-  IdentitySortByQuery,
-} from "@app/api/rest";
-import { IdentityFilterKey } from "@app/Constants";
-import { IdentityToolbarToggleGroup } from "./identity-toolbar-toggle-group";
+  FilterToolbar,
+  FilterType,
+  FilterCategory,
+} from "@app/shared/components/FilterToolbar";
+import { NoDataEmptyState } from "@app/shared/components";
+import { Identity } from "@app/api/models";
+import { useFilterState } from "@app/shared/hooks/useFilterState";
+import { usePaginationState } from "@app/shared/hooks/usePaginationState";
+import { useSortState } from "@app/shared/hooks/useSortState";
 
-const toSortByQuery = (
-  sortBy?: SortByQuery
-): IdentitySortByQuery | undefined => {
-  if (!sortBy) {
-    return undefined;
-  }
-
-  let field: IdentitySortBy;
-  switch (sortBy.index) {
-    case 2:
-      field = IdentitySortBy.NAME;
-      break;
-    case 6:
-      field = IdentitySortBy.KIND;
-      break;
-    case 7:
-      field = IdentitySortBy.CREATEUSER;
-      break;
-    default:
-      return undefined;
-  }
-
-  return {
-    field,
-    direction: sortBy.direction,
-  };
-};
 export const Identities: React.FunctionComponent = () => {
-  // i18
   const { t } = useTranslation();
 
-  // // Redux
-  // const dispatch = useDispatch();
-
-  // Toolbar filters
-  const {
-    filters: filtersValue,
-    isPresent: areFiltersPresent,
-    addFilter,
-    setFilter,
-    clearAllFilters,
-  } = useApplicationToolbarFilter();
-
-  // Table data
-  const {
-    paginationQuery,
-    sortByQuery,
-    handlePaginationChange,
-    handleSortChange,
-  } = useTableControls({
-    sortByQuery: { direction: "asc", index: 2 },
-  });
-
-  const fetchIdentities = useCallback(() => {
-    const nameVal = filtersValue.get(IdentityFilterKey.NAME);
-    const descriptionVal = filtersValue.get(IdentityFilterKey.DESCRIPTION);
-    const kindVal = filtersValue.get(IdentityFilterKey.KIND);
-    const createUserVal = filtersValue.get(IdentityFilterKey.CREATEUSER);
-    return getIdentities(
-      {
-        name: nameVal?.map((f) => f.key),
-        description: descriptionVal?.map((f) => f.key),
-        kind: kindVal?.map((f) => f.key),
-        createdBy: createUserVal?.map((f) => f.key),
+  const filterCategories: FilterCategory<Identity>[] = [
+    {
+      key: "name",
+      title: "Name",
+      type: FilterType.search,
+      placeholderText: "Filter by name...",
+      getItemValue: (item) => {
+        return item.name;
       },
-      paginationQuery,
-      toSortByQuery(sortByQuery)
-    );
-  }, [filtersValue, paginationQuery, sortByQuery]);
+    },
+    {
+      key: "type",
+      title: "Type",
+      type: FilterType.select,
+      placeholderText: "Filter by type...",
+      selectOptions: [
+        { key: "scm", value: "Source Control" },
+        { key: "mvn", value: "Maven Settings File" },
+      ],
+      getItemValue: (item) => {
+        return item.kind ? "Warm" : "Cold";
+      },
+    },
+  ];
+  const identities: Identity[] = [];
 
-  const {
-    data: page,
-    isFetching,
-    fetchError,
-    requestFetch: refreshTable,
-  } = useFetch<IdentityPage>({
-    defaultIsFetching: true,
-    onFetch: fetchIdentities,
-  });
+  const { filterValues, setFilterValues, filteredItems } = useFilterState(
+    identities,
+    filterCategories
+  );
+  const getSortValues = (identity: Identity) => [
+    "", // Expand/collapse column
+    identity.name,
+    identity.kind,
+    "", // Action column
+  ];
 
-  console.log(`page: ${page}`);
-  console.log(`isFetching: ${isFetching}`);
-
-  const identities = useMemo(() => {
-    return page ? IdentityPageMapper(page) : undefined;
-  }, [page]);
-
-  React.useEffect(() => {
-    refreshTable();
-  }, [filtersValue, paginationQuery, sortByQuery, refreshTable]);
+  const { sortBy, onSort, sortedItems } = useSortState(
+    filteredItems,
+    getSortValues
+  );
+  const { currentPageItems, setPageNumber, paginationProps } =
+    usePaginationState(sortedItems, 10);
 
   const columns: ICell[] = [
     {
@@ -157,64 +106,62 @@ export const Identities: React.FunctionComponent = () => {
         </TextContent>
       </PageSection>
       <PageSection>
-        <ConditionalRender
-          when={isFetching && !(identities || fetchError)}
-          then={<AppPlaceholder />}
-        >
-          <AppTableWithControls
-            count={identities ? identities.meta.count : 0}
-            pagination={paginationQuery}
-            sortBy={sortByQuery}
-            onPaginationChange={handlePaginationChange}
-            onSort={handleSortChange}
-            // onCollapse={collapseRow}
-            // onSelect={selectRow}
-            canSelectAll={false}
+        <FilterToolbar<Identity>
+          filterCategories={filterCategories}
+          filterValues={filterValues}
+          setFilterValues={setFilterValues}
+          endToolbarItems={
+            <>
+              <ToolbarItem>
+                <Button
+                  isSmall
+                  // onClick={() => history.push("/credentials/create")}
+                  variant="primary"
+                  id="create-credential-button"
+                >
+                  Create new
+                </Button>
+              </ToolbarItem>
+            </>
+          }
+          pagination={
+            <Pagination
+              className={spacing.mtMd}
+              {...paginationProps}
+              widgetId="plans-table-pagination-top"
+            />
+          }
+        />
+
+        {identities.length > 0 ? (
+          <Table
+            aria-label="Credentials table"
+            // className="credential-table"
             cells={columns}
             rows={rows}
-            // actionResolver={actionResolver}
-            isLoading={isFetching}
-            loadingVariant="skeleton"
-            fetchError={fetchError}
-            toolbarClearAllFilters={clearAllFilters}
-            filtersApplied={areFiltersPresent}
-            toolbarToggle={
-              <IdentityToolbarToggleGroup
-                value={filtersValue as Map<IdentityFilterKey, ToolbarChip[]>}
-                addFilter={addFilter}
-                setFilter={setFilter}
-              />
-            }
-            toolbarActions={
-              <>
-                <ToolbarGroup variant="button-group">
-                  <ToolbarItem>
-                    <Button
-                      type="button"
-                      aria-label="create-application"
-                      variant={ButtonVariant.primary}
-                      // onClick={openCreateApplicationModal}
-                    >
-                      {t("actions.createNew")}
-                    </Button>
-                  </ToolbarItem>
-                </ToolbarGroup>
-              </>
-            }
-            noDataState={
-              <NoDataEmptyState
-                title={t("composed.noDataStateTitle", {
-                  what: t("terms.credentials").toLowerCase(),
-                })}
-                description={
-                  t("composed.noDataStateBody", {
-                    what: t("terms.credential").toLowerCase(),
-                  }) + "."
-                }
-              />
+            sortBy={sortBy}
+            onSort={onSort}
+          >
+            <TableHeader />
+            <TableBody />
+          </Table>
+        ) : (
+          <NoDataEmptyState
+            title={t("composed.noDataStateTitle", {
+              what: t("terms.credentials").toLowerCase(),
+            })}
+            description={
+              t("composed.noDataStateBody", {
+                what: t("terms.credential").toLowerCase(),
+              }) + "."
             }
           />
-        </ConditionalRender>
+        )}
+        <Pagination
+          {...paginationProps}
+          widgetId="plans-table-pagination-bottom"
+          variant="bottom"
+        />
       </PageSection>
     </>
   );
