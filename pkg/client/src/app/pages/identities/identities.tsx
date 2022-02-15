@@ -29,7 +29,7 @@ import {
   FilterCategory,
 } from "@app/shared/components/FilterToolbar";
 import { NoDataEmptyState } from "@app/shared/components";
-import { IdentitiesPage, Identity } from "@app/api/models";
+import { Identity } from "@app/api/models";
 import { useFilterState } from "@app/shared/hooks/useFilterState";
 import { usePaginationState } from "@app/shared/hooks/usePaginationState";
 import { useSortState } from "@app/shared/hooks/useSortState";
@@ -58,13 +58,13 @@ export const Identities: React.FunctionComponent = () => {
     isFetching,
     fetchError,
     requestFetch: refreshTable,
-  } = useFetch<IdentitiesPage>({
+  } = useFetch<Array<any>>({
     defaultIsFetching: true,
     onFetch: fetchIdentities,
   });
 
   const identities = useMemo(() => {
-    return page ? IdentityPageMapper(page) : undefined;
+    return page !== undefined && page.length === 0 ? page : undefined;
   }, [page]);
 
   useEffect(() => {
@@ -102,12 +102,11 @@ export const Identities: React.FunctionComponent = () => {
       },
     },
   ];
-  // const identities: Identity[] = [];
 
-  // const { filterValues, setFilterValues, filteredItems } = useFilterState(
-  //   identities,
-  //   filterCategories
-  // );
+  const { filterValues, setFilterValues, filteredItems } = useFilterState(
+    identities || [],
+    filterCategories
+  );
   const getSortValues = (identity: Identity) => [
     "", // Expand/collapse column
     identity.name,
@@ -115,12 +114,12 @@ export const Identities: React.FunctionComponent = () => {
     "", // Action column
   ];
 
-  // const { sortBy, onSort, sortedItems } = useSortState(
-  //   filteredItems,
-  //   getSortValues
-  // );
-  // const { currentPageItems, setPageNumber, paginationProps } =
-  //   usePaginationState(sortedItems, 10);
+  const { sortBy, onSort, sortedItems } = useSortState(
+    filteredItems,
+    getSortValues
+  );
+  const { currentPageItems, setPageNumber, paginationProps } =
+    usePaginationState(sortedItems, 10);
 
   const columns: ICell[] = [
     {
@@ -148,8 +147,7 @@ export const Identities: React.FunctionComponent = () => {
         </TextContent>
       </PageSection>
       <PageSection>
-        <>{identities?.data}</>
-        {/* <FilterToolbar<Identity>
+        <FilterToolbar<Identity>
           filterCategories={filterCategories}
           filterValues={filterValues}
           setFilterValues={setFilterValues}
@@ -175,8 +173,8 @@ export const Identities: React.FunctionComponent = () => {
               widgetId="plans-table-pagination-top"
             />
           }
-        /> */}
-        {/* {identities?.data.length > 0 ? (
+        />
+        {identities && identities?.length > 0 ? (
           <Table
             aria-label="Credentials table"
             // className="credential-table"
@@ -199,12 +197,12 @@ export const Identities: React.FunctionComponent = () => {
               }) + "."
             }
           />
-        )} */}
-        {/* <Pagination
+        )}
+        <Pagination
           {...paginationProps}
           widgetId="plans-table-pagination-bottom"
           variant="bottom"
-        /> */}
+        />
       </PageSection>
     </>
   );

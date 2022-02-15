@@ -10,9 +10,7 @@ import {
   ApplicationPage,
   BusinessService,
   BusinessServicePage,
-  IdentitiesPage,
   Identity,
-  // IdentityPage,
   JobFunction,
   JobFunctionPage,
   PageRepresentation,
@@ -161,10 +159,10 @@ export const applicationImportPageMapper = (
 });
 
 export const IdentityPageMapper = (
-  page: IdentitiesPage
+  page: Array<any>
 ): PageRepresentation<Identity> => ({
   meta: { count: 0 },
-  data: page.identities,
+  data: page,
   // meta: { count: page.total_count },
   // data: page._embedded["identity"],
 });

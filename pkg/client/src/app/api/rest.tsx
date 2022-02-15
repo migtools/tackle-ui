@@ -29,7 +29,6 @@ import {
   ApplicationImportSummary,
   BulkCopyAssessment,
   BulkCopyReview,
-  IdentitiesPage,
 } from "./models";
 
 // Tackle hub api
@@ -769,7 +768,7 @@ export const getBulkCopyAssessment = (
 //   direction?: Direction;
 // }
 
-export const getIdentities = (): AxiosPromise<IdentitiesPage> => {
+export const getIdentities = (): AxiosPromise<Array<any>> => {
   // const params = {
   //   page: pagination.page - 1,
   //   size: pagination.perPage,

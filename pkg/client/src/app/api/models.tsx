@@ -286,7 +286,3 @@ export interface ApplicationImportPage {
 //   };
 //   total_count: number;
 // }
-
-export interface IdentitiesPage {
-  identities: Identity[];
-}
