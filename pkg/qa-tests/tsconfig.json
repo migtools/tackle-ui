@@ -1,8 +1,11 @@
 {
   "compilerOptions": {
+    "outDir": "build",
+    "sourceMap": false,
     "target": "es5",
     "lib": ["es5", "dom", "es2019"],
     "types": ["cypress", "cypress-file-upload"],
+    "noEmit": true,
     "allowJs": true
   },
   "include": ["**/*.ts", "**/*.js"],

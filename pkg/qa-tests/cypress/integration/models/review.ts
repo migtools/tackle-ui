@@ -1,3 +1,4 @@
+import { IDependencyAction } from "./application";
 import {
   applyFilterTextToolbar,
   submitForm,
@@ -62,7 +63,7 @@ export class ReviewPage {
   }
 
   create(formValue: IFormValue): void {
-    this.openPage();
+    this.openPage(null);
 
     cy.get("button[aria-label='create-application']").click();
 
@@ -75,7 +76,7 @@ export class ReviewPage {
   }
 
   edit(rowIndex: number, formValue: IFormValue): void {
-    this.openPage();
+    this.openPage(null);
 
     cy.get(".pf-c-table").pf4_table_row_edit(rowIndex, "open");
 
@@ -88,7 +89,7 @@ export class ReviewPage {
   }
 
   delete(rowIndex: number): void {
-    this.openPage();
+    this.openPage(null);
 
     cy.get(".pf-c-table").pf4_table_action_select(rowIndex, "Delete");
     cy.get("button[aria-label='confirm']").click();
@@ -136,7 +137,7 @@ export class ReviewPage {
   }
 
   manageDependencies(rowIndex: number, actions: IDependencyAction[]): void {
-    this.openPage();
+    this.openPage(null);
 
     cy.get(".pf-c-table").pf4_table_action_select(
       rowIndex,
@@ -163,7 +164,7 @@ export class ReviewPage {
   }
 
   assessApplication(rowIndex: number): void {
-    this.openPage();
+    this.openPage(null);
 
     cy.get(".pf-c-table").pf4_table_row_check(rowIndex);
     cy.get(".pf-c-toolbar button[aria-label='assess-application']").click();
