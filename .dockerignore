@@ -1,4 +1,4 @@
 *
-!build/*
-!nginx.conf.template
 !entrypoint.sh
+!/pkg/client/dist/*
+!/pkg/server/*

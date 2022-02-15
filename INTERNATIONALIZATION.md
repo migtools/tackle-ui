@@ -10,7 +10,7 @@ Steps:
 - Locate your terminal in the cloned repository and execute:
 
 ```
-yarn install
+npm install
 ```
 
 - Edit the file `i18next-parser.config.js` and add your new language code to the array `locales`. E.g.
@@ -22,7 +22,7 @@ locales: ["en", "es", "myLanguageCode"]
 - Generate the folder and files for the new language:
 
 ```
-yarn extract
+npm extract
 ```
 
 The previous command created a file `public/locales/{myLanguageCode}/translation.json`; the content of this file should be the translated new language. As a reference you can use the english version of the translation located at [public/locales/en/translation.json](https://github.com/konveyor/tackle-ui/blob/main/public/locales/en/translation.json)

@@ -19,6 +19,19 @@ Tackle UI requires the following services in order to work properly:
 - [tackle-pathfinder](https://github.com/konveyor/tackle-pathfinder)
 - [keycloak](https://www.keycloak.org/)
 
+When deployed through konveyor/tackle-operator the above services endpoints are automatically assigned to the tackle-ui image throught the following environment variables.
+- APPLICATION_INVENTORY_API_URL
+- CONTROLS_API_URL
+- PATHFINDER_API_URL
+- SSO_SERVER_URL
+
+Meanwhile for development or troubleshooting they can be assigned to a different endpoint using environment variables
+If those env variables are not defined the endpoints will fallback to the following default values:
+- SSO_SERVER_URL: "http://localhost:21000"
+- CONTROLS_API_URL: "http://localhost:22000"
+- APPLICATION_INVENTORY_API_URL: "http://localhost:22000"
+- PATHFINDER_API_URL: "http://localhost:23000"
+
 You can start all services using `docker-compose.yml`:
 
 ```shell
@@ -30,13 +43,13 @@ docker-compose up
 Install the npm dependencies:
 
 ```shell
-yarn install
+npm install
 ```
 
 Start the UI:
 
 ```shell
-yarn start
+npm start
 ```
 
 You should be able to open http://localhost:3000 and start working on the UI.
@@ -114,7 +127,7 @@ docker-compose up
 You can start the UI using:
 
 ```shell
-yarn start
+npm start
 ```
 
 You should be able to open http://localhost:3000 and start working on the UI; notice that this time the UI will point to the custom `tackle-controls` service you started rather than the service comming from `docker-compose.yml`.
@@ -123,7 +136,7 @@ You should be able to open http://localhost:3000 and start working on the UI; no
 
 To build a container image for the UI based on local code, execute the following commands:
 ```shell
-yarn build
+npm build
 podman build -t quay.io/$USERNAME/tackle-ui .
 ```
 consider replacing `podman` with `docker` if you have the latter installed and `quay.io` registry with the one you're using.  
