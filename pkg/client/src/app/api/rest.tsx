@@ -29,6 +29,7 @@ import {
   ApplicationImportSummary,
   BulkCopyAssessment,
   BulkCopyReview,
+  Identity,
 } from "./models";
 
 // Tackle hub api
@@ -785,4 +786,12 @@ export const getIdentities = (): AxiosPromise<Array<any>> => {
   return APIClient.get(`${IDENTITIES}`, {
     headers,
   });
+};
+
+export const createIdentity = (obj: Identity): AxiosPromise<Identity> => {
+  return APIClient.post(`${IDENTITIES}`, obj);
+};
+
+export const updateIdentity = (obj: Identity): AxiosPromise<Identity> => {
+  return APIClient.put(`${IDENTITIES}/${obj.id}`, obj);
 };

@@ -4,6 +4,7 @@ import { getIdentities } from "@app/api/rest";
 import {
   Button,
   Checkbox,
+  Modal,
   PageSection,
   PageSectionVariants,
   Pagination,
@@ -35,9 +36,27 @@ import { usePaginationState } from "@app/shared/hooks/usePaginationState";
 import { useSortState } from "@app/shared/hooks/useSortState";
 import { useFetch } from "@app/shared/hooks/useFetch";
 import { IdentityPageMapper } from "@app/api/apiUtils";
+import { useEntityModal } from "@app/shared/hooks/useEntityModal";
+import { ApplicationsIdentityForm } from "../application-inventory/application-list/components/ApplicationsIdentityForm";
+import { IdentityForm } from "./components/identity-form";
+import { AxiosResponse } from "axios";
+import { useDispatch } from "react-redux";
+import { alertActions } from "@app/store/alert";
 
 export const Identities: React.FunctionComponent = () => {
   const { t } = useTranslation();
+
+  // Redux
+  const dispatch = useDispatch();
+
+  // Create and update modal
+  const {
+    isOpen: isIdentityModalOpen,
+    data: identityToUpdate,
+    create: openCreateIdentityModal,
+    update: openUpdateIdentityModal,
+    close: closeIdentityModal,
+  } = useEntityModal<Identity>();
 
   /** fetch identities
    *
@@ -77,6 +96,23 @@ export const Identities: React.FunctionComponent = () => {
     // isWatchingBulkCopy,
     refreshTable,
   ]);
+
+  const onIdentityModalSaved = (response: AxiosResponse<Identity>) => {
+    if (!identityToUpdate) {
+      dispatch(
+        alertActions.addSuccess(
+          // t('terms.application')
+          t("toastr.success.added", {
+            what: response.data.name,
+            type: t("terms.identity").toLowerCase(),
+          })
+        )
+      );
+    }
+
+    closeIdentityModal();
+    refreshTable();
+  };
 
   const filterCategories: FilterCategory<Identity>[] = [
     {
@@ -156,12 +192,11 @@ export const Identities: React.FunctionComponent = () => {
               <ToolbarItem>
                 <Button
                   isSmall
-                  // onClick={() => history.push("/credentials/create")}
-                  onClick={() => console.log("ping")}
+                  onClick={openCreateIdentityModal}
                   variant="primary"
                   id="create-credential-button"
                 >
-                  Create new
+                  {t("actions.createNew")}
                 </Button>
               </ToolbarItem>
             </>
@@ -174,6 +209,24 @@ export const Identities: React.FunctionComponent = () => {
             />
           }
         />
+        <Modal
+          // t('dialog.title.update')
+          // t('dialog.title.new')
+          // t('terms.application')
+          title={t(`dialog.title.${identityToUpdate ? "update" : "new"}`, {
+            what: t("terms.application").toLowerCase(),
+          })}
+          variant="medium"
+          isOpen={isIdentityModalOpen}
+          onClose={closeIdentityModal}
+        >
+          <IdentityForm
+            identity={identityToUpdate}
+            onSaved={onIdentityModalSaved}
+            onCancel={closeIdentityModal}
+          />
+        </Modal>
+
         {identities && identities?.length > 0 ? (
           <Table
             aria-label="Credentials table"
