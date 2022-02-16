@@ -16,8 +16,6 @@
     "start:dev": "concurrently -n server,client \"npm:server\" \"npm:build:dev\"",
     "start:dev:local": "concurrently -n proxy,server,client \"npm:proxy\" \"npm:server\" \"npm:build:dev\"",
     "start": "node ../server/index.js -r @cypress/instrument-cra",
-    "test": " $(npm bin)/jest src/setupTest.ts",
-    "test:old": "node scripts/test.js",
     "test:unit": "$(npm bin)/jest --rootDir=. --config=config/jest.config.js"
   },
   "dependencies": {
