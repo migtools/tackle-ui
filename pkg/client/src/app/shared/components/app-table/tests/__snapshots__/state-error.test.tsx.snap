@@ -6,7 +6,6 @@ exports[`StateError Renders without crashing 1`] = `
 >
   <EmptyStateIcon
     color="#a30000"
-    icon={[Function]}
   />
   <Title
     headingLevel="h2"

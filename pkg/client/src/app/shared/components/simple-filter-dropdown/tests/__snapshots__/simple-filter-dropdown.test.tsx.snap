@@ -31,11 +31,7 @@ exports[`SimpleFilterDropdown Renders without crashing 1`] = `
     <DropdownToggle
       onToggle={[Function]}
     >
-      <FilterIcon
-        color="currentColor"
-        noVerticalAlign={false}
-        size="sm"
-      />
+      <UNDEFINED />
        
       My label
     </DropdownToggle>

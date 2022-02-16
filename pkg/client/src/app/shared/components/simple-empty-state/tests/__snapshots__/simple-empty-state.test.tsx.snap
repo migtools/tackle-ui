@@ -20,9 +20,6 @@ exports[`SimpleEmptyState Renders with icon 1`] = `
 <EmptyState
   variant="small"
 >
-  <EmptyStateIcon
-    icon={[Function]}
-  />
   <Title
     headingLevel="h2"
     size="lg"

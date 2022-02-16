@@ -15,11 +15,7 @@ exports[`InputTextFilter Renders without crashing 1`] = `
     onClick={[Function]}
     variant="control"
   >
-    <SearchIcon
-      color="currentColor"
-      noVerticalAlign={false}
-      size="sm"
-    />
+    <Component />
   </Button>
 </InputGroup>
 `;

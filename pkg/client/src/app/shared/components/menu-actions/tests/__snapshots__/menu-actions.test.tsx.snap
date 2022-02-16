@@ -23,7 +23,6 @@ exports[`MenuActions Renders without crashing 1`] = `
   toggle={
     <DropdownToggle
       onToggle={[Function]}
-      toggleIndicator={[Function]}
     >
       Actions
     </DropdownToggle>

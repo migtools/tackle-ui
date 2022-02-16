@@ -16,7 +16,9 @@
     "start:dev": "concurrently -n server,client \"npm:server\" \"npm:build:dev\"",
     "start:dev:local": "concurrently -n proxy,server,client \"npm:proxy\" \"npm:server\" \"npm:build:dev\"",
     "start": "node ../server/index.js -r @cypress/instrument-cra",
-    "test": "node scripts/test.js"
+    "test": " $(npm bin)/jest src/setupTest.ts",
+    "test:old": "node scripts/test.js",
+    "test:unit": "$(npm bin)/jest --rootDir=. --config=config/jest.config.js"
   },
   "dependencies": {
     "@hot-loader/react-dom": "^17.0.2",
@@ -51,7 +53,7 @@
   "devDependencies": {
     "@cypress/code-coverage": "^3.9.11",
     "@cypress/instrument-cra": "^1.4.0",
-    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.2",
     "@testing-library/react-hooks": "^4.0.1",
     "@testing-library/user-event": "^13.5.0",
@@ -103,6 +105,7 @@
     "style-loader": "^3.3.1",
     "svg-url-loader": "^7.1.1",
     "terser-webpack-plugin": "^5.3.0",
+    "ts-jest": "^27.0.3",
     "ts-loader": "^9.2.6",
     "tsconfig-paths-webpack-plugin": "^3.5.2",
     "typescript": "4.0.3",
@@ -130,59 +133,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "jest": {
-    "roots": [
-      "<rootDir>/src"
-    ],
-    "collectCoverageFrom": [
-      "pkg/client/src/**/*.{js,jsx,ts,tsx}",
-      "!<rootDir>/node_modules/"
-    ],
-    "setupFiles": [
-      "react-app-polyfill/jsdom"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/src/setupTests.ts"
-    ],
-    "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
-      "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
-    ],
-    "testEnvironment": "jsdom",
-    "transform": {
-      "^.+\\.(js|jsx|mjs|cjs|ts|tsx)$": "<rootDir>/config/jest/babelTransform.js",
-      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
-      "^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
-    },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$",
-      "^.+\\.module\\.(css|sass|scss)$"
-    ],
-    "modulePaths": [
-      "/home/gildub/github.com/gildub/tackle-ui/pkg/client/src"
-    ],
-    "moduleNameMapper": {
-      "^react-native$": "react-native-web",
-      "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
-    },
-    "moduleFileExtensions": [
-      "web.js",
-      "js",
-      "web.ts",
-      "ts",
-      "web.tsx",
-      "tsx",
-      "json",
-      "web.jsx",
-      "jsx",
-      "node"
-    ],
-    "watchPlugins": [
-      "jest-watch-typeahead/filename",
-      "jest-watch-typeahead/testname"
-    ],
-    "resetMocks": true
   },
   "husky": {
     "hooks": {

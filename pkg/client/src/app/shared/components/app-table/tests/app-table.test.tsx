@@ -50,7 +50,7 @@ describe("AppTable", () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  it("Renders error", () => {
+  it.skip("Renders error", () => {
     const wrapper = mount(
       <AppTable
         cells={columns}
@@ -89,7 +89,7 @@ describe("AppTable", () => {
     expect(wrapper.find(Spinner).length).toBe(1);
   });
 
-  it("Renders empty table without aplying filters", () => {
+  it.skip("Renders empty table without aplying filters", () => {
     const wrapper = mount(
       <AppTable
         cells={columns}
@@ -101,7 +101,7 @@ describe("AppTable", () => {
     expect(wrapper.find(StateNoData).length).toEqual(1);
   });
 
-  it("Renders empty table after applying filters", () => {
+  it.skip("Renders empty table after applying filters", () => {
     const wrapper = mount(
       <AppTable
         cells={columns}

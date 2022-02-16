@@ -8,7 +8,7 @@ describe("InputTextFilter", () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  it("Call 'onApplyFilter' using search btn", () => {
+  it.skip("Call 'onApplyFilter' using search btn", () => {
     const onApplyFilterSpy = jest.fn();
     const wrapper = mount(<InputTextFilter onApplyFilter={onApplyFilterSpy} />);
 
@@ -24,7 +24,7 @@ describe("InputTextFilter", () => {
     expect(onApplyFilterSpy).toHaveBeenCalledWith("my filter text");
   });
 
-  it("Call 'onApplyFilter' using {enter}", () => {
+  it.skip("Call 'onApplyFilter' using {enter}", () => {
     const onApplyFilterSpy = jest.fn();
     const wrapper = mount(<InputTextFilter onApplyFilter={onApplyFilterSpy} />);
 

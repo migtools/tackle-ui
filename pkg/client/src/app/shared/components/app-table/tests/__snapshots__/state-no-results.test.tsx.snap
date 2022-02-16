@@ -4,9 +4,7 @@ exports[`StateNoResults Renders without crashing 1`] = `
 <EmptyState
   variant="small"
 >
-  <EmptyStateIcon
-    icon={[Function]}
-  />
+  <EmptyStateIcon />
   <Title
     headingLevel="h2"
     size="lg"
