@@ -196,6 +196,7 @@
         "groupCount": "Número de grupos",
         "highRisk": "Riesgo alto",
         "identifiedRisks": "Riesgos identificados",
+        "identity": "",
         "impactfulButMigratable": "Impactante pero migrable",
         "impactfulButNotAdvisableToMove": "Impactante pero no recomendable para moverse",
         "imports": "Importaciones",
