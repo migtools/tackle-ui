@@ -25,7 +25,7 @@ jobs:
           npm install
           npm run build
       - name: Test
-        run: npm test --coverage --watchAll=false
+        run: npm run test:unit --coverage --watchAll=false
       - uses: codecov/codecov-action@v1
         with:
           flags: unitests
