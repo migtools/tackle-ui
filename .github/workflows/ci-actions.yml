@@ -22,10 +22,13 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Build
         run:
+          cd pkg/client
           npm install
           npm run build
       - name: Test
-        run: npm run test:unit --coverage --watchAll=false
+        run: 
+          cd pkg/client
+          npm run test:unit --coverage --watchAll=false
       - uses: codecov/codecov-action@v1
         with:
           flags: unitests
