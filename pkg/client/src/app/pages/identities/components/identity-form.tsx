@@ -21,36 +21,16 @@ import {
 } from "@app/shared/components";
 import { useFetchBusinessServices, useFetchTagTypes } from "@app/shared/hooks";
 import { DEFAULT_SELECT_MAX_HEIGHT } from "@app/Constants";
-import {
-  createApplication,
-  createIdentity,
-  TagTypeSortBy,
-  updateApplication,
-  updateIdentity,
-} from "@app/api/rest";
-import { Application, Identity, Tag } from "@app/api/models";
+import { createIdentity, TagTypeSortBy, updateIdentity } from "@app/api/rest";
+import { Identity, Tag } from "@app/api/models";
 import {
   getAxiosErrorMessage,
   getValidatedFromError,
   getValidatedFromErrorTouched,
 } from "@app/utils/utils";
-import {
-  IBusinessServiceDropdown,
-  isIModelEqual,
-  ITagDropdown,
-  toIBusinessServiceDropdown,
-  toIBusinessServiceDropdownOptionWithValue,
-  toITagDropdown,
-  toITagDropdownOptionWithValue,
-} from "@app/utils/model-utils";
 
 import "./identity-form.css";
 export interface FormValues {
-  // name: string;
-  // description: string;
-  // comments: string;
-  // businessService: IBusinessServiceDropdown | null;
-  // tags: ITagDropdown[];
   application: number;
   createTime: string;
   createUser: string;
@@ -80,81 +60,6 @@ export const IdentityForm: React.FC<IdentityFormProps> = ({
   const { t } = useTranslation();
 
   const [error, setError] = useState<AxiosError>();
-
-  // Business services
-
-  const {
-    businessServices,
-    isFetching: isFetchingBusinessServices,
-    fetchError: fetchErrorBusinessServices,
-    fetchAllBusinessServices,
-  } = useFetchBusinessServices();
-
-  useEffect(() => {
-    fetchAllBusinessServices();
-  }, [fetchAllBusinessServices]);
-
-  // TagTypes
-
-  const {
-    tagTypes,
-    isFetching: isFetchingTagTypes,
-    fetchError: fetchErrorTagTypes,
-    fetchAllTagTypes,
-  } = useFetchTagTypes();
-
-  useEffect(() => {
-    fetchAllTagTypes({ field: TagTypeSortBy.RANK });
-  }, [fetchAllTagTypes]);
-
-  // Tags
-
-  const [tags, setTags] = useState<Tag[]>();
-
-  useEffect(() => {
-    if (tagTypes) {
-      setTags(tagTypes.data.flatMap((f) => f.tags || []));
-    }
-  }, [tagTypes]);
-
-  // Formik
-
-  // const businessServiceInitialValue = useMemo(() => {
-  //   let result: IBusinessServiceDropdown | null = null;
-  //   if (
-  //     application &&
-  //     application.businessService &&
-  //     businessServices &&
-  //     businessServices.data
-  //   ) {
-  //     const businessServiceId = Number(application.businessService);
-  //     const businessService = businessServices.data.find(
-  //       (f) => f.id === businessServiceId
-  //     );
-
-  //     if (businessService) {
-  //       result = toIBusinessServiceDropdown({
-  //         id: businessServiceId,
-  //         name: businessService.name,
-  //       });
-  //     }
-  //   }
-
-  //   return result;
-  // }, [application, businessServices]);
-
-  // const tagsInitialValue = useMemo(() => {
-  //   let result: ITagDropdown[] = [];
-
-  //   if (application && application.tags && tags) {
-  //     result = application.tags.reduce((prev, current) => {
-  //       const exists = tags.find((f) => `${f.id}` === current);
-  //       return exists ? [...prev, toITagDropdown(exists)] : prev;
-  //     }, [] as ITagDropdown[]);
-  //   }
-
-  //   return result;
-  // }, [application, tags]);
 
   const initialValues: FormValues = {
     application: 0,
@@ -193,12 +98,6 @@ export const IdentityForm: React.FC<IdentityFormProps> = ({
       id: formValues.id,
       kind: formValues.kind.trim(),
       createUser: formValues.createUser.trim(),
-
-      // businessService: formValues.businessService
-      //   ? `${formValues.businessService.id}`
-      //   : undefined,
-      // tags: formValues.tags.map((f) => `${f.id}`),
-      // review: undefined, // The review should not updated through this form
     };
 
     let promise: AxiosPromise<Identity>;
@@ -233,8 +132,6 @@ export const IdentityForm: React.FC<IdentityFormProps> = ({
   };
 
   const [isBasicExpanded, setBasicExpanded] = React.useState(true);
-  const [isSourceCodeExpanded, setSourceCodeExpanded] = React.useState(false);
-  const [isBinaryExpanded, setBinaryExpanded] = React.useState(false);
 
   return (
     <FormikProvider value={formik}>

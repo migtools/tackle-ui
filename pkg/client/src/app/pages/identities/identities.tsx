@@ -17,11 +17,14 @@ import {
   expandable,
   ICell,
   IRow,
+  IRowData,
   sortable,
   Table,
   TableBody,
   TableHeader,
+  TableText,
 } from "@patternfly/react-table";
+import { PencilAltIcon } from "@patternfly/react-icons/dist/esm/icons/pencil-alt-icon";
 import spacing from "@patternfly/react-styles/css/utilities/Spacing/spacing";
 
 import {
@@ -42,6 +45,12 @@ import { IdentityForm } from "./components/identity-form";
 import { AxiosResponse } from "axios";
 import { useDispatch } from "react-redux";
 import { alertActions } from "@app/store/alert";
+
+const ENTITY_FIELD = "entity";
+
+const getRow = (rowData: IRowData): Identity => {
+  return rowData[ENTITY_FIELD];
+};
 
 export const Identities: React.FunctionComponent = () => {
   const { t } = useTranslation();
@@ -83,25 +92,13 @@ export const Identities: React.FunctionComponent = () => {
   });
 
   const identities = useMemo(() => {
-    return page !== undefined && page.length === 0 ? page : undefined;
+    return page !== undefined ? page : undefined;
   }, [page]);
-
-  useEffect(() => {
-    refreshTable();
-    console.log("what is data", page);
-  }, [
-    // filtersValue,
-    // paginationQuery,
-    // sortByQuery,
-    // isWatchingBulkCopy,
-    refreshTable,
-  ]);
 
   const onIdentityModalSaved = (response: AxiosResponse<Identity>) => {
     if (!identityToUpdate) {
       dispatch(
         alertActions.addSuccess(
-          // t('terms.application')
           t("toastr.success.added", {
             what: response.data.name,
             type: t("terms.identity").toLowerCase(),
@@ -137,6 +134,15 @@ export const Identities: React.FunctionComponent = () => {
         return item.kind ? "Warm" : "Cold";
       },
     },
+    {
+      key: "createUser",
+      title: "Created By",
+      type: FilterType.search,
+      placeholderText: "Filter by created by...",
+      getItemValue: (item) => {
+        return item.createUser;
+      },
+    },
   ];
 
   const { filterValues, setFilterValues, filteredItems } = useFilterState(
@@ -144,9 +150,9 @@ export const Identities: React.FunctionComponent = () => {
     filterCategories
   );
   const getSortValues = (identity: Identity) => [
-    "", // Expand/collapse column
     identity.name,
     identity.kind,
+    identity.createUser,
     "", // Action column
   ];
 
@@ -156,6 +162,10 @@ export const Identities: React.FunctionComponent = () => {
   );
   const { currentPageItems, setPageNumber, paginationProps } =
     usePaginationState(sortedItems, 10);
+
+  useEffect(() => {
+    refreshTable();
+  }, [refreshTable]);
 
   const columns: ICell[] = [
     {
@@ -175,6 +185,43 @@ export const Identities: React.FunctionComponent = () => {
   ];
 
   const rows: IRow[] = [];
+  currentPageItems?.forEach((item: Identity) => {
+    rows.push({
+      [ENTITY_FIELD]: item,
+      cells: [
+        {
+          title: <TableText wrapModifier="truncate">{item.name}</TableText>,
+        },
+        {
+          title: (
+            <TableText wrapModifier="truncate">{item.description}</TableText>
+          ),
+        },
+        {
+          title: <TableText wrapModifier="truncate">{item.kind} </TableText>,
+        },
+        {
+          title: (
+            <TableText wrapModifier="truncate">{item.createUser} </TableText>
+          ),
+        },
+        {
+          title: (
+            <div className="pf-c-inline-edit__action pf-m-enable-editable">
+              <Button
+                type="button"
+                variant="plain"
+                onClick={() => openUpdateIdentityModal(item)}
+              >
+                <PencilAltIcon />
+              </Button>
+            </div>
+          ),
+        },
+      ],
+    });
+  });
+
   return (
     <>
       <PageSection variant={PageSectionVariants.light}>
@@ -214,7 +261,7 @@ export const Identities: React.FunctionComponent = () => {
           // t('dialog.title.new')
           // t('terms.application')
           title={t(`dialog.title.${identityToUpdate ? "update" : "new"}`, {
-            what: t("terms.application").toLowerCase(),
+            what: t("terms.identity").toLowerCase(),
           })}
           variant="medium"
           isOpen={isIdentityModalOpen}
@@ -230,7 +277,6 @@ export const Identities: React.FunctionComponent = () => {
         {identities && identities?.length > 0 ? (
           <Table
             aria-label="Credentials table"
-            // className="credential-table"
             cells={columns}
             rows={rows}
             sortBy={sortBy}
