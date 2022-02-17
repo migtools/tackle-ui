@@ -78,10 +78,7 @@ describe("Assessment: answer questionnaire", () => {
       ],
     });
 
-    cy.url().should(
-      "match",
-      new RegExp("/application-inventory/application-list*")
-    );
+    cy.url().should("match", new RegExp("/applications/application-list*"));
   });
 
   it("Answer questionnaire with stakeholder group", () => {
@@ -97,10 +94,7 @@ describe("Assessment: answer questionnaire", () => {
       ],
     });
 
-    cy.url().should(
-      "match",
-      new RegExp("/application-inventory/application-list*")
-    );
+    cy.url().should("match", new RegExp("/applications/application-list*"));
   });
 
   it("Answer questionnaire and then 'Review'", () => {
@@ -118,9 +112,7 @@ describe("Assessment: answer questionnaire", () => {
 
     cy.url().should(
       "match",
-      new RegExp(
-        `/application-inventory/application/${applicationToEdit.id}/review`
-      )
+      new RegExp(`/applications/application/${applicationToEdit.id}/review`)
     );
   });
 });

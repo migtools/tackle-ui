@@ -18,7 +18,7 @@ export class ApplicationImportPage {
     );
 
     // Open page
-    cy.visit("/application-inventory/application-imports");
+    cy.visit("/applications/application-imports");
     cy.wait("@getImportSummaries");
   }
 

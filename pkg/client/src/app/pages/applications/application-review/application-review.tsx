@@ -105,8 +105,8 @@ export const ApplicationReview: React.FC = () => {
     }
   }, [applicationId]);
 
-  const redirectToApplicationList = () => {
-    history.push(Paths.applicationInventory_applicationList);
+  const redirectToApplications = () => {
+    history.push(Paths.applications);
   };
 
   const startApplicationAssessment = () => {
@@ -119,7 +119,7 @@ export const ApplicationReview: React.FC = () => {
       application,
       (assessment: Assessment) => {
         history.push(
-          formatPath(Paths.applicationInventory_assessment, {
+          formatPath(Paths.applicationsAssessment, {
             assessmentId: assessment.id,
           })
         );
@@ -193,8 +193,8 @@ export const ApplicationReview: React.FC = () => {
                     <ReviewForm
                       application={application}
                       review={review}
-                      onSaved={redirectToApplicationList}
-                      onCancel={redirectToApplicationList}
+                      onSaved={redirectToApplications}
+                      onCancel={redirectToApplications}
                     />
                   </FormSection>
                 </div>

@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 
 import "./Repositories.css";
 
-export const RepositoriesMaven: React.FunctionComponent = () => {
+export const RepositoriesMvn: React.FunctionComponent = () => {
   const { t } = useTranslation();
   const [isInsecure, setInsecure] = React.useState(false);
   const [isForced, setForced] = React.useState(false);

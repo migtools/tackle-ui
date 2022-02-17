@@ -31,7 +31,7 @@ exports[`ApplicationAssessmentPageHeader Renders without crashing 1`] = `
             "title": "terms.applications",
           },
           Object {
-            "path": "/application-inventory/assessment/:assessmentId",
+            "path": "/applications/assessment/:assessmentId",
             "title": "terms.assessment",
           },
         ]
@@ -63,7 +63,7 @@ exports[`ApplicationAssessmentPageHeader Renders without crashing 1`] = `
                       "title": "terms.applications",
                     },
                     Object {
-                      "path": "/application-inventory/assessment/:assessmentId",
+                      "path": "/applications/assessment/:assessmentId",
                       "title": "terms.assessment",
                     },
                   ]

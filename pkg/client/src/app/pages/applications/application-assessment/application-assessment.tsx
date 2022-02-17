@@ -99,11 +99,11 @@ export const ApplicationAssessment: React.FC = () => {
 
   //
 
-  const redirectToApplicationList = () => {
-    history.push(Paths.applicationInventory_applicationList);
+  const redirectToApplications = () => {
+    history.push(Paths.applications);
   };
 
-  const confirmAndRedirectToApplicationList = () => {
+  const confirmAndRedirectToApplications = () => {
     dispatch(
       confirmDialogActions.openDialog({
         title: t("dialog.title.leavePage"),
@@ -113,7 +113,7 @@ export const ApplicationAssessment: React.FC = () => {
         cancelBtnLabel: t("actions.cancel"),
         onConfirm: () => {
           dispatch(confirmDialogActions.closeDialog());
-          redirectToApplicationList();
+          redirectToApplications();
         },
       })
     );
@@ -195,14 +195,14 @@ export const ApplicationAssessment: React.FC = () => {
         formikHelpers.setSubmitting(false);
         switch (saveAction) {
           case SAVE_ACTION_VALUE.SAVE:
-            redirectToApplicationList();
+            redirectToApplications();
             break;
           case SAVE_ACTION_VALUE.SAVE_AND_REVIEW:
             getApplicationById(assessment.applicationId)
               .then(({ data }) => {
                 formikHelpers.setSubmitting(false);
                 history.push(
-                  formatPath(Paths.applicationInventory_review, {
+                  formatPath(Paths.applicationsReview, {
                     applicationId: data.id,
                   })
                 );
@@ -384,7 +384,7 @@ export const ApplicationAssessment: React.FC = () => {
             onBack={() => {
               setCurrentStep((current) => current - 1);
             }}
-            onClose={confirmAndRedirectToApplicationList}
+            onClose={confirmAndRedirectToApplications}
             onGoToStep={(step) => {
               setCurrentStep(step.id as number);
             }}

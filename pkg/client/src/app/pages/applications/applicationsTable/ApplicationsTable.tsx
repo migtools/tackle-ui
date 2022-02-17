@@ -130,7 +130,7 @@ const searchAppAssessment = (id: number) => {
   return result;
 };
 
-export const ApplicationList: React.FC = () => {
+export const ApplicationsTable: React.FC = () => {
   // i18
   const { t } = useTranslation();
 
@@ -611,7 +611,7 @@ export const ApplicationList: React.FC = () => {
       (assessment: Assessment) => {
         const redirectToAssessment = () => {
           history.push(
-            formatPath(Paths.applicationInventory_assessment, {
+            formatPath(Paths.applicationsAssessment, {
               assessmentId: assessment.id,
             })
           );
@@ -660,7 +660,7 @@ export const ApplicationList: React.FC = () => {
     }
 
     history.push(
-      formatPath(Paths.applicationInventory_review, {
+      formatPath(Paths.applicationsReview, {
         applicationId: row.id,
       })
     );
@@ -679,6 +679,7 @@ export const ApplicationList: React.FC = () => {
           <Text component="h1">{t("composed.applicationInventory")}</Text>
         </TextContent>
       </PageSection>
+
       <PageSection>
         <ConditionalRender
           when={isFetching && !(applications || fetchError)}
@@ -763,9 +764,7 @@ export const ApplicationList: React.FC = () => {
                         <DropdownItem
                           key="manage-application-imports"
                           onClick={() => {
-                            history.push(
-                              Paths.applicationInventory_manageImports
-                            );
+                            history.push(Paths.applicationsImports);
                           }}
                         >
                           {t("actions.manageImports")}

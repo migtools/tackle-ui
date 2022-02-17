@@ -113,7 +113,7 @@ context("Reset table after deletion", () => {
     });
 
     // Go to page
-    cy.visit("/application-inventory");
+    cy.visit("/applications");
 
     verifyPagination(
       "application-inventory/application",

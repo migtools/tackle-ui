@@ -1,6 +1,5 @@
 import React from "react";
 import { Page, SkipToContent } from "@patternfly/react-core";
-import { AppPlaceholder } from "@app/shared/components";
 import { HeaderApp } from "../HeaderApp";
 import { SidebarApp } from "../SidebarApp";
 
@@ -13,16 +12,14 @@ export const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
   );
 
   return (
-    <React.Suspense fallback={<AppPlaceholder />}>
-      <Page
-        header={<HeaderApp />}
-        sidebar={<SidebarApp />}
-        isManagedSidebar
-        skipToContent={PageSkipToContent}
-        mainContainerId={pageId}
-      >
-        {children}
-      </Page>
-    </React.Suspense>
+    <Page
+      header={<HeaderApp />}
+      sidebar={<SidebarApp />}
+      isManagedSidebar
+      skipToContent={PageSkipToContent}
+      mainContainerId={pageId}
+    >
+      {children}
+    </Page>
   );
 };

@@ -147,11 +147,11 @@ export const ManageImportsDetails: React.FC = () => {
           breadcrumbs={[
             {
               title: t("terms.applications"),
-              path: Paths.applicationInventory_applicationList,
+              path: Paths.applications,
             },
             {
               title: t("terms.imports"),
-              path: Paths.applicationInventory_manageImports,
+              path: Paths.applicationsImports,
             },
             {
               title: applicationImportSummary?.filename || "",

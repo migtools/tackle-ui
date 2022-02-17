@@ -15,7 +15,7 @@ export class AssessmentReviewPage {
     this.configInterceptors();
 
     // Open page
-    cy.visit(`/application-inventory/assessment/${assessmentId}`);
+    cy.visit(`/applications/assessment/${assessmentId}`);
     cy.wait("@getAssessment");
   }
 
@@ -24,7 +24,7 @@ export class AssessmentReviewPage {
     this.configInterceptors();
 
     // Open page
-    cy.visit(`/application-inventory/application/${applicationId}/review`);
+    cy.visit(`/applications/application/${applicationId}/review`);
     cy.wait("@getApplication");
   }
 

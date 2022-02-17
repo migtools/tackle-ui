@@ -1,4 +1,3 @@
-export { AppPageSection } from "./app-page-section";
 export { AppPlaceholder } from "./app-placeholder";
 export { StateError } from "./app-table";
 export { AppTableActionButtons } from "./app-table-action-buttons";

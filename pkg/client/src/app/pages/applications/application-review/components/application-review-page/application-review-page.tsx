@@ -21,11 +21,11 @@ export const ApplicationReviewPage: React.FC = ({ children }) => {
           breadcrumbs={[
             {
               title: t("terms.applications"),
-              path: Paths.applicationInventory_applicationList,
+              path: Paths.applications,
             },
             {
               title: t("terms.review"),
-              path: Paths.applicationInventory_review,
+              path: Paths.applicationsReview,
             },
           ]}
           menuActions={[]}

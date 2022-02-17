@@ -64,7 +64,7 @@ import {
 import { applicationImportSummaryPageMapper } from "@app/api/apiUtils";
 import { formatDate, getAxiosErrorMessage } from "@app/utils/utils";
 
-import { ImportApplicationsForm } from "../application-list/components/import-applications-form";
+import { ImportApplicationsForm } from "../applicationsTable/components/import-applications-form";
 
 export enum FilterKey {
   FILE_NAME = "filename",
@@ -343,7 +343,7 @@ export const ManageImports: React.FC = () => {
 
   const viewRowDetails = (row: ApplicationImportSummary) => {
     history.push(
-      formatPath(Paths.applicationInventory_manageImports_details, {
+      formatPath(Paths.applicationsImportsDetails, {
         importId: row.id,
       })
     );
@@ -375,7 +375,7 @@ export const ManageImports: React.FC = () => {
           breadcrumbs={[
             {
               title: t("terms.applications"),
-              path: Paths.applicationInventory_applicationList,
+              path: Paths.applications,
             },
             {
               title: t("terms.applicationImports"),

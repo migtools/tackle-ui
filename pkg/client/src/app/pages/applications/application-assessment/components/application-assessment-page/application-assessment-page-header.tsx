@@ -62,7 +62,7 @@ export const ApplicationAssessmentPageHeader: React.FC<
                   cancelBtnLabel: t("actions.cancel"),
                   onConfirm: () => {
                     dispatch(confirmDialogActions.closeDialog());
-                    history.push(Paths.applicationInventory_applicationList);
+                    history.push(Paths.applications);
                   },
                 })
               );
@@ -70,7 +70,7 @@ export const ApplicationAssessmentPageHeader: React.FC<
           },
           {
             title: t("terms.assessment"),
-            path: Paths.applicationInventory_assessment,
+            path: Paths.applicationsAssessment,
           },
         ]}
         btnActions={

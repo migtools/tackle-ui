@@ -22,12 +22,9 @@ describe("Assess an application", () => {
               name: `application-${(i + 10).toString(36)}`,
             }))
             .forEach((payload) => {
-              cy.api_crud(
-                tokens,
-                "Application",
-                "POST",
-                payload
-              ).then((responseData) => applications.push(responseData));
+              cy.api_crud(tokens, "Application", "POST", payload).then(
+                (responseData) => applications.push(responseData)
+              );
             });
         })
         .then(() => {
@@ -57,14 +54,14 @@ describe("Assess an application", () => {
     cy.wait("@postAssessment");
 
     cy.wait(1000);
-    cy.url().should("match", new RegExp("/application-inventory/assessment/*"));
+    cy.url().should("match", new RegExp("/applications/assessment/*"));
   });
 
   it("Assess application whose status is 'inProgress'", () => {
     application.assessApplication(1);
 
     cy.wait(1000);
-    cy.url().should("match", new RegExp("/application-inventory/assessment/*"));
+    cy.url().should("match", new RegExp("/applications/assessment/*"));
   });
 
   it("Assess application whose status is 'complete'", () => {
@@ -76,6 +73,6 @@ describe("Assess an application", () => {
     cy.get("button[aria-label='confirm']").click();
 
     cy.wait(1000);
-    cy.url().should("match", new RegExp("/application-inventory/assessment/*"));
+    cy.url().should("match", new RegExp("/applications/assessment/*"));
   });
 });

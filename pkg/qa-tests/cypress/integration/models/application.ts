@@ -64,7 +64,7 @@ export class ApplicationPage {
     cy.intercept("POST", "/api/pathfinder/assessments*").as("postAssessment");
 
     // Open page
-    cy.visit("/application-inventory");
+    cy.visit("/applications");
     cy.wait("@getApplications");
   }
 

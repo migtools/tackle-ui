@@ -33,7 +33,7 @@ export class ReviewPage {
     cy.intercept("POST", "/api/application-inventory/review").as("postReview");
 
     // Open page
-    cy.visit(`/application-inventory/application/${applicationId}/review`);
+    cy.visit(`/applications/application/${applicationId}/review`);
     cy.wait("@getApplication");
   }
 
