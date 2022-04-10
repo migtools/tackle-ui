@@ -23,3 +23,4 @@ export { SimpleFilterDropdown } from "./simple-filter-dropdown";
 export * from "./status-icon-assessment";
 export { ToolbarSearchFilter } from "./toolbar-search-filter";
 export { ToolbarBulkSelector } from "./toolbar-bulk-selector";
+export { VisibilityByPermission } from "./visibility-by-permission";

@@ -29,14 +29,16 @@ import {
   AppTableToolbarToggleGroup,
   NoDataEmptyState,
   SearchFilter,
+  VisibilityByPermission,
 } from "shared/components";
 import {
   useTableControls,
   useDelete,
   useFetchJobFunctions,
+  useKcPermission,
 } from "shared/hooks";
 
-import { getAxiosErrorMessage } from "utils/utils";
+import { getAxiosErrorMessage, wrapInArrayWhen } from "utils/utils";
 import {
   deleteJobFunction,
   JobFunctionSortBy,
@@ -76,9 +78,18 @@ const toSortByQuery = (
 const ENTITY_FIELD = "entity";
 
 export const JobFunctions: React.FC = () => {
+  // i18
   const { t } = useTranslation();
+
+  // Redux
   const dispatch = useDispatch();
 
+  // RBAC
+  const { isAllowed: isAllowedToWrite } = useKcPermission({
+    permissionsAllowed: ["controls:write"],
+  });
+
+  // Filters
   const filters = [
     {
       key: FilterKey.NAME,
@@ -89,13 +100,16 @@ export const JobFunctions: React.FC = () => {
     new Map([])
   );
 
+  // Create and update modal states
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
   const [rowToUpdate, setRowToUpdate] = useState<JobFunction>();
 
+  // Delete state
   const { requestDelete: requestDeleteJobFunction } = useDelete<JobFunction>({
     onDelete: (t: JobFunction) => deleteJobFunction(t.id!),
   });
 
+  // Table data
   const {
     jobFunctions,
     isFetching,
@@ -132,20 +146,19 @@ export const JobFunctions: React.FC = () => {
     );
   }, [filtersValue, paginationQuery, sortByQuery, fetchJobFunctions]);
 
-  //
-
+  // Table's rows and columns
   const columns: ICell[] = [
     {
       title: t("terms.name"),
       transforms: [sortable, cellWidth(70)],
       cellFormatters: [],
     },
-    {
+    ...wrapInArrayWhen(isAllowedToWrite, {
       title: "",
       props: {
         className: "pf-u-text-align-right",
       },
-    },
+    }),
   ];
 
   const rows: IRow[] = [];
@@ -156,14 +169,14 @@ export const JobFunctions: React.FC = () => {
         {
           title: <TableText wrapModifier="truncate">{item.role}</TableText>,
         },
-        {
+        ...wrapInArrayWhen(isAllowedToWrite, {
           title: (
             <AppTableActionButtons
               onEdit={() => setRowToUpdate(item)}
               onDelete={() => deleteRow(item)}
             />
           ),
-        },
+        }),
       ],
     });
   });
@@ -308,18 +321,20 @@ export const JobFunctions: React.FC = () => {
             </AppTableToolbarToggleGroup>
           }
           toolbarActions={
-            <ToolbarGroup variant="button-group">
-              <ToolbarItem>
-                <Button
-                  type="button"
-                  aria-label="create-job-function"
-                  variant={ButtonVariant.primary}
-                  onClick={handleOnOpenCreateModal}
-                >
-                  {t("actions.createNew")}
-                </Button>
-              </ToolbarItem>
-            </ToolbarGroup>
+            <VisibilityByPermission permissionsAllowed={["controls:write"]}>
+              <ToolbarGroup variant="button-group">
+                <ToolbarItem>
+                  <Button
+                    type="button"
+                    aria-label="create-job-function"
+                    variant={ButtonVariant.primary}
+                    onClick={handleOnOpenCreateModal}
+                  >
+                    {t("actions.createNew")}
+                  </Button>
+                </ToolbarItem>
+              </ToolbarGroup>
+            </VisibilityByPermission>
           }
           noDataState={
             <NoDataEmptyState

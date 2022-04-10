@@ -1,8 +1,9 @@
 import React, { lazy, Suspense } from "react";
-import { Redirect, Route, Switch, useLocation } from "react-router-dom";
+import { Redirect, Switch, useLocation } from "react-router-dom";
 
 import { Paths } from "Paths";
 import { AppPlaceholder } from "shared/components";
+import { ProtectedRoute } from "ProtectedRoute";
 
 const ApplicationList = lazy(() => import("./application-list"));
 const ApplicationAssessment = lazy(() => import("./application-assessment"));
@@ -16,26 +17,31 @@ export const ApplicationInventory: React.FC = () => {
   return (
     <Suspense fallback={<AppPlaceholder />}>
       <Switch>
-        <Route
+        <ProtectedRoute
           path={Paths.applicationInventory_applicationList}
           component={ApplicationList}
+          permissionsAllowed={["inventory:application:read"]}
         />
-        <Route
+        <ProtectedRoute
           path={Paths.applicationInventory_assessment}
           component={ApplicationAssessment}
+          permissionsAllowed={["pathfinder:assessment:write"]}
         />
-        <Route
+        <ProtectedRoute
           path={Paths.applicationInventory_review}
           component={ApplicationReview}
+          permissionsAllowed={["inventory:application-review:write"]}
         />
-        <Route
+        <ProtectedRoute
           path={Paths.applicationInventory_manageImports}
           component={ManageImports}
           exact
+          permissionsAllowed={["inventory:application-import:read"]}
         />
-        <Route
+        <ProtectedRoute
           path={Paths.applicationInventory_manageImports_details}
           component={ImportDetails}
+          permissionsAllowed={["inventory:application-import:read"]}
         />
 
         <Redirect

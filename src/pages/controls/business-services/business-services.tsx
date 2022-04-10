@@ -29,11 +29,13 @@ import {
   AppTableActionButtons,
   AppTableToolbarToggleGroup,
   NoDataEmptyState,
+  VisibilityByPermission,
 } from "shared/components";
 import {
   useTableControls,
   useFetchBusinessServices,
   useDelete,
+  useKcPermission,
 } from "shared/hooks";
 
 import { BusinessService, SortByQuery } from "api/models";
@@ -42,7 +44,7 @@ import {
   BusinessServiceSortByQuery,
   deleteBusinessService,
 } from "api/rest";
-import { getAxiosErrorMessage } from "utils/utils";
+import { getAxiosErrorMessage, wrapInArrayWhen } from "utils/utils";
 
 import { NewBusinessServiceModal } from "./components/new-business-service-modal";
 import { UpdateBusinessServiceModal } from "./components/update-business-service-modal";
@@ -85,9 +87,18 @@ const ENTITY_FIELD = "entity";
 // };
 
 export const BusinessServices: React.FC = () => {
+  // i18
   const { t } = useTranslation();
+
+  // Redux
   const dispatch = useDispatch();
 
+  // RBAC
+  const { isAllowed: isAllowedToWrite } = useKcPermission({
+    permissionsAllowed: ["controls:write"],
+  });
+
+  // Filters
   const filters = [
     {
       key: FilterKey.NAME,
@@ -106,15 +117,18 @@ export const BusinessServices: React.FC = () => {
     new Map([])
   );
 
+  // Create and update modal states
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
   const [rowToUpdate, setRowToUpdate] = useState<BusinessService>();
 
+  // Delete state
   const {
     requestDelete: requestDeleteBusinessService,
   } = useDelete<BusinessService>({
     onDelete: (t: BusinessService) => deleteBusinessService(t.id!),
   });
 
+  // Table data
   const {
     businessServices,
     isFetching,
@@ -155,16 +169,17 @@ export const BusinessServices: React.FC = () => {
     );
   }, [filtersValue, paginationQuery, sortByQuery, fetchBusinessServices]);
 
+  // Table's rows and columns
   const columns: ICell[] = [
     { title: t("terms.name"), transforms: [sortable, cellWidth(25)] },
     { title: t("terms.description"), transforms: [cellWidth(40)] },
     { title: t("terms.owner"), transforms: [sortable] },
-    {
+    ...wrapInArrayWhen(isAllowedToWrite, {
       title: "",
       props: {
         className: "pf-u-text-align-right",
       },
-    },
+    }),
   ];
 
   const rows: IRow[] = [];
@@ -187,14 +202,14 @@ export const BusinessServices: React.FC = () => {
             </TableText>
           ),
         },
-        {
+        ...wrapInArrayWhen(isAllowedToWrite, {
           title: (
             <AppTableActionButtons
               onEdit={() => editRow(item)}
               onDelete={() => deleteRow(item)}
             />
           ),
-        },
+        }),
       ],
     });
   });
@@ -371,18 +386,20 @@ export const BusinessServices: React.FC = () => {
             </AppTableToolbarToggleGroup>
           }
           toolbarActions={
-            <ToolbarGroup variant="button-group">
-              <ToolbarItem>
-                <Button
-                  type="button"
-                  aria-label="create-business-service"
-                  variant={ButtonVariant.primary}
-                  onClick={handleOnOpenCreateNewBusinessServiceModal}
-                >
-                  {t("actions.createNew")}
-                </Button>
-              </ToolbarItem>
-            </ToolbarGroup>
+            <VisibilityByPermission permissionsAllowed={["controls:write"]}>
+              <ToolbarGroup variant="button-group">
+                <ToolbarItem>
+                  <Button
+                    type="button"
+                    aria-label="create-business-service"
+                    variant={ButtonVariant.primary}
+                    onClick={handleOnOpenCreateNewBusinessServiceModal}
+                  >
+                    {t("actions.createNew")}
+                  </Button>
+                </ToolbarItem>
+              </ToolbarGroup>
+            </VisibilityByPermission>
           }
           noDataState={
             <NoDataEmptyState

@@ -7,7 +7,7 @@ import { Button, ButtonVariant, Modal, Text } from "@patternfly/react-core";
 import { useDispatch } from "react-redux";
 import { confirmDialogActions } from "store/confirmDialog";
 
-import { PageHeader } from "shared/components";
+import { PageHeader, VisibilityByPermission } from "shared/components";
 import { useEntityModal } from "shared/hooks";
 import { ApplicationDependenciesFormContainer } from "shared/containers";
 
@@ -76,9 +76,13 @@ export const ApplicationAssessmentPageHeader: React.FC<IApplicationAssessmentPag
         btnActions={
           <>
             {application && (
-              <Button onClick={() => openDependenciesModal(application)}>
-                {t("actions.manageDependencies")}
-              </Button>
+              <VisibilityByPermission
+                permissionsAllowed={["inventory:application-dependency:write"]}
+              >
+                <Button onClick={() => openDependenciesModal(application)}>
+                  {t("actions.manageDependencies")}
+                </Button>
+              </VisibilityByPermission>
             )}
           </>
         }

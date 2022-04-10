@@ -12,6 +12,7 @@ import {
   TableHeader,
 } from "@patternfly/react-table";
 
+import { useKcPermission } from "shared/hooks";
 import { Tag, TagType } from "api/models";
 import styles from "./tag-table.module.scss";
 
@@ -32,8 +33,15 @@ export const TagTable: React.FC<TabTableProps> = ({
   onEdit,
   onDelete,
 }) => {
+  // i18
   const { t } = useTranslation();
 
+  // RBAC
+  const { isAllowed: isAllowedToWrite } = useKcPermission({
+    permissionsAllowed: ["controls:write"],
+  });
+
+  // Table's rows and columns
   const columns: ICell[] = [
     {
       title: t("terms.tagName"),
@@ -102,7 +110,7 @@ export const TagTable: React.FC<TabTableProps> = ({
       aria-label="tag-table"
       cells={columns}
       rows={rows}
-      actions={actions}
+      actions={isAllowedToWrite ? actions : []}
       className={styles.actionColumnPadding}
     >
       <TableHeader />

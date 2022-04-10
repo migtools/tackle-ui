@@ -11,6 +11,7 @@ export { useFetchJobFunctions } from "./useFetchJobFunctions";
 export { useFetchStakeholderGroups } from "./useFetchStakeholderGroups";
 export { useFetchStakeholders } from "./useFetchStakeholders";
 export { useFetchTagTypes } from "./useFetchTagTypes";
+export { useKcPermission } from "./useKcPermission";
 export { useMultipleFetch } from "./useMultipleFetch";
 export { useQueryString } from "./useRouteAsState";
 export { useSelectionFromPageState } from "./useSelectionFromPageState";

@@ -5,33 +5,50 @@ import { Nav, NavItem, PageSidebar, NavList } from "@patternfly/react-core";
 
 import { Paths } from "Paths";
 import { LayoutTheme } from "../LayoutUtils";
+import { VisibilityByPermission } from "shared/components";
 
 export const SidebarApp: React.FC = () => {
+  // i18
   const { t } = useTranslation();
+
+  // Location
   const { search } = useLocation();
 
   const renderPageNav = () => {
     return (
       <Nav id="nav-primary" aria-label="Nav" theme={LayoutTheme}>
         <NavList title="Global">
-          <NavItem>
-            <NavLink
-              to={Paths.applicationInventory + search}
-              activeClassName="pf-m-current"
-            >
-              {t("sidebar.applicationInventory")}
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink to={Paths.reports + search} activeClassName="pf-m-current">
-              {t("sidebar.reports")}
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink to={Paths.controls} activeClassName="pf-m-current">
-              {t("sidebar.controls")}
-            </NavLink>
-          </NavItem>
+          <VisibilityByPermission
+            permissionsAllowed={["inventory:application:read"]}
+          >
+            <NavItem>
+              <NavLink
+                to={Paths.applicationInventory + search}
+                activeClassName="pf-m-current"
+              >
+                {t("sidebar.applicationInventory")}
+              </NavLink>
+            </NavItem>
+          </VisibilityByPermission>
+          <VisibilityByPermission
+            permissionsAllowed={["inventory:application:read"]}
+          >
+            <NavItem>
+              <NavLink
+                to={Paths.reports + search}
+                activeClassName="pf-m-current"
+              >
+                {t("sidebar.reports")}
+              </NavLink>
+            </NavItem>
+          </VisibilityByPermission>
+          <VisibilityByPermission permissionsAllowed={["controls:read"]}>
+            <NavItem>
+              <NavLink to={Paths.controls} activeClassName="pf-m-current">
+                {t("sidebar.controls")}
+              </NavLink>
+            </NavItem>
+          </VisibilityByPermission>
         </NavList>
       </Nav>
     );

@@ -46,6 +46,7 @@ import {
   NoDataEmptyState,
   StatusIconAssessment,
   KebabDropdown,
+  VisibilityByPermission,
 } from "shared/components";
 import {
   useTableControls,
@@ -55,6 +56,7 @@ import {
   useEntityModal,
   useDelete,
   useApplicationToolbarFilter,
+  useKcPermission,
 } from "shared/hooks";
 import { ApplicationDependenciesFormContainer } from "shared/containers";
 
@@ -77,7 +79,7 @@ import {
   getAssessments,
 } from "api/rest";
 import { applicationPageMapper } from "api/apiUtils";
-import { getAxiosErrorMessage } from "utils/utils";
+import { getAxiosErrorMessage, wrapInArrayWhen } from "utils/utils";
 
 import { ApplicationForm } from "./components/application-form";
 
@@ -145,6 +147,20 @@ export const ApplicationList: React.FC = () => {
 
   // Router
   const history = useHistory();
+
+  // RBAC
+  const { isAllowed: isAllowedToWriteApp } = useKcPermission({
+    permissionsAllowed: ["inventory:application:write"],
+  });
+  const { isAllowed: isAllowedToWriteAssessment } = useKcPermission({
+    permissionsAllowed: ["pathfinder:assessment:write"],
+  });
+  const { isAllowed: isAllowedToWriteAssessmentAndReview } = useKcPermission({
+    permissionsAllowed: ["inventory:application-review:write"],
+  });
+  const { isAllowed: isAllowedToWriteAppDependencies } = useKcPermission({
+    permissionsAllowed: ["inventory:application-dependency:write"],
+  });
 
   // Toolbar filters
   const {
@@ -320,12 +336,12 @@ export const ApplicationList: React.FC = () => {
     { title: t("terms.assessment"), transforms: [cellWidth(10)] },
     { title: t("terms.review"), transforms: [sortable, cellWidth(10)] },
     { title: t("terms.tagCount"), transforms: [sortable, cellWidth(10)] },
-    {
+    ...wrapInArrayWhen(isAllowedToWriteApp, {
       title: "",
       props: {
         className: "pf-c-table__inline-edit-action",
       },
-    },
+    }),
   ];
 
   const rows: IRow[] = [];
@@ -382,7 +398,7 @@ export const ApplicationList: React.FC = () => {
             </>
           ),
         },
-        {
+        ...wrapInArrayWhen(isAllowedToWriteApp, {
           title: (
             <div className="pf-c-inline-edit__action pf-m-enable-editable">
               <Button
@@ -394,7 +410,7 @@ export const ApplicationList: React.FC = () => {
               </Button>
             </div>
           ),
-        },
+        }),
       ],
     });
 
@@ -418,7 +434,10 @@ export const ApplicationList: React.FC = () => {
     const actions: (IAction | ISeparator)[] = [];
 
     const applicationAssessment = getApplicationAssessment(row.id!);
-    if (applicationAssessment?.status === "COMPLETE") {
+    if (
+      isAllowedToWriteAssessment &&
+      applicationAssessment?.status === "COMPLETE"
+    ) {
       actions.push({
         title: t("actions.copyAssessment"),
         onClick: (
@@ -431,7 +450,7 @@ export const ApplicationList: React.FC = () => {
         },
       });
     }
-    if (row.review) {
+    if (isAllowedToWriteAssessmentAndReview && row.review) {
       actions.push({
         title: t("actions.copyAssessmentAndReview"),
         onClick: (
@@ -444,7 +463,11 @@ export const ApplicationList: React.FC = () => {
         },
       });
     }
-    if (applicationAssessment) {
+
+    if (
+      isAllowedToWriteAssessmentAndReview &&
+      getApplicationAssessment(row.id!)
+    ) {
       actions.push({
         title: t("actions.discardAssessment"),
         onClick: (
@@ -458,8 +481,8 @@ export const ApplicationList: React.FC = () => {
       });
     }
 
-    actions.push(
-      {
+    if (isAllowedToWriteAppDependencies) {
+      actions.push({
         title: t("actions.manageDependencies"),
         onClick: (
           event: React.MouseEvent,
@@ -469,8 +492,11 @@ export const ApplicationList: React.FC = () => {
           const row: Application = getRow(rowData);
           openDependenciesModal(row);
         },
-      },
-      {
+      });
+    }
+
+    if (isAllowedToWriteApp) {
+      actions.push({
         title: t("actions.delete"),
         onClick: (
           event: React.MouseEvent,
@@ -480,8 +506,8 @@ export const ApplicationList: React.FC = () => {
           const row: Application = getRow(rowData);
           deleteRow(row);
         },
-      }
-    );
+      });
+    }
 
     return actions;
   };
@@ -709,68 +735,86 @@ export const ApplicationList: React.FC = () => {
             toolbarActions={
               <>
                 <ToolbarGroup variant="button-group">
-                  <ToolbarItem>
-                    <Button
-                      type="button"
-                      aria-label="create-application"
-                      variant={ButtonVariant.primary}
-                      onClick={openCreateApplicationModal}
-                    >
-                      {t("actions.createNew")}
-                    </Button>
-                  </ToolbarItem>
-                  <ToolbarItem>
-                    <Button
-                      type="button"
-                      aria-label="assess-application"
-                      variant={ButtonVariant.primary}
-                      onClick={assessSelectedRows}
-                      isDisabled={
-                        selectedRows.length !== 1 ||
-                        isApplicationAssessInProgress
-                      }
-                      isLoading={isApplicationAssessInProgress}
-                    >
-                      {t("actions.assess")}
-                    </Button>
-                  </ToolbarItem>
-                  <ToolbarItem>
-                    <Button
-                      type="button"
-                      aria-label="review-application"
-                      variant={ButtonVariant.primary}
-                      onClick={reviewSelectedRows}
-                      isDisabled={
-                        selectedRows.length !== 1 ||
-                        isReviewBtnDisabled(selectedRows[0])
-                      }
-                    >
-                      {t("actions.review")}
-                    </Button>
-                  </ToolbarItem>
-                  <ToolbarItem>
-                    <KebabDropdown
-                      dropdownItems={[
-                        <DropdownItem
-                          key="import-applications"
-                          component="button"
-                          onClick={() => setIsApplicationImportModalOpen(true)}
-                        >
-                          {t("actions.import")}
-                        </DropdownItem>,
-                        <DropdownItem
-                          key="manage-application-imports"
-                          onClick={() => {
-                            history.push(
-                              Paths.applicationInventory_manageImports
-                            );
-                          }}
-                        >
-                          {t("actions.manageImports")}
-                        </DropdownItem>,
-                      ]}
-                    />
-                  </ToolbarItem>
+                  <VisibilityByPermission
+                    permissionsAllowed={["inventory:application:write"]}
+                  >
+                    <ToolbarItem>
+                      <Button
+                        type="button"
+                        aria-label="create-application"
+                        variant={ButtonVariant.primary}
+                        onClick={openCreateApplicationModal}
+                      >
+                        {t("actions.createNew")}
+                      </Button>
+                    </ToolbarItem>
+                  </VisibilityByPermission>
+                  <VisibilityByPermission
+                    permissionsAllowed={["pathfinder:assessment:write"]}
+                  >
+                    <ToolbarItem>
+                      <Button
+                        type="button"
+                        aria-label="assess-application"
+                        variant={ButtonVariant.primary}
+                        onClick={assessSelectedRows}
+                        isDisabled={
+                          selectedRows.length !== 1 ||
+                          isApplicationAssessInProgress
+                        }
+                        isLoading={isApplicationAssessInProgress}
+                      >
+                        {t("actions.assess")}
+                      </Button>
+                    </ToolbarItem>
+                  </VisibilityByPermission>
+                  <VisibilityByPermission
+                    permissionsAllowed={["inventory:application-review:write"]}
+                  >
+                    <ToolbarItem>
+                      <Button
+                        type="button"
+                        aria-label="review-application"
+                        variant={ButtonVariant.primary}
+                        onClick={reviewSelectedRows}
+                        isDisabled={
+                          selectedRows.length !== 1 ||
+                          isReviewBtnDisabled(selectedRows[0])
+                        }
+                      >
+                        {t("actions.review")}
+                      </Button>
+                    </ToolbarItem>
+                  </VisibilityByPermission>
+                  <VisibilityByPermission
+                    permissionsAllowed={["inventory:application-import:write"]}
+                  >
+                    <ToolbarItem>
+                      <KebabDropdown
+                        dropdownItems={[
+                          <DropdownItem
+                            key="import-applications"
+                            component="button"
+                            onClick={() =>
+                              setIsApplicationImportModalOpen(true)
+                            }
+                          >
+                            {t("actions.import")}
+                          </DropdownItem>,
+                          <DropdownItem
+                            key="manage-application-imports"
+                            onClick={() => {
+                              history.push(
+                                Paths.applicationInventory_manageImports
+                              );
+                            }}
+                          >
+                            {t("actions.manageImports")}
+                          </DropdownItem>,
+                        ]}
+                      />
+                    </ToolbarItem>
+                  </VisibilityByPermission>
                 </ToolbarGroup>
               </>
             }

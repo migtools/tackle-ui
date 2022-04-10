@@ -47,6 +47,7 @@ import {
   PageHeader,
   ToolbarSearchFilter,
   KebabDropdown,
+  VisibilityByPermission,
 } from "shared/components";
 
 import { formatPath, Paths } from "Paths";
@@ -424,16 +425,20 @@ export const ManageImports: React.FC = () => {
             toolbarActions={
               <>
                 <ToolbarGroup variant="button-group">
-                  <ToolbarItem>
-                    <Button
-                      type="button"
-                      aria-label="import-applications"
-                      variant={ButtonVariant.primary}
-                      onClick={() => setIsApplicationImportModalOpen(true)}
-                    >
-                      {t("actions.import")}
-                    </Button>
-                  </ToolbarItem>
+                  <VisibilityByPermission
+                    permissionsAllowed={["inventory:application-import:write"]}
+                  >
+                    <ToolbarItem>
+                      <Button
+                        type="button"
+                        aria-label="import-applications"
+                        variant={ButtonVariant.primary}
+                        onClick={() => setIsApplicationImportModalOpen(true)}
+                      >
+                        {t("actions.import")}
+                      </Button>
+                    </ToolbarItem>
+                  </VisibilityByPermission>
                   <ToolbarItem>
                     <KebabDropdown
                       dropdownItems={[
