@@ -135,3 +135,15 @@ podman push quay.io/$USERNAME/tackle-ui
  # Internationalization
 
  To contribute translating Tackle UI into a new language please read [Internationalization](./INTERNATIONALIZATION)
+
+# License
+
+In order to check all files have the proper license header set, run:
+```shell
+yarn license-check-and-add check
+```
+
+To add the license header to all the files missing it, run:
+```shell
+yarn license-check-and-add add
+```
