@@ -6,7 +6,7 @@
     "@konveyor/lib-ui": "^2.0.0",
     "@patternfly/patternfly": "4.132.2",
     "@patternfly/react-charts": "6.15.20",
-    "@patternfly/react-core": "4.152.4",
+    "@patternfly/react-core": "4.250.1",
     "@patternfly/react-table": "4.29.58",
     "@react-keycloak/web": "^3.4.0",
     "@redhat-cloud-services/frontend-components-notifications": "3.2.2",
