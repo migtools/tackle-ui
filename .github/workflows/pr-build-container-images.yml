@@ -21,7 +21,7 @@ jobs:
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
       - name: Push to GitHub Packages
-        uses: elgohr/Publish-Docker-Github-Action@3.02
+        uses: elgohr/Publish-Docker-Github-Action@v5
         with:
           registry: ghcr.io
           name: ${{ github.repository_owner }}/${{ github.event.repository.name }}/tackle-ui
