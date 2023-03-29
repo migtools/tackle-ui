@@ -182,7 +182,7 @@ jobs:
           yarn install
           yarn build
       - name: Push to Quay.io
-        uses: elgohr/Publish-Docker-Github-Action@3.02
+        uses: elgohr/Publish-Docker-Github-Action@v5
         with:
           registry: quay.io
           name: konveyor/tackle-ui
